@@ -1,0 +1,26 @@
+app:
+  name: "Fire Salamander"
+  version: "1.0.0"
+  icon: "🦎"
+  powered_by: "SEPTEO"
+  
+branding:
+  primary_color: "#ff6136"  # Orange SEPTEO
+  secondary_color: "#1e3a8a" # Bleu corporate
+  neutral_colors: ["#f5f5f5", "#e5e5e5", "#737373", "#262626"]
+  
+server:
+  port: 3000
+  
+database:
+  type: sqlite
+  path: ./data/firesalamander.db
+  
+crawler:
+  workers: 2
+  rate_limit: 10/s  # Plus rapide en dev
+  user_agent: "FireSalamander/1.0 (SEPTEO) SEO Analyzer"
+  
+ai:
+  enabled: true
+  mock_mode: true  # Pas d'appels réels en dev
