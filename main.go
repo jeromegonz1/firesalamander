@@ -3,43 +3,77 @@ package main
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/jeromegonz1/firesalamander/config"
+	"github.com/jeromegonz1/firesalamander/internal/debug"
+	"github.com/jeromegonz1/firesalamander/internal/logger"
 )
 
-var cfg *config.Config
+var (
+	cfg *config.Config
+	log = logger.New("MAIN")
+)
 
 func main() {
+	// Activer le mode debug
+	logger.SetDebugMode(true)
+	log.Info("🔥 Fire Salamander - Démarrage avec mode debug activé")
+	
 	// Charger la configuration
 	env := os.Getenv("ENV")
 	if env == "" {
 		env = "development"
 	}
+	log.Debug("Chargement de la configuration", map[string]interface{}{"environment": env})
 
 	var err error
 	cfg, err = config.Load(env)
 	if err != nil {
-		log.Fatalf("Erreur lors du chargement de la configuration: %v", err)
+		log.Fatal("Erreur lors du chargement de la configuration", map[string]interface{}{"error": err.Error()})
 	}
+	log.Info("Configuration chargée avec succès", map[string]interface{}{
+		"app_name": cfg.App.Name,
+		"version": cfg.App.Version,
+		"port": cfg.Server.Port,
+		"db_type": cfg.Database.Type,
+	})
 
 	// Configuration des routes
+	log.Debug("Configuration des routes HTTP")
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/health", healthHandler)
+	http.HandleFunc("/debug", debug.DebugHandler(cfg))
+	log.Debug("Routes configurées", map[string]interface{}{
+		"routes": []string{"/", "/health", "/debug"},
+	})
 
 	// Démarrage du serveur
 	addr := fmt.Sprintf(":%d", cfg.Server.Port)
-	log.Printf("🔥 Fire Salamander %s démarré sur le port %d", cfg.App.Icon, cfg.Server.Port)
-	log.Printf("🌐 Serveur accessible sur: http://localhost%s", addr)
+	log.Info("🔥 Fire Salamander démarré", map[string]interface{}{
+		"icon": cfg.App.Icon,
+		"port": cfg.Server.Port,
+		"address": addr,
+	})
+	log.Info("🌐 Serveur accessible", map[string]interface{}{
+		"url": fmt.Sprintf("http://localhost%s", addr),
+		"debug_url": fmt.Sprintf("http://localhost%s/debug", addr),
+	})
 	
+	log.Debug("Démarrage du serveur HTTP")
 	if err := http.ListenAndServe(addr, nil); err != nil {
-		log.Fatalf("Erreur lors du démarrage du serveur: %v", err)
+		log.Fatal("Erreur lors du démarrage du serveur", map[string]interface{}{"error": err.Error()})
 	}
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Home page requested", map[string]interface{}{
+		"method": r.Method,
+		"path": r.URL.Path,
+		"remote": r.RemoteAddr,
+		"user_agent": r.Header.Get("User-Agent"),
+	})
 	tmpl := `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -332,18 +366,27 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.New("home").Parse(tmpl)
 	if err != nil {
+		log.Error("Template parsing error", map[string]interface{}{"error": err.Error()})
 		http.Error(w, "Erreur de template", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := t.Execute(w, cfg); err != nil {
+		log.Error("Template execution error", map[string]interface{}{"error": err.Error()})
 		http.Error(w, "Erreur d'exécution du template", http.StatusInternalServerError)
 		return
 	}
+	
+	log.Debug("Home page served successfully")
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Health check requested", map[string]interface{}{
+		"method": r.Method,
+		"remote": r.RemoteAddr,
+	})
+	
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{
@@ -352,4 +395,6 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 		"version": "%s",
 		"environment": "%s"
 	}`, cfg.App.Name, cfg.App.Version, os.Getenv("ENV"))
+	
+	log.Debug("Health check response sent")
 }
