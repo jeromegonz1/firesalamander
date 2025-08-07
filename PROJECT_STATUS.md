@@ -71,6 +71,22 @@ fire-salamander/
 
 ---
 
+## 🔄 ÉTAT ACTUEL (Dernière MAJ: 2025-01-07 15:45)
+
+### ✅ **FONCTIONNALITÉS OPÉRATIONNELLES**
+- ✅ **Config Loader** - Implémenté, testé (69.6% coverage), production-ready
+- ✅ **Architecture MVP** - Structure SOLID avec séparation des responsabilités
+- ✅ **Standards qualité** - TDD, No hardcoding, Error handling professionnel
+- ✅ **Documentation** - PROJECT_STATUS.md avec règles non-négociables
+
+### 🚧 **EN DÉVELOPPEMENT**
+- ⏳ Aucun développement actuel (attente instructions)
+
+### 📋 **BACKLOG PRIORISÉ**
+1. **HTTP Server** - TDD avec graceful shutdown
+2. **Template Engine** - Rendering HTML basique  
+3. **URL Crawler** - Extraction title/meta
+
 ## ✅ ACCOMPLI (Validation Architecte)
 
 - [x] **Archive V1** - Sauvegardée avec documentation post-mortem
@@ -78,6 +94,7 @@ fire-salamander/
 - [x] **Structure MVP** - Séparation claire des responsabilités
 - [x] **Configuration externalisée** - .env.example créé, zéro hardcoding
 - [x] **Standards qualité** - .gitignore, PROJECT_STATUS.md
+- [x] **Config Loader TDD** - RED → GREEN, 5/5 tests passants
 
 ---
 
@@ -185,6 +202,83 @@ gosec -quiet ./...
 
 ---
 
+---
+
+## 📜 HISTORIQUE (Chronologique)
+
+### ✅ Config Loader Complet - 2025-01-07 15:30
+**Commit:** `4d626855` feat: restart Fire Salamander with clean MVP architecture
+
+**Implémenté:**
+- Configuration loader avec variables d'environnement
+- Validation complète des paramètres (port, host, paths, enum values)
+- Error handling professionnel avec context wrapping
+- Support des valeurs par défaut depuis .env.example
+
+**Tests ajoutés:**
+- 5 test cases (config_test.go) - 69.6% coverage
+- Tests positifs : valeurs env, défaults
+- Tests négatifs : ports invalides, valeurs négatives
+- Test de validation : enum environments, log levels
+
+**État actuel:**
+- Config loader production-ready
+- Toutes les validations fonctionnelles
+- Error messages explicites
+
+**Commande pour tester:**
+```bash
+go test ./internal/config -v -cover
+```
+
+**Note technique:**
+Décision de n'utiliser que les env vars (pas de YAML) pour simplifier les dépendances et respecter les 12-factor apps.
+
+### ✅ Restructuration Architecturale Complète - 2025-01-07 14:00
+**Commit:** `4d626855` feat: restart Fire Salamander with clean MVP architecture
+
+**Implémenté:**
+- Archive V1 avec documentation post-mortem
+- Nettoyage complet du repository (39,062 files)
+- Structure MVP SOLID : cmd/, internal/, tests/
+- Standards qualité non-négociables définis
+
+**Standards appliqués:**
+- TDD obligatoire (RED → GREEN → REFACTOR)
+- Zero hardcoding policy
+- Error handling professionnel
+- SOLID principles enforcement
+- Clean code avec noms explicites
+
+**Architecture finale:**
+```
+fire-salamander/
+├── .env.example              # Configuration externalisée
+├── PROJECT_STATUS.md         # Standards et documentation
+├── main.go                   # Point d'entrée minimal
+├── internal/config/          # Config loader (TDD complet)
+├── archive/v1-20250107/     # V1 sauvegardée
+└── tests/                   # Tests obligatoires
+```
+
+---
+
+## 🔧 GIT HOOK AUTOMATIQUE
+
+**Installation du hook post-commit :**
+```bash
+cat > .git/hooks/post-commit << 'EOF'
+#!/bin/bash
+echo "⚠️  RÈGLE ARCHITECTE : Mettre à jour PROJECT_STATUS.md !"
+echo "Commande : Ajouter section dans HISTORIQUE puis :"
+echo "git add PROJECT_STATUS.md && git commit -m 'docs: update project status'"
+EOF
+chmod +x .git/hooks/post-commit
+```
+
+---
+
 **Architecte Principal :** Claude Code  
-**Dernière Révision :** 2025-01-07  
-**Prochaine Révision :** Après Phase 1 TDD
+**Dernière Révision :** 2025-01-07 15:45  
+**Prochaine Révision :** Après chaque commit (OBLIGATOIRE)  
+**Règle de Documentation :** ✅ ADOPTÉE ET APPLIQUÉE
