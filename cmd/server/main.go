@@ -84,7 +84,7 @@ var (
 	resultsTemplate   *template.Template
 )
 
-// loadTemplates - Charger les 3 templates avec noms explicites
+// loadTemplates - Charger les 3 templates
 func loadTemplates() error {
 	templateDir := filepath.Join(".", "templates")
 	
@@ -95,21 +95,18 @@ func loadTemplates() error {
 
 	var err error
 	
-	// Charger chaque template avec un nom unique
-	homeTemplate = template.New("home")
-	homeTemplate, err = homeTemplate.ParseFiles(filepath.Join(templateDir, "home.html"))
+	// Charger chaque template individuellement
+	homeTemplate, err = template.ParseFiles(filepath.Join(templateDir, "home.html"))
 	if err != nil {
 		return fmt.Errorf("failed to parse home template: %w", err)
 	}
 
-	analyzingTemplate = template.New("analyzing") 
-	analyzingTemplate, err = analyzingTemplate.ParseFiles(filepath.Join(templateDir, "analyzing.html"))
+	analyzingTemplate, err = template.ParseFiles(filepath.Join(templateDir, "analyzing.html"))
 	if err != nil {
 		return fmt.Errorf("failed to parse analyzing template: %w", err)
 	}
 
-	resultsTemplate = template.New("results")
-	resultsTemplate, err = resultsTemplate.ParseFiles(filepath.Join(templateDir, "results.html"))
+	resultsTemplate, err = template.ParseFiles(filepath.Join(templateDir, "results.html"))
 	if err != nil {
 		return fmt.Errorf("failed to parse results template: %w", err)
 	}
@@ -131,7 +128,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := homeTemplate.Execute(w, data)
+	err := homeTemplate.ExecuteTemplate(w, "home.html", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -174,7 +171,7 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = analyzingTemplate.Execute(w, data)
+	err = analyzingTemplate.ExecuteTemplate(w, "analyzing.html", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -240,7 +237,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := resultsTemplate.Execute(w, data)
+	err := resultsTemplate.ExecuteTemplate(w, "results.html", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
