@@ -1,171 +1,233 @@
-{{define "header"}}
-<header class="bg-white shadow-sm py-4">
-    <div class="container mx-auto px-4 flex items-center justify-between">
-        <div class="flex items-center">
-            <div class="h-10 w-10 bg-septeo-blue rounded-md flex items-center justify-center text-white font-bold">S</div>
-            <div class="ml-3 flex items-center">
-                <span class="text-xl font-semibold">Fire Salamander</span>
-                <i class="fa-solid fa-fire text-septeo-orange ml-2"></i>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - Fire Salamander SEO Tool</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <script>window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Alpine.js -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
+    <!-- Tailwind Config with SEPTEO Colors -->
+    <script>
+    tailwind.config = {
+      "theme": {
+        "extend": {
+          "colors": {
+            "septeo-orange": "#ff6136",
+            "septeo-blue": "#1e3a8a",
+            "septeo-gray-50": "#f8fafc",
+            "septeo-gray-100": "#f1f5f9",
+            "septeo-gray-800": "#1e293b",
+            "septeo-red": "#dc2626",
+            "septeo-green": "#16a34a",
+            "septeo-yellow": "#fbbf24"
+          }
+        }
+      }
+    };
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap">
+    
+    <style>
+      body { font-family: 'Inter', sans-serif !important; }
+      .fa, .fas, .far, .fal, .fab { font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important; }
+      ::-webkit-scrollbar { display: none; }
+      html, body { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-septeo-gray-50 text-septeo-gray-800 font-sans" x-data="app()">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="h-10 w-10 bg-septeo-blue rounded-md flex items-center justify-center text-white font-bold">S</div>
+                <div class="ml-3 flex items-center">
+                    <span class="text-xl font-semibold">Fire Salamander</span>
+                    <i class="fa-solid fa-fire text-septeo-orange ml-2"></i>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-septeo-gray-800 hover:text-septeo-orange transition-colors flex items-center">
+                    <i class="fa-solid fa-plus mr-1"></i>
+                    Nouvelle analyse
+                </a>
+                <button @click="downloadPdf()" class="bg-septeo-orange hover:bg-septeo-orange/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
+                    <i class="fa-solid fa-file-pdf mr-2"></i>
+                    Exporter PDF
+                </button>
             </div>
         </div>
-        <div class="flex items-center space-x-4">
-            <a href="/" class="text-septeo-gray-800 hover:text-septeo-orange transition-colors flex items-center">
-                <i class="fa-solid fa-plus mr-1"></i>
-                Nouvelle analyse
-            </a>
-            <button @click="downloadPdf()" class="bg-septeo-orange hover:bg-septeo-orange/90 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center">
-                <i class="fa-solid fa-file-pdf mr-2"></i>
-                Exporter PDF
-            </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold">{{.Analysis.Domain}} - Analysé le {{.Analysis.Date}}</h1>
+            <p class="text-gray-600">Rapport d'analyse SEO complet</p>
         </div>
-    </div>
-</header>
-{{end}}
 
-{{define "content"}}
-<div class="container mx-auto py-8 px-4">
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{.Analysis.Domain}} - Analysé le {{.Analysis.Date}}</h1>
-        <p class="text-gray-600">Rapport d'analyse SEO complet</p>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-        <div class="flex flex-col md:flex-row items-center">
-            <div class="w-full md:w-1/3 flex justify-center md:justify-start mb-6 md:mb-0">
-                <div class="relative h-40 w-40">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="text-center">
-                            <div class="text-4xl font-bold">{{.Analysis.Score}}</div>
-                            <div class="text-gray-500">sur 100</div>
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="w-full md:w-1/3 flex justify-center md:justify-start mb-6 md:mb-0">
+                    <div class="relative h-40 w-40">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-4xl font-bold">{{.Analysis.Score}}</div>
+                                <div class="text-gray-500">sur 100</div>
+                            </div>
+                        </div>
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f1f5f9" stroke-width="3" stroke-dasharray="100, 100"></path>
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ff6136" stroke-width="3" stroke-dasharray="{{.Analysis.Score}}, 100" class="animate-[dash_1.5s_ease-in-out]"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3">
+                    <h2 class="text-xl font-semibold mb-4">Score Global SEO</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-septeo-orange/10 p-4 rounded-lg">
+                            <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.PagesAnalyzed}}</div>
+                            <div class="text-sm">Pages analysées</div>
+                        </div>
+                        <div class="bg-septeo-orange/10 p-4 rounded-lg">
+                            <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.AnalysisTime}}</div>
+                            <div class="text-sm">Temps d'analyse</div>
+                        </div>
+                        <div class="bg-septeo-orange/10 p-4 rounded-lg">
+                            <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.CriticalIssues}}</div>
+                            <div class="text-sm">Problèmes détectés</div>
+                        </div>
+                        <div class="bg-septeo-orange/10 p-4 rounded-lg">
+                            <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.Warnings}}</div>
+                            <div class="text-sm">Avertissements</div>
                         </div>
                     </div>
-                    <svg class="w-full h-full" viewBox="0 0 36 36">
-                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f1f5f9" stroke-width="3" stroke-dasharray="100, 100"></path>
-                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ff6136" stroke-width="3" stroke-dasharray="{{.Analysis.Score}}, 100" class="animate-[dash_1.5s_ease-in-out]"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="w-full md:w-2/3">
-                <h2 class="text-xl font-semibold mb-4">Score Global SEO</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-septeo-orange/10 p-4 rounded-lg">
-                        <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.PagesAnalyzed}}</div>
-                        <div class="text-sm">Pages analysées</div>
-                    </div>
-                    <div class="bg-septeo-orange/10 p-4 rounded-lg">
-                        <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.AnalysisTime}}</div>
-                        <div class="text-sm">Temps d'analyse</div>
-                    </div>
-                    <div class="bg-septeo-orange/10 p-4 rounded-lg">
-                        <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.CriticalIssues}}</div>
-                        <div class="text-sm">Problèmes détectés</div>
-                    </div>
-                    <div class="bg-septeo-orange/10 p-4 rounded-lg">
-                        <div class="text-septeo-orange text-lg font-semibold">{{.Analysis.Warnings}}</div>
-                        <div class="text-sm">Avertissements</div>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4 flex items-center">
-            <i class="fa-solid fa-triangle-exclamation text-septeo-red mr-2"></i>
-            Problèmes Critiques ({{len .Analysis.Issues}})
-        </h2>
-        
-        <div class="space-y-4">
-            {{range $index, $issue := .Analysis.Issues}}
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.issue{{$index}} = !expandedIssues.issue{{$index}}">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-times-circle text-septeo-red mr-3"></i>
-                        <span class="font-medium">{{.Title}} ({{.Count}})</span>
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-triangle-exclamation text-septeo-red mr-2"></i>
+                Problèmes Critiques ({{len .Analysis.Issues}})
+            </h2>
+            
+            <div class="space-y-4">
+                {{range $index, $issue := .Analysis.Issues}}
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.issue{{$index}} = !expandedIssues.issue{{$index}}">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-times-circle text-septeo-red mr-3"></i>
+                            <span class="font-medium">{{.Title}} ({{.Count}})</span>
+                        </div>
+                        <i class="fa-solid transition-transform duration-200" :class="expandedIssues.issue{{$index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                     </div>
-                    <i class="fa-solid transition-transform duration-200" :class="expandedIssues.issue{{$index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                </div>
-                <div x-show="expandedIssues.issue{{$index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
-                    <div class="mb-4">
-                        <p class="mb-2 text-gray-700">{{.Description}}</p>
-                        {{if .Pages}}
-                        <ul class="list-disc pl-5 space-y-1 text-gray-600">
-                            {{range .Pages}}
-                            <li>{{.}}</li>
+                    <div x-show="expandedIssues.issue{{$index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
+                        <div class="mb-4">
+                            <p class="mb-2 text-gray-700">{{.Description}}</p>
+                            {{if .Pages}}
+                            <ul class="list-disc pl-5 space-y-1 text-gray-600">
+                                {{range .Pages}}
+                                <li>{{.}}</li>
+                                {{end}}
+                            </ul>
                             {{end}}
-                        </ul>
-                        {{end}}
+                        </div>
+                        <div class="bg-septeo-blue/5 p-3 rounded border-l-4 border-septeo-blue">
+                            <p class="font-medium text-septeo-blue mb-1">Solution recommandée :</p>
+                            <p class="text-gray-700">{{.Solution}}</p>
+                        </div>
                     </div>
-                    <div class="bg-septeo-blue/5 p-3 rounded border-l-4 border-septeo-blue">
-                        <p class="font-medium text-septeo-blue mb-1">Solution recommandée :</p>
-                        <p class="text-gray-700">{{.Solution}}</p>
-                    </div>
-                </div>
-            </div>
-            {{end}}
-        </div>
-    </div>
-
-    <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-4 flex items-center">
-            <i class="fa-solid fa-exclamation-circle text-septeo-yellow mr-2"></i>
-            Avertissements ({{len .Analysis.WarningsList}})
-        </h2>
-        
-        <div class="space-y-4">
-            {{range $index, $warning := .Analysis.WarningsList}}
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.warning{{$index}} = !expandedIssues.warning{{$index}}">
-                    <div class="flex items-center">
-                        <i class="fa-solid fa-exclamation-circle text-septeo-yellow mr-3"></i>
-                        <span class="font-medium">{{.Title}} ({{.Count}})</span>
-                    </div>
-                    <i class="fa-solid transition-transform duration-200" :class="expandedIssues.warning{{$index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                </div>
-                <div x-show="expandedIssues.warning{{$index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
-                    <p class="text-gray-700">{{.Description}}</p>
-                </div>
-            </div>
-            {{end}}
-        </div>
-    </div>
-
-    <div>
-        <h2 class="text-xl font-semibold mb-4 flex items-center">
-            <i class="fa-solid fa-robot text-septeo-blue mr-2"></i>
-            Suggestions IA
-        </h2>
-        
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <div class="space-y-6">
-                {{range .Analysis.AISuggestions}}
-                <div>
-                    <h3 class="font-medium mb-2 flex items-center">
-                        <i class="fa-solid fa-lightbulb text-septeo-orange mr-2"></i>
-                        {{.Title}}
-                    </h3>
-                    {{if .Keywords}}
-                    <div class="flex flex-wrap gap-2 mb-2">
-                        {{range .Keywords}}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-septeo-orange/10 text-septeo-orange">
-                            {{.}}
-                        </span>
-                        {{end}}
-                    </div>
-                    {{end}}
-                    <p class="text-gray-700">{{.Description}}</p>
                 </div>
                 {{end}}
             </div>
         </div>
-    </div>
-</div>
-{{end}}
 
-{{define "footer"}}
-<footer class="bg-white py-4 border-t border-gray-200 mt-8">
-    <div class="container mx-auto px-4 text-center">
-        <p class="text-gray-600">Powered by SEPTEO</p>
-    </div>
-</footer>
-{{end}}
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-exclamation-circle text-septeo-yellow mr-2"></i>
+                Avertissements ({{len .Analysis.WarningsList}})
+            </h2>
+            
+            <div class="space-y-4">
+                {{range $index, $warning := .Analysis.WarningsList}}
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.warning{{$index}} = !expandedIssues.warning{{$index}}">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-exclamation-circle text-septeo-yellow mr-3"></i>
+                            <span class="font-medium">{{.Title}} ({{.Count}})</span>
+                        </div>
+                        <i class="fa-solid transition-transform duration-200" :class="expandedIssues.warning{{$index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                    </div>
+                    <div x-show="expandedIssues.warning{{$index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
+                        <p class="text-gray-700">{{.Description}}</p>
+                    </div>
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fa-solid fa-robot text-septeo-blue mr-2"></i>
+                Suggestions IA
+            </h2>
+            
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="space-y-6">
+                    {{range .Analysis.AISuggestions}}
+                    <div>
+                        <h3 class="font-medium mb-2 flex items-center">
+                            <i class="fa-solid fa-lightbulb text-septeo-orange mr-2"></i>
+                            {{.Title}}
+                        </h3>
+                        {{if .Keywords}}
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            {{range .Keywords}}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-septeo-orange/10 text-septeo-orange">
+                                {{.}}
+                            </span>
+                            {{end}}
+                        </div>
+                        {{end}}
+                        <p class="text-gray-700">{{.Description}}</p>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white py-4 border-t border-gray-200 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-600">Powered by SEPTEO</p>
+        </div>
+    </footer>
+
+    <!-- Alpine.js App Logic -->
+    <script>
+        function app() {
+            return {
+                expandedIssues: {},
+                
+                downloadPdf() {
+                    alert("Le rapport PDF a été généré et téléchargé.");
+                }
+            }
+        }
+    </script>
+</body>
+</html>

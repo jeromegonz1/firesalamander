@@ -1,85 +1,153 @@
-{{define "header"}}
-<header class="bg-white shadow-sm py-4">
-    <div class="container mx-auto px-4 flex items-center justify-between">
-        <div class="flex items-center">
-            <!-- SEPTEO Logo -->
-            <div class="h-10 w-10 bg-septeo-blue rounded-md flex items-center justify-center text-white font-bold">S</div>
-            <div class="ml-3 flex items-center">
-                <span class="text-xl font-semibold">Fire Salamander</span>
-                <i class="fa-solid fa-fire text-septeo-orange ml-2"></i>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - Fire Salamander SEO Tool</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <script>window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Alpine.js -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    
+    <!-- Tailwind Config with SEPTEO Colors -->
+    <script>
+    tailwind.config = {
+      "theme": {
+        "extend": {
+          "colors": {
+            "septeo-orange": "#ff6136",
+            "septeo-blue": "#1e3a8a",
+            "septeo-gray-50": "#f8fafc",
+            "septeo-gray-100": "#f1f5f9",
+            "septeo-gray-800": "#1e293b",
+            "septeo-red": "#dc2626",
+            "septeo-green": "#16a34a",
+            "septeo-yellow": "#fbbf24"
+          }
+        }
+      }
+    };
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;500;600;700;800;900&display=swap">
+    
+    <style>
+      body { font-family: 'Inter', sans-serif !important; }
+      .fa, .fas, .far, .fal, .fab { font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important; }
+      ::-webkit-scrollbar { display: none; }
+      html, body { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-septeo-gray-50 text-septeo-gray-800 font-sans" x-data="app()">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-4">
+        <div class="container mx-auto px-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="h-10 w-10 bg-septeo-blue rounded-md flex items-center justify-center text-white font-bold">S</div>
+                <div class="ml-3 flex items-center">
+                    <span class="text-xl font-semibold">Fire Salamander</span>
+                    <i class="fa-solid fa-fire text-septeo-orange ml-2"></i>
+                </div>
             </div>
+            <nav>
+                <button class="text-septeo-gray-800 hover:text-septeo-orange transition-colors">Documentation</button>
+            </nav>
         </div>
-        <nav>
-            <button class="text-septeo-gray-800 hover:text-septeo-orange transition-colors">Documentation</button>
-        </nav>
-    </div>
-</header>
-{{end}}
+    </header>
 
-{{define "content"}}
-<div class="flex-grow flex items-center justify-center py-10 px-4">
-    <div class="max-w-3xl w-full">
-        <div class="text-center mb-8">
-            <div class="mb-6 flex justify-center">
-                <div class="relative">
-                    <div class="h-24 w-24 bg-septeo-orange rounded-full flex items-center justify-center">
-                        <i class="fa-solid fa-fire text-white text-4xl"></i>
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center py-10 px-4">
+        <div class="max-w-3xl w-full">
+            <div class="text-center mb-8">
+                <div class="mb-6 flex justify-center">
+                    <div class="relative">
+                        <div class="h-24 w-24 bg-septeo-orange rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-fire text-white text-4xl"></i>
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 h-12 w-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-search text-septeo-orange text-xl"></i>
+                        </div>
                     </div>
-                    <div class="absolute -bottom-2 -right-2 h-12 w-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <i class="fa-solid fa-search text-septeo-orange text-xl"></i>
+                </div>
+                <h1 class="text-4xl font-bold mb-4">Analysez votre SEO en 2 minutes</h1>
+                <p class="text-lg text-gray-600 mb-8">Un outil simple et rapide pour identifier les problèmes SEO de votre site web</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                <form @submit.prevent="startAnalysis" class="space-y-6">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-globe text-gray-400"></i>
+                        </div>
+                        <input type="url" x-model="url" class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-septeo-orange focus:border-septeo-orange transition-all text-lg" placeholder="https://votre-site.com" required pattern="https://.*" title="L'URL doit commencer par https://">
+                        <div x-show="error" x-text="error" class="text-septeo-red text-sm mt-2"></div>
                     </div>
-                </div>
+                    <button type="submit" class="w-full bg-septeo-orange hover:bg-septeo-orange/90 text-white font-semibold py-4 px-6 rounded-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-septeo-orange focus:ring-opacity-50 shadow-md">
+                        ANALYSER MON SITE
+                    </button>
+                </form>
             </div>
-            <h1 class="text-4xl font-bold mb-4">Analysez votre SEO en 2 minutes</h1>
-            <p class="text-lg text-gray-600 mb-8">Un outil simple et rapide pour identifier les problèmes SEO de votre site web</p>
-        </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-            <form @submit.prevent="startAnalysis" class="space-y-6">
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i class="fa-solid fa-globe text-gray-400"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-septeo-orange/10 text-septeo-orange mb-4">
+                        <i class="fa-solid fa-bolt"></i>
                     </div>
-                    <input type="url" x-model="url" class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-septeo-orange focus:border-septeo-orange transition-all text-lg" placeholder="https://votre-site.com" required pattern="https://.*" title="L'URL doit commencer par https://">
-                    <div x-show="error" x-text="error" class="text-septeo-red text-sm mt-2"></div>
+                    <h3 class="font-semibold mb-2">Analyse rapide</h3>
+                    <p class="text-sm text-gray-600">Résultats en moins de 2 minutes</p>
                 </div>
-                <button type="submit" class="w-full bg-septeo-orange hover:bg-septeo-orange/90 text-white font-semibold py-4 px-6 rounded-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-septeo-orange focus:ring-opacity-50 shadow-md">
-                    ANALYSER MON SITE
-                </button>
-            </form>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div class="bg-white p-6 rounded-lg shadow-sm text-center">
-                <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-septeo-orange/10 text-septeo-orange mb-4">
-                    <i class="fa-solid fa-bolt"></i>
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-septeo-orange/10 text-septeo-orange mb-4">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Rapport détaillé</h3>
+                    <p class="text-sm text-gray-600">Identifiez les problèmes critiques</p>
                 </div>
-                <h3 class="font-semibold mb-2">Analyse rapide</h3>
-                <p class="text-sm text-gray-600">Résultats en moins de 2 minutes</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-sm text-center">
-                <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-septeo-orange/10 text-septeo-orange mb-4">
-                    <i class="fa-solid fa-file-lines"></i>
+                <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                    <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-septeo-orange/10 text-septeo-orange mb-4">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Recommandations IA</h3>
+                    <p class="text-sm text-gray-600">Solutions concrètes et adaptées</p>
                 </div>
-                <h3 class="font-semibold mb-2">Rapport détaillé</h3>
-                <p class="text-sm text-gray-600">Identifiez les problèmes critiques</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-sm text-center">
-                <div class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-septeo-orange/10 text-septeo-orange mb-4">
-                    <i class="fa-solid fa-robot"></i>
-                </div>
-                <h3 class="font-semibold mb-2">Recommandations IA</h3>
-                <p class="text-sm text-gray-600">Solutions concrètes et adaptées</p>
             </div>
         </div>
-    </div>
-</div>
-{{end}}
+    </main>
 
-{{define "footer"}}
-<footer class="bg-white py-4 border-t border-gray-200">
-    <div class="container mx-auto px-4 text-center">
-        <p class="text-gray-600">Powered by SEPTEO</p>
-    </div>
-</footer>
-{{end}}
+    <!-- Footer -->
+    <footer class="bg-white py-4 border-t border-gray-200">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-600">Powered by SEPTEO</p>
+        </div>
+    </footer>
+
+    <!-- Alpine.js App Logic -->
+    <script>
+        function app() {
+            return {
+                url: '{{.URL}}',
+                error: null,
+                
+                startAnalysis() {
+                    if (!this.url.startsWith('https://')) {
+                        this.error = "L'URL doit commencer par https://";
+                        return;
+                    }
+                    
+                    // Redirect to analysis endpoint
+                    window.location.href = '/analyze?url=' + encodeURIComponent(this.url);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

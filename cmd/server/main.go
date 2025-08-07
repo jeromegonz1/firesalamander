@@ -15,27 +15,24 @@ import (
 
 // HomeData - Structure pour la page d'accueil
 type HomeData struct {
-	Title       string
-	URL         string
-	CurrentStep string
-	Progress    int
+	Title string
+	URL   string
 }
 
 // AnalyzingData - Structure pour la page d'analyse
 type AnalyzingData struct {
-	Title       string
-	URL         string
-	CurrentStep string
-	Progress    int
-	Analysis    AnalysisProgress
+	Title    string
+	URL      string
+	Progress int
+	Analysis AnalysisProgress
 }
 
 // AnalysisProgress - Progression de l'analyse
 type AnalysisProgress struct {
-	PagesFound     int    `json:"pages_found"`
-	PagesAnalyzed  int    `json:"pages_analyzed"`
-	IssuesFound    int    `json:"issues_found"`
-	EstimatedTime  string `json:"estimated_time"`
+	PagesFound    int    `json:"pages_found"`
+	PagesAnalyzed int    `json:"pages_analyzed"`
+	IssuesFound   int    `json:"issues_found"`
+	EstimatedTime string `json:"estimated_time"`
 }
 
 // ResultsData - Structure pour les résultats
@@ -81,9 +78,13 @@ type AISuggestion struct {
 	Keywords    []string `json:"keywords"`
 }
 
-var templates *template.Template
+var (
+	homeTemplate      *template.Template
+	analyzingTemplate *template.Template
+	resultsTemplate   *template.Template
+)
 
-// loadTemplates - Charger tous les templates
+// loadTemplates - Charger les 3 templates
 func loadTemplates() error {
 	templateDir := filepath.Join(".", "templates")
 	
@@ -92,11 +93,22 @@ func loadTemplates() error {
 		return fmt.Errorf("templates directory not found: %w", err)
 	}
 
-	// Parser tous les templates
 	var err error
-	templates, err = template.ParseGlob(filepath.Join(templateDir, "*.html"))
+	
+	// Charger les 3 templates
+	homeTemplate, err = template.ParseFiles(filepath.Join(templateDir, "home.html"))
 	if err != nil {
-		return fmt.Errorf("failed to parse templates: %w", err)
+		return fmt.Errorf("failed to parse home template: %w", err)
+	}
+
+	analyzingTemplate, err = template.ParseFiles(filepath.Join(templateDir, "analyzing.html"))
+	if err != nil {
+		return fmt.Errorf("failed to parse analyzing template: %w", err)
+	}
+
+	resultsTemplate, err = template.ParseFiles(filepath.Join(templateDir, "results.html"))
+	if err != nil {
+		return fmt.Errorf("failed to parse results template: %w", err)
 	}
 
 	return nil
@@ -105,20 +117,18 @@ func loadTemplates() error {
 // homeHandler - Handler pour la page d'accueil
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	data := HomeData{
-		Title:       "Accueil",
-		URL:         "",
-		CurrentStep: "home",
-		Progress:    0,
+		Title: "Accueil",
+		URL:   "",
 	}
 
 	// Mode test - utiliser HTML simple
-	if templates == nil {
+	if homeTemplate == nil {
 		w.Header().Set("Content-Type", "text/html")
 		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Fire Salamander</title></head><body><h1>Analysez votre SEO</h1></body></html>`)
 		return
 	}
 
-	err := templates.ExecuteTemplate(w, "base", data)
+	err := homeTemplate.Execute(w, data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -143,26 +153,25 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Simuler une progression d'analyse
 	data := AnalyzingData{
-		Title:       "Analyse",
-		URL:         urlParam,
-		CurrentStep: "analyzing",
-		Progress:    75,
+		Title:    "Analyse",
+		URL:      urlParam,
+		Progress: 75,
 		Analysis: AnalysisProgress{
-			PagesFound:     12,
-			PagesAnalyzed:  9,
-			IssuesFound:    3,
-			EstimatedTime:  "45s",
+			PagesFound:    12,
+			PagesAnalyzed: 9,
+			IssuesFound:   3,
+			EstimatedTime: "45s",
 		},
 	}
 
 	// Mode test - utiliser HTML simple
-	if templates == nil {
+	if analyzingTemplate == nil {
 		w.Header().Set("Content-Type", "text/html")
 		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Analyse en cours</title></head><body><h1>Analyse en cours</h1><p>%s</p></body></html>`, urlParam)
 		return
 	}
 
-	err = templates.ExecuteTemplate(w, "base.html", data)
+	err = analyzingTemplate.Execute(w, data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -222,13 +231,13 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Mode test - utiliser HTML simple
-	if templates == nil {
+	if resultsTemplate == nil {
 		w.Header().Set("Content-Type", "text/html")
 		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Résultats SEO</title></head><body><h1>Score Global SEO</h1><p>%s</p></body></html>`, extractDomain(urlParam))
 		return
 	}
 
-	err := templates.ExecuteTemplate(w, "base", data)
+	err := resultsTemplate.Execute(w, data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
