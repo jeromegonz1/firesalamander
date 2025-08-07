@@ -1,0 +1,27 @@
+{
+  "name": "fire-salamander",
+  "version": "1.0.0",
+  "description": "**Fire Salamander Agency Edition** - Outil SEO interne pour SEPTEO",
+  "main": "chart-fix.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeromegonz1/firesalamander.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jeromegonz1/firesalamander/issues"
+  },
+  "homepage": "https://github.com/jeromegonz1/firesalamander#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}

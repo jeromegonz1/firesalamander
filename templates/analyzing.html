@@ -47,7 +47,7 @@
       html, body { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-septeo-gray-50 text-septeo-gray-800 font-sans">
+<body class="bg-septeo-gray-50 text-septeo-gray-800 font-sans" x-data="analysisApp()"  x-init="init()">
     <!-- Header -->
     <header class="bg-white shadow-sm py-4">
         <div class="container mx-auto px-4 flex items-center">
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-septeo-orange/10">
-                            <div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-septeo-orange transition-all duration-500" style="width: {{.Progress}}%"></div>
+                            <div class="progress-bar shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-septeo-orange transition-all duration-500" style="width: {{.Progress}}%"></div>
                         </div>
                     </div>
                 </div>
@@ -117,19 +117,19 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <p class="text-sm text-gray-600">Pages trouvées</p>
-                            <p class="font-semibold">{{.Analysis.PagesFound}}</p>
+                            <p class="pages-found font-semibold">{{.Analysis.PagesFound}}</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Pages analysées</p>
-                            <p class="font-semibold">{{.Analysis.PagesAnalyzed}}/{{.Analysis.PagesFound}}</p>
+                            <p class="pages-analyzed font-semibold">{{.Analysis.PagesAnalyzed}}/{{.Analysis.PagesFound}}</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Problèmes détectés</p>
-                            <p class="font-semibold">{{.Analysis.IssuesFound}}</p>
+                            <p class="issues-found font-semibold">{{.Analysis.IssuesFound}}</p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Temps estimé</p>
-                            <p class="font-semibold">{{.Analysis.EstimatedTime}}</p>
+                            <p class="estimated-time font-semibold">{{.Analysis.EstimatedTime}}</p>
                         </div>
                     </div>
                 </div>
@@ -149,5 +149,64 @@
             <p class="text-gray-600">Powered by SEPTEO</p>
         </div>
     </footer>
+
+    <!-- Alpine.js App Logic -->
+    <script>
+        function analysisApp() {
+            return {
+                progress: {{.Progress}},
+                url: '{{.URL}}',
+                analysisId: new URLSearchParams(window.location.search).get('id'),
+                
+                init() {
+                    if (this.analysisId) {
+                        this.pollStatus();
+                    }
+                },
+                
+                pollStatus() {
+                    const interval = setInterval(() => {
+                        fetch(`/api/status/${this.analysisId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.progress = data.progress;
+                            
+                            // Mettre à jour les stats
+                            if (data.pages_found) {
+                                document.querySelector('.pages-found').textContent = data.pages_found;
+                            }
+                            if (data.pages_analyzed !== undefined) {
+                                document.querySelector('.pages-analyzed').textContent = `${data.pages_analyzed}/${data.pages_found}`;
+                            }
+                            if (data.issues_found !== undefined) {
+                                document.querySelector('.issues-found').textContent = data.issues_found;
+                            }
+                            if (data.estimated_time) {
+                                document.querySelector('.estimated-time').textContent = data.estimated_time;
+                            }
+                            
+                            // Mettre à jour la barre de progression
+                            const progressBar = document.querySelector('.progress-bar');
+                            if (progressBar) {
+                                progressBar.style.width = `${data.progress}%`;
+                            }
+                            
+                            // Si terminé, rediriger vers les résultats
+                            if (data.status === 'complete') {
+                                clearInterval(interval);
+                                setTimeout(() => {
+                                    window.location.href = `/results?id=${this.analysisId}`;
+                                }, 1500); // Petit délai pour voir 100%
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur polling:', error);
+                            // Continuer le polling même en cas d'erreur temporaire
+                        });
+                    }, 1000); // Poll toutes les secondes
+                }
+            }
+        }
+    </script>
 </body>
 </html>

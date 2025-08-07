@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"firesalamander/internal/api"
 	"firesalamander/internal/config"
 )
 
@@ -137,41 +138,73 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 // analyzeHandler - Handler pour l'analyse
 func analyzeHandler(w http.ResponseWriter, r *http.Request) {
-	// Récupérer l'URL depuis les paramètres
-	urlParam := r.URL.Query().Get("url")
-	if urlParam == "" {
-		http.Error(w, "URL manquante", http.StatusBadRequest)
+	// Récupérer l'ID d'analyse depuis les paramètres
+	analysisID := r.URL.Query().Get("id")
+	if analysisID == "" {
+		// Fallback : récupérer l'URL directement (ancienne méthode)
+		urlParam := r.URL.Query().Get("url")
+		if urlParam == "" {
+			http.Error(w, "ID d'analyse ou URL manquant", http.StatusBadRequest)
+			return
+		}
+
+		// Valider l'URL pour le fallback
+		parsedURL, err := url.Parse(urlParam)
+		if err != nil || parsedURL.Scheme == "" || parsedURL.Host == "" {
+			http.Error(w, "URL invalide", http.StatusBadRequest)
+			return
+		}
+
+		// Simuler une progression d'analyse (ancien comportement)
+		data := AnalyzingData{
+			Title:    "Analyse",
+			URL:      urlParam,
+			Progress: 75,
+			Analysis: AnalysisProgress{
+				PagesFound:    12,
+				PagesAnalyzed: 9,
+				IssuesFound:   3,
+				EstimatedTime: "45s",
+			},
+		}
+
+		renderAnalyzingTemplate(w, data)
 		return
 	}
 
-	// Valider l'URL
-	parsedURL, err := url.Parse(urlParam)
-	if err != nil || parsedURL.Scheme == "" || parsedURL.Host == "" {
-		http.Error(w, "URL invalide", http.StatusBadRequest)
+	// Récupérer l'analyse depuis l'API
+	analysis, exists := api.Store.Get(analysisID)
+	if !exists {
+		http.Error(w, "Analyse non trouvée", http.StatusNotFound)
 		return
 	}
 
-	// Simuler une progression d'analyse
+	// Construire les données pour le template
 	data := AnalyzingData{
 		Title:    "Analyse",
-		URL:      urlParam,
-		Progress: 75,
+		URL:      analysis.URL,
+		Progress: analysis.Progress,
 		Analysis: AnalysisProgress{
-			PagesFound:    12,
-			PagesAnalyzed: 9,
-			IssuesFound:   3,
-			EstimatedTime: "45s",
+			PagesFound:    analysis.PagesFound,
+			PagesAnalyzed: analysis.PagesAnalyzed,
+			IssuesFound:   analysis.IssuesFound,
+			EstimatedTime: analysis.EstimatedTime,
 		},
 	}
 
+	renderAnalyzingTemplate(w, data)
+}
+
+// renderAnalyzingTemplate - Fonction helper pour rendre le template d'analyse
+func renderAnalyzingTemplate(w http.ResponseWriter, data AnalyzingData) {
 	// Mode test - utiliser HTML simple
 	if analyzingTemplate == nil {
 		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Analyse en cours</title></head><body><h1>Analyse en cours</h1><p>%s</p></body></html>`, urlParam)
+		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Analyse en cours</title></head><body><h1>Analyse en cours</h1><p>%s (%d%%)</p></body></html>`, data.URL, data.Progress)
 		return
 	}
 
-	err = analyzingTemplate.ExecuteTemplate(w, "analyzing.html", data)
+	err := analyzingTemplate.ExecuteTemplate(w, "analyzing.html", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -257,7 +290,7 @@ func extractDomain(rawURL string) string {
 func setupServer() *http.ServeMux {
 	mux := http.NewServeMux()
 
-	// Routes principales
+	// Routes principales (pages web)
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
@@ -267,6 +300,11 @@ func setupServer() *http.ServeMux {
 	})
 	mux.HandleFunc("/analyze", analyzeHandler)
 	mux.HandleFunc("/results", resultsHandler)
+
+	// Routes API
+	mux.HandleFunc("/api/analyze", api.AnalyzeHandler)
+	mux.HandleFunc("/api/status/", api.StatusHandler)
+	mux.HandleFunc("/api/results/", api.ResultsHandler)
 
 	return mux
 }

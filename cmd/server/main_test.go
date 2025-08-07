@@ -47,10 +47,10 @@ func TestAnalyzeHandler(t *testing.T) {
 			expectedBody:   "Analyse en cours",
 		},
 		{
-			name:           "Missing URL",
+			name:           "Missing URL and ID",
 			url:            "",
 			expectedStatus: http.StatusBadRequest,
-			expectedBody:   "URL manquante",
+			expectedBody:   "ID d'analyse ou URL manquant",
 		},
 		{
 			name:           "Invalid URL",

@@ -91,8 +91,9 @@
                         <input type="url" x-model="url" class="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-septeo-orange focus:border-septeo-orange transition-all text-lg" placeholder="https://votre-site.com" required pattern="https://.*" title="L'URL doit commencer par https://">
                         <div x-show="error" x-text="error" class="text-septeo-red text-sm mt-2"></div>
                     </div>
-                    <button type="submit" class="w-full bg-septeo-orange hover:bg-septeo-orange/90 text-white font-semibold py-4 px-6 rounded-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-septeo-orange focus:ring-opacity-50 shadow-md">
-                        ANALYSER MON SITE
+                    <button type="submit" :disabled="loading" class="w-full bg-septeo-orange hover:bg-septeo-orange/90 text-white font-semibold py-4 px-6 rounded-lg transition-all transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-septeo-orange focus:ring-opacity-50 shadow-md disabled:opacity-50">
+                        <span x-show="!loading">ANALYSER MON SITE</span>
+                        <span x-show="loading">ANALYSE EN COURS...</span>
                     </button>
                 </form>
             </div>
@@ -136,6 +137,7 @@
             return {
                 url: '{{.URL}}',
                 error: null,
+                loading: false,
                 
                 startAnalysis() {
                     if (!this.url.startsWith('https://')) {
@@ -143,8 +145,29 @@
                         return;
                     }
                     
-                    // Redirect to analysis endpoint
-                    window.location.href = '/analyze?url=' + encodeURIComponent(this.url);
+                    this.error = null;
+                    this.loading = true;
+                    
+                    // Appel API pour démarrer l'analyse
+                    fetch('/api/analyze', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({url: this.url})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            this.error = data.error;
+                            this.loading = false;
+                        } else {
+                            // Rediriger vers la page d'analyse avec l'ID
+                            window.location.href = '/analyze?id=' + data.id;
+                        }
+                    })
+                    .catch(error => {
+                        this.error = 'Erreur de connexion. Veuillez réessayer.';
+                        this.loading = false;
+                    });
                 }
             }
         }
