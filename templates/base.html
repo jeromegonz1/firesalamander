@@ -1,3 +1,4 @@
+{{define "base"}}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -14,9 +15,6 @@
     
     <!-- Alpine.js -->
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    
-    <!-- Custom Styles -->
-    <style>::-webkit-scrollbar { display: none;}</style>
     
     <!-- Tailwind Config with SEPTEO Colors -->
     <script>
@@ -57,11 +55,6 @@
         font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
       }
       
-      .highlighted-section {
-        outline: 2px solid #3F20FB;
-        background-color: rgba(63, 32, 251, 0.1);
-      }
-
       ::-webkit-scrollbar {
         display: none;
       }
@@ -113,3 +106,4 @@
     </script>
 </body>
 </html>
+{{end}}

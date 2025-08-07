@@ -118,7 +118,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := templates.ExecuteTemplate(w, "base.html", data)
+	err := templates.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -228,7 +228,7 @@ func resultsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := templates.ExecuteTemplate(w, "base.html", data)
+	err := templates.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
