@@ -1,0 +1,35 @@
+{
+  "name": "fire-salamander-frontend-tests",
+  "version": "1.0.0",
+  "description": "Frontend E2E Test Agent for Fire Salamander",
+  "main": "frontend_test_agent.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project='Mobile Chrome' --project='Mobile Safari'",
+    "test:report": "playwright show-report",
+    "install-browsers": "playwright install",
+    "install-deps": "playwright install-deps"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "playwright",
+    "frontend",
+    "fire-salamander",
+    "septeo"
+  ],
+  "author": "Fire Salamander Team",
+  "license": "MIT"
+}

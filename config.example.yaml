@@ -1,0 +1,162 @@
+# Fire Salamander - Configuration Example
+# Copiez ce fichier vers config.yaml et adaptez selon vos besoins
+
+app:
+  name: "Fire Salamander"
+  version: "1.0.0"
+  environment: "development"  # development, staging, production
+  debug: true
+
+server:
+  port: 8080
+  host: "0.0.0.0"
+  read_timeout: "30s"
+  write_timeout: "30s"
+  idle_timeout: "60s"
+
+crawler:
+  workers: 3
+  rate_limit: "10/s"  # 10 requêtes par seconde
+  user_agent: "Fire Salamander SEO Analyzer/1.0"
+  max_depth: 3
+  max_pages: 100
+  timeout: "30s"
+  retry_attempts: 3
+  retry_delay: "1s"
+  respect_robots: true
+  follow_sitemaps: true
+  enable_cache: true
+  cache_duration: "24h"
+
+ai:
+  enabled: false  # Désactivé par défaut
+  mock_mode: true  # Mode simulation pour les tests
+  provider: "openai"  # openai, anthropic
+  model: "gpt-3.5-turbo"
+  api_key: ""  # À renseigner si AI activé
+  max_tokens: 1000
+  temperature: 0.1
+  timeout: "30s"
+  rate_limit: "60/h"  # 60 requêtes par heure
+
+database:
+  type: "sqlite"  # sqlite, postgresql, mysql
+  path: "data/firesalamander.db"  # Pour SQLite
+  # Pour PostgreSQL/MySQL:
+  # host: "localhost"
+  # port: 5432
+  # database: "firesalamander"
+  # username: "user"
+  # password: "password"
+  max_connections: 10
+  max_idle_connections: 5
+  connection_lifetime: "1h"
+  enable_migrations: true
+
+storage:
+  type: "local"  # local, s3, gcs
+  base_path: "data/reports"
+  max_file_size: "100MB"
+  retention_days: 90
+  # Pour S3:
+  # bucket: "fire-salamander-reports"
+  # region: "eu-west-1"
+  # access_key: ""
+  # secret_key: ""
+
+logging:
+  level: "info"  # debug, info, warn, error
+  format: "json"  # json, text
+  output: "stdout"  # stdout, file
+  file_path: "logs/fire-salamander.log"
+  max_size: "100MB"
+  max_backups: 5
+  max_age: 30  # jours
+
+monitoring:
+  enabled: true
+  metrics_port: 9090
+  health_check_interval: "30s"
+  prometheus_enabled: false
+  jaeger_enabled: false
+
+security:
+  api_key_required: false
+  api_keys: []
+  cors_origins: ["*"]
+  cors_methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  cors_headers: ["Content-Type", "Authorization", "X-Requested-With"]
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst: 20
+
+features:
+  semantic_analysis: true
+  seo_analysis: true
+  performance_analysis: true
+  crawler_analysis: true
+  ai_enrichment: false  # Nécessite ai.enabled = true
+  report_generation: true
+  historical_data: true
+  export_formats: ["html", "json", "csv", "pdf"]
+
+# Configuration avancée pour les modules d'analyse
+analysis:
+  semantic:
+    enable_local_analysis: true
+    enable_ai_enrichment: false
+    stop_words_file: "data/stopwords.txt"
+    min_keyword_length: 3
+    max_ngram_size: 3
+    tfidf_threshold: 0.1
+    
+  seo:
+    enable_technical_audit: true
+    enable_performance_analysis: true
+    enable_mobile_analysis: true
+    enable_accessibility_check: true
+    lighthouse_enabled: false  # Nécessite Lighthouse installé
+    pagespeed_api_key: ""  # Clé API Google PageSpeed Insights
+    
+  reports:
+    default_format: "html"
+    include_screenshots: false
+    include_recommendations: true
+    include_historical_comparison: true
+    branding:
+      company_name: "SEPTEO"
+      logo_url: ""
+      primary_color: "#ff6b35"
+      
+# Personnalisation des seuils de scoring
+scoring:
+  excellent_threshold: 80
+  good_threshold: 60
+  warning_threshold: 40
+  # poor_threshold: < 40
+  
+  weights:
+    technical: 0.25
+    performance: 0.25
+    content: 0.25
+    mobile: 0.15
+    accessibility: 0.10
+    
+# Configuration des notifications (optionnel)
+notifications:
+  enabled: false
+  email:
+    smtp_host: ""
+    smtp_port: 587
+    username: ""
+    password: ""
+    from: "noreply@firesalamander.com"
+  
+  slack:
+    webhook_url: ""
+    channel: "#seo-alerts"
+  
+  webhook:
+    url: ""
+    secret: ""

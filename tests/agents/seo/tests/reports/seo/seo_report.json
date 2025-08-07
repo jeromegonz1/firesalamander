@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-08-01T14:57:08.860046",
+  "target_url": "http://localhost:3000",
+  "seo_results": {
+    "site_structure": [
+      {
+        "test": "robots.txt",
+        "status": "pass",
+        "description": "robots.txt is accessible"
+      },
+      {
+        "test": "robots.txt format",
+        "status": "warning",
+        "description": "robots.txt format may be incorrect"
+      },
+      {
+        "test": "sitemap.xml",
+        "status": "pass",
+        "description": "XML sitemap is accessible"
+      },
+      {
+        "test": "sitemap.xml format",
+        "status": "warning",
+        "description": "XML sitemap format may be incorrect"
+      }
+    ],
+    "technical_seo": [
+      {
+        "test": "Technical SEO",
+        "status": "error",
+        "description": "Cannot perform technical tests: 'timeout'"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "type": "error",
+      "page": "Homepage",
+      "issue": "Cannot analyze homepage: 'timeout'",
+      "impact": "Critical"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "high",
+      "category": "Strategy",
+      "recommendation": "Conduct comprehensive SEO audit and create optimization roadmap",
+      "impact": "Critical - Multiple SEO issues detected requiring immediate attention"
+    }
+  ],
+  "overall_score": 2,
+  "status": "poor"
+}

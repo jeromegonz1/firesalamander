@@ -1,0 +1,478 @@
+name: 🔥 Fire Salamander UX/UI Tests
+
+# Déclencher les tests sur les événements critiques
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'web/**'
+      - 'cmd/**'
+      - 'config/**'
+      - 'tests/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'web/**'
+      - 'cmd/**'
+      - 'config/**'
+      - 'tests/**'
+  schedule:
+    # Tests automatiques tous les jours à 6h UTC (7h FR)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Lancement manuel
+
+env:
+  GO_VERSION: '1.21'
+  NODE_VERSION: '18'
+  SEPTEO_STANDARDS: 'enabled'
+
+jobs:
+  # Build Fire Salamander
+  build:
+    name: 🏗️ Build Fire Salamander
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Build Fire Salamander
+        run: |
+          go mod download
+          go build -o fire-salamander cmd/fire-salamander/main.go
+
+      - name: Upload Fire Salamander binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: fire-salamander-binary
+          path: fire-salamander
+          retention-days: 1
+
+  # Tests visuels de régression
+  visual-regression:
+    name: 👁️ Visual Regression Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Fire Salamander binary
+        uses: actions/download-artifact@v3
+        with:
+          name: fire-salamander-binary
+
+      - name: Make binary executable
+        run: chmod +x fire-salamander
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Start Fire Salamander
+        run: |
+          ./fire-salamander --config config.example.yaml &
+          sleep 10
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/api/v1/health
+
+      - name: Run BackstopJS reference (if needed)
+        run: |
+          cd tests
+          npm run test:visual:reference || true
+
+      - name: Run Visual Regression Tests
+        run: |
+          cd tests
+          npm run test:visual
+
+      - name: Upload visual test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: visual-regression-results
+          path: tests/ux/visual-regression/backstop_data/
+          retention-days: 7
+
+  # Tests d'accessibilité
+  accessibility-tests:
+    name: ♿ Accessibility Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Fire Salamander binary
+        uses: actions/download-artifact@v3
+        with:
+          name: fire-salamander-binary
+
+      - name: Make binary executable
+        run: chmod +x fire-salamander
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Start Fire Salamander
+        run: |
+          ./fire-salamander --config config.example.yaml &
+          sleep 10
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/api/v1/health
+
+      - name: Run Axe-core accessibility tests
+        run: |
+          cd tests
+          npm run test:axe
+
+      - name: Run Pa11y accessibility tests
+        run: |
+          cd tests
+          npm run test:pa11y
+
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: accessibility-results
+          path: tests/reports/accessibility/
+          retention-days: 7
+
+      - name: Comment PR with accessibility results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './tests/reports/accessibility/accessibility-report.json';
+            
+            if (fs.existsSync(path)) {
+              const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const compliance = Math.round(report.summary.septeoCompliance.overall);
+              
+              let message = `## 🎨 Rapport d'Accessibilité SEPTEO\n\n`;
+              message += `**Score global:** ${compliance}%\n`;
+              message += `**Violations:** ${report.summary.totalViolations}\n`;
+              message += `**Tests réussis:** ${report.summary.totalPasses}\n\n`;
+              
+              if (report.summary.totalViolations === 0) {
+                message += `✅ **Parfait!** Aucune violation d'accessibilité détectée.\n`;
+              } else {
+                message += `⚠️ **Action requise:** ${report.summary.totalViolations} violations à corriger.\n`;
+              }
+              
+              message += `\n[📄 Rapport détaillé](../../../actions/runs/${context.runId})`;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            }
+
+  # Tests de performance Lighthouse
+  lighthouse-performance:
+    name: ⚡ Lighthouse Performance Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Fire Salamander binary
+        uses: actions/download-artifact@v3
+        with:
+          name: fire-salamander-binary
+
+      - name: Make binary executable
+        run: chmod +x fire-salamander
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Start Fire Salamander
+        run: |
+          ./fire-salamander --config config.example.yaml &
+          sleep 10
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/api/v1/health
+
+      - name: Run Lighthouse CI
+        run: |
+          cd tests
+          npm run test:lighthouse
+
+      - name: Upload lighthouse results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: lighthouse-results
+          path: tests/reports/lighthouse/
+          retention-days: 7
+
+  # Tests du Design System SEPTEO
+  design-system-validation:
+    name: 🎨 Design System Validation
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Fire Salamander binary
+        uses: actions/download-artifact@v3
+        with:
+          name: fire-salamander-binary
+
+      - name: Make binary executable
+        run: chmod +x fire-salamander
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Start Fire Salamander
+        run: |
+          ./fire-salamander --config config.example.yaml &
+          sleep 10
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/api/v1/health
+
+      - name: Run SEPTEO Design System Validation
+        run: |
+          cd tests
+          npm run test:design-system
+
+      - name: Upload design system results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: design-system-results
+          path: tests/reports/design-system/
+          retention-days: 7
+
+  # Tests des parcours utilisateur
+  user-flow-tests:
+    name: 👤 User Flow Tests
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Fire Salamander binary
+        uses: actions/download-artifact@v3
+        with:
+          name: fire-salamander-binary
+
+      - name: Make binary executable
+        run: chmod +x fire-salamander
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: tests/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Install Playwright browsers
+        run: |
+          cd tests
+          npx playwright install ${{ matrix.browser }}
+
+      - name: Start Fire Salamander
+        run: |
+          ./fire-salamander --config config.example.yaml &
+          sleep 10
+          curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/api/v1/health
+
+      - name: Run User Flow Tests
+        run: |
+          cd tests
+          npm run test:user-flows -- --project="${{ matrix.browser }}"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: user-flow-results-${{ matrix.browser }}
+          path: |
+            tests/reports/playwright/
+            tests/ux/user-flows/recordings/
+          retention-days: 7
+
+  # Consolidation et rapport final
+  consolidate-results:
+    name: 📊 Consolidate UX Results
+    needs: [visual-regression, accessibility-tests, lighthouse-performance, design-system-validation, user-flow-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Download all test results
+        uses: actions/download-artifact@v3
+        with:
+          path: test-results/
+
+      - name: Install dependencies
+        run: |
+          cd tests
+          npm ci
+
+      - name: Generate consolidated UX report
+        run: |
+          cd tests
+          node scripts/generate-ux-report.js
+
+      - name: Upload consolidated report
+        uses: actions/upload-artifact@v3
+        with:
+          name: fire-salamander-ux-final-report
+          path: tests/reports/fire-salamander-ux-final-report.html
+          retention-days: 30
+
+      - name: Comment PR with UX summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './tests/reports/ux-consolidated-report.json';
+            
+            if (fs.existsSync(path)) {
+              const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const globalScore = Math.round(
+                (report.compliance.accessibility + 
+                 report.compliance.performance + 
+                 report.compliance.designSystem + 
+                 report.compliance.userExperience) / 4
+              );
+              
+              let status = '🎉 EXCELLENT';
+              if (globalScore < 95) status = '⚠️ BIEN';
+              if (globalScore < 85) status = '❌ À AMÉLIORER';
+              
+              let message = `## 🔥 Fire Salamander - Rapport UX/UI SEPTEO\n\n`;
+              message += `### ${status} - Score Global: ${globalScore}%\n\n`;
+              message += `| Catégorie | Score | Status |\n`;
+              message += `|-----------|-------|--------|\n`;
+              message += `| 🎨 Accessibilité | ${report.compliance.accessibility}% | ${report.compliance.accessibility >= 95 ? '✅' : '⚠️'} |\n`;
+              message += `| ⚡ Performance | ${report.compliance.performance}% | ${report.compliance.performance >= 90 ? '✅' : '⚠️'} |\n`;
+              message += `| 🎯 Design System | ${report.compliance.designSystem}% | ${report.compliance.designSystem >= 90 ? '✅' : '⚠️'} |\n`;
+              message += `| 👤 Expérience Utilisateur | ${report.compliance.userExperience}% | ${report.compliance.userExperience >= 90 ? '✅' : '⚠️'} |\n\n`;
+              
+              if (report.recommendations.length > 0) {
+                message += `### 💡 Actions Recommandées:\n`;
+                report.recommendations.slice(0, 5).forEach((rec, i) => {
+                  const priority = rec.priority === 'critical' ? '🔴' : rec.priority === 'high' ? '🟡' : '🔵';
+                  message += `${i + 1}. ${priority} **${rec.category}**: ${rec.description}\n`;
+                });
+                
+                if (report.recommendations.length > 5) {
+                  message += `\n... et ${report.recommendations.length - 5} autres recommandations.\n`;
+                }
+              }
+              
+              message += `\n[📄 Rapport complet](../../../actions/runs/${context.runId})`;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            }
+
+      - name: Fail if critical UX issues found
+        run: |
+          cd tests
+          node -e "
+            const fs = require('fs');
+            const path = './reports/ux-consolidated-report.json';
+            
+            if (fs.existsSync(path)) {
+              const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const globalScore = Math.round(
+                (report.compliance.accessibility + 
+                 report.compliance.performance + 
+                 report.compliance.designSystem + 
+                 report.compliance.userExperience) / 4
+              );
+              
+              console.log('Global SEPTEO UX Score:', globalScore + '%');
+              
+              if (globalScore < 85) {
+                console.error('❌ UX Score below SEPTEO minimum (85%)');
+                process.exit(1);
+              }
+              
+              if (report.summary.criticalIssues > 0) {
+                console.error('❌ Critical UX issues found:', report.summary.criticalIssues);
+                process.exit(1);
+              }
+              
+              console.log('✅ UX Tests passed - Fire Salamander meets SEPTEO standards');
+            } else {
+              console.error('❌ No consolidated report found');
+              process.exit(1);
+            }
+          "

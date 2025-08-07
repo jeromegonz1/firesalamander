@@ -1,0 +1,39 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="1.1500810000000001">
+<testsuite name="user-story-e2e.spec.js" timestamp="2025-08-05T13:56:43.020Z" hostname="chromium" tests="1" failures="1" skipped="0" time="0.23" errors="0">
+<testcase name="User Story E2E - Client Analyse septeo.com › 🔍 Vérification cohérence données backend/frontend" classname="user-story-e2e.spec.js" time="0.23">
+<failure message="user-story-e2e.spec.js:196:3 🔍 Vérification cohérence données backend/frontend" type="FAILURE">
+<![CDATA[  [chromium] › user-story-e2e.spec.js:196:3 › User Story E2E - Client Analyse septeo.com › 🔍 Vérification cohérence données backend/frontend 
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3001/analysis/20/report
+    Call log:
+      - navigating to "http://localhost:3001/analysis/20/report", waiting until "load"
+
+
+      210 |     
+      211 |     // Vérifier sur page rapport
+    > 212 |     await page.goto('/analysis/20/report');
+          |                ^
+      213 |     
+      214 |     const frontendScore = await page.locator('[data-testid="overall-score"]').textContent();
+      215 |     expect(parseInt(frontendScore)).toBe(backendData.score);
+        at /Users/jeromegonzalez/claude-code/fire-salamander/tests/agents/frontend/tests/user-story-e2e.spec.js:212:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/user-story-e2e-User-Story--7b95b-ce-données-backend-frontend-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/user-story-e2e-User-Story--7b95b-ce-données-backend-frontend-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../../agents/frontend/test-results/user-story-e2e-User-Story--7b95b-ce-données-backend-frontend-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|../../agents/frontend/test-results/user-story-e2e-User-Story--7b95b-ce-données-backend-frontend-chromium/video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

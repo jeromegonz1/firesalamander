@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fire Salamander - API Test Report</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .header { background: #ff6136; color: white; padding: 20px; border-radius: 8px; }
+        .score { font-size: 2em; font-weight: bold; }
+        .section { margin: 20px 0; }
+        .test-result { margin: 10px 0; padding: 10px; border-left: 4px solid #ddd; }
+        .passed { border-left-color: #28a745; }
+        .failed { border-left-color: #dc3545; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🕷️ Fire Salamander - API Test Report</h1>
+        <div class="score">Score: 52/100 (needs_improvement)</div>
+        <p>Generated: 2025-08-01T12:56:35.661Z</p>
+    </div>
+    
+    <div class="section">
+        <h2>📋 Contract Tests</h2>
+        
+            <div class="test-result passed">
+                <strong>GET /</strong> - Home page<br>
+                Status: 200 | Response Time: 6ms
+                
+            </div>
+        
+            <div class="test-result passed">
+                <strong>GET /health</strong> - Health check<br>
+                Status: 200 | Response Time: 3ms
+                
+            </div>
+        
+            <div class="test-result passed">
+                <strong>GET /debug</strong> - Debug endpoint<br>
+                Status: 200 | Response Time: 8ms
+                
+            </div>
+        
+            <div class="test-result failed">
+                <strong>GET /api/nonexistent</strong> - Non-existent endpoint<br>
+                Status: 200 | Response Time: 2ms
+                <br>Errors: Expected status 404, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>POST /api/sites</strong> - Invalid URL validation<br>
+                Status: 200 | Response Time: 3ms
+                <br>Errors: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>POST /api/sites</strong> - Empty URL validation<br>
+                Status: 200 | Response Time: 2ms
+                <br>Errors: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result passed">
+                <strong>GET /api/sites?page=1&limit=10</strong> - Pagination - first page<br>
+                Status: 200 | Response Time: 2ms
+                
+            </div>
+        
+            <div class="test-result passed">
+                <strong>GET /api/sites?page=999&limit=10</strong> - Pagination - out of range page<br>
+                Status: 200 | Response Time: 2ms
+                
+            </div>
+        
+            <div class="test-result failed">
+                <strong>GET /api/admin</strong> - Protected endpoint without auth<br>
+                Status: 200 | Response Time: 7ms
+                <br>Errors: Expected status 401, got 200
+            </div>
+        
+    </div>
+    
+    <div class="section">
+        <h2>⚡ Load Tests</h2>
+        
+            <div class="test-result passed">
+                <strong>Light Load</strong><br>
+                Success: 50/50 | 
+                Avg Response: 2ms | 
+                P95: 5ms
+            </div>
+        
+            <div class="test-result passed">
+                <strong>Normal Load</strong><br>
+                Success: 100/100 | 
+                Avg Response: 2ms | 
+                P95: 5ms
+            </div>
+        
+            <div class="test-result passed">
+                <strong>Heavy Load</strong><br>
+                Success: 200/200 | 
+                Avg Response: 4ms | 
+                P95: 13ms
+            </div>
+        
+    </div>
+    
+    <div class="section">
+        <h2>🔒 Security Tests</h2>
+        
+            <div class="test-result failed">
+                <strong>SQL Injection test: '; DROP TABLE users;...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>SQL Injection test: ' OR '1'='1...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>SQL Injection test: '; UNION SELECT * FR...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>SQL Injection test: admin'--...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>SQL Injection test: admin' OR 1=1--...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>XSS test: <script>alert('XSS')...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>XSS test: <img src=x onerror=a...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>XSS test: javascript:alert('XS...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>XSS test: <svg onload=alert('X...</strong>
+                <br>Issues: Expected status 400, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>CSRF protection test</strong>
+                <br>Issues: Expected status 403, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>Rate limiting test (50 rapid requests)</strong>
+                <br>Issues: No rate limiting detected
+            </div>
+        
+            <div class="test-result failed">
+                <strong>Security headers test</strong>
+                <br>Issues: Missing security header: x-content-type-options, Invalid x-frame-options header: expected one of DENY, SAMEORIGIN, got undefined, Missing security header: x-xss-protection, Missing or invalid security header: strict-transport-security
+            </div>
+        
+            <div class="test-result failed">
+                <strong>Path traversal auth bypass</strong>
+                <br>Issues: Expected status 401, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>URL encoded path traversal</strong>
+                <br>Issues: Expected status 401, got 200
+            </div>
+        
+            <div class="test-result failed">
+                <strong>Trailing slash bypass</strong>
+                <br>Issues: Expected status 401, got 200
+            </div>
+        
+    </div>
+</body>
+</html>
+        

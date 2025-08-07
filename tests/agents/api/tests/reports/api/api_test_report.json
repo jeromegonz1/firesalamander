@@ -1,0 +1,927 @@
+{
+  "timestamp": "2025-08-01T12:56:35.661Z",
+  "contractTests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "description": "Home page",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "responseTime": 6,
+      "passed": true,
+      "errors": [],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "description": "Health check",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "responseTime": 3,
+      "passed": true,
+      "errors": [],
+      "response": {
+        "headers": {
+          "content-type": "application/json",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "content-length": "97"
+        },
+        "data": {
+          "status": "healthy",
+          "app": "Fire Salamander",
+          "version": "1.0.0",
+          "environment": ""
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/debug",
+      "description": "Debug endpoint",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "responseTime": 8,
+      "passed": true,
+      "errors": [],
+      "response": {
+        "headers": {
+          "content-type": "application/json",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "content-length": "915"
+        },
+        "data": {
+          "status": "healthy",
+          "timestamp": "2025-08-01T14:56:35+02:00",
+          "app": {
+            "name": "Fire Salamander",
+            "version": "1.0.0",
+            "icon": "🦎",
+            "powered_by": "SEPTEO",
+            "uptime": "3m48.099373875s"
+          },
+          "system": {
+            "go_version": "go1.24.5",
+            "os": "darwin",
+            "arch": "amd64",
+            "cpus": 14,
+            "memory": "0.4 MB",
+            "debug_mode": true
+          },
+          "config": {
+            "environment": "development",
+            "server_port": 3000,
+            "database_type": "sqlite",
+            "ai_enabled": true
+          },
+          "checks": {
+            "ai": {
+              "status": "ok",
+              "message": "AI is in mock mode",
+              "data": {
+                "mock_mode": true
+              }
+            },
+            "config": {
+              "status": "ok",
+              "message": "Configuration is valid",
+              "data": {
+                "app_name": "Fire Salamander",
+                "database_type": "sqlite",
+                "server_port": 3000
+              }
+            },
+            "database": {
+              "status": "ok",
+              "message": "SQLite configuration is valid",
+              "data": {
+                "path": "./data/firesalamander.db"
+              }
+            },
+            "filesystem": {
+              "status": "ok",
+              "message": "All required files and directories present"
+            },
+            "network": {
+              "status": "ok",
+              "message": "Network configuration valid",
+              "data": {
+                "addr": ":3000",
+                "port": 3000
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/nonexistent",
+      "description": "Non-existent endpoint",
+      "expectedStatus": 404,
+      "actualStatus": 200,
+      "responseTime": 2,
+      "passed": false,
+      "errors": [
+        "Expected status 404, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/sites",
+      "description": "Invalid URL validation",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 3,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/sites",
+      "description": "Empty URL validation",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 2,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/sites?page=1&limit=10",
+      "description": "Pagination - first page",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "responseTime": 2,
+      "passed": true,
+      "errors": [],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/sites?page=999&limit=10",
+      "description": "Pagination - out of range page",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "responseTime": 2,
+      "passed": true,
+      "errors": [],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin",
+      "description": "Protected endpoint without auth",
+      "expectedStatus": 401,
+      "actualStatus": 200,
+      "responseTime": 7,
+      "passed": false,
+      "errors": [
+        "Expected status 401, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    }
+  ],
+  "loadTests": [
+    {
+      "name": "Light Load",
+      "concurrent": 5,
+      "totalRequests": 50,
+      "successCount": 50,
+      "errorCount": 0,
+      "responseTimes": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        6
+      ],
+      "errors": [],
+      "averageResponseTime": 2.2,
+      "p95ResponseTime": 5,
+      "throughput": 1515.1515151515152,
+      "passed": true
+    },
+    {
+      "name": "Normal Load",
+      "concurrent": 10,
+      "totalRequests": 100,
+      "successCount": 100,
+      "errorCount": 0,
+      "responseTimes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "errors": [],
+      "averageResponseTime": 2.21,
+      "p95ResponseTime": 5,
+      "throughput": 2941.1764705882356,
+      "passed": true
+    },
+    {
+      "name": "Heavy Load",
+      "concurrent": 20,
+      "totalRequests": 200,
+      "successCount": 200,
+      "errorCount": 0,
+      "responseTimes": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        8,
+        8,
+        9,
+        9,
+        11,
+        11,
+        12,
+        12,
+        12,
+        12,
+        12,
+        13,
+        13,
+        13,
+        13,
+        13,
+        15,
+        15,
+        15,
+        15,
+        15,
+        15,
+        16,
+        17
+      ],
+      "errors": [],
+      "averageResponseTime": 4.14,
+      "p95ResponseTime": 13,
+      "throughput": 2777.777777777778,
+      "passed": true
+    }
+  ],
+  "securityTests": [
+    {
+      "method": "GET",
+      "path": "/api/search?q='%3B%20DROP%20TABLE%20users%3B%20--",
+      "description": "SQL Injection test: '; DROP TABLE users;...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 2,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?q='%20OR%20'1'%3D'1",
+      "description": "SQL Injection test: ' OR '1'='1...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?q='%3B%20UNION%20SELECT%20*%20FROM%20users%3B%20--",
+      "description": "SQL Injection test: '; UNION SELECT * FR...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 0,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?q=admin'--",
+      "description": "SQL Injection test: admin'--...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?q=admin'%20OR%201%3D1--",
+      "description": "SQL Injection test: admin' OR 1=1--...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 0,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/feedback",
+      "description": "XSS test: <script>alert('XSS')...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/feedback",
+      "description": "XSS test: <img src=x onerror=a...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/feedback",
+      "description": "XSS test: javascript:alert('XS...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/feedback",
+      "description": "XSS test: <svg onload=alert('X...",
+      "expectedStatus": 400,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 400, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/delete",
+      "description": "CSRF protection test",
+      "expectedStatus": 403,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 403, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/test",
+      "description": "Rate limiting test (50 rapid requests)",
+      "passed": false,
+      "rateLimitedRequests": 0,
+      "totalRequests": 50,
+      "errors": [
+        "No rate limiting detected"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "description": "Security headers test",
+      "passed": false,
+      "errors": [
+        "Missing security header: x-content-type-options",
+        "Invalid x-frame-options header: expected one of DENY, SAMEORIGIN, got undefined",
+        "Missing security header: x-xss-protection",
+        "Missing or invalid security header: strict-transport-security"
+      ],
+      "headers": {
+        "content-type": "text/html; charset=utf-8",
+        "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+        "transfer-encoding": "chunked"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/../public",
+      "description": "Path traversal auth bypass",
+      "expectedStatus": 401,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 401, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin%2f..%2fpublic",
+      "description": "URL encoded path traversal",
+      "expectedStatus": 401,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 401, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/",
+      "description": "Trailing slash bypass",
+      "expectedStatus": 401,
+      "actualStatus": 200,
+      "responseTime": 1,
+      "passed": false,
+      "errors": [
+        "Expected status 401, got 200"
+      ],
+      "response": {
+        "headers": {
+          "content-type": "text/html; charset=utf-8",
+          "date": "Fri, 01 Aug 2025 12:56:35 GMT",
+          "transfer-encoding": "chunked"
+        },
+        "data": "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fire Salamander - SEPTEO</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;\n            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\n            min-height: 100vh;\n            color: #333;\n        }\n\n        .header {\n            background: white;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n            padding: 1rem 0;\n        }\n\n        .header-content {\n            max-width: 1200px;\n            margin: 0 auto;\n            padding: 0 2rem;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .logo-section {\n            display: flex;"
+      }
+    }
+  ],
+  "overallScore": 52,
+  "status": "needs_improvement"
+}

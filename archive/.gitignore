@@ -1,0 +1,59 @@
+# Fire Salamander - Clean Architecture
+# AUCUNE donnée sensible ou hardcoding
+
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+fire-salamander
+
+# Test binary
+*.test
+
+# Output
+*.out
+
+# Environment (CRITIQUE - PAS DE HARDCODING\!)
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Reports
+reports/*.pdf
+reports/*.html
+
+# Temp files
+tmp/
+temp/
+
+# Archives
+archive/*.zip
+archive/v*/
+
+# Coverage
+coverage.txt
+coverage.html
+EOF < /dev/null

@@ -1,0 +1,53 @@
+{
+  "name": "fire-salamander-ux-tests",
+  "version": "1.0.0",
+  "description": "UX/UI Testing Suite for Fire Salamander - SEPTEO Standards",
+  "scripts": {
+    "test:visual": "backstop test --config=ux/visual-regression/backstop.config.js",
+    "test:visual:approve": "backstop approve --config=ux/visual-regression/backstop.config.js",
+    "test:visual:reference": "backstop reference --config=ux/visual-regression/backstop.config.js",
+    "test:accessibility": "npm run test:axe && npm run test:pa11y",
+    "test:axe": "node ux/accessibility/axe-runner.js",
+    "test:pa11y": "pa11y-ci --config ux/accessibility/pa11y.config.js",
+    "test:lighthouse": "node scripts/lighthouse-runner.js",
+    "test:design-system": "node ux/design-system/validator.js",
+    "test:user-flows": "playwright test ux/user-flows/",
+    "test:all": "npm run test:visual && npm run test:accessibility && npm run test:lighthouse && npm run test:design-system && npm run test:user-flows",
+    "report": "node scripts/generate-ux-report.js",
+    "dashboard": "node scripts/ux-dashboard.js",
+    "serve-reports": "node scripts/serve-reports.js"
+  },
+  "devDependencies": {
+    "backstopjs": "^6.2.2",
+    "@axe-core/cli": "^4.8.2",
+    "axe-core": "^4.8.2",
+    "axe-playwright": "^2.0.1",
+    "pa11y": "^8.0.0",
+    "pa11y-ci": "^3.1.0",
+    "@lhci/cli": "^0.12.0",
+    "@playwright/test": "^1.40.0",
+    "playwright": "^1.40.0",
+    "puppeteer": "^21.5.2",
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10",
+    "lighthouse": "^11.3.0",
+    "postcss": "^8.4.32",
+    "css-tree": "^2.3.1",
+    "sharp": "^0.32.6",
+    "express": "^4.18.2",
+    "chrome-launcher": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "ux",
+    "ui",
+    "testing",
+    "accessibility",
+    "visual-regression",
+    "septeo",
+    "fire-salamander"
+  ]
+}

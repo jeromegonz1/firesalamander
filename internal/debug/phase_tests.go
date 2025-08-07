@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jeromegonz1/firesalamander/config"
-	"github.com/jeromegonz1/firesalamander/internal/logger"
+	"firesalamander/internal/config"
+	"firesalamander/internal/logger"
 )
 
 type PhaseTest struct {

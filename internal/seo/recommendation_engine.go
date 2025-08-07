@@ -1,0 +1,588 @@
+package seo
+
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
+
+// RecommendationEngine moteur de recommandations SEO intelligent
+type RecommendationEngine struct {
+	// Règles de priorité
+	priorityRules map[string]int
+	// Templates de recommandations
+	templates map[string]RecommendationTemplate
+}
+
+// SEORecommendation recommandation SEO structurée
+type SEORecommendation struct {
+	ID           string                 `json:"id"`
+	Title        string                 `json:"title"`
+	Description  string                 `json:"description"`
+	Category     string                 `json:"category"`
+	Priority     Priority               `json:"priority"`
+	Impact       Impact                 `json:"impact"`
+	Effort       Effort                 `json:"effort"`
+	Actions      []ActionItem           `json:"actions"`
+	Resources    []Resource             `json:"resources"`
+	Metrics      []string               `json:"metrics"`
+	Tags         []string               `json:"tags"`
+}
+
+// RecommendationTemplate template pour générer des recommandations
+type RecommendationTemplate struct {
+	ID          string
+	Title       string
+	Description string
+	Category    string
+	Priority    Priority
+	Impact      Impact
+	Effort      Effort
+	Actions     []string
+	Resources   []string
+	Metrics     []string
+	Tags        []string
+	Conditions  []string // Conditions pour déclencher cette recommandation
+}
+
+// ActionItem action à effectuer
+type ActionItem struct {
+	Task        string `json:"task"`
+	Description string `json:"description"`
+	Technical   bool   `json:"technical"`
+	Estimated   string `json:"estimated_time"`
+}
+
+// Priority niveau de priorité
+type Priority string
+
+const (
+	PriorityCritical Priority = "critical"
+	PriorityHigh     Priority = "high"
+	PriorityMedium   Priority = "medium"
+	PriorityLow      Priority = "low"
+)
+
+// Impact impact sur le SEO
+type Impact string
+
+const (
+	ImpactHigh   Impact = "high"
+	ImpactMedium Impact = "medium"
+	ImpactLow    Impact = "low"
+)
+
+// Effort effort requis
+type Effort string
+
+const (
+	EffortLow    Effort = "low"
+	EffortMedium Effort = "medium"
+	EffortHigh   Effort = "high"
+)
+
+// NewRecommendationEngine crée un nouveau moteur de recommandations
+func NewRecommendationEngine() *RecommendationEngine {
+	engine := &RecommendationEngine{
+		priorityRules: make(map[string]int),
+		templates:     make(map[string]RecommendationTemplate),
+	}
+
+	// Initialiser les règles de priorité
+	engine.initPriorityRules()
+	
+	// Initialiser les templates
+	engine.initRecommendationTemplates()
+
+	return engine
+}
+
+// GenerateRecommendations génère les recommandations basées sur l'analyse
+func (re *RecommendationEngine) GenerateRecommendations(analysis *SEOAnalysisResult) []SEORecommendation {
+	var recommendations []SEORecommendation
+
+	// 1. Recommandations basées sur les balises
+	recommendations = append(recommendations, re.generateTagRecommendations(&analysis.TagAnalysis)...)
+
+	// 2. Recommandations basées sur les performances
+	recommendations = append(recommendations, re.generatePerformanceRecommendations(&analysis.PerformanceMetrics)...)
+
+	// 3. Recommandations basées sur l'audit technique
+	recommendations = append(recommendations, re.generateTechnicalRecommendations(&analysis.TechnicalAudit)...)
+
+	// 4. Recommandations générales basées sur les scores
+	recommendations = append(recommendations, re.generateScoreBasedRecommendations(analysis)...)
+
+	// 5. Trier par priorité et impact
+	re.sortRecommendations(recommendations)
+
+	// 6. Déduplication et optimisation
+	recommendations = re.deduplicateRecommendations(recommendations)
+
+	// 7. Limiter le nombre de recommandations (top 20)
+	if len(recommendations) > 20 {
+		recommendations = recommendations[:20]
+	}
+
+	return recommendations
+}
+
+// generateTagRecommendations génère les recommandations pour les balises
+func (re *RecommendationEngine) generateTagRecommendations(tagAnalysis *TagAnalysisResult) []SEORecommendation {
+	var recs []SEORecommendation
+
+	// Titre
+	if !tagAnalysis.Title.Present {
+		recs = append(recs, re.createRecommendation("missing-title", map[string]interface{}{
+			"issue": "Titre manquant",
+		}))
+	} else if !tagAnalysis.Title.OptimalLength {
+		recs = append(recs, re.createRecommendation("title-length", map[string]interface{}{
+			"current_length": tagAnalysis.Title.Length,
+			"optimal_range":  "30-60 caractères",
+		}))
+	}
+
+	// Meta description
+	if !tagAnalysis.MetaDescription.Present {
+		recs = append(recs, re.createRecommendation("missing-meta-desc", map[string]interface{}{}))
+	} else if !tagAnalysis.MetaDescription.OptimalLength {
+		recs = append(recs, re.createRecommendation("meta-desc-length", map[string]interface{}{
+			"current_length": tagAnalysis.MetaDescription.Length,
+			"optimal_range":  "120-160 caractères",
+		}))
+	}
+
+	// Structure des headings
+	if tagAnalysis.Headings.H1Count == 0 {
+		recs = append(recs, re.createRecommendation("missing-h1", map[string]interface{}{}))
+	} else if tagAnalysis.Headings.H1Count > 1 {
+		recs = append(recs, re.createRecommendation("multiple-h1", map[string]interface{}{
+			"count": tagAnalysis.Headings.H1Count,
+		}))
+	}
+
+	if !tagAnalysis.Headings.HasHierarchy {
+		recs = append(recs, re.createRecommendation("heading-hierarchy", map[string]interface{}{}))
+	}
+
+	// Images
+	if tagAnalysis.Images.AltTextCoverage < 1.0 {
+		recs = append(recs, re.createRecommendation("missing-alt-tags", map[string]interface{}{
+			"coverage": fmt.Sprintf("%.1f%%", tagAnalysis.Images.AltTextCoverage*100),
+			"missing":  len(tagAnalysis.Images.MissingAltImages),
+		}))
+	}
+
+	// Meta tags essentiels
+	if !tagAnalysis.MetaTags.HasViewport {
+		recs = append(recs, re.createRecommendation("missing-viewport", map[string]interface{}{}))
+	}
+
+	if !tagAnalysis.MetaTags.HasCanonical {
+		recs = append(recs, re.createRecommendation("missing-canonical", map[string]interface{}{}))
+	}
+
+	if !tagAnalysis.MetaTags.HasOGTags {
+		recs = append(recs, re.createRecommendation("missing-og-tags", map[string]interface{}{}))
+	}
+
+	return recs
+}
+
+// generatePerformanceRecommendations génère les recommandations de performance
+func (re *RecommendationEngine) generatePerformanceRecommendations(perfMetrics *PerformanceMetricsResult) []SEORecommendation {
+	var recs []SEORecommendation
+
+	// Temps de chargement
+	if perfMetrics.CoreWebVitals.LCP.Score == "poor" {
+		recs = append(recs, re.createRecommendation("improve-lcp", map[string]interface{}{
+			"current_value": fmt.Sprintf("%.1fms", perfMetrics.CoreWebVitals.LCP.Value),
+			"target":        "≤ 2.5s",
+		}))
+	}
+
+	if perfMetrics.CoreWebVitals.FID.Score == "poor" {
+		recs = append(recs, re.createRecommendation("improve-fid", map[string]interface{}{
+			"current_value": fmt.Sprintf("%.1fms", perfMetrics.CoreWebVitals.FID.Value),
+			"target":        "≤ 100ms",
+		}))
+	}
+
+	if perfMetrics.CoreWebVitals.CLS.Score == "poor" {
+		recs = append(recs, re.createRecommendation("improve-cls", map[string]interface{}{
+			"current_value": fmt.Sprintf("%.3f", perfMetrics.CoreWebVitals.CLS.Value),
+			"target":        "≤ 0.1",
+		}))
+	}
+
+	// Compression
+	if !perfMetrics.HasCompression {
+		recs = append(recs, re.createRecommendation("enable-compression", map[string]interface{}{}))
+	}
+
+	// Cache
+	if !perfMetrics.HasCaching {
+		recs = append(recs, re.createRecommendation("configure-caching", map[string]interface{}{}))
+	}
+
+	// Images
+	if !perfMetrics.OptimizedImages && perfMetrics.ResourceCounts.Images > 0 {
+		recs = append(recs, re.createRecommendation("optimize-images", map[string]interface{}{
+			"image_count": perfMetrics.ResourceCounts.Images,
+		}))
+	}
+
+	// Minification
+	if !perfMetrics.MinifiedResources {
+		recs = append(recs, re.createRecommendation("minify-resources", map[string]interface{}{}))
+	}
+
+	// Taille de page
+	if perfMetrics.PageSize > 2*1024*1024 { // > 2MB
+		recs = append(recs, re.createRecommendation("reduce-page-size", map[string]interface{}{
+			"current_size": fmt.Sprintf("%.1f MB", float64(perfMetrics.PageSize)/(1024*1024)),
+			"target":       "< 2 MB",
+		}))
+	}
+
+	return recs
+}
+
+// generateTechnicalRecommendations génère les recommandations techniques
+func (re *RecommendationEngine) generateTechnicalRecommendations(techAudit *TechnicalAuditResult) []SEORecommendation {
+	var recs []SEORecommendation
+
+	// Sécurité
+	if !techAudit.Security.HasHTTPS {
+		recs = append(recs, re.createRecommendation("migrate-https", map[string]interface{}{}))
+	}
+
+	if techAudit.Security.MixedContent {
+		recs = append(recs, re.createRecommendation("fix-mixed-content", map[string]interface{}{
+			"insecure_links": len(techAudit.Security.InsecureLinks),
+		}))
+	}
+
+	if !techAudit.Security.HasHSTS {
+		recs = append(recs, re.createRecommendation("add-hsts", map[string]interface{}{}))
+	}
+
+	// Mobile
+	if !techAudit.Mobile.IsResponsive {
+		recs = append(recs, re.createRecommendation("make-responsive", map[string]interface{}{}))
+	}
+
+	// Structure
+	if !techAudit.Structure.HasSitemap {
+		recs = append(recs, re.createRecommendation("add-sitemap", map[string]interface{}{}))
+	}
+
+	if !techAudit.Structure.HasRobotsTxt {
+		recs = append(recs, re.createRecommendation("add-robots-txt", map[string]interface{}{}))
+	}
+
+	// Indexabilité
+	if techAudit.Indexability.HasNoIndex {
+		recs = append(recs, re.createRecommendation("remove-noindex", map[string]interface{}{}))
+	}
+
+	if techAudit.Indexability.DuplicateContent {
+		recs = append(recs, re.createRecommendation("fix-duplicate-content", map[string]interface{}{}))
+	}
+
+	// Accessibilité
+	if techAudit.Accessibility.Score < 0.7 {
+		recs = append(recs, re.createRecommendation("improve-accessibility", map[string]interface{}{
+			"current_score": fmt.Sprintf("%.1f%%", techAudit.Accessibility.Score*100),
+			"target":        "≥ 80%",
+		}))
+	}
+
+	// Crawlabilité
+	if len(techAudit.Crawlability.BrokenLinks) > 0 {
+		recs = append(recs, re.createRecommendation("fix-broken-links", map[string]interface{}{
+			"broken_count": len(techAudit.Crawlability.BrokenLinks),
+		}))
+	}
+
+	if techAudit.Crawlability.InternalLinks < 3 {
+		recs = append(recs, re.createRecommendation("improve-internal-linking", map[string]interface{}{
+			"current_links": techAudit.Crawlability.InternalLinks,
+			"target":        "≥ 3",
+		}))
+	}
+
+	return recs
+}
+
+// generateScoreBasedRecommendations génère des recommandations basées sur les scores globaux
+func (re *RecommendationEngine) generateScoreBasedRecommendations(analysis *SEOAnalysisResult) []SEORecommendation {
+	var recs []SEORecommendation
+
+	// Score global faible
+	if analysis.OverallScore < 50 {
+		recs = append(recs, re.createRecommendation("overall-seo-audit", map[string]interface{}{
+			"current_score": fmt.Sprintf("%.1f", analysis.OverallScore),
+			"target":        "≥ 70",
+		}))
+	}
+
+	// Scores par catégorie
+	for category, score := range analysis.CategoryScores {
+		if score < 0.5 { // Score < 50%
+			recs = append(recs, re.createRecommendation(fmt.Sprintf("improve-%s", category), map[string]interface{}{
+				"category":      category,
+				"current_score": fmt.Sprintf("%.1f%%", score*100),
+				"target":        "≥ 70%",
+			}))
+		}
+	}
+
+	return recs
+}
+
+// createRecommendation crée une recommandation à partir d'un template
+func (re *RecommendationEngine) createRecommendation(templateID string, params map[string]interface{}) SEORecommendation {
+	template, exists := re.templates[templateID]
+	if !exists {
+		// Template par défaut
+		return SEORecommendation{
+			ID:          templateID,
+			Title:       "Recommandation SEO",
+			Description: "Amélioration SEO recommandée",
+			Category:    "general",
+			Priority:    PriorityMedium,
+			Impact:      ImpactMedium,
+			Effort:      EffortMedium,
+		}
+	}
+
+	rec := SEORecommendation{
+		ID:          template.ID,
+		Title:       template.Title,
+		Description: template.Description,
+		Category:    template.Category,
+		Priority:    template.Priority,
+		Impact:      template.Impact,
+		Effort:      template.Effort,
+		Metrics:     template.Metrics,
+		Tags:        template.Tags,
+	}
+
+	// Personnaliser avec les paramètres
+	rec.Description = re.interpolateTemplate(template.Description, params)
+
+	// Créer les actions
+	for _, actionTemplate := range template.Actions {
+		action := ActionItem{
+			Task:        re.interpolateTemplate(actionTemplate, params),
+			Description: re.interpolateTemplate(actionTemplate, params),
+			Technical:   strings.Contains(actionTemplate, "technique") || strings.Contains(actionTemplate, "code"),
+			Estimated:   re.estimateTime(template.Effort),
+		}
+		rec.Actions = append(rec.Actions, action)
+	}
+
+	// Créer les ressources
+	for _, resourceTemplate := range template.Resources {
+		resource := Resource{
+			URL:  resourceTemplate,
+			Type: "documentation",
+		}
+		rec.Resources = append(rec.Resources, resource)
+	}
+
+	return rec
+}
+
+// interpolateTemplate remplace les placeholders dans les templates
+func (re *RecommendationEngine) interpolateTemplate(template string, params map[string]interface{}) string {
+	result := template
+	for key, value := range params {
+		placeholder := fmt.Sprintf("{%s}", key)
+		result = strings.ReplaceAll(result, placeholder, fmt.Sprintf("%v", value))
+	}
+	return result
+}
+
+// estimateTime estime le temps requis
+func (re *RecommendationEngine) estimateTime(effort Effort) string {
+	switch effort {
+	case EffortLow:
+		return "1-2 heures"
+	case EffortMedium:
+		return "4-8 heures"
+	case EffortHigh:
+		return "1-2 jours"
+	default:
+		return "Variable"
+	}
+}
+
+// sortRecommendations trie les recommandations par priorité et impact
+func (re *RecommendationEngine) sortRecommendations(recommendations []SEORecommendation) {
+	sort.Slice(recommendations, func(i, j int) bool {
+		// Priorité d'abord
+		iPrio := re.getPriorityWeight(recommendations[i].Priority)
+		jPrio := re.getPriorityWeight(recommendations[j].Priority)
+		
+		if iPrio != jPrio {
+			return iPrio > jPrio
+		}
+		
+		// Puis impact
+		iImpact := re.getImpactWeight(recommendations[i].Impact)
+		jImpact := re.getImpactWeight(recommendations[j].Impact)
+		
+		return iImpact > jImpact
+	})
+}
+
+// getPriorityWeight retourne le poids numérique de la priorité
+func (re *RecommendationEngine) getPriorityWeight(priority Priority) int {
+	switch priority {
+	case PriorityCritical:
+		return 4
+	case PriorityHigh:
+		return 3
+	case PriorityMedium:
+		return 2
+	case PriorityLow:
+		return 1
+	default:
+		return 0
+	}
+}
+
+// getImpactWeight retourne le poids numérique de l'impact
+func (re *RecommendationEngine) getImpactWeight(impact Impact) int {
+	switch impact {
+	case ImpactHigh:
+		return 3
+	case ImpactMedium:
+		return 2
+	case ImpactLow:
+		return 1
+	default:
+		return 0
+	}
+}
+
+// deduplicateRecommendations supprime les doublons
+func (re *RecommendationEngine) deduplicateRecommendations(recommendations []SEORecommendation) []SEORecommendation {
+	seen := make(map[string]bool)
+	var unique []SEORecommendation
+
+	for _, rec := range recommendations {
+		key := rec.ID + "|" + rec.Category
+		if !seen[key] {
+			seen[key] = true
+			unique = append(unique, rec)
+		}
+	}
+
+	return unique
+}
+
+// initPriorityRules initialise les règles de priorité
+func (re *RecommendationEngine) initPriorityRules() {
+	re.priorityRules["missing-title"] = 90
+	re.priorityRules["missing-meta-desc"] = 80
+	re.priorityRules["migrate-https"] = 95
+	re.priorityRules["missing-viewport"] = 85
+	re.priorityRules["improve-lcp"] = 75
+	re.priorityRules["missing-h1"] = 70
+	// ... plus de règles
+}
+
+// initRecommendationTemplates initialise les templates de recommandations
+func (re *RecommendationEngine) initRecommendationTemplates() {
+	// Template: Titre manquant
+	re.templates["missing-title"] = RecommendationTemplate{
+		ID:          "missing-title",
+		Title:       "Ajouter un titre de page",
+		Description: "La page n'a pas de balise <title>. C'est un élément fondamental pour le SEO.",
+		Category:    "tags",
+		Priority:    PriorityCritical,
+		Impact:      ImpactHigh,
+		Effort:      EffortLow,
+		Actions: []string{
+			"Ajouter une balise <title> descriptive et unique",
+			"Inclure les mots-clés principaux",
+			"Respecter la longueur optimale (30-60 caractères)",
+		},
+		Resources: []string{
+			"https://developers.google.com/search/docs/appearance/title-link",
+		},
+		Metrics: []string{"Taux de clic", "Position dans les SERP"},
+		Tags:    []string{"critique", "balises", "onpage"},
+	}
+
+	// Template: Meta description manquante
+	re.templates["missing-meta-desc"] = RecommendationTemplate{
+		ID:          "missing-meta-desc",
+		Title:       "Ajouter une meta description",
+		Description: "La page n'a pas de meta description. Elle influence le taux de clic dans les résultats de recherche.",
+		Category:    "tags",
+		Priority:    PriorityHigh,
+		Impact:      ImpactHigh,
+		Effort:      EffortLow,
+		Actions: []string{
+			"Ajouter une meta description attrayante",
+			"Inclure un appel à l'action",
+			"Respecter la longueur optimale (120-160 caractères)",
+		},
+		Resources: []string{
+			"https://developers.google.com/search/docs/appearance/snippet",
+		},
+		Metrics: []string{"Taux de clic", "Impressions"},
+		Tags:    []string{"meta", "balises", "ctr"},
+	}
+
+	// Template: Migration HTTPS
+	re.templates["migrate-https"] = RecommendationTemplate{
+		ID:          "migrate-https",
+		Title:       "Migrer vers HTTPS",
+		Description: "Le site utilise HTTP au lieu de HTTPS. Google favorise les sites sécurisés.",
+		Category:    "security",
+		Priority:    PriorityCritical,
+		Impact:      ImpactHigh,
+		Effort:      EffortHigh,
+		Actions: []string{
+			"Obtenir un certificat SSL/TLS",
+			"Configurer le serveur pour HTTPS",
+			"Rediriger tout le trafic HTTP vers HTTPS",
+			"Mettre à jour les liens internes",
+		},
+		Resources: []string{
+			"https://developers.google.com/search/docs/advanced/security/https",
+		},
+		Metrics: []string{"Trust signals", "Ranking boost"},
+		Tags:    []string{"critique", "sécurité", "technique"},
+	}
+
+	// Template: Core Web Vitals - LCP
+	re.templates["improve-lcp"] = RecommendationTemplate{
+		ID:          "improve-lcp",
+		Title:       "Améliorer le Largest Contentful Paint (LCP)",
+		Description: "Le LCP actuel est de {current_value}, l'objectif est {target}. Optimisez le chargement du contenu principal.",
+		Category:    "performance",
+		Priority:    PriorityHigh,
+		Impact:      ImpactHigh,
+		Effort:      EffortMedium,
+		Actions: []string{
+			"Optimiser les images de l'above-the-fold",
+			"Améliorer le temps de réponse du serveur",
+			"Précharger les ressources critiques",
+			"Utiliser un CDN",
+		},
+		Resources: []string{
+			"https://web.dev/lcp/",
+		},
+		Metrics: []string{"LCP", "Page Experience", "Core Web Vitals"},
+		Tags:    []string{"performance", "core-web-vitals", "lcp"},
+	}
+
+	// ... Ajouter plus de templates selon les besoins
+}
