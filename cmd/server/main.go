@@ -84,7 +84,7 @@ var (
 	resultsTemplate   *template.Template
 )
 
-// loadTemplates - Charger les 3 templates
+// loadTemplates - Charger les 3 templates avec noms explicites
 func loadTemplates() error {
 	templateDir := filepath.Join(".", "templates")
 	
@@ -95,18 +95,21 @@ func loadTemplates() error {
 
 	var err error
 	
-	// Charger les 3 templates
-	homeTemplate, err = template.ParseFiles(filepath.Join(templateDir, "home.html"))
+	// Charger chaque template avec un nom unique
+	homeTemplate = template.New("home")
+	homeTemplate, err = homeTemplate.ParseFiles(filepath.Join(templateDir, "home.html"))
 	if err != nil {
 		return fmt.Errorf("failed to parse home template: %w", err)
 	}
 
-	analyzingTemplate, err = template.ParseFiles(filepath.Join(templateDir, "analyzing.html"))
+	analyzingTemplate = template.New("analyzing") 
+	analyzingTemplate, err = analyzingTemplate.ParseFiles(filepath.Join(templateDir, "analyzing.html"))
 	if err != nil {
 		return fmt.Errorf("failed to parse analyzing template: %w", err)
 	}
 
-	resultsTemplate, err = template.ParseFiles(filepath.Join(templateDir, "results.html"))
+	resultsTemplate = template.New("results")
+	resultsTemplate, err = resultsTemplate.ParseFiles(filepath.Join(templateDir, "results.html"))
 	if err != nil {
 		return fmt.Errorf("failed to parse results template: %w", err)
 	}
