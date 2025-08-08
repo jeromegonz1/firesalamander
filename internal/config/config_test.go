@@ -26,12 +26,12 @@ func TestLoadConfig_Success(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 	
-	if cfg.Port != 3000 {
-		t.Errorf("Expected port 3000, got %d", cfg.Port)
+	if cfg.Server.Port != 3000 {
+		t.Errorf("Expected port 3000, got %d", cfg.Server.Port)
 	}
 	
-	if cfg.Host != "127.0.0.1" {
-		t.Errorf("Expected host '127.0.0.1', got '%s'", cfg.Host)
+	if cfg.Server.Host != "127.0.0.1" {
+		t.Errorf("Expected host '127.0.0.1', got '%s'", cfg.Server.Host)
 	}
 	
 	if cfg.Env != "test" {
@@ -67,12 +67,12 @@ func TestLoadConfig_Defaults(t *testing.T) {
 	}
 	
 	// Default values as per .env.example
-	if cfg.Port != 8080 {
-		t.Errorf("Expected default port 8080, got %d", cfg.Port)
+	if cfg.Server.Port != 8080 {
+		t.Errorf("Expected default port 8080, got %d", cfg.Server.Port)
 	}
 	
-	if cfg.Host != "localhost" {
-		t.Errorf("Expected default host 'localhost', got '%s'", cfg.Host)
+	if cfg.Server.Host != "localhost" {
+		t.Errorf("Expected default host 'localhost', got '%s'", cfg.Server.Host)
 	}
 	
 	if cfg.Env != "development" {
@@ -140,8 +140,19 @@ func TestConfig_Validate(t *testing.T) {
 		{
 			name: "valid config",
 			config: Config{
-				Port:            8080,
-				Host:            "localhost",
+				Server: ServerConfig{
+					Port: 8080,
+					Host: "localhost",
+				},
+				App: AppConfig{
+					Name: "Test App",
+					Version: "1.0.0",
+				},
+				Crawler: CrawlerConfig{
+					UserAgent: "Test Agent",
+					Workers: 5,
+					RateLimit: "10/s",
+				},
 				Env:             "development",
 				LogLevel:        "info",
 				MaxPagesCrawl:   20,
@@ -156,7 +167,7 @@ func TestConfig_Validate(t *testing.T) {
 		{
 			name: "invalid port too low",
 			config: Config{
-				Port: 0,
+				Server: ServerConfig{Port: 0},
 			},
 			wantErr: true,
 			errMsg:  "port must be between 1 and 65535",
@@ -164,7 +175,7 @@ func TestConfig_Validate(t *testing.T) {
 		{
 			name: "invalid port too high",
 			config: Config{
-				Port: 70000,
+				Server: ServerConfig{Port: 70000},
 			},
 			wantErr: true,
 			errMsg:  "port must be between 1 and 65535",
@@ -172,8 +183,10 @@ func TestConfig_Validate(t *testing.T) {
 		{
 			name: "empty host",
 			config: Config{
-				Port: 8080,
-				Host: "",
+				Server: ServerConfig{
+					Port: 8080,
+					Host: "",
+				},
 			},
 			wantErr: true,
 			errMsg:  "host cannot be empty",

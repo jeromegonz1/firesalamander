@@ -1,6 +1,7 @@
 package main
 
 import (
+	"firesalamander/internal/constants"
 	"fmt"
 	"html/template"
 	"log"
@@ -298,13 +299,13 @@ func setupServer() *http.ServeMux {
 		}
 		homeHandler(w, r)
 	})
-	mux.HandleFunc("/analyze", analyzeHandler)
-	mux.HandleFunc("/results", resultsHandler)
+	mux.HandleFunc(constants.APIEndpointAnalyze, analyzeHandler)
+	mux.HandleFunc(constants.APIEndpointResults, resultsHandler)
 
 	// Routes API
-	mux.HandleFunc("/api/analyze", api.AnalyzeHandler)
-	mux.HandleFunc("/api/status/", api.StatusHandler)
-	mux.HandleFunc("/api/results/", api.ResultsHandler)
+	mux.HandleFunc(constants.APIEndpointAnalyze, api.AnalyzeHandler)
+	mux.HandleFunc(constants.APIEndpointStatus + "/", api.StatusHandler)
+	mux.HandleFunc(constants.APIEndpointResults + "/", api.ResultsHandler)
 
 	return mux
 }
@@ -324,8 +325,8 @@ func main() {
 	// Configuration du serveur
 	server := setupServer()
 
-	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
-	log.Printf("🔥 Fire Salamander démarré sur http://%s", addr)
+	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
+	log.Printf(constants.ServerStartedFormat, addr)
 	log.Printf("📊 Interface SEO disponible à l'adresse ci-dessus")
 
 	// Démarrage du serveur

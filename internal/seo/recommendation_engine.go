@@ -3,7 +3,10 @@ package seo
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
+
+	"firesalamander/internal/constants"
 )
 
 // RecommendationEngine moteur de recommandations SEO intelligent
@@ -120,7 +123,7 @@ func (re *RecommendationEngine) GenerateRecommendations(analysis *SEOAnalysisRes
 	recommendations = re.deduplicateRecommendations(recommendations)
 
 	// 7. Limiter le nombre de recommandations (top 20)
-	if len(recommendations) > 20 {
+	if len(recommendations) > constants.RecommendationMaxRecommendations {
 		recommendations = recommendations[:20]
 	}
 
@@ -133,42 +136,42 @@ func (re *RecommendationEngine) generateTagRecommendations(tagAnalysis *TagAnaly
 
 	// Titre
 	if !tagAnalysis.Title.Present {
-		recs = append(recs, re.createRecommendation("missing-title", map[string]interface{}{
-			"issue": "Titre manquant",
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingTitle, map[string]interface{}{
+			"issue": constants.RecommendationIssueTitleMissing,
 		}))
 	} else if !tagAnalysis.Title.OptimalLength {
-		recs = append(recs, re.createRecommendation("title-length", map[string]interface{}{
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDTitleLength, map[string]interface{}{
 			"current_length": tagAnalysis.Title.Length,
-			"optimal_range":  "30-60 caractères",
+			"optimal_range":  constants.RecommendationTitleRange,
 		}))
 	}
 
 	// Meta description
 	if !tagAnalysis.MetaDescription.Present {
-		recs = append(recs, re.createRecommendation("missing-meta-desc", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingMetaDesc, map[string]interface{}{}))
 	} else if !tagAnalysis.MetaDescription.OptimalLength {
-		recs = append(recs, re.createRecommendation("meta-desc-length", map[string]interface{}{
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMetaDescLength, map[string]interface{}{
 			"current_length": tagAnalysis.MetaDescription.Length,
-			"optimal_range":  "120-160 caractères",
+			"optimal_range":  constants.RecommendationMetaDescRange,
 		}))
 	}
 
 	// Structure des headings
 	if tagAnalysis.Headings.H1Count == 0 {
-		recs = append(recs, re.createRecommendation("missing-h1", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingH1, map[string]interface{}{}))
 	} else if tagAnalysis.Headings.H1Count > 1 {
-		recs = append(recs, re.createRecommendation("multiple-h1", map[string]interface{}{
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMultipleH1, map[string]interface{}{
 			"count": tagAnalysis.Headings.H1Count,
 		}))
 	}
 
 	if !tagAnalysis.Headings.HasHierarchy {
-		recs = append(recs, re.createRecommendation("heading-hierarchy", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDHeadingHierarchy, map[string]interface{}{}))
 	}
 
 	// Images
-	if tagAnalysis.Images.AltTextCoverage < 1.0 {
-		recs = append(recs, re.createRecommendation("missing-alt-tags", map[string]interface{}{
+	if tagAnalysis.Images.AltTextCoverage < constants.RecommendationAltTextThreshold {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingAltTags, map[string]interface{}{
 			"coverage": fmt.Sprintf("%.1f%%", tagAnalysis.Images.AltTextCoverage*100),
 			"missing":  len(tagAnalysis.Images.MissingAltImages),
 		}))
@@ -176,15 +179,15 @@ func (re *RecommendationEngine) generateTagRecommendations(tagAnalysis *TagAnaly
 
 	// Meta tags essentiels
 	if !tagAnalysis.MetaTags.HasViewport {
-		recs = append(recs, re.createRecommendation("missing-viewport", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingViewport, map[string]interface{}{}))
 	}
 
 	if !tagAnalysis.MetaTags.HasCanonical {
-		recs = append(recs, re.createRecommendation("missing-canonical", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingCanonical, map[string]interface{}{}))
 	}
 
 	if !tagAnalysis.MetaTags.HasOGTags {
-		recs = append(recs, re.createRecommendation("missing-og-tags", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMissingOGTags, map[string]interface{}{}))
 	}
 
 	return recs
@@ -195,54 +198,54 @@ func (re *RecommendationEngine) generatePerformanceRecommendations(perfMetrics *
 	var recs []SEORecommendation
 
 	// Temps de chargement
-	if perfMetrics.CoreWebVitals.LCP.Score == "poor" {
-		recs = append(recs, re.createRecommendation("improve-lcp", map[string]interface{}{
+	if perfMetrics.CoreWebVitals.LCP.Score == constants.RecommendationScorePoor {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDImproveLCP, map[string]interface{}{
 			"current_value": fmt.Sprintf("%.1fms", perfMetrics.CoreWebVitals.LCP.Value),
-			"target":        "≤ 2.5s",
+			"target":        constants.RecommendationTargetLCP,
 		}))
 	}
 
-	if perfMetrics.CoreWebVitals.FID.Score == "poor" {
-		recs = append(recs, re.createRecommendation("improve-fid", map[string]interface{}{
+	if perfMetrics.CoreWebVitals.FID.Score == constants.RecommendationScorePoor {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDImproveFID, map[string]interface{}{
 			"current_value": fmt.Sprintf("%.1fms", perfMetrics.CoreWebVitals.FID.Value),
-			"target":        "≤ 100ms",
+			"target":        constants.RecommendationTargetFID,
 		}))
 	}
 
-	if perfMetrics.CoreWebVitals.CLS.Score == "poor" {
-		recs = append(recs, re.createRecommendation("improve-cls", map[string]interface{}{
+	if perfMetrics.CoreWebVitals.CLS.Score == constants.RecommendationScorePoor {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDImproveCLS, map[string]interface{}{
 			"current_value": fmt.Sprintf("%.3f", perfMetrics.CoreWebVitals.CLS.Value),
-			"target":        "≤ 0.1",
+			"target":        constants.RecommendationTargetCLS,
 		}))
 	}
 
 	// Compression
 	if !perfMetrics.HasCompression {
-		recs = append(recs, re.createRecommendation("enable-compression", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDEnableCompression, map[string]interface{}{}))
 	}
 
 	// Cache
 	if !perfMetrics.HasCaching {
-		recs = append(recs, re.createRecommendation("configure-caching", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDConfigureCaching, map[string]interface{}{}))
 	}
 
 	// Images
 	if !perfMetrics.OptimizedImages && perfMetrics.ResourceCounts.Images > 0 {
-		recs = append(recs, re.createRecommendation("optimize-images", map[string]interface{}{
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDOptimizeImages, map[string]interface{}{
 			"image_count": perfMetrics.ResourceCounts.Images,
 		}))
 	}
 
 	// Minification
 	if !perfMetrics.MinifiedResources {
-		recs = append(recs, re.createRecommendation("minify-resources", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMinifyResources, map[string]interface{}{}))
 	}
 
 	// Taille de page
-	if perfMetrics.PageSize > 2*1024*1024 { // > 2MB
-		recs = append(recs, re.createRecommendation("reduce-page-size", map[string]interface{}{
+	if perfMetrics.PageSize > constants.RecommendationMaxPageSizeBytes { // > 2MB
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDReducePageSize, map[string]interface{}{
 			"current_size": fmt.Sprintf("%.1f MB", float64(perfMetrics.PageSize)/(1024*1024)),
-			"target":       "< 2 MB",
+			"target":       constants.RecommendationTargetPageSize,
 		}))
 	}
 
@@ -255,61 +258,61 @@ func (re *RecommendationEngine) generateTechnicalRecommendations(techAudit *Tech
 
 	// Sécurité
 	if !techAudit.Security.HasHTTPS {
-		recs = append(recs, re.createRecommendation("migrate-https", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMigrateHTTPS, map[string]interface{}{}))
 	}
 
 	if techAudit.Security.MixedContent {
-		recs = append(recs, re.createRecommendation("fix-mixed-content", map[string]interface{}{
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDFixMixedContent, map[string]interface{}{
 			"insecure_links": len(techAudit.Security.InsecureLinks),
 		}))
 	}
 
 	if !techAudit.Security.HasHSTS {
-		recs = append(recs, re.createRecommendation("add-hsts", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDAddHSTS, map[string]interface{}{}))
 	}
 
 	// Mobile
 	if !techAudit.Mobile.IsResponsive {
-		recs = append(recs, re.createRecommendation("make-responsive", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDMakeResponsive, map[string]interface{}{}))
 	}
 
 	// Structure
 	if !techAudit.Structure.HasSitemap {
-		recs = append(recs, re.createRecommendation("add-sitemap", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDAddSitemap, map[string]interface{}{}))
 	}
 
 	if !techAudit.Structure.HasRobotsTxt {
-		recs = append(recs, re.createRecommendation("add-robots-txt", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDAddRobotsTxt, map[string]interface{}{}))
 	}
 
 	// Indexabilité
 	if techAudit.Indexability.HasNoIndex {
-		recs = append(recs, re.createRecommendation("remove-noindex", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDRemoveNoIndex, map[string]interface{}{}))
 	}
 
 	if techAudit.Indexability.DuplicateContent {
-		recs = append(recs, re.createRecommendation("fix-duplicate-content", map[string]interface{}{}))
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDFixDuplicateContent, map[string]interface{}{}))
 	}
 
 	// Accessibilité
-	if techAudit.Accessibility.Score < 0.7 {
-		recs = append(recs, re.createRecommendation("improve-accessibility", map[string]interface{}{
+	if techAudit.Accessibility.Score < constants.RecommendationAccessibilityThreshold {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDImproveAccessibility, map[string]interface{}{
 			"current_score": fmt.Sprintf("%.1f%%", techAudit.Accessibility.Score*100),
-			"target":        "≥ 80%",
+			"target":        "≥ " + strconv.Itoa(constants.RecommendationRuleMissingMetaDesc) + "%",
 		}))
 	}
 
 	// Crawlabilité
 	if len(techAudit.Crawlability.BrokenLinks) > 0 {
-		recs = append(recs, re.createRecommendation("fix-broken-links", map[string]interface{}{
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDFixBrokenLinks, map[string]interface{}{
 			"broken_count": len(techAudit.Crawlability.BrokenLinks),
 		}))
 	}
 
-	if techAudit.Crawlability.InternalLinks < 3 {
-		recs = append(recs, re.createRecommendation("improve-internal-linking", map[string]interface{}{
+	if techAudit.Crawlability.InternalLinks < constants.RecommendationMinInternalLinks {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDImproveInternalLinking, map[string]interface{}{
 			"current_links": techAudit.Crawlability.InternalLinks,
-			"target":        "≥ 3",
+			"target":        constants.RecommendationTargetLinks,
 		}))
 	}
 
@@ -321,20 +324,20 @@ func (re *RecommendationEngine) generateScoreBasedRecommendations(analysis *SEOA
 	var recs []SEORecommendation
 
 	// Score global faible
-	if analysis.OverallScore < 50 {
-		recs = append(recs, re.createRecommendation("overall-seo-audit", map[string]interface{}{
+	if analysis.OverallScore < constants.RecommendationScoreThresholdLow {
+		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDOverallSEOAudit, map[string]interface{}{
 			"current_score": fmt.Sprintf("%.1f", analysis.OverallScore),
-			"target":        "≥ 70",
+			"target":        constants.RecommendationTargetScore,
 		}))
 	}
 
 	// Scores par catégorie
 	for category, score := range analysis.CategoryScores {
-		if score < 0.5 { // Score < 50%
+		if score < constants.RecommendationCategoryThresholdLow { // Score < 50%
 			recs = append(recs, re.createRecommendation(fmt.Sprintf("improve-%s", category), map[string]interface{}{
 				"category":      category,
 				"current_score": fmt.Sprintf("%.1f%%", score*100),
-				"target":        "≥ 70%",
+				"target":        constants.RecommendationTargetScore,
 			}))
 		}
 	}
@@ -349,9 +352,9 @@ func (re *RecommendationEngine) createRecommendation(templateID string, params m
 		// Template par défaut
 		return SEORecommendation{
 			ID:          templateID,
-			Title:       "Recommandation SEO",
-			Description: "Amélioration SEO recommandée",
-			Category:    "general",
+			Title:       constants.RecommendationDefaultTitle,
+			Description: constants.RecommendationDefaultDescription,
+			Category:    constants.RecommendationCategoryGeneral,
 			Priority:    PriorityMedium,
 			Impact:      ImpactMedium,
 			Effort:      EffortMedium,
@@ -378,7 +381,7 @@ func (re *RecommendationEngine) createRecommendation(templateID string, params m
 		action := ActionItem{
 			Task:        re.interpolateTemplate(actionTemplate, params),
 			Description: re.interpolateTemplate(actionTemplate, params),
-			Technical:   strings.Contains(actionTemplate, "technique") || strings.Contains(actionTemplate, "code"),
+			Technical:   strings.Contains(actionTemplate, constants.RecommendationTagTechnical) || strings.Contains(actionTemplate, "code"),
 			Estimated:   re.estimateTime(template.Effort),
 		}
 		rec.Actions = append(rec.Actions, action)
@@ -388,7 +391,7 @@ func (re *RecommendationEngine) createRecommendation(templateID string, params m
 	for _, resourceTemplate := range template.Resources {
 		resource := Resource{
 			URL:  resourceTemplate,
-			Type: "documentation",
+			Type: constants.RecommendationResourceTypeDoc,
 		}
 		rec.Resources = append(rec.Resources, resource)
 	}
@@ -400,7 +403,7 @@ func (re *RecommendationEngine) createRecommendation(templateID string, params m
 func (re *RecommendationEngine) interpolateTemplate(template string, params map[string]interface{}) string {
 	result := template
 	for key, value := range params {
-		placeholder := fmt.Sprintf("{%s}", key)
+		placeholder := fmt.Sprintf("constants.RecommendationPlaceholderPattern", key)
 		result = strings.ReplaceAll(result, placeholder, fmt.Sprintf("%v", value))
 	}
 	return result
@@ -410,13 +413,13 @@ func (re *RecommendationEngine) interpolateTemplate(template string, params map[
 func (re *RecommendationEngine) estimateTime(effort Effort) string {
 	switch effort {
 	case EffortLow:
-		return "1-2 heures"
+		return constants.RecommendationTimeLow
 	case EffortMedium:
-		return "4-8 heures"
+		return constants.RecommendationTimeMedium
 	case EffortHigh:
-		return "1-2 jours"
+		return constants.RecommendationTimeHigh
 	default:
-		return "Variable"
+		return constants.RecommendationTimeVariable
 	}
 }
 
@@ -487,101 +490,101 @@ func (re *RecommendationEngine) deduplicateRecommendations(recommendations []SEO
 
 // initPriorityRules initialise les règles de priorité
 func (re *RecommendationEngine) initPriorityRules() {
-	re.priorityRules["missing-title"] = 90
-	re.priorityRules["missing-meta-desc"] = 80
-	re.priorityRules["migrate-https"] = 95
-	re.priorityRules["missing-viewport"] = 85
-	re.priorityRules["improve-lcp"] = 75
-	re.priorityRules["missing-h1"] = 70
+	re.priorityRules[constants.RecommendationTemplateIDMissingTitle] = constants.RecommendationRuleMissingTitle
+	re.priorityRules[constants.RecommendationTemplateIDMissingMetaDesc] = constants.RecommendationRuleMissingMetaDesc
+	re.priorityRules[constants.RecommendationTemplateIDMigrateHTTPS] = constants.RecommendationRuleMigrateHTTPS
+	re.priorityRules[constants.RecommendationTemplateIDMissingViewport] = constants.RecommendationRuleMissingMetaDesc
+	re.priorityRules[constants.RecommendationTemplateIDImproveLCP] = constants.RecommendationRuleImproveLCP
+	re.priorityRules[constants.RecommendationTemplateIDMissingH1] = constants.RecommendationRuleMissingH1
 	// ... plus de règles
 }
 
 // initRecommendationTemplates initialise les templates de recommandations
 func (re *RecommendationEngine) initRecommendationTemplates() {
 	// Template: Titre manquant
-	re.templates["missing-title"] = RecommendationTemplate{
-		ID:          "missing-title",
-		Title:       "Ajouter un titre de page",
-		Description: "La page n'a pas de balise <title>. C'est un élément fondamental pour le SEO.",
-		Category:    "tags",
+	re.templates[constants.RecommendationTemplateIDMissingTitle] = RecommendationTemplate{
+		ID:          constants.RecommendationTemplateIDMissingTitle,
+		Title:       constants.RecommendationTitleAddPageTitle,
+		Description: constants.RecommendationDescMissingTitle,
+		Category:    constants.RecommendationCategoryTags,
 		Priority:    PriorityCritical,
 		Impact:      ImpactHigh,
 		Effort:      EffortLow,
 		Actions: []string{
-			"Ajouter une balise <title> descriptive et unique",
-			"Inclure les mots-clés principaux",
-			"Respecter la longueur optimale (30-60 caractères)",
+			constants.RecommendationActionAddTitleTag,
+			constants.RecommendationActionIncludeKeywords,
+			constants.RecommendationActionRespectLength,
 		},
 		Resources: []string{
-			"https://developers.google.com/search/docs/appearance/title-link",
+			constants.GoogleTitleLinkDocs,
 		},
-		Metrics: []string{"Taux de clic", "Position dans les SERP"},
-		Tags:    []string{"critique", "balises", "onpage"},
+		Metrics: []string{constants.RecommendationMetricCTR, constants.RecommendationMetricSERPPosition},
+		Tags:    []string{constants.RecommendationTagCritical, constants.RecommendationTagTags, constants.RecommendationTagOnPage},
 	}
 
 	// Template: Meta description manquante
-	re.templates["missing-meta-desc"] = RecommendationTemplate{
-		ID:          "missing-meta-desc",
-		Title:       "Ajouter une meta description",
-		Description: "La page n'a pas de meta description. Elle influence le taux de clic dans les résultats de recherche.",
-		Category:    "tags",
+	re.templates[constants.RecommendationTemplateIDMissingMetaDesc] = RecommendationTemplate{
+		ID:          constants.RecommendationTemplateIDMissingMetaDesc,
+		Title:       constants.RecommendationTitleAddMetaDesc,
+		Description: constants.RecommendationDescMissingMetaDesc,
+		Category:    constants.RecommendationCategoryTags,
 		Priority:    PriorityHigh,
 		Impact:      ImpactHigh,
 		Effort:      EffortLow,
 		Actions: []string{
-			"Ajouter une meta description attrayante",
-			"Inclure un appel à l'action",
-			"Respecter la longueur optimale (120-160 caractères)",
+			constants.RecommendationActionAddMetaDesc,
+			constants.RecommendationActionIncludeCTA,
+			constants.RecommendationActionRespectLength,
 		},
 		Resources: []string{
-			"https://developers.google.com/search/docs/appearance/snippet",
+			constants.GoogleSnippetDocs,
 		},
-		Metrics: []string{"Taux de clic", "Impressions"},
-		Tags:    []string{"meta", "balises", "ctr"},
+		Metrics: []string{constants.RecommendationMetricCTR, constants.RecommendationMetricImpressions},
+		Tags:    []string{constants.RecommendationTagMeta, constants.RecommendationTagTags, constants.RecommendationTagCTR},
 	}
 
 	// Template: Migration HTTPS
-	re.templates["migrate-https"] = RecommendationTemplate{
-		ID:          "migrate-https",
-		Title:       "Migrer vers HTTPS",
-		Description: "Le site utilise HTTP au lieu de HTTPS. Google favorise les sites sécurisés.",
-		Category:    "security",
+	re.templates[constants.RecommendationTemplateIDMigrateHTTPS] = RecommendationTemplate{
+		ID:          constants.RecommendationTemplateIDMigrateHTTPS,
+		Title:       constants.RecommendationTitleMigrateHTTPS,
+		Description: constants.RecommendationDescMigrateHTTPS,
+		Category:    constants.RecommendationCategorySecurity,
 		Priority:    PriorityCritical,
 		Impact:      ImpactHigh,
 		Effort:      EffortHigh,
 		Actions: []string{
-			"Obtenir un certificat SSL/TLS",
-			"Configurer le serveur pour HTTPS",
-			"Rediriger tout le trafic HTTP vers HTTPS",
-			"Mettre à jour les liens internes",
+			constants.RecommendationActionGetSSLCert,
+			constants.RecommendationActionConfigureHTTPS,
+			constants.RecommendationActionRedirectHTTPS,
+			constants.RecommendationActionUpdateLinks,
 		},
 		Resources: []string{
-			"https://developers.google.com/search/docs/advanced/security/https",
+			constants.GoogleHTTPSDocs,
 		},
-		Metrics: []string{"Trust signals", "Ranking boost"},
-		Tags:    []string{"critique", "sécurité", "technique"},
+		Metrics: []string{constants.RecommendationMetricTrustSignals, constants.RecommendationMetricRankingBoost},
+		Tags:    []string{constants.RecommendationTagCritical, constants.RecommendationTagSecurity, constants.RecommendationTagTechnical},
 	}
 
 	// Template: Core Web Vitals - LCP
-	re.templates["improve-lcp"] = RecommendationTemplate{
-		ID:          "improve-lcp",
-		Title:       "Améliorer le Largest Contentful Paint (LCP)",
-		Description: "Le LCP actuel est de {current_value}, l'objectif est {target}. Optimisez le chargement du contenu principal.",
-		Category:    "performance",
+	re.templates[constants.RecommendationTemplateIDImproveLCP] = RecommendationTemplate{
+		ID:          constants.RecommendationTemplateIDImproveLCP,
+		Title:       constants.RecommendationTitleImproveLCP,
+		Description: constants.RecommendationDescImproveLCP,
+		Category:    constants.RecommendationCategoryPerformance,
 		Priority:    PriorityHigh,
 		Impact:      ImpactHigh,
 		Effort:      EffortMedium,
 		Actions: []string{
-			"Optimiser les images de l'above-the-fold",
-			"Améliorer le temps de réponse du serveur",
-			"Précharger les ressources critiques",
-			"Utiliser un CDN",
+			constants.RecommendationActionOptimizeImages,
+			constants.RecommendationActionImproveServer,
+			constants.RecommendationActionPreloadResources,
+			constants.RecommendationActionUseCDN,
 		},
 		Resources: []string{
-			"https://web.dev/lcp/",
+			constants.WebDevLCPDocs,
 		},
-		Metrics: []string{"LCP", "Page Experience", "Core Web Vitals"},
-		Tags:    []string{"performance", "core-web-vitals", "lcp"},
+		Metrics: []string{constants.RecommendationMetricLCP, constants.RecommendationMetricPageExperience, constants.RecommendationMetricCoreWebVitals},
+		Tags:    []string{constants.RecommendationCategoryPerformance, constants.RecommendationTagCoreWebVitals, constants.RecommendationTagLCP},
 	}
 
 	// ... Ajouter plus de templates selon les besoins

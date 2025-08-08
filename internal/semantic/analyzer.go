@@ -16,7 +16,8 @@ type SemanticAnalyzer struct {
 	ngramAnalyzer   *NGramAnalyzer
 	seoScorer       *SEOScorer
 	aiEnricher      *AIEnricher
-	config          *config.AIConfig
+	aiEnabled       bool
+	aiModel         string
 }
 
 // NewSemanticAnalyzer crée un nouvel analyseur sémantique
@@ -25,8 +26,9 @@ func NewSemanticAnalyzer(cfg *config.Config) *SemanticAnalyzer {
 		contentExtractor: NewContentExtractor(),
 		ngramAnalyzer:   NewNGramAnalyzer(),
 		seoScorer:       NewSEOScorer(),
-		aiEnricher:      NewAIEnricher(&cfg.AI),
-		config:          &cfg.AI,
+		aiEnricher:      NewAIEnricher(cfg),
+		aiEnabled:       cfg.OpenAIAPIKey != "",
+		aiModel:         cfg.OpenAIModel,
 	}
 }
 
@@ -50,7 +52,7 @@ func (sa *SemanticAnalyzer) AnalyzePage(ctx context.Context, url string, htmlCon
 	
 	// 4. Enrichissement IA (si nécessaire)
 	var aiEnrichment *AIAnalysis
-	if useAI && sa.config.Enabled {
+	if useAI && sa.aiEnabled {
 		keywords := sa.extractTopKeywords(localAnalysis.Keywords, 5) // Limiter à 5 pour économiser
 		enrichmentResult, err := sa.aiEnricher.EnrichKeywords(ctx, keywords, content.CleanText)
 		if err != nil {
@@ -118,7 +120,7 @@ func (sa *SemanticAnalyzer) performLocalAnalysis(content *ExtractedContent) Loca
 
 // shouldUseAI détermine si on doit utiliser l'IA basé sur la confiance de l'analyse locale
 func (sa *SemanticAnalyzer) shouldUseAI(localAnalysis LocalAnalysis) bool {
-	if !sa.config.Enabled {
+	if !sa.aiEnabled {
 		return false
 	}
 
@@ -380,8 +382,8 @@ func (sa *SemanticAnalyzer) calculateStatistics(content *ExtractedContent) Conte
 func (sa *SemanticAnalyzer) GetStats() map[string]interface{} {
 	stats := map[string]interface{}{
 		"analyzer_type": "semantic",
-		"ai_enabled":    sa.config.Enabled,
-		"ai_model":      sa.config.Model,
+		"ai_enabled":    sa.aiEnabled,
+		"ai_model":      sa.aiModel,
 	}
 	
 	// Ajouter les stats du cache IA

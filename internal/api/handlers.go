@@ -8,33 +8,43 @@ import (
 	"path"
 	"strings"
 	"time"
+
+	"firesalamander/internal/constants"
+	"firesalamander/internal/messages"
 )
+
+// sendJSONError - Helper pour envoyer des erreurs JSON
+func sendJSONError(w http.ResponseWriter, message string, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
+	errorJSON := fmt.Sprintf(`{"error":"%s"}`, message)
+	http.Error(w, errorJSON, statusCode)
+}
 
 // AnalyzeHandler - POST /api/analyze
 func AnalyzeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method != http.MethodPost {
-		http.Error(w, `{"error":"Method not allowed"}`, http.StatusMethodNotAllowed)
+		sendJSONError(w, messages.ErrMethodNotAllowed, http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Parser la requête JSON
 	var req AnalyzeRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, `{"error":"Invalid JSON"}`, http.StatusBadRequest)
+		sendJSONError(w, messages.ErrInvalidJSON, http.StatusBadRequest)
 		return
 	}
 
 	// Valider l'URL
 	if req.URL == "" {
-		http.Error(w, `{"error":"URL is required"}`, http.StatusBadRequest)
+		sendJSONError(w, messages.ErrURLRequired, http.StatusBadRequest)
 		return
 	}
 
 	parsedURL, err := url.Parse(req.URL)
 	if err != nil || parsedURL.Scheme == "" || parsedURL.Host == "" {
-		http.Error(w, `{"error":"Invalid URL format"}`, http.StatusBadRequest)
+		sendJSONError(w, messages.ErrInvalidURL, http.StatusBadRequest)
 		return
 	}
 
@@ -45,12 +55,12 @@ func AnalyzeHandler(w http.ResponseWriter, r *http.Request) {
 	analysis := &AnalysisState{
 		ID:             analysisID,
 		URL:            req.URL,
-		Status:         "started",
-		Progress:       0,
+		Status:         constants.StatusProcessing,
+		Progress:       constants.DefaultProgressStart,
 		PagesFound:     0,
 		PagesAnalyzed:  0,
 		IssuesFound:    0,
-		EstimatedTime:  "Calcul en cours...",
+		EstimatedTime:  messages.TimeEstimateCalculating,
 		StartTime:      time.Now(),
 	}
 
@@ -63,7 +73,7 @@ func AnalyzeHandler(w http.ResponseWriter, r *http.Request) {
 	// Retourner la réponse
 	response := AnalyzeResponse{
 		ID:     analysisID,
-		Status: "started",
+		Status: constants.StatusProcessing,
 	}
 
 	json.NewEncoder(w).Encode(response)
@@ -88,7 +98,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	// Récupérer l'analyse
 	analysis, exists := Store.Get(analysisID)
 	if !exists {
-		http.Error(w, `{"error":"Analysis not found"}`, http.StatusNotFound)
+		sendJSONError(w, messages.ErrAnalysisNotFound, http.StatusNotFound)
 		return
 	}
 
@@ -126,7 +136,7 @@ func ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	// Récupérer l'analyse
 	analysis, exists := Store.Get(analysisID)
 	if !exists {
-		http.Error(w, `{"error":"Analysis not found"}`, http.StatusNotFound)
+		sendJSONError(w, messages.ErrAnalysisNotFound, http.StatusNotFound)
 		return
 	}
 

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 )
 
 // Test de l'orchestrateur principal
@@ -26,10 +27,7 @@ func TestOrchestratorBasic(t *testing.T) {
 			RateLimit: "1/s",
 			UserAgent: "Fire Salamander Test Bot",
 		},
-		AI: config.AIConfig{
-			Enabled:  false, // Désactivé pour les tests
-			MockMode: true,
-		},
+		// AI configuration removed - not implemented yet
 	}
 
 	// Créer l'orchestrateur
@@ -73,10 +71,7 @@ func TestFullAnalysis(t *testing.T) {
 			RateLimit: "1/s",
 			UserAgent: "Fire Salamander Test Bot",
 		},
-		AI: config.AIConfig{
-			Enabled:  false,
-			MockMode: true,
-		},
+		// AI configuration removed - not implemented yet
 	}
 
 	orchestrator, err := NewOrchestrator(cfg)
@@ -154,10 +149,7 @@ func TestAPIServerBasic(t *testing.T) {
 			Workers:   1,
 			RateLimit: "1/s",
 		},
-		AI: config.AIConfig{
-			Enabled:  false,
-			MockMode: true,
-		},
+		// AI configuration removed - not implemented yet
 	}
 
 	orchestrator, err := NewOrchestrator(cfg)
@@ -194,7 +186,7 @@ func TestAPIServerBasic(t *testing.T) {
 func TestReportGenerator(t *testing.T) {
 	// Créer un résultat d'analyse simulé
 	result := &UnifiedAnalysisResult{
-		TaskID:         "test_task_123",
+		TaskID:         constants.IntegrationTestDataTask + "_123",
 		URL:            "https://example.com",
 		Domain:         "example.com",
 		AnalyzedAt:     time.Now(),
@@ -202,9 +194,9 @@ func TestReportGenerator(t *testing.T) {
 		OverallScore:   75.5,
 		Status:         AnalysisStatusSuccess,
 		CategoryScores: map[string]float64{
-			"content":     80.0,
-			"technical":   70.0,
-			"performance": 75.0,
+			constants.IntegrationAnalysisTypeContent:     80.0,
+			constants.IntegrationAnalysisTypeTechnical:   70.0,
+			constants.IntegrationTestCategoryPerformance: 75.0,
 			"mobile":      85.0,
 		},
 		UnifiedMetrics: UnifiedMetrics{
@@ -217,24 +209,24 @@ func TestReportGenerator(t *testing.T) {
 		},
 		CrossModuleInsights: []CrossModuleInsight{
 			{
-				Type:        "test_insight",
+				Type:        constants.IntegrationTestDataInsight,
 				Severity:    "info",
 				Title:       "Test Insight",
 				Description: "Ceci est un insight de test",
 				Evidence:    []string{"Evidence 1", "Evidence 2"},
-				Modules:     []string{"seo", "semantic"},
+				Modules:     []string{constants.IntegrationAgentSEO, constants.IntegrationAgentSemantic},
 				Impact:      "positive",
 			},
 		},
 		PriorityActions: []PriorityAction{
 			{
-				ID:          "test_action_1",
+				ID:          constants.IntegrationTestDataAction + "_1",
 				Title:       "Action prioritaire de test",
 				Description: "Description de l'action de test",
 				Priority:    "high",
 				Impact:      "high",
 				Effort:      "medium",
-				Module:      "seo",
+				Module:      constants.IntegrationAgentSEO,
 				EstimatedTime: "2-4 heures",
 			},
 		},
@@ -392,10 +384,7 @@ func TestCompleteIntegration(t *testing.T) {
 			RateLimit: "1/s",
 			UserAgent: "Fire Salamander Integration Test",
 		},
-		AI: config.AIConfig{
-			Enabled:  false,
-			MockMode: true,
-		},
+		// AI configuration removed - not implemented yet
 	}
 
 	// 1. Créer l'orchestrateur

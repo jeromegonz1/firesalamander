@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"firesalamander/internal/constants"
 )
 
 // PerformanceAnalyzer analyseur de performances SEO
@@ -127,7 +129,7 @@ type PerformanceHeaders struct {
 // NewPerformanceAnalyzer crée un nouvel analyseur de performance
 func NewPerformanceAnalyzer() *PerformanceAnalyzer {
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: constants.ClientTimeout,
 	}
 
 	return &PerformanceAnalyzer{
@@ -287,7 +289,7 @@ func (pa *PerformanceAnalyzer) checkMinification(htmlContent string) bool {
 	shortLines := 0
 	
 	for _, line := range lines {
-		if len(strings.TrimSpace(line)) < 80 {
+		if len(strings.TrimSpace(line)) < constants.OptimalLineLength {
 			shortLines++
 		}
 	}
@@ -388,7 +390,7 @@ func (pa *PerformanceAnalyzer) scoreCLS(value float64) string {
 func (pa *PerformanceAnalyzer) scoreFCP(value float64) string {
 	if value <= 1800 {
 		return "good"
-	} else if value <= 3000 {
+	} else if value <= constants.TestValue3000 {
 		return "needs-improvement"
 	}
 	return "poor"
@@ -406,7 +408,7 @@ func (pa *PerformanceAnalyzer) scoreSpeedIndex(value float64) string {
 // generatePerformanceRecommendations génère les recommandations de performance
 func (pa *PerformanceAnalyzer) generatePerformanceRecommendations(result *PerformanceMetricsResult) {
 	// Temps de chargement
-	if result.LoadTime > 3*time.Second {
+	if result.LoadTime > constants.AcceptableLoadTime {
 		result.Issues = append(result.Issues, "Temps de chargement élevé")
 		result.Recommendations = append(result.Recommendations, "Optimiser le temps de réponse du serveur")
 	}

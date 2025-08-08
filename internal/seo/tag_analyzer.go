@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"firesalamander/internal/constants"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -128,10 +129,10 @@ type TwitterTag struct {
 // NewTagAnalyzer crée un nouvel analyseur de balises
 func NewTagAnalyzer() *TagAnalyzer {
 	return &TagAnalyzer{
-		titleRegex:    regexp.MustCompile(`^.{1,200}$`),
-		metaDescRegex: regexp.MustCompile(`^.{1,300}$`),
-		urlRegex:      regexp.MustCompile(`^https?://[^\s/$.?#].[^\s]*$`),
-		imageExtRegex: regexp.MustCompile(`\.(webp|avif|jpg|jpeg|png|gif|svg)$`),
+		titleRegex:    regexp.MustCompile(constants.TagRegexTitlePattern),
+		metaDescRegex: regexp.MustCompile(constants.TagRegexMetaDescPattern),
+		urlRegex:      regexp.MustCompile(constants.TagRegexURLPattern),
+		imageExtRegex: regexp.MustCompile(constants.TagRegexImageExtPattern),
 	}
 }
 
@@ -173,8 +174,8 @@ func (ta *TagAnalyzer) analyzeTitle(doc *html.Node) TitleAnalysis {
 	// Trouver la balise title
 	titleNode := ta.findNodeByAtom(doc, atom.Title)
 	if titleNode == nil || titleNode.FirstChild == nil {
-		analysis.Issues = append(analysis.Issues, "Balise title manquante")
-		analysis.Recommendations = append(analysis.Recommendations, "Ajouter une balise <title> descriptive")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgTitleMissing)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAddTitle)
 		return analysis
 	}
 
@@ -183,14 +184,14 @@ func (ta *TagAnalyzer) analyzeTitle(doc *html.Node) TitleAnalysis {
 	analysis.Length = len(analysis.Content)
 
 	// Vérifier la longueur optimale (30-60 caractères)
-	if analysis.Length >= 30 && analysis.Length <= 60 {
+	if analysis.Length >= constants.TagTitleMinLength && analysis.Length <= constants.TagTitleMaxLength {
 		analysis.OptimalLength = true
-	} else if analysis.Length < 30 {
-		analysis.Issues = append(analysis.Issues, "Titre trop court")
-		analysis.Recommendations = append(analysis.Recommendations, "Étendre le titre (30-60 caractères optimal)")
+	} else if analysis.Length < constants.TagTitleMinLength {
+		analysis.Issues = append(analysis.Issues, constants.TagMsgTitleTooShort)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendExtendTitle)
 	} else {
-		analysis.Issues = append(analysis.Issues, "Titre trop long")
-		analysis.Recommendations = append(analysis.Recommendations, "Raccourcir le titre (risque de troncature)")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgTitleTooLong)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendShortenTitle)
 	}
 
 	// Détecter les mots dupliqués
@@ -207,12 +208,12 @@ func (ta *TagAnalyzer) analyzeTitle(doc *html.Node) TitleAnalysis {
 	}
 
 	if len(analysis.DuplicateWords) > 0 {
-		analysis.Issues = append(analysis.Issues, "Mots dupliqués dans le titre")
-		analysis.Recommendations = append(analysis.Recommendations, "Éviter la répétition de mots dans le titre")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgTitleDuplicates)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAvoidDuplicates)
 	}
 
 	// Vérifier la présence de mots-clés potentiels
-	if len(words) >= 3 {
+	if len(words) >= constants.TagMinWordLength {
 		analysis.HasKeywords = true
 	}
 
@@ -227,10 +228,10 @@ func (ta *TagAnalyzer) analyzeMetaDescription(doc *html.Node) MetaDescAnalysis {
 	}
 
 	// Trouver la meta description
-	metaDesc := ta.findMetaByName(doc, "description")
+	metaDesc := ta.findMetaByName(doc, constants.TagMetaNameDescription)
 	if metaDesc == "" {
-		analysis.Issues = append(analysis.Issues, "Meta description manquante")
-		analysis.Recommendations = append(analysis.Recommendations, "Ajouter une meta description attrayante")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgMetaDescMissing)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAddMetaDesc)
 		return analysis
 	}
 
@@ -239,14 +240,14 @@ func (ta *TagAnalyzer) analyzeMetaDescription(doc *html.Node) MetaDescAnalysis {
 	analysis.Length = len(analysis.Content)
 
 	// Vérifier la longueur optimale (120-160 caractères)
-	if analysis.Length >= 120 && analysis.Length <= 160 {
+	if analysis.Length >= constants.TagMetaDescMinLength && analysis.Length <= constants.TagMetaDescMaxLength {
 		analysis.OptimalLength = true
-	} else if analysis.Length < 120 {
-		analysis.Issues = append(analysis.Issues, "Meta description trop courte")
-		analysis.Recommendations = append(analysis.Recommendations, "Étendre la meta description (120-160 caractères)")
+	} else if analysis.Length < constants.TagMetaDescMinLength {
+		analysis.Issues = append(analysis.Issues, constants.TagMsgMetaDescTooShort)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendExtendMetaDesc)
 	} else {
-		analysis.Issues = append(analysis.Issues, "Meta description trop longue")
-		analysis.Recommendations = append(analysis.Recommendations, "Raccourcir la meta description")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgMetaDescTooLong)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendShortenMetaDesc)
 	}
 
 	// Détecter les appels à l'action
@@ -266,7 +267,7 @@ func (ta *TagAnalyzer) analyzeMetaDescription(doc *html.Node) MetaDescAnalysis {
 	}
 
 	if !analysis.HasCallToAction {
-		analysis.Recommendations = append(analysis.Recommendations, "Ajouter un appel à l'action dans la meta description")
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAddCTA)
 	}
 
 	return analysis
@@ -305,18 +306,18 @@ func (ta *TagAnalyzer) analyzeHeadings(doc *html.Node) HeadingAnalysis {
 
 	// Vérifications
 	if analysis.H1Count == 0 {
-		analysis.Issues = append(analysis.Issues, "Aucun titre H1")
-		analysis.Recommendations = append(analysis.Recommendations, "Ajouter un titre H1 principal")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgNoH1)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAddH1)
 	} else if analysis.H1Count > 1 {
-		analysis.Issues = append(analysis.Issues, "Plusieurs titres H1")
-		analysis.Recommendations = append(analysis.Recommendations, "Utiliser un seul H1 par page")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgMultipleH1)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendSingleH1)
 	}
 
 	// Vérifier la hiérarchie
 	analysis.HasHierarchy = ta.checkHeadingHierarchy(analysis.HeadingStructure)
 	if !analysis.HasHierarchy {
-		analysis.Issues = append(analysis.Issues, "Hiérarchie des titres incorrecte")
-		analysis.Recommendations = append(analysis.Recommendations, "Respecter la hiérarchie H1 > H2 > H3...")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgBadHierarchy)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendRespectHierarchy)
 	}
 
 	return analysis
@@ -332,33 +333,33 @@ func (ta *TagAnalyzer) analyzeMetaTags(doc *html.Node) MetaTagsAnalysis {
 	}
 
 	// Meta robots
-	robots := ta.findMetaByName(doc, "robots")
+	robots := ta.findMetaByName(doc, constants.TagMetaNameRobots)
 	if robots != "" {
 		analysis.HasRobots = true
 		analysis.RobotsContent = robots
 	}
 
 	// Canonical URL
-	canonical := ta.findLinkByRel(doc, "canonical")
+	canonical := ta.findLinkByRel(doc, constants.TagValueCanonical)
 	if canonical != "" {
 		analysis.HasCanonical = true
 		analysis.CanonicalURL = canonical
 	} else {
-		analysis.Recommendations = append(analysis.Recommendations, "Ajouter une URL canonique")
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAddCanonical)
 	}
 
 	// Viewport
-	viewport := ta.findMetaByName(doc, "viewport")
+	viewport := ta.findMetaByName(doc, constants.TagMetaNameViewport)
 	if viewport != "" {
 		analysis.HasViewport = true
 		analysis.ViewportContent = viewport
 	} else {
-		analysis.Issues = append(analysis.Issues, "Meta viewport manquante")
-		analysis.Recommendations = append(analysis.Recommendations, "Ajouter meta viewport pour le responsive")
+		analysis.Issues = append(analysis.Issues, constants.TagMsgViewportMissing)
+		analysis.Recommendations = append(analysis.Recommendations, constants.TagRecommendAddViewport)
 	}
 
 	// Open Graph tags
-	ogTags := ta.findAllMetaByProperty(doc, "og:")
+	ogTags := ta.findAllMetaByProperty(doc, constants.TagPrefixOG)
 	if len(ogTags) > 0 {
 		analysis.HasOGTags = true
 		for property, content := range ogTags {

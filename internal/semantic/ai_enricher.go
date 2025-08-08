@@ -10,14 +10,18 @@ import (
 	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 )
 
 // AIEnricher utilise OpenAI pour enrichir l'analyse sémantique
 type AIEnricher struct {
-	config     *config.AIConfig
+	apiKey     string
+	model      string
 	httpClient *http.Client
 	cache      map[string]*EnrichmentResult
 	cacheTTL   time.Duration
+	enabled    bool
+	mockMode   bool
 }
 
 // EnrichmentResult résultat de l'enrichissement IA
@@ -67,20 +71,26 @@ type OpenAIResponse struct {
 }
 
 // NewAIEnricher crée un nouvel enrichisseur IA
-func NewAIEnricher(cfg *config.AIConfig) *AIEnricher {
+func NewAIEnricher(cfg *config.Config) *AIEnricher {
+	enabled := cfg.OpenAIAPIKey != ""
+	mockMode := cfg.Env == "development" && cfg.OpenAIAPIKey == ""
+	
 	return &AIEnricher{
-		config: cfg,
+		apiKey:   cfg.OpenAIAPIKey,
+		model:    cfg.OpenAIModel,
+		enabled:  enabled,
+		mockMode: mockMode,
 		httpClient: &http.Client{
-			Timeout: time.Duration(cfg.Timeout) * time.Second,
+			Timeout: constants.AIRequestTimeout,
 		},
 		cache:    make(map[string]*EnrichmentResult),
-		cacheTTL: time.Duration(cfg.CacheTTL) * time.Second,
+		cacheTTL: constants.DefaultCacheTTL,
 	}
 }
 
 // EnrichKeywords enrichit une liste de mots-clés avec l'IA
 func (ai *AIEnricher) EnrichKeywords(ctx context.Context, keywords []string, content string) (*EnrichmentResult, error) {
-	if !ai.config.Enabled {
+	if !ai.enabled {
 		return ai.mockEnrichment(keywords), nil
 	}
 
@@ -95,7 +105,7 @@ func (ai *AIEnricher) EnrichKeywords(ctx context.Context, keywords []string, con
 	}
 
 	// Mode mock pour les tests
-	if ai.config.MockMode {
+	if ai.mockMode {
 		result := ai.mockEnrichment(keywords)
 		ai.cache[cacheKey] = result
 		return result, nil
@@ -117,15 +127,15 @@ func (ai *AIEnricher) EnrichKeywords(ctx context.Context, keywords []string, con
 
 // callOpenAI fait l'appel réel à l'API OpenAI
 func (ai *AIEnricher) callOpenAI(ctx context.Context, keywords []string, content string) (*EnrichmentResult, error) {
-	if ai.config.APIKey == "" {
+	if ai.apiKey == "" {
 		return nil, fmt.Errorf("OpenAI API key not configured")
 	}
 
 	prompt := ai.buildPrompt(keywords, content)
 	
 	request := OpenAIRequest{
-		Model:       ai.config.Model,
-		MaxTokens:   ai.config.MaxTokens,
+		Model:       ai.model,
+		MaxTokens:   constants.DefaultMaxTokens,
 		Temperature: 0.3, // Faible température pour des résultats consistants
 		Messages: []Message{
 			{
@@ -144,13 +154,13 @@ func (ai *AIEnricher) callOpenAI(ctx context.Context, keywords []string, content
 		return nil, fmt.Errorf("error marshaling request: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, "POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(jsonData))
+	req, err := http.NewRequestWithContext(ctx, "POST", constants.OpenAIAPIURL, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+ai.config.APIKey)
+	req.Header.Set("Authorization", "Bearer "+ai.apiKey)
 
 	resp, err := ai.httpClient.Do(req)
 	if err != nil {
@@ -272,9 +282,9 @@ func (ai *AIEnricher) getCacheKey(keywords []string, content string) string {
 func (ai *AIEnricher) GetCacheStats() map[string]interface{} {
 	return map[string]interface{}{
 		"cache_entries": len(ai.cache),
-		"enabled":       ai.config.Enabled,
-		"mock_mode":     ai.config.MockMode,
-		"model":         ai.config.Model,
+		"enabled":       ai.enabled,
+		"mock_mode":     ai.mockMode,
+		"model":         ai.model,
 		"cache_ttl":     ai.cacheTTL.String(),
 	}
 }

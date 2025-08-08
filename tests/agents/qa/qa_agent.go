@@ -13,10 +13,11 @@ import (
 	"strings"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
-var log = logger.New("QA-AGENT")
+var log = logger.New(constants.QAAgentName)
 
 // QAAgent gère la qualité du code Go
 type QAAgent struct {
@@ -122,13 +123,13 @@ type TestCase struct {
 // DefaultQAConfig retourne une configuration par défaut
 func DefaultQAConfig() *QAConfig {
 	return &QAConfig{
-		MinCoverage:      80.0,
+		MinCoverage:      constants.MinCoverageThreshold,
 		EnableVet:        true,
 		EnableLint:       true,
 		EnableSecurity:   true,
 		EnableComplexity: true,
-		OutputFormat:     "json",
-		ReportPath:       "tests/reports/qa",
+		OutputFormat:     constants.OutputFormatJSON,
+		ReportPath:       constants.DefaultQAReportsDir,
 	}
 }
 
@@ -161,20 +162,20 @@ func (qa *QAAgent) RunFullAnalysis() (*QAStats, error) {
 	// 1. Tests unitaires
 	log.Debug("Running unit tests")
 	if err := qa.runUnitTests(); err != nil {
-		log.Error("Unit tests failed", map[string]interface{}{"error": err.Error()})
+		log.Error(constants.MsgUnitTestsFailed, map[string]interface{}{"error": err.Error()})
 	}
 
 	// 2. Coverage analysis
 	log.Debug("Analyzing test coverage")
 	if err := qa.analyzeCoverage(); err != nil {
-		log.Error("Coverage analysis failed", map[string]interface{}{"error": err.Error()})
+		log.Error(constants.MsgCoverageAnalysisFailed, map[string]interface{}{"error": err.Error()})
 	}
 
 	// 3. Go vet
 	if qa.config.EnableVet {
 		log.Debug("Running go vet")
 		if err := qa.runGoVet(); err != nil {
-			log.Warn("Go vet issues found", map[string]interface{}{"error": err.Error()})
+			log.Warn(constants.MsgVetIssuesFound, map[string]interface{}{"error": err.Error()})
 		}
 	}
 
@@ -188,7 +189,7 @@ func (qa *QAAgent) RunFullAnalysis() (*QAStats, error) {
 
 	// 5. Security analysis
 	if qa.config.EnableSecurity {
-		log.Debug("Running security analysis")
+		log.Debug(constants.MsgRunningSecurityCheck)
 		if err := qa.runSecurityAnalysis(); err != nil {
 			log.Warn("Security analysis issues", map[string]interface{}{"error": err.Error()})
 		}
@@ -221,7 +222,7 @@ func (qa *QAAgent) RunFullAnalysis() (*QAStats, error) {
 
 // runUnitTests exécute les tests unitaires
 func (qa *QAAgent) runUnitTests() error {
-	cmd := exec.Command("go", "test", "-v", "-json", "./...")
+	cmd := exec.Command(constants.GoTool, constants.TestTool, constants.TestArgV, "-json", constants.VetArgAll)
 	output, err := cmd.Output()
 	if err != nil {
 		return fmt.Errorf("failed to run tests: %w", err)
@@ -235,13 +236,13 @@ func (qa *QAAgent) runUnitTests() error {
 // analyzeCoverage analyse la couverture de code
 func (qa *QAAgent) analyzeCoverage() error {
 	// Générer le profil de coverage
-	cmd := exec.Command("go", "test", "-coverprofile=coverage.out", "./...")
+	cmd := exec.Command(constants.GoTool, constants.TestTool, "-coverprofile=" + constants.CoverageProfileFile, constants.VetArgAll)
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("failed to generate coverage: %w", err)
 	}
 
 	// Analyser le coverage par package
-	cmd = exec.Command("go", "tool", "cover", "-func=coverage.out")
+	cmd = exec.Command(constants.GoTool, "tool", "cover", "-func=" + constants.CoverageProfileFile)
 	output, err := cmd.Output()
 	if err != nil {
 		return fmt.Errorf("failed to analyze coverage: %w", err)
@@ -250,14 +251,14 @@ func (qa *QAAgent) analyzeCoverage() error {
 	qa.parseCoverageResults(string(output))
 	
 	// Nettoyage
-	os.Remove("coverage.out")
+	os.Remove(constants.CoverageProfileFile)
 	
 	return nil
 }
 
 // runGoVet exécute go vet
 func (qa *QAAgent) runGoVet() error {
-	cmd := exec.Command("go", "vet", "./...")
+	cmd := exec.Command(constants.GoTool, constants.VetTool, constants.VetArgAll)
 	output, err := cmd.CombinedOutput()
 	
 	if err != nil {
@@ -524,7 +525,7 @@ func (qa *QAAgent) calculateOverallScore() {
 	// Security issues (10% du score)
 	highSecIssues := 0
 	for _, issue := range qa.stats.SecurityIssues {
-		if issue.Severity == "HIGH" {
+		if issue.Severity == constants.QASeverityHigh {
 			highSecIssues++
 		}
 	}
@@ -541,11 +542,11 @@ func (qa *QAAgent) calculateOverallScore() {
 	
 	// Déterminer le statut
 	switch {
-	case score >= 90:
+	case score >= constants.ExcellentScore90:
 		qa.stats.Status = "excellent"
-	case score >= 80:
+	case score >= constants.HighQualityScore:
 		qa.stats.Status = "good"
-	case score >= 70:
+	case score >= constants.AcceptableScore70:
 		qa.stats.Status = "acceptable"
 	case score >= 60:
 		qa.stats.Status = "needs_improvement"
@@ -562,7 +563,7 @@ func (qa *QAAgent) generateReport() error {
 	}
 	
 	// Générer le rapport JSON
-	reportFile := filepath.Join(qa.config.ReportPath, "qa_report.json")
+	reportFile := filepath.Join(qa.config.ReportPath, constants.QAReportJSONFile)
 	data, err := json.MarshalIndent(qa.stats, "", "  ")
 	if err != nil {
 		return err
@@ -580,7 +581,7 @@ func (qa *QAAgent) GetStats() *QAStats {
 func getEnabledTools(config *QAConfig) []string {
 	var tools []string
 	if config.EnableVet {
-		tools = append(tools, "go vet")
+		tools = append(tools, constants.GoCommandVet)
 	}
 	if config.EnableLint {
 		tools = append(tools, "golangci-lint")

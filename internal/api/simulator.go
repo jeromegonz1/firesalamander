@@ -4,6 +4,9 @@ import (
 	"math/rand"
 	"net/url"
 	"time"
+
+	"firesalamander/internal/constants"
+	"firesalamander/internal/messages"
 )
 
 // SimulateAnalysis - Simuler une analyse SEO en arrière-plan
@@ -13,45 +16,45 @@ func SimulateAnalysis(analysisID string) {
 		return
 	}
 
-	// Phase 1: Découverte des pages (0-30%)
-	simulatePhase(analysisID, "Découverte des pages...", 0, 30, 500*time.Millisecond, func(progress int) {
+	// Phase 1: Découverte des pages
+	simulatePhase(analysisID, messages.PhaseDiscoveryMsg, constants.DefaultProgressStart, 30, constants.DefaultSimulationSpeed, func(progress int) {
 		Store.Update(analysisID, func(a *AnalysisState) {
 			a.Progress = progress
-			a.Status = "analyzing"
-			a.PagesFound = int(float64(progress) * 1.5) // Simule la découverte progressive
+			a.Status = constants.StatusProcessing
+			a.PagesFound = int(float64(progress) * constants.PageDiscoveryFactor) // Facteur de découverte
 			a.EstimatedTime = calculateRemainingTime(progress)
 		})
 	})
 
-	// Phase 2: Analyse SEO (30-70%)
-	simulatePhase(analysisID, "Analyse SEO en cours...", 30, 70, 800*time.Millisecond, func(progress int) {
+	// Phase 2: Analyse SEO
+	simulatePhase(analysisID, messages.PhaseSEOAnalysisMsg, constants.PhaseSEOStart, constants.PhaseSEOEnd, constants.PhaseSEOSpeed, func(progress int) {
 		Store.Update(analysisID, func(a *AnalysisState) {
 			a.Progress = progress
-			a.PagesAnalyzed = int(float64(a.PagesFound) * float64(progress-30) / 40.0) // Analyse progressive
-			a.IssuesFound = int(float64(progress-30) * 0.1) // Accumule les problèmes
+			a.PagesAnalyzed = int(float64(a.PagesFound) * float64(progress-constants.PhaseSEOStart) / constants.AnalysisProgressRatio) // Ratio d'analyse
+			a.IssuesFound = int(float64(progress-constants.PhaseSEOStart) * constants.IssueAccumulationRate) // Taux de problèmes
 			a.EstimatedTime = calculateRemainingTime(progress)
 		})
 	})
 
-	// Phase 3: Analyse IA (70-95%)
-	simulatePhase(analysisID, "Analyse IA...", 70, 95, 600*time.Millisecond, func(progress int) {
+	// Phase 3: Analyse IA
+	simulatePhase(analysisID, messages.PhaseAIAnalysisMsg, constants.PhaseAIStart, constants.PhaseAIEnd, constants.PhaseAISpeed, func(progress int) {
 		Store.Update(analysisID, func(a *AnalysisState) {
 			a.Progress = progress
 			a.EstimatedTime = calculateRemainingTime(progress)
 		})
 	})
 
-	// Phase 4: Génération rapport (95-100%)
-	simulatePhase(analysisID, "Génération rapport...", 95, 100, 300*time.Millisecond, func(progress int) {
+	// Phase 4: Génération rapport
+	simulatePhase(analysisID, messages.PhaseReportGenMsg, constants.PhaseReportStart, constants.PhaseReportEnd, constants.PhaseReportSpeed, func(progress int) {
 		Store.Update(analysisID, func(a *AnalysisState) {
 			a.Progress = progress
-			if progress == 100 {
-				a.Status = "complete"
-				a.EstimatedTime = "Terminé"
+			if progress == constants.DefaultProgressEnd {
+				a.Status = constants.StatusComplete
+				a.EstimatedTime = messages.TimeEstimateComplete
 				// Générer les résultats finaux
 				a.Results = GenerateTestResults(a.URL)
 			} else {
-				a.EstimatedTime = "Quelques secondes..."
+				a.EstimatedTime = messages.TimeEstimateCalculating
 			}
 		})
 	})
@@ -59,7 +62,7 @@ func SimulateAnalysis(analysisID string) {
 
 // simulatePhase - Simuler une phase de progression
 func simulatePhase(analysisID, description string, startProgress, endProgress int, interval time.Duration, callback func(int)) {
-	for progress := startProgress; progress <= endProgress; progress += rand.Intn(3) + 1 {
+	for progress := startProgress; progress <= endProgress; progress += rand.Intn(constants.ProgressRandomStep) + 1 {
 		if progress > endProgress {
 			progress = endProgress
 		}
@@ -67,7 +70,7 @@ func simulatePhase(analysisID, description string, startProgress, endProgress in
 		callback(progress)
 		
 		// Variation aléatoire du timing pour rendre plus réaliste
-		sleepTime := interval + time.Duration(rand.Intn(200))*time.Millisecond
+		sleepTime := interval + time.Duration(rand.Intn(int(constants.TimingVariation/time.Millisecond)))*time.Millisecond
 		time.Sleep(sleepTime)
 		
 		// Vérifier que l'analyse existe toujours
@@ -80,20 +83,20 @@ func simulatePhase(analysisID, description string, startProgress, endProgress in
 // calculateRemainingTime - Calculer le temps restant estimé
 func calculateRemainingTime(progress int) string {
 	switch {
-	case progress < 20:
-		return "2-3 minutes"
-	case progress < 40:
-		return "1-2 minutes"
-	case progress < 60:
-		return "45-60 secondes"
-	case progress < 80:
-		return "30-45 secondes"
-	case progress < 95:
-		return "15-30 secondes"
-	case progress < 100:
-		return "Quelques secondes..."
+	case progress < constants.ProgressThreshold20:
+		return messages.TimeEstimate2to3min
+	case progress < constants.ProgressThreshold40:
+		return messages.TimeEstimate1to2min
+	case progress < constants.ProgressThreshold60:
+		return messages.TimeEstimate45to60s
+	case progress < constants.ProgressThreshold80:
+		return messages.TimeEstimate30to45s
+	case progress < constants.ProgressThreshold95:
+		return messages.TimeEstimate15to30s
+	case progress < constants.ProgressThreshold100:
+		return messages.TimeEstimateFewSeconds
 	default:
-		return "Terminé"
+		return messages.TimeEstimateComplete
 	}
 }
 
@@ -101,7 +104,7 @@ func calculateRemainingTime(progress int) string {
 func simulateRealisticPages(analysisURL string) int {
 	parsedURL, err := url.Parse(analysisURL)
 	if err != nil {
-		return 20 // Valeur par défaut
+		return constants.DefaultMinPages
 	}
 
 	domain := parsedURL.Host
@@ -109,15 +112,15 @@ func simulateRealisticPages(analysisURL string) int {
 	// Simuler différents types de sites
 	switch {
 	case contains(domain, []string{"github.com", "gitlab.com"}):
-		return rand.Intn(100) + 50 // Sites techniques : 50-150 pages
+		return rand.Intn(constants.TechnicalSiteMaxPages-constants.TechnicalSiteMinPages) + constants.TechnicalSiteMinPages
 	case contains(domain, []string{"blog", "news", "journal"}):
-		return rand.Intn(200) + 100 // Blogs/News : 100-300 pages  
+		return rand.Intn(constants.BlogSiteMaxPages-constants.BlogSiteMinPages) + constants.BlogSiteMinPages  
 	case contains(domain, []string{"shop", "store", "commerce"}):
-		return rand.Intn(500) + 200 // E-commerce : 200-700 pages
-	case domain == "example.com":
-		return rand.Intn(30) + 20 // Site de test : 20-50 pages
+		return rand.Intn(constants.EcommerceSiteMaxPages-constants.EcommerceSiteMinPages) + constants.EcommerceSiteMinPages
+	case domain == constants.TestDefaultDomain:
+		return rand.Intn(constants.TestSiteMaxPages-constants.TestSiteMinPages) + constants.TestSiteMinPages
 	default:
-		return rand.Intn(80) + 30 // Site corporate : 30-110 pages
+		return rand.Intn(constants.CorporateSiteMaxPages-constants.CorporateSiteMinPages) + constants.CorporateSiteMinPages
 	}
 }
 

@@ -11,6 +11,18 @@ import (
 	"firesalamander/internal/integration"
 )
 
+// 🔥💀 RAMBO CONSTANTS - Hardcoded strings eliminated! 💀🔥
+const (
+	HTTP_METHOD_GET            = "GET"
+	HEADER_CONTENT_TYPE        = "Content-Type"
+	HEADER_CONTENT_DISPOSITION = "Content-Disposition"
+	CONTENT_TYPE_HTML          = "text/html"
+	CONTENT_TYPE_JSON          = "application/json"
+	TEST_PORT_8080             = 8080
+	TEST_PORT_8083             = 8083
+	TEST_PORT_8084             = 8084
+)
+
 // Test du serveur web principal
 func TestWebServer(t *testing.T) {
 	// Configuration de test
@@ -20,7 +32,7 @@ func TestWebServer(t *testing.T) {
 			Version: "1.0.0-test",
 		},
 		Server: config.ServerConfig{
-			Port: 8080,
+			Port: TEST_PORT_8080,
 		},
 		Crawler: config.CrawlerConfig{
 			Workers:   1,
@@ -68,13 +80,13 @@ func TestWebInterface(t *testing.T) {
 			Name:    "Fire Salamander Test",
 			Version: "1.0.0-test",
 		},
-		Server: config.ServerConfig{Port: 8080},
+		Server: config.ServerConfig{Port: TEST_PORT_8080},
 	}
 
 	webServer := NewWebServer(nil, cfg) // Orchestrateur nil pour ce test
 
 	// Créer une requête de test
-	req := httptest.NewRequest("GET", "/", nil)
+	req := httptest.NewRequest(HTTP_METHOD_GET, "/", nil)
 	w := httptest.NewRecorder()
 
 	// Tester la route principale
@@ -86,7 +98,7 @@ func TestWebInterface(t *testing.T) {
 		t.Errorf("Status code attendu: %d, reçu: %d", http.StatusOK, resp.StatusCode)
 	}
 
-	contentType := resp.Header.Get("Content-Type")
+	contentType := resp.Header.Get(HEADER_CONTENT_TYPE)
 	if contentType != "text/html; charset=utf-8" {
 		t.Errorf("Content-Type attendu: text/html; charset=utf-8, reçu: %s", contentType)
 	}
@@ -101,13 +113,13 @@ func TestWebHealth(t *testing.T) {
 			Name:    "Fire Salamander Test",
 			Version: "1.0.0-test",
 		},
-		Server: config.ServerConfig{Port: 8080},
+		Server: config.ServerConfig{Port: TEST_PORT_8080},
 	}
 
 	webServer := NewWebServer(nil, cfg)
 
 	// Créer une requête de test
-	req := httptest.NewRequest("GET", "/web/health", nil)
+	req := httptest.NewRequest(HTTP_METHOD_GET, "/web/health", nil)
 	w := httptest.NewRecorder()
 
 	// Tester la route de santé
@@ -119,8 +131,8 @@ func TestWebHealth(t *testing.T) {
 		t.Errorf("Status code attendu: %d, reçu: %d", http.StatusOK, resp.StatusCode)
 	}
 
-	contentType := resp.Header.Get("Content-Type")
-	if contentType != "application/json" {
+	contentType := resp.Header.Get(HEADER_CONTENT_TYPE)
+	if contentType != CONTENT_TYPE_JSON {
 		t.Errorf("Content-Type attendu: application/json, reçu: %s", contentType)
 	}
 
@@ -134,22 +146,22 @@ func TestReportGeneration(t *testing.T) {
 			Name:    "Fire Salamander Test",
 			Version: "1.0.0-test",
 		},
-		Server: config.ServerConfig{Port: 8080},
+		Server: config.ServerConfig{Port: TEST_PORT_8080},
 	}
 
 	webServer := NewWebServer(nil, cfg)
 
 	// Tester différents formats de rapport
 	formats := []string{"html", "json", "csv"}
-	
+
 	for _, format := range formats {
 		filename := "test-report." + format
 		report := webServer.generateSampleReport(filename)
-		
+
 		if len(report) == 0 {
 			t.Errorf("Rapport %s vide", format)
 		}
-		
+
 		// Vérifications spécifiques par format
 		switch format {
 		case "html":
@@ -158,14 +170,14 @@ func TestReportGeneration(t *testing.T) {
 			}
 		case "json":
 			if !contains(report, `"report"`) {
-				t.Errorf("Rapport JSON invalide") 
+				t.Errorf("Rapport JSON invalide")
 			}
 		case "csv":
 			if !contains(report, "URL,Score Global") {
 				t.Errorf("Rapport CSV invalide")
 			}
 		}
-		
+
 		t.Logf("Rapport %s généré avec succès (%d caractères)", format, len(report))
 	}
 }
@@ -177,13 +189,13 @@ func TestReportDownload(t *testing.T) {
 			Name:    "Fire Salamander Test",
 			Version: "1.0.0-test",
 		},
-		Server: config.ServerConfig{Port: 8080},
+		Server: config.ServerConfig{Port: TEST_PORT_8080},
 	}
 
 	webServer := NewWebServer(nil, cfg)
 
 	// Créer une requête de téléchargement
-	req := httptest.NewRequest("GET", "/web/download/test-report.html", nil)
+	req := httptest.NewRequest(HTTP_METHOD_GET, "/web/download/test-report.html", nil)
 	w := httptest.NewRecorder()
 
 	// Tester le téléchargement
@@ -195,14 +207,14 @@ func TestReportDownload(t *testing.T) {
 		t.Errorf("Status code attendu: %d, reçu: %d", http.StatusOK, resp.StatusCode)
 	}
 
-	contentDisposition := resp.Header.Get("Content-Disposition")
+	contentDisposition := resp.Header.Get(HEADER_CONTENT_DISPOSITION)
 	expectedDisposition := "attachment; filename=test-report.html"
 	if contentDisposition != expectedDisposition {
 		t.Errorf("Content-Disposition attendu: %s, reçu: %s", expectedDisposition, contentDisposition)
 	}
 
-	contentType := resp.Header.Get("Content-Type")
-	if contentType != "text/html" {
+	contentType := resp.Header.Get(HEADER_CONTENT_TYPE)
+	if contentType != CONTENT_TYPE_HTML {
 		t.Errorf("Content-Type attendu: text/html, reçu: %s", contentType)
 	}
 
@@ -216,7 +228,7 @@ func TestWebServerStats(t *testing.T) {
 			Name:    "Fire Salamander Test",
 			Version: "1.0.0-test",
 		},
-		Server: config.ServerConfig{Port: 8080},
+		Server: config.ServerConfig{Port: TEST_PORT_8080},
 	}
 
 	webServer := NewWebServer(nil, cfg)
@@ -251,7 +263,7 @@ func TestWebServerStartStop(t *testing.T) {
 			Name:    "Fire Salamander Test",
 			Version: "1.0.0-test",
 		},
-		Server: config.ServerConfig{Port: 8083}, // Port différent pour éviter les conflits
+		Server: config.ServerConfig{Port: TEST_PORT_8083}, // Port différent pour éviter les conflits
 	}
 
 	webServer := NewWebServer(nil, cfg)
@@ -295,7 +307,7 @@ func TestWebServerIntegration(t *testing.T) {
 			Name:    "Fire Salamander Integration Test",
 			Version: "1.0.0-integration",
 		},
-		Server: config.ServerConfig{Port: 8084},
+		Server: config.ServerConfig{Port: TEST_PORT_8084},
 		Crawler: config.CrawlerConfig{
 			Workers:   1,
 			RateLimit: "1/s",
@@ -366,7 +378,7 @@ func TestWebServerIntegration(t *testing.T) {
 
 // Fonction utilitaire pour vérifier si une chaîne contient une sous-chaîne
 func contains(s, substr string) bool {
-	return len(substr) == 0 || (len(s) >= len(substr) && 
+	return len(substr) == 0 || (len(s) >= len(substr) &&
 		func() bool {
 			for i := 0; i <= len(s)-len(substr); i++ {
 				if s[i:i+len(substr)] == substr {

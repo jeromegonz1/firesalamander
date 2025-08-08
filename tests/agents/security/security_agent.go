@@ -10,10 +10,11 @@ import (
 	"strings"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
-var log = logger.New("SECURITY-AGENT")
+var log = logger.New(constants.SecurityAgentName)
 
 // SecurityAgent performs OWASP security testing
 type SecurityAgent struct {
@@ -97,7 +98,7 @@ func NewSecurityAgent() *SecurityAgent {
 		SQLInjection:    true,
 		XSSCheck:        true,
 		CSRFCheck:       true,
-		ReportPath:      "tests/reports/security",
+		ReportPath:      constants.SecurityDefaultReportPath,
 	}
 
 	return &SecurityAgent{
@@ -108,38 +109,38 @@ func NewSecurityAgent() *SecurityAgent {
 
 // RunSecurityScan performs comprehensive security testing
 func (sa *SecurityAgent) RunSecurityScan(ctx context.Context, baseURL string) (*SecurityResults, error) {
-	log.Info("🔒 Starting OWASP security scan")
+	log.Info(constants.SecurityMsgStartingScan)
 
 	// 1. Static Code Analysis (SAST)
 	if err := sa.runStaticAnalysis(ctx); err != nil {
-		log.Error("Static analysis failed", map[string]interface{}{"error": err.Error()})
+		log.Error(constants.SecurityMsgStaticAnalysisFailed, map[string]interface{}{"error": err.Error()})
 	}
 
 	// 2. Dependency Vulnerability Check
 	if sa.config.DependencyCheck {
 		if err := sa.checkDependencies(ctx); err != nil {
-			log.Error("Dependency check failed", map[string]interface{}{"error": err.Error()})
+			log.Error(constants.SecurityMsgDependencyCheckFailed, map[string]interface{}{"error": err.Error()})
 		}
 	}
 
 	// 3. Secret Scanning
 	if sa.config.SecretScanning {
 		if err := sa.scanForSecrets(ctx); err != nil {
-			log.Error("Secret scanning failed", map[string]interface{}{"error": err.Error()})
+			log.Error(constants.SecurityMsgSecretScanningFailed, map[string]interface{}{"error": err.Error()})
 		}
 	}
 
 	// 4. Dynamic Security Testing (DAST)
 	if baseURL != "" {
 		if err := sa.runDynamicAnalysis(ctx, baseURL); err != nil {
-			log.Error("Dynamic analysis failed", map[string]interface{}{"error": err.Error()})
+			log.Error(constants.SecurityMsgDynamicAnalysisFailed, map[string]interface{}{"error": err.Error()})
 		}
 	}
 
 	// 5. HTTP Security Headers Check
 	if baseURL != "" {
 		if err := sa.checkSecurityHeaders(ctx, baseURL); err != nil {
-			log.Error("Security headers check failed", map[string]interface{}{"error": err.Error()})
+			log.Error(constants.SecurityMsgSecurityHeadersFailed, map[string]interface{}{"error": err.Error()})
 		}
 	}
 
@@ -148,10 +149,10 @@ func (sa *SecurityAgent) RunSecurityScan(ctx context.Context, baseURL string) (*
 
 	// Generate security report
 	if err := sa.generateReport(); err != nil {
-		log.Error("Failed to generate security report", map[string]interface{}{"error": err.Error()})
+		log.Error(constants.SecurityMsgReportGenerationFailed, map[string]interface{}{"error": err.Error()})
 	}
 
-	log.Info("Security scan completed", map[string]interface{}{
+	log.Info(constants.SecurityMsgSecurityScanCompleted, map[string]interface{}{
 		"owasp_score":      sa.results.OWASPScore,
 		"overall_risk":     sa.results.OverallRisk,
 		"vulnerabilities":  len(sa.results.Vulnerabilities),
@@ -165,48 +166,48 @@ func (sa *SecurityAgent) RunSecurityScan(ctx context.Context, baseURL string) (*
 
 // runStaticAnalysis performs static code analysis
 func (sa *SecurityAgent) runStaticAnalysis(ctx context.Context) error {
-	log.Debug("Running static code analysis with gosec")
+	log.Debug(constants.SecurityMsgRunningStaticAnalysis)
 
 	// Check if gosec is installed
 	if _, err := exec.LookPath("gosec"); err != nil {
-		log.Warn("gosec not found, installing...")
-		cmd := exec.Command("go", "install", "github.com/securecodewarrior/gosec/v2/cmd/gosec@latest")
+		log.Warn(constants.SecurityMsgGosecNotFound)
+		cmd := exec.Command(constants.SecurityCmdGo, constants.SecurityCmdInstall, constants.SecurityCmdInstallGosec)
 		if err := cmd.Run(); err != nil {
 			return fmt.Errorf("failed to install gosec: %w", err)
 		}
 	}
 
 	// Run gosec
-	cmd := exec.Command("gosec", "-fmt", "json", "-out", "gosec-report.json", "./...")
+	cmd := exec.Command(constants.SecurityToolGosec, constants.SecurityArgFormat, constants.SecurityArgJSON, constants.SecurityArgOut, constants.SecurityFileGosecReport, constants.SecurityArgAll)
 	output, err := cmd.CombinedOutput()
 	
 	if err != nil {
 		// gosec returns non-zero when issues are found
-		log.Debug("gosec found security issues", map[string]interface{}{"output": string(output)})
+		log.Debug(constants.SecurityMsgGosecFoundIssues, map[string]interface{}{"output": string(output)})
 	}
 
 	// Parse gosec results
-	if err := sa.parseGosecResults("gosec-report.json"); err != nil {
-		log.Error("Failed to parse gosec results", map[string]interface{}{"error": err.Error()})
+	if err := sa.parseGosecResults(constants.SecurityFileGosecReport); err != nil {
+		log.Error(constants.SecurityMsgFailedParseGosec, map[string]interface{}{"error": err.Error()})
 	}
 
 	// Cleanup
-	os.Remove("gosec-report.json")
+	os.Remove(constants.SecurityFileGosecReport)
 
 	return nil
 }
 
 // checkDependencies checks for vulnerable dependencies
 func (sa *SecurityAgent) checkDependencies(ctx context.Context) error {
-	log.Debug("Checking dependencies for vulnerabilities")
+	log.Debug(constants.SecurityMsgCheckingDependencies)
 
 	// Use nancy for Go dependency checking
 	if _, err := exec.LookPath("nancy"); err != nil {
-		log.Warn("nancy not found, using govulncheck instead")
+		log.Warn(constants.SecurityMsgNancyNotFound)
 		return sa.runGovulncheck(ctx)
 	}
 
-	cmd := exec.Command("nancy", "sleuth", "--format", "json")
+	cmd := exec.Command(constants.SecurityToolNancy, constants.SecurityArgSleuth, "--format", constants.SecurityArgJSON)
 	output, err := cmd.Output()
 	
 	if err != nil {
@@ -261,7 +262,7 @@ func (sa *SecurityAgent) scanForSecrets(ctx context.Context) error {
 	// For now, implement basic pattern matching
 	_ = map[string]string{
 		"API_KEY":     `(?i)(api[_-]?key|apikey)\s*[:=]\s*['""]?([a-zA-Z0-9]{20,})['""]?`,
-		"PASSWORD":    `(?i)(password|passwd|pwd)\s*[:=]\s*['""]?([^'"\s]{8,})['""]?`,
+		constants.SecurityConfigPassword:    `(?i)(password|passwd|pwd)\s*[:=]\s*['""]?([^'"\s]{8,})['""]?`,
 		"JWT_TOKEN":   `eyJ[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*`,
 		"AWS_KEY":     `AKIA[0-9A-Z]{16}`,
 		"PRIVATE_KEY": `-----BEGIN [A-Z ]+PRIVATE KEY-----`,
@@ -304,7 +305,7 @@ func (sa *SecurityAgent) runDynamicAnalysis(ctx context.Context, baseURL string)
 	tests := []string{
 		"injection",
 		"broken_authentication",
-		"sensitive_data_exposure",
+		constants.SecurityVulnerabilitySensitiveDataExposure,
 		"xml_external_entities",
 		"broken_access_control",
 		"security_misconfiguration",
@@ -319,7 +320,7 @@ func (sa *SecurityAgent) runDynamicAnalysis(ctx context.Context, baseURL string)
 		log.Debug("Running OWASP test", map[string]interface{}{"test": test})
 		
 		// For demo purposes, add a low-severity finding
-		if test == "security_misconfiguration" {
+		if test == constants.SecurityVulnerabilitySecurityMisconfiguration {
 			vuln := Vulnerability{
 				ID:          "SEC-001",
 				Title:       "Missing Security Headers",
@@ -460,16 +461,16 @@ func (sa *SecurityAgent) calculateOWASPScore() {
 	// Determine risk level
 	switch {
 	case score >= 90:
-		sa.results.OverallRisk = "LOW"
+		sa.results.OverallRisk = constants.SecurityRiskLow
 		sa.results.Passed = true
 	case score >= 70:
-		sa.results.OverallRisk = "MEDIUM"
+		sa.results.OverallRisk = constants.SecurityRiskMedium
 		sa.results.Passed = false
 	case score >= 50:
-		sa.results.OverallRisk = "HIGH"
+		sa.results.OverallRisk = constants.SecurityRiskHigh
 		sa.results.Passed = false
 	default:
-		sa.results.OverallRisk = "CRITICAL"
+		sa.results.OverallRisk = constants.SecurityRiskCritical
 		sa.results.Passed = false
 	}
 }
@@ -480,7 +481,7 @@ func (sa *SecurityAgent) generateReport() error {
 		return err
 	}
 
-	reportFile := filepath.Join(sa.config.ReportPath, "security_report.json")
+	reportFile := filepath.Join(sa.config.ReportPath, constants.SecurityFileSecurityReport)
 	data, err := json.MarshalIndent(sa.results, "", "  ")
 	if err != nil {
 		return err

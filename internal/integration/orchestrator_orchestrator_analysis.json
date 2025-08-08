@@ -1,0 +1,1742 @@
+{
+  "file_path": "internal/integration/orchestrator.go",
+  "total_violations": 85,
+  "violations_by_category": {
+    "Concurrency Configuration": [
+      {
+        "line_number": 32,
+        "line_content": "workerPool      sync.WaitGroup",
+        "violation_type": "concurrency_patterns",
+        "hardcoded_value": "sync.WaitGroup",
+        "severity": "HIGH",
+        "category": "Concurrency Configuration",
+        "suggestion": "Move concurrency setting \"sync.WaitGroup\" to orchestrator config",
+        "architecture_impact": "Prevents performance tuning and resource optimization"
+      },
+      {
+        "line_number": 231,
+        "line_content": "taskQueue:        make(chan *AnalysisTask, 100),",
+        "violation_type": "concurrency_patterns",
+        "hardcoded_value": "100",
+        "severity": "HIGH",
+        "category": "Concurrency Configuration",
+        "suggestion": "Move concurrency setting \"100\" to orchestrator config",
+        "architecture_impact": "Prevents performance tuning and resource optimization"
+      },
+      {
+        "line_number": 232,
+        "line_content": "resultsChan:      make(chan *UnifiedAnalysisResult, 100),",
+        "violation_type": "concurrency_patterns",
+        "hardcoded_value": "100",
+        "severity": "HIGH",
+        "category": "Concurrency Configuration",
+        "suggestion": "Move concurrency setting \"100\" to orchestrator config",
+        "architecture_impact": "Prevents performance tuning and resource optimization"
+      },
+      {
+        "line_number": 374,
+        "line_content": "var wg sync.WaitGroup",
+        "violation_type": "concurrency_patterns",
+        "hardcoded_value": "sync.WaitGroup",
+        "severity": "HIGH",
+        "category": "Concurrency Configuration",
+        "suggestion": "Move concurrency setting \"sync.WaitGroup\" to orchestrator config",
+        "architecture_impact": "Prevents performance tuning and resource optimization"
+      }
+    ],
+    "State Management": [
+      {
+        "line_number": 125,
+        "line_content": "TaskStatusPending    TaskStatus = \"pending\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Pending",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Pending\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 125,
+        "line_content": "TaskStatusPending    TaskStatus = \"pending\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "pending",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"pending\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 126,
+        "line_content": "TaskStatusRunning    TaskStatus = \"running\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Running",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Running\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 126,
+        "line_content": "TaskStatusRunning    TaskStatus = \"running\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "running",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"running\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 127,
+        "line_content": "TaskStatusCompleted  TaskStatus = \"completed\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Completed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Completed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 127,
+        "line_content": "TaskStatusCompleted  TaskStatus = \"completed\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "completed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"completed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 128,
+        "line_content": "TaskStatusFailed     TaskStatus = \"failed\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Failed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Failed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 128,
+        "line_content": "TaskStatusFailed     TaskStatus = \"failed\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "failed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"failed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 129,
+        "line_content": "TaskStatusCancelled  TaskStatus = \"cancelled\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Cancelled",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Cancelled\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 129,
+        "line_content": "TaskStatusCancelled  TaskStatus = \"cancelled\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "cancelled",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"cancelled\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 136,
+        "line_content": "AnalysisStatusSuccess AnalysisStatus = \"success\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Success",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Success\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 137,
+        "line_content": "AnalysisStatusPartial AnalysisStatus = \"partial\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Partial",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Partial\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 138,
+        "line_content": "AnalysisStatusFailed  AnalysisStatus = \"failed\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Failed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Failed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 138,
+        "line_content": "AnalysisStatusFailed  AnalysisStatus = \"failed\"",
+        "violation_type": "state_strings",
+        "hardcoded_value": "failed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"failed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 298,
+        "line_content": "Status:     TaskStatusPending,",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Pending",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Pending\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 357,
+        "line_content": "task.Status = TaskStatusRunning",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Running",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Running\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 449,
+        "line_content": "task.Status = TaskStatusCompleted",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Completed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Completed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 454,
+        "line_content": "result.Status = AnalysisStatusSuccess",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Success",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Success\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 456,
+        "line_content": "result.Status = AnalysisStatusPartial",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Partial",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Partial\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 459,
+        "line_content": "result.Status = AnalysisStatusFailed",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Failed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Failed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 460,
+        "line_content": "task.Status = TaskStatusFailed",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Failed",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Failed\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 739,
+        "line_content": "if result.Status == AnalysisStatusSuccess || result.Status == AnalysisStatusPartial {",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Success",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Success\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      },
+      {
+        "line_number": 739,
+        "line_content": "if result.Status == AnalysisStatusSuccess || result.Status == AnalysisStatusPartial {",
+        "violation_type": "state_strings",
+        "hardcoded_value": "Partial",
+        "severity": "MEDIUM",
+        "category": "State Management",
+        "suggestion": "Use orchestrator state constants for \"Partial\"",
+        "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+      }
+    ],
+    "Timing Configuration": [
+      {
+        "line_number": 204,
+        "line_content": "RetryAttempts: 3,",
+        "violation_type": "timing_values",
+        "hardcoded_value": "3",
+        "severity": "HIGH",
+        "category": "Timing Configuration",
+        "suggestion": "Move timeout/duration \"3\" to orchestrator configuration",
+        "architecture_impact": "Prevents adaptive timeout management and environment-specific tuning"
+      }
+    ],
+    "Retry Configuration": [
+      {
+        "line_number": 204,
+        "line_content": "RetryAttempts: 3,",
+        "violation_type": "retry_patterns",
+        "hardcoded_value": "3",
+        "severity": "MEDIUM",
+        "category": "Retry Configuration",
+        "suggestion": "Define retry policy \"3\" in orchestration config",
+        "architecture_impact": "Limits retry policy customization and fault tolerance configuration"
+      }
+    ],
+    "Integration Points": [
+      {
+        "line_number": 211,
+        "line_content": "crawlerInstance, err := crawler.New(crawlerConfig)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "crawler.New(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 334,
+        "line_content": "result := o.processTask(ctx, task)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "o.processTask(ctx, task)",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 384,
+        "line_content": "if cr, err := o.performCrawling(ctx, task); err != nil {",
+        "violation_type": "integration_points",
+        "hardcoded_value": "o.performCrawling(ctx, task)",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 403,
+        "line_content": "if sr, err := o.performSemanticAnalysis(ctx, task); err != nil {",
+        "violation_type": "integration_points",
+        "hardcoded_value": "o.performSemanticAnalysis(ctx, task)",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 422,
+        "line_content": "if seoRes, err := o.performSEOAnalysis(ctx, task); err != nil {",
+        "violation_type": "integration_points",
+        "hardcoded_value": "o.performSEOAnalysis(ctx, task)",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 483,
+        "line_content": "result, err := o.crawler.CrawlPage(ctx, task.URL)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "crawler.CrawlPage(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 503,
+        "line_content": "result, err := o.semanticAnalyzer.AnalyzePage(ctx, task.URL, htmlContent)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "semanticAnalyzer.AnalyzePage(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 516,
+        "line_content": "result, err := o.seoAnalyzer.AnalyzePage(ctx, task.URL)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "seoAnalyzer.AnalyzePage(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 758,
+        "line_content": "err := o.storage.SaveAnalysis(result)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "storage.SaveAnalysis(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 781,
+        "line_content": "analyses, err := o.storage.GetRecentAnalyses(20)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "storage.GetRecentAnalyses(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      },
+      {
+        "line_number": 813,
+        "line_content": "analysis, err := o.storage.GetAnalysisById(analysisID)",
+        "violation_type": "integration_points",
+        "hardcoded_value": "storage.GetAnalysisById(",
+        "severity": "MEDIUM",
+        "category": "Integration Points",
+        "suggestion": "Use dependency injection for service integration",
+        "architecture_impact": "Creates tight coupling and reduces microservice independence"
+      }
+    ],
+    "Error Handling": [
+      {
+        "line_number": 213,
+        "line_content": "return nil, fmt.Errorf(\"erreur initialisation crawler: %w\", err)",
+        "violation_type": "error_messages",
+        "hardcoded_value": "erreur initialisation crawler: %w",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"erreur initialisation crawler: %w\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 222,
+        "line_content": "return nil, fmt.Errorf(\"erreur initialisation storage: %w\", err)",
+        "violation_type": "error_messages",
+        "hardcoded_value": "erreur initialisation storage: %w",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"erreur initialisation storage: %w\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 247,
+        "line_content": "return fmt.Errorf(\"orchestrateur d\u00e9j\u00e0 en cours d'ex\u00e9cution\")",
+        "violation_type": "error_messages",
+        "hardcoded_value": "orchestrateur d\u00e9j\u00e0 en cours d'ex\u00e9cution",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"orchestrateur d\u00e9j\u00e0 en cours d'ex\u00e9cution\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 485,
+        "line_content": "return nil, fmt.Errorf(\"erreur crawling page: %w\", err)",
+        "violation_type": "error_messages",
+        "hardcoded_value": "erreur crawling page: %w",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"erreur crawling page: %w\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 500,
+        "line_content": "return nil, fmt.Errorf(\"impossible de r\u00e9cup\u00e9rer le contenu HTML\")",
+        "violation_type": "error_messages",
+        "hardcoded_value": "impossible de r\u00e9cup\u00e9rer le contenu HTML",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"impossible de r\u00e9cup\u00e9rer le contenu HTML\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 505,
+        "line_content": "return nil, fmt.Errorf(\"erreur analyse s\u00e9mantique: %w\", err)",
+        "violation_type": "error_messages",
+        "hardcoded_value": "erreur analyse s\u00e9mantique: %w",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"erreur analyse s\u00e9mantique: %w\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 518,
+        "line_content": "return nil, fmt.Errorf(\"erreur analyse SEO: %w\", err)",
+        "violation_type": "error_messages",
+        "hardcoded_value": "erreur analyse SEO: %w",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"erreur analyse SEO: %w\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 548,
+        "line_content": "return \"\", fmt.Errorf(\"URL invalide\")",
+        "violation_type": "error_messages",
+        "hardcoded_value": "URL invalide",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"URL invalide\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 809,
+        "line_content": "return nil, fmt.Errorf(\"storage non disponible\")",
+        "violation_type": "error_messages",
+        "hardcoded_value": "storage non disponible",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"storage non disponible\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      },
+      {
+        "line_number": 815,
+        "line_content": "return nil, fmt.Errorf(\"analyse non trouv\u00e9e: %w\", err)",
+        "violation_type": "error_messages",
+        "hardcoded_value": "analyse non trouv\u00e9e: %w",
+        "severity": "MEDIUM",
+        "category": "Error Handling",
+        "suggestion": "Use structured error handling for \"analyse non trouv\u00e9e: %w\"",
+        "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+      }
+    ],
+    "Service Discovery": [
+      {
+        "line_number": 220,
+        "line_content": "storage, err := NewStorageManager(\"fire_salamander.db\")",
+        "violation_type": "service_endpoints",
+        "hardcoded_value": "fire_salamander.db",
+        "severity": "HIGH",
+        "category": "Service Discovery",
+        "suggestion": "Move \"fire_salamander.db\" to configuration file or environment variable",
+        "architecture_impact": "Breaks service discovery patterns and deployment flexibility"
+      },
+      {
+        "line_number": 231,
+        "line_content": "taskQueue:        make(chan *AnalysisTask, 100),",
+        "violation_type": "service_endpoints",
+        "hardcoded_value": "100",
+        "severity": "HIGH",
+        "category": "Service Discovery",
+        "suggestion": "Move \"100\" to configuration file or environment variable",
+        "architecture_impact": "Breaks service discovery patterns and deployment flexibility"
+      },
+      {
+        "line_number": 232,
+        "line_content": "resultsChan:      make(chan *UnifiedAnalysisResult, 100),",
+        "violation_type": "service_endpoints",
+        "hardcoded_value": "100",
+        "severity": "HIGH",
+        "category": "Service Discovery",
+        "suggestion": "Move \"100\" to configuration file or environment variable",
+        "architecture_impact": "Breaks service discovery patterns and deployment flexibility"
+      }
+    ],
+    "Database Configuration": [
+      {
+        "line_number": 220,
+        "line_content": "storage, err := NewStorageManager(\"fire_salamander.db\")",
+        "violation_type": "database_hardcoding",
+        "hardcoded_value": "\"fire_salamander.db\"",
+        "severity": "HIGH",
+        "category": "Database Configuration",
+        "suggestion": "Externalize database configuration \"\"fire_salamander.db\"\"",
+        "architecture_impact": "Breaks database abstraction and multi-environment support"
+      },
+      {
+        "line_number": 220,
+        "line_content": "storage, err := NewStorageManager(\"fire_salamander.db\")",
+        "violation_type": "database_hardcoding",
+        "hardcoded_value": "fire_salamander.db",
+        "severity": "HIGH",
+        "category": "Database Configuration",
+        "suggestion": "Externalize database configuration \"fire_salamander.db\"",
+        "architecture_impact": "Breaks database abstraction and multi-environment support"
+      }
+    ],
+    "Event Management": [
+      {
+        "line_number": 250,
+        "line_content": "log.Printf(\"D\u00e9marrage de l'orchestrateur Fire Salamander avec %d workers\", o.workers)",
+        "violation_type": "event_names",
+        "hardcoded_value": "D\u00e9marrage de l'orchestrateur Fire Salamander avec %d workers",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"D\u00e9marrage de l'orchestrateur Fire Salamander avec %d workers\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 259,
+        "line_content": "log.Printf(\"Orchestrateur Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s\")",
+        "violation_type": "event_names",
+        "hardcoded_value": "Orchestrateur Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Orchestrateur Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 273,
+        "line_content": "log.Printf(\"Arr\u00eat de l'orchestrateur Fire Salamander\")",
+        "violation_type": "event_names",
+        "hardcoded_value": "Arr\u00eat de l'orchestrateur Fire Salamander",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Arr\u00eat de l'orchestrateur Fire Salamander\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 282,
+        "line_content": "log.Printf(\"Orchestrateur Fire Salamander arr\u00eat\u00e9\")",
+        "violation_type": "event_names",
+        "hardcoded_value": "Orchestrateur Fire Salamander arr\u00eat\u00e9",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Orchestrateur Fire Salamander arr\u00eat\u00e9\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 289,
+        "line_content": "taskID := fmt.Sprintf(\"task_%d\", time.Now().UnixNano())",
+        "violation_type": "event_names",
+        "hardcoded_value": "task_%d",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"task_%d\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 305,
+        "line_content": "log.Printf(\"T\u00e2che %s ajout\u00e9e \u00e0 la queue pour %s\", taskID, targetURL)",
+        "violation_type": "event_names",
+        "hardcoded_value": "T\u00e2che %s ajout\u00e9e \u00e0 la queue pour %s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"T\u00e2che %s ajout\u00e9e \u00e0 la queue pour %s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 323,
+        "line_content": "log.Printf(\"Worker %d d\u00e9marr\u00e9\", workerID)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Worker %d d\u00e9marr\u00e9",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Worker %d d\u00e9marr\u00e9\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 329,
+        "line_content": "log.Printf(\"Worker %d: queue ferm\u00e9e, arr\u00eat\", workerID)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Worker %d: queue ferm\u00e9e, arr\u00eat",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Worker %d: queue ferm\u00e9e, arr\u00eat\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 333,
+        "line_content": "log.Printf(\"Worker %d: traitement t\u00e2che %s pour %s\", workerID, task.ID, task.URL)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Worker %d: traitement t\u00e2che %s pour %s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Worker %d: traitement t\u00e2che %s pour %s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 340,
+        "line_content": "log.Printf(\"Worker %d: impossible d'envoyer le r\u00e9sultat pour %s\", workerID, task.ID)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Worker %d: impossible d'envoyer le r\u00e9sultat pour %s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Worker %d: impossible d'envoyer le r\u00e9sultat pour %s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 344,
+        "line_content": "log.Printf(\"Worker %d: signal d'arr\u00eat re\u00e7u\", workerID)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Worker %d: signal d'arr\u00eat re\u00e7u",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Worker %d: signal d'arr\u00eat re\u00e7u\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 348,
+        "line_content": "log.Printf(\"Worker %d: contexte annul\u00e9\", workerID)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Worker %d: contexte annul\u00e9",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Worker %d: contexte annul\u00e9\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 457,
+        "line_content": "result.Warnings = append(result.Warnings, fmt.Sprintf(\"Analyse partielle - %d erreurs\", len(result.Errors)))",
+        "violation_type": "event_names",
+        "hardcoded_value": "Analyse partielle - %d erreurs",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Analyse partielle - %d erreurs\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 466,
+        "line_content": "log.Printf(\"T\u00e2che %s termin\u00e9e - Statut: %s, Dur\u00e9e: %v, Score: %.1f\",",
+        "violation_type": "event_names",
+        "hardcoded_value": "T\u00e2che %s termin\u00e9e - Statut: %s, Dur\u00e9e: %v, Score: %.1f",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"T\u00e2che %s termin\u00e9e - Statut: %s, Dur\u00e9e: %v, Score: %.1f\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 474,
+        "line_content": "log.Printf(\"D\u00e9but crawling pour %s\", task.URL)",
+        "violation_type": "event_names",
+        "hardcoded_value": "D\u00e9but crawling pour %s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"D\u00e9but crawling pour %s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 488,
+        "line_content": "log.Printf(\"Crawling termin\u00e9 - Page: %s, Status: %d\", task.URL, result.StatusCode)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Crawling termin\u00e9 - Page: %s, Status: %d",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Crawling termin\u00e9 - Page: %s, Status: %d\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 494,
+        "line_content": "log.Printf(\"D\u00e9but analyse s\u00e9mantique pour %s\", task.URL)",
+        "violation_type": "event_names",
+        "hardcoded_value": "D\u00e9but analyse s\u00e9mantique pour %s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"D\u00e9but analyse s\u00e9mantique pour %s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 508,
+        "line_content": "log.Printf(\"Analyse s\u00e9mantique termin\u00e9e - Score: %.1f\", result.SEOScore.Overall)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Analyse s\u00e9mantique termin\u00e9e - Score: %.1f",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Analyse s\u00e9mantique termin\u00e9e - Score: %.1f\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 514,
+        "line_content": "log.Printf(\"D\u00e9but analyse SEO pour %s\", task.URL)",
+        "violation_type": "event_names",
+        "hardcoded_value": "D\u00e9but analyse SEO pour %s",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"D\u00e9but analyse SEO pour %s\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 521,
+        "line_content": "log.Printf(\"Analyse SEO termin\u00e9e - Score: %.1f\", result.OverallScore)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Analyse SEO termin\u00e9e - Score: %.1f",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Analyse SEO termin\u00e9e - Score: %.1f\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 646,
+        "line_content": "Evidence:    []string{fmt.Sprintf(\"Performance: %.1f%%\", perfScore), fmt.Sprintf(\"Contenu: %.1f%%\", contentScore)},",
+        "violation_type": "event_names",
+        "hardcoded_value": "Performance: %.1f%%",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Performance: %.1f%%\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 646,
+        "line_content": "Evidence:    []string{fmt.Sprintf(\"Performance: %.1f%%\", perfScore), fmt.Sprintf(\"Contenu: %.1f%%\", contentScore)},",
+        "violation_type": "event_names",
+        "hardcoded_value": "Contenu: %.1f%%",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Contenu: %.1f%%\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 760,
+        "line_content": "log.Printf(\"Erreur sauvegarde analyse %s: %v\", result.TaskID, err)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Erreur sauvegarde analyse %s: %v",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Erreur sauvegarde analyse %s: %v\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      },
+      {
+        "line_number": 783,
+        "line_content": "log.Printf(\"Erreur r\u00e9cup\u00e9ration analyses r\u00e9centes: %v\", err)",
+        "violation_type": "event_names",
+        "hardcoded_value": "Erreur r\u00e9cup\u00e9ration analyses r\u00e9centes: %v",
+        "severity": "LOW",
+        "category": "Event Management",
+        "suggestion": "Define event type \"Erreur r\u00e9cup\u00e9ration analyses r\u00e9centes: %v\" in orchestrator event registry",
+        "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+      }
+    ],
+    "Workflow Management": [
+      {
+        "line_number": 382,
+        "line_content": "go func() {",
+        "violation_type": "workflow_steps",
+        "hardcoded_value": "go func() {",
+        "severity": "LOW",
+        "category": "Workflow Management",
+        "suggestion": "Define workflow step \"go func() {\" in orchestration plan",
+        "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+      },
+      {
+        "line_number": 383,
+        "line_content": "defer wg.Done()",
+        "violation_type": "workflow_steps",
+        "hardcoded_value": "defer wg.Done()",
+        "severity": "LOW",
+        "category": "Workflow Management",
+        "suggestion": "Define workflow step \"defer wg.Done()\" in orchestration plan",
+        "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+      },
+      {
+        "line_number": 401,
+        "line_content": "go func() {",
+        "violation_type": "workflow_steps",
+        "hardcoded_value": "go func() {",
+        "severity": "LOW",
+        "category": "Workflow Management",
+        "suggestion": "Define workflow step \"go func() {\" in orchestration plan",
+        "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+      },
+      {
+        "line_number": 402,
+        "line_content": "defer wg.Done()",
+        "violation_type": "workflow_steps",
+        "hardcoded_value": "defer wg.Done()",
+        "severity": "LOW",
+        "category": "Workflow Management",
+        "suggestion": "Define workflow step \"defer wg.Done()\" in orchestration plan",
+        "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+      },
+      {
+        "line_number": 420,
+        "line_content": "go func() {",
+        "violation_type": "workflow_steps",
+        "hardcoded_value": "go func() {",
+        "severity": "LOW",
+        "category": "Workflow Management",
+        "suggestion": "Define workflow step \"go func() {\" in orchestration plan",
+        "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+      },
+      {
+        "line_number": 421,
+        "line_content": "defer wg.Done()",
+        "violation_type": "workflow_steps",
+        "hardcoded_value": "defer wg.Done()",
+        "severity": "LOW",
+        "category": "Workflow Management",
+        "suggestion": "Define workflow step \"defer wg.Done()\" in orchestration plan",
+        "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+      }
+    ]
+  },
+  "violations_by_severity": {
+    "HIGH": 10,
+    "MEDIUM": 45,
+    "LOW": 30
+  },
+  "violations": [
+    {
+      "line_number": 32,
+      "line_content": "workerPool      sync.WaitGroup",
+      "violation_type": "concurrency_patterns",
+      "hardcoded_value": "sync.WaitGroup",
+      "severity": "HIGH",
+      "category": "Concurrency Configuration",
+      "suggestion": "Move concurrency setting \"sync.WaitGroup\" to orchestrator config",
+      "architecture_impact": "Prevents performance tuning and resource optimization"
+    },
+    {
+      "line_number": 125,
+      "line_content": "TaskStatusPending    TaskStatus = \"pending\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Pending",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Pending\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 125,
+      "line_content": "TaskStatusPending    TaskStatus = \"pending\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "pending",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"pending\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 126,
+      "line_content": "TaskStatusRunning    TaskStatus = \"running\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Running",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Running\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 126,
+      "line_content": "TaskStatusRunning    TaskStatus = \"running\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "running",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"running\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 127,
+      "line_content": "TaskStatusCompleted  TaskStatus = \"completed\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Completed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Completed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 127,
+      "line_content": "TaskStatusCompleted  TaskStatus = \"completed\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "completed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"completed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 128,
+      "line_content": "TaskStatusFailed     TaskStatus = \"failed\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Failed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Failed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 128,
+      "line_content": "TaskStatusFailed     TaskStatus = \"failed\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "failed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"failed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 129,
+      "line_content": "TaskStatusCancelled  TaskStatus = \"cancelled\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Cancelled",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Cancelled\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 129,
+      "line_content": "TaskStatusCancelled  TaskStatus = \"cancelled\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "cancelled",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"cancelled\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 136,
+      "line_content": "AnalysisStatusSuccess AnalysisStatus = \"success\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Success",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Success\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 137,
+      "line_content": "AnalysisStatusPartial AnalysisStatus = \"partial\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Partial",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Partial\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 138,
+      "line_content": "AnalysisStatusFailed  AnalysisStatus = \"failed\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Failed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Failed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 138,
+      "line_content": "AnalysisStatusFailed  AnalysisStatus = \"failed\"",
+      "violation_type": "state_strings",
+      "hardcoded_value": "failed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"failed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 204,
+      "line_content": "RetryAttempts: 3,",
+      "violation_type": "timing_values",
+      "hardcoded_value": "3",
+      "severity": "HIGH",
+      "category": "Timing Configuration",
+      "suggestion": "Move timeout/duration \"3\" to orchestrator configuration",
+      "architecture_impact": "Prevents adaptive timeout management and environment-specific tuning"
+    },
+    {
+      "line_number": 204,
+      "line_content": "RetryAttempts: 3,",
+      "violation_type": "retry_patterns",
+      "hardcoded_value": "3",
+      "severity": "MEDIUM",
+      "category": "Retry Configuration",
+      "suggestion": "Define retry policy \"3\" in orchestration config",
+      "architecture_impact": "Limits retry policy customization and fault tolerance configuration"
+    },
+    {
+      "line_number": 211,
+      "line_content": "crawlerInstance, err := crawler.New(crawlerConfig)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "crawler.New(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 213,
+      "line_content": "return nil, fmt.Errorf(\"erreur initialisation crawler: %w\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "erreur initialisation crawler: %w",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"erreur initialisation crawler: %w\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 220,
+      "line_content": "storage, err := NewStorageManager(\"fire_salamander.db\")",
+      "violation_type": "service_endpoints",
+      "hardcoded_value": "fire_salamander.db",
+      "severity": "HIGH",
+      "category": "Service Discovery",
+      "suggestion": "Move \"fire_salamander.db\" to configuration file or environment variable",
+      "architecture_impact": "Breaks service discovery patterns and deployment flexibility"
+    },
+    {
+      "line_number": 220,
+      "line_content": "storage, err := NewStorageManager(\"fire_salamander.db\")",
+      "violation_type": "database_hardcoding",
+      "hardcoded_value": "\"fire_salamander.db\"",
+      "severity": "HIGH",
+      "category": "Database Configuration",
+      "suggestion": "Externalize database configuration \"\"fire_salamander.db\"\"",
+      "architecture_impact": "Breaks database abstraction and multi-environment support"
+    },
+    {
+      "line_number": 220,
+      "line_content": "storage, err := NewStorageManager(\"fire_salamander.db\")",
+      "violation_type": "database_hardcoding",
+      "hardcoded_value": "fire_salamander.db",
+      "severity": "HIGH",
+      "category": "Database Configuration",
+      "suggestion": "Externalize database configuration \"fire_salamander.db\"",
+      "architecture_impact": "Breaks database abstraction and multi-environment support"
+    },
+    {
+      "line_number": 222,
+      "line_content": "return nil, fmt.Errorf(\"erreur initialisation storage: %w\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "erreur initialisation storage: %w",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"erreur initialisation storage: %w\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 231,
+      "line_content": "taskQueue:        make(chan *AnalysisTask, 100),",
+      "violation_type": "service_endpoints",
+      "hardcoded_value": "100",
+      "severity": "HIGH",
+      "category": "Service Discovery",
+      "suggestion": "Move \"100\" to configuration file or environment variable",
+      "architecture_impact": "Breaks service discovery patterns and deployment flexibility"
+    },
+    {
+      "line_number": 231,
+      "line_content": "taskQueue:        make(chan *AnalysisTask, 100),",
+      "violation_type": "concurrency_patterns",
+      "hardcoded_value": "100",
+      "severity": "HIGH",
+      "category": "Concurrency Configuration",
+      "suggestion": "Move concurrency setting \"100\" to orchestrator config",
+      "architecture_impact": "Prevents performance tuning and resource optimization"
+    },
+    {
+      "line_number": 232,
+      "line_content": "resultsChan:      make(chan *UnifiedAnalysisResult, 100),",
+      "violation_type": "service_endpoints",
+      "hardcoded_value": "100",
+      "severity": "HIGH",
+      "category": "Service Discovery",
+      "suggestion": "Move \"100\" to configuration file or environment variable",
+      "architecture_impact": "Breaks service discovery patterns and deployment flexibility"
+    },
+    {
+      "line_number": 232,
+      "line_content": "resultsChan:      make(chan *UnifiedAnalysisResult, 100),",
+      "violation_type": "concurrency_patterns",
+      "hardcoded_value": "100",
+      "severity": "HIGH",
+      "category": "Concurrency Configuration",
+      "suggestion": "Move concurrency setting \"100\" to orchestrator config",
+      "architecture_impact": "Prevents performance tuning and resource optimization"
+    },
+    {
+      "line_number": 247,
+      "line_content": "return fmt.Errorf(\"orchestrateur d\u00e9j\u00e0 en cours d'ex\u00e9cution\")",
+      "violation_type": "error_messages",
+      "hardcoded_value": "orchestrateur d\u00e9j\u00e0 en cours d'ex\u00e9cution",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"orchestrateur d\u00e9j\u00e0 en cours d'ex\u00e9cution\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 250,
+      "line_content": "log.Printf(\"D\u00e9marrage de l'orchestrateur Fire Salamander avec %d workers\", o.workers)",
+      "violation_type": "event_names",
+      "hardcoded_value": "D\u00e9marrage de l'orchestrateur Fire Salamander avec %d workers",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"D\u00e9marrage de l'orchestrateur Fire Salamander avec %d workers\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 259,
+      "line_content": "log.Printf(\"Orchestrateur Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s\")",
+      "violation_type": "event_names",
+      "hardcoded_value": "Orchestrateur Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Orchestrateur Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 273,
+      "line_content": "log.Printf(\"Arr\u00eat de l'orchestrateur Fire Salamander\")",
+      "violation_type": "event_names",
+      "hardcoded_value": "Arr\u00eat de l'orchestrateur Fire Salamander",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Arr\u00eat de l'orchestrateur Fire Salamander\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 282,
+      "line_content": "log.Printf(\"Orchestrateur Fire Salamander arr\u00eat\u00e9\")",
+      "violation_type": "event_names",
+      "hardcoded_value": "Orchestrateur Fire Salamander arr\u00eat\u00e9",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Orchestrateur Fire Salamander arr\u00eat\u00e9\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 289,
+      "line_content": "taskID := fmt.Sprintf(\"task_%d\", time.Now().UnixNano())",
+      "violation_type": "event_names",
+      "hardcoded_value": "task_%d",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"task_%d\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 298,
+      "line_content": "Status:     TaskStatusPending,",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Pending",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Pending\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 305,
+      "line_content": "log.Printf(\"T\u00e2che %s ajout\u00e9e \u00e0 la queue pour %s\", taskID, targetURL)",
+      "violation_type": "event_names",
+      "hardcoded_value": "T\u00e2che %s ajout\u00e9e \u00e0 la queue pour %s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"T\u00e2che %s ajout\u00e9e \u00e0 la queue pour %s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 323,
+      "line_content": "log.Printf(\"Worker %d d\u00e9marr\u00e9\", workerID)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Worker %d d\u00e9marr\u00e9",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Worker %d d\u00e9marr\u00e9\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 329,
+      "line_content": "log.Printf(\"Worker %d: queue ferm\u00e9e, arr\u00eat\", workerID)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Worker %d: queue ferm\u00e9e, arr\u00eat",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Worker %d: queue ferm\u00e9e, arr\u00eat\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 333,
+      "line_content": "log.Printf(\"Worker %d: traitement t\u00e2che %s pour %s\", workerID, task.ID, task.URL)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Worker %d: traitement t\u00e2che %s pour %s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Worker %d: traitement t\u00e2che %s pour %s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 334,
+      "line_content": "result := o.processTask(ctx, task)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "o.processTask(ctx, task)",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 340,
+      "line_content": "log.Printf(\"Worker %d: impossible d'envoyer le r\u00e9sultat pour %s\", workerID, task.ID)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Worker %d: impossible d'envoyer le r\u00e9sultat pour %s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Worker %d: impossible d'envoyer le r\u00e9sultat pour %s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 344,
+      "line_content": "log.Printf(\"Worker %d: signal d'arr\u00eat re\u00e7u\", workerID)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Worker %d: signal d'arr\u00eat re\u00e7u",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Worker %d: signal d'arr\u00eat re\u00e7u\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 348,
+      "line_content": "log.Printf(\"Worker %d: contexte annul\u00e9\", workerID)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Worker %d: contexte annul\u00e9",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Worker %d: contexte annul\u00e9\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 357,
+      "line_content": "task.Status = TaskStatusRunning",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Running",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Running\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 374,
+      "line_content": "var wg sync.WaitGroup",
+      "violation_type": "concurrency_patterns",
+      "hardcoded_value": "sync.WaitGroup",
+      "severity": "HIGH",
+      "category": "Concurrency Configuration",
+      "suggestion": "Move concurrency setting \"sync.WaitGroup\" to orchestrator config",
+      "architecture_impact": "Prevents performance tuning and resource optimization"
+    },
+    {
+      "line_number": 382,
+      "line_content": "go func() {",
+      "violation_type": "workflow_steps",
+      "hardcoded_value": "go func() {",
+      "severity": "LOW",
+      "category": "Workflow Management",
+      "suggestion": "Define workflow step \"go func() {\" in orchestration plan",
+      "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+    },
+    {
+      "line_number": 383,
+      "line_content": "defer wg.Done()",
+      "violation_type": "workflow_steps",
+      "hardcoded_value": "defer wg.Done()",
+      "severity": "LOW",
+      "category": "Workflow Management",
+      "suggestion": "Define workflow step \"defer wg.Done()\" in orchestration plan",
+      "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+    },
+    {
+      "line_number": 384,
+      "line_content": "if cr, err := o.performCrawling(ctx, task); err != nil {",
+      "violation_type": "integration_points",
+      "hardcoded_value": "o.performCrawling(ctx, task)",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 401,
+      "line_content": "go func() {",
+      "violation_type": "workflow_steps",
+      "hardcoded_value": "go func() {",
+      "severity": "LOW",
+      "category": "Workflow Management",
+      "suggestion": "Define workflow step \"go func() {\" in orchestration plan",
+      "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+    },
+    {
+      "line_number": 402,
+      "line_content": "defer wg.Done()",
+      "violation_type": "workflow_steps",
+      "hardcoded_value": "defer wg.Done()",
+      "severity": "LOW",
+      "category": "Workflow Management",
+      "suggestion": "Define workflow step \"defer wg.Done()\" in orchestration plan",
+      "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+    },
+    {
+      "line_number": 403,
+      "line_content": "if sr, err := o.performSemanticAnalysis(ctx, task); err != nil {",
+      "violation_type": "integration_points",
+      "hardcoded_value": "o.performSemanticAnalysis(ctx, task)",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 420,
+      "line_content": "go func() {",
+      "violation_type": "workflow_steps",
+      "hardcoded_value": "go func() {",
+      "severity": "LOW",
+      "category": "Workflow Management",
+      "suggestion": "Define workflow step \"go func() {\" in orchestration plan",
+      "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+    },
+    {
+      "line_number": 421,
+      "line_content": "defer wg.Done()",
+      "violation_type": "workflow_steps",
+      "hardcoded_value": "defer wg.Done()",
+      "severity": "LOW",
+      "category": "Workflow Management",
+      "suggestion": "Define workflow step \"defer wg.Done()\" in orchestration plan",
+      "architecture_impact": "Reduces workflow orchestration flexibility and step reusability"
+    },
+    {
+      "line_number": 422,
+      "line_content": "if seoRes, err := o.performSEOAnalysis(ctx, task); err != nil {",
+      "violation_type": "integration_points",
+      "hardcoded_value": "o.performSEOAnalysis(ctx, task)",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 449,
+      "line_content": "task.Status = TaskStatusCompleted",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Completed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Completed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 454,
+      "line_content": "result.Status = AnalysisStatusSuccess",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Success",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Success\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 456,
+      "line_content": "result.Status = AnalysisStatusPartial",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Partial",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Partial\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 457,
+      "line_content": "result.Warnings = append(result.Warnings, fmt.Sprintf(\"Analyse partielle - %d erreurs\", len(result.Errors)))",
+      "violation_type": "event_names",
+      "hardcoded_value": "Analyse partielle - %d erreurs",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Analyse partielle - %d erreurs\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 459,
+      "line_content": "result.Status = AnalysisStatusFailed",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Failed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Failed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 460,
+      "line_content": "task.Status = TaskStatusFailed",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Failed",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Failed\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 466,
+      "line_content": "log.Printf(\"T\u00e2che %s termin\u00e9e - Statut: %s, Dur\u00e9e: %v, Score: %.1f\",",
+      "violation_type": "event_names",
+      "hardcoded_value": "T\u00e2che %s termin\u00e9e - Statut: %s, Dur\u00e9e: %v, Score: %.1f",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"T\u00e2che %s termin\u00e9e - Statut: %s, Dur\u00e9e: %v, Score: %.1f\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 474,
+      "line_content": "log.Printf(\"D\u00e9but crawling pour %s\", task.URL)",
+      "violation_type": "event_names",
+      "hardcoded_value": "D\u00e9but crawling pour %s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"D\u00e9but crawling pour %s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 483,
+      "line_content": "result, err := o.crawler.CrawlPage(ctx, task.URL)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "crawler.CrawlPage(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 485,
+      "line_content": "return nil, fmt.Errorf(\"erreur crawling page: %w\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "erreur crawling page: %w",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"erreur crawling page: %w\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 488,
+      "line_content": "log.Printf(\"Crawling termin\u00e9 - Page: %s, Status: %d\", task.URL, result.StatusCode)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Crawling termin\u00e9 - Page: %s, Status: %d",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Crawling termin\u00e9 - Page: %s, Status: %d\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 494,
+      "line_content": "log.Printf(\"D\u00e9but analyse s\u00e9mantique pour %s\", task.URL)",
+      "violation_type": "event_names",
+      "hardcoded_value": "D\u00e9but analyse s\u00e9mantique pour %s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"D\u00e9but analyse s\u00e9mantique pour %s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 500,
+      "line_content": "return nil, fmt.Errorf(\"impossible de r\u00e9cup\u00e9rer le contenu HTML\")",
+      "violation_type": "error_messages",
+      "hardcoded_value": "impossible de r\u00e9cup\u00e9rer le contenu HTML",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"impossible de r\u00e9cup\u00e9rer le contenu HTML\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 503,
+      "line_content": "result, err := o.semanticAnalyzer.AnalyzePage(ctx, task.URL, htmlContent)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "semanticAnalyzer.AnalyzePage(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 505,
+      "line_content": "return nil, fmt.Errorf(\"erreur analyse s\u00e9mantique: %w\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "erreur analyse s\u00e9mantique: %w",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"erreur analyse s\u00e9mantique: %w\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 508,
+      "line_content": "log.Printf(\"Analyse s\u00e9mantique termin\u00e9e - Score: %.1f\", result.SEOScore.Overall)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Analyse s\u00e9mantique termin\u00e9e - Score: %.1f",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Analyse s\u00e9mantique termin\u00e9e - Score: %.1f\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 514,
+      "line_content": "log.Printf(\"D\u00e9but analyse SEO pour %s\", task.URL)",
+      "violation_type": "event_names",
+      "hardcoded_value": "D\u00e9but analyse SEO pour %s",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"D\u00e9but analyse SEO pour %s\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 516,
+      "line_content": "result, err := o.seoAnalyzer.AnalyzePage(ctx, task.URL)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "seoAnalyzer.AnalyzePage(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 518,
+      "line_content": "return nil, fmt.Errorf(\"erreur analyse SEO: %w\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "erreur analyse SEO: %w",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"erreur analyse SEO: %w\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 521,
+      "line_content": "log.Printf(\"Analyse SEO termin\u00e9e - Score: %.1f\", result.OverallScore)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Analyse SEO termin\u00e9e - Score: %.1f",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Analyse SEO termin\u00e9e - Score: %.1f\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 548,
+      "line_content": "return \"\", fmt.Errorf(\"URL invalide\")",
+      "violation_type": "error_messages",
+      "hardcoded_value": "URL invalide",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"URL invalide\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 646,
+      "line_content": "Evidence:    []string{fmt.Sprintf(\"Performance: %.1f%%\", perfScore), fmt.Sprintf(\"Contenu: %.1f%%\", contentScore)},",
+      "violation_type": "event_names",
+      "hardcoded_value": "Performance: %.1f%%",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Performance: %.1f%%\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 646,
+      "line_content": "Evidence:    []string{fmt.Sprintf(\"Performance: %.1f%%\", perfScore), fmt.Sprintf(\"Contenu: %.1f%%\", contentScore)},",
+      "violation_type": "event_names",
+      "hardcoded_value": "Contenu: %.1f%%",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Contenu: %.1f%%\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 739,
+      "line_content": "if result.Status == AnalysisStatusSuccess || result.Status == AnalysisStatusPartial {",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Success",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Success\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 739,
+      "line_content": "if result.Status == AnalysisStatusSuccess || result.Status == AnalysisStatusPartial {",
+      "violation_type": "state_strings",
+      "hardcoded_value": "Partial",
+      "severity": "MEDIUM",
+      "category": "State Management",
+      "suggestion": "Use orchestrator state constants for \"Partial\"",
+      "architecture_impact": "Reduces state machine flexibility and workflow adaptability"
+    },
+    {
+      "line_number": 758,
+      "line_content": "err := o.storage.SaveAnalysis(result)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "storage.SaveAnalysis(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 760,
+      "line_content": "log.Printf(\"Erreur sauvegarde analyse %s: %v\", result.TaskID, err)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Erreur sauvegarde analyse %s: %v",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Erreur sauvegarde analyse %s: %v\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 781,
+      "line_content": "analyses, err := o.storage.GetRecentAnalyses(20)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "storage.GetRecentAnalyses(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 783,
+      "line_content": "log.Printf(\"Erreur r\u00e9cup\u00e9ration analyses r\u00e9centes: %v\", err)",
+      "violation_type": "event_names",
+      "hardcoded_value": "Erreur r\u00e9cup\u00e9ration analyses r\u00e9centes: %v",
+      "severity": "LOW",
+      "category": "Event Management",
+      "suggestion": "Define event type \"Erreur r\u00e9cup\u00e9ration analyses r\u00e9centes: %v\" in orchestrator event registry",
+      "architecture_impact": "Complicates event-driven architecture and monitoring integration"
+    },
+    {
+      "line_number": 809,
+      "line_content": "return nil, fmt.Errorf(\"storage non disponible\")",
+      "violation_type": "error_messages",
+      "hardcoded_value": "storage non disponible",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"storage non disponible\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    },
+    {
+      "line_number": 813,
+      "line_content": "analysis, err := o.storage.GetAnalysisById(analysisID)",
+      "violation_type": "integration_points",
+      "hardcoded_value": "storage.GetAnalysisById(",
+      "severity": "MEDIUM",
+      "category": "Integration Points",
+      "suggestion": "Use dependency injection for service integration",
+      "architecture_impact": "Creates tight coupling and reduces microservice independence"
+    },
+    {
+      "line_number": 815,
+      "line_content": "return nil, fmt.Errorf(\"analyse non trouv\u00e9e: %w\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "analyse non trouv\u00e9e: %w",
+      "severity": "MEDIUM",
+      "category": "Error Handling",
+      "suggestion": "Use structured error handling for \"analyse non trouv\u00e9e: %w\"",
+      "architecture_impact": "Hinders structured error handling and error recovery mechanisms"
+    }
+  ],
+  "summary": "Found 85 orchestration hardcoding violations across 10 categories. 10 high-severity issues require immediate attention for proper microservice orchestration.",
+  "recommendations": [
+    "Implement service discovery pattern with registry (Consul, etcd, or Kubernetes DNS)",
+    "Create centralized timeout management with environment-specific configurations",
+    "Implement configurable retry policies with exponential backoff",
+    "Use state machine pattern with externalized state definitions",
+    "Apply dependency injection pattern for loose coupling between services",
+    "Implement adaptive concurrency management based on system resources"
+  ]
+}

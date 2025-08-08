@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -34,8 +35,8 @@ type RetryStrategy struct {
 func DefaultRetryStrategy() RetryStrategy {
 	return RetryStrategy{
 		MaxAttempts:  3,
-		InitialDelay: 1 * time.Second,
-		MaxDelay:     30 * time.Second,
+		InitialDelay: constants.DefaultRetryDelay,
+		MaxDelay:     constants.ClientTimeout,
 		Multiplier:   2.0,
 	}
 }
@@ -52,15 +53,15 @@ func NewFetcher(config *Config) *Fetcher {
 	transport := &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
-			Timeout:   30 * time.Second,
-			KeepAlive: 30 * time.Second,
+			Timeout:   constants.ClientTimeout,
+			KeepAlive: constants.ClientKeepAlive,
 		}).DialContext,
 		ForceAttemptHTTP2:     true,
 		MaxIdleConns:          100,
 		MaxIdleConnsPerHost:   10,
-		IdleConnTimeout:       90 * time.Second,
-		TLSHandshakeTimeout:   10 * time.Second,
-		ExpectContinueTimeout: 1 * time.Second,
+		IdleConnTimeout:       constants.ClientIdleTimeout,
+		TLSHandshakeTimeout:   constants.ClientTLSTimeout,
+		ExpectContinueTimeout: constants.ClientExpectTimeout,
 		DisableCompression:    false, // Nous gérons la compression manuellement
 	}
 
@@ -83,7 +84,7 @@ func NewFetcher(config *Config) *Fetcher {
 		retryStrategy: RetryStrategy{
 			MaxAttempts:  config.RetryAttempts,
 			InitialDelay: config.RetryDelay,
-			MaxDelay:     30 * time.Second,
+			MaxDelay:     constants.ClientTimeout,
 			Multiplier:   2.0,
 		},
 	}

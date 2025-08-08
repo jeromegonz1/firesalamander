@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 	"time"
+	"firesalamander/internal/constants"
 )
 
 // TestCrawlerCreation teste la création d'un nouveau crawler
@@ -40,7 +41,7 @@ func TestCrawlerCreation(t *testing.T) {
 func TestFetcherBasic(t *testing.T) {
 	// Créer un serveur de test
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html")
+		w.Header().Set(constants.CrawlerResponseHeaderContentType, constants.CrawlerContentTypeHTML)
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintln(w, "<html><body>Test Page</body></html>")
 	}))
@@ -160,7 +161,7 @@ Sitemap: https://example.com/sitemap2.xml`
 
 // TestSitemapParsing teste le parsing de sitemap XML
 func TestSitemapParsing(t *testing.T) {
-	sitemapContent := `<?xml version="1.0" encoding="UTF-8"?>
+	sitemapContent := `<?xml version="1.0" encoding=constants.CrawlerEncodingUTF8?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://example.com/page1.html</loc>
@@ -313,7 +314,7 @@ func TestCrawlSiteIntegration(t *testing.T) {
 	
 	// Page principale
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html")
+		w.Header().Set(constants.CrawlerResponseHeaderContentType, constants.CrawlerContentTypeHTML)
 		fmt.Fprintf(w, `<html>
 			<head><title>Test Site</title></head>
 			<body>
@@ -332,7 +333,7 @@ Sitemap: /sitemap.xml`)
 
 	// sitemap.xml
 	mux.HandleFunc("/sitemap.xml", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/xml")
+		w.Header().Set(constants.CrawlerResponseHeaderContentType, constants.CrawlerContentTypeXMLApp)
 		fmt.Fprintf(w, `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>

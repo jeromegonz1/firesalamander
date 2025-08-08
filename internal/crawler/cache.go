@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -155,7 +156,7 @@ func (pc *PageCache) removeElement(element *list.Element) {
 
 // cleanup nettoie périodiquement les entrées expirées
 func (pc *PageCache) cleanup() {
-	ticker := time.NewTicker(5 * time.Minute)
+	ticker := time.NewTicker(constants.CacheCleanupInterval)
 	defer ticker.Stop()
 
 	for range ticker.C {

@@ -7,6 +7,8 @@ import (
 	"html/template"
 	"strings"
 	"time"
+
+	"firesalamander/internal/constants"
 )
 
 // ReportGenerator générateur de rapports Fire Salamander
@@ -237,7 +239,7 @@ func (rg *ReportGenerator) createReportSummary(result *UnifiedAnalysisResult) Re
 	// Top issues (basé sur les erreurs et insights)
 	var topIssues []string
 	for _, insight := range result.CrossModuleInsights {
-		if insight.Severity == "warning" || insight.Severity == "error" {
+		if insight.Severity == constants.StatusWarning || insight.Severity == constants.StatusError {
 			topIssues = append(topIssues, insight.Title)
 		}
 		if len(topIssues) >= 5 {
@@ -272,7 +274,7 @@ func (rg *ReportGenerator) prepareTemplateData(result *UnifiedAnalysisResult, op
 		"Result":    result,
 		"Options":   options,
 		"Summary":   rg.createReportSummary(result),
-		"Generated": time.Now().Format("2006-01-02 15:04:05"),
+		"Generated": time.Now().Format(constants.DateTimeFormat),
 		"Grade":     rg.calculateGrade(result.OverallScore),
 		"Branding":  options.BrandingOptions,
 	}
@@ -407,35 +409,35 @@ func (rg *ReportGenerator) generateTitle(result *UnifiedAnalysisResult, reportTy
 
 func (rg *ReportGenerator) calculateGrade(score float64) string {
 	switch {
-	case score >= 90:
-		return "A+"
-	case score >= 80:
-		return "A"
+	case score >= constants.ExcellentScore90:
+		return constants.GradeAPlus
+	case score >= constants.HighQualityScore:
+		return constants.GradeA
 	case score >= 70:
-		return "B+"
+		return constants.GradeBPlus
 	case score >= 60:
-		return "B"
+		return constants.GradeB
 	case score >= 50:
-		return "C+"
+		return constants.GradeCPlus
 	case score >= 40:
-		return "C"
+		return constants.GradeC
 	case score >= 30:
-		return "D"
+		return constants.GradeD
 	default:
-		return "F"
+		return constants.GradeF
 	}
 }
 
 func (rg *ReportGenerator) getScoreColor(score float64) string {
 	switch {
-	case score >= 80:
-		return "#28a745" // Vert
+	case score >= constants.HighQualityScore:
+		return constants.ColorSuccessGreen // Vert
 	case score >= 60:
-		return "#ffc107" // Jaune
+		return constants.ColorWarningYellow // Jaune
 	case score >= 40:
-		return "#fd7e14" // Orange
+		return constants.ColorDangerOrange // Orange
 	default:
-		return "#dc3545" // Rouge
+		return constants.ColorErrorRed // Rouge
 	}
 }
 

@@ -4,34 +4,57 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"firesalamander/internal/constants"
 )
+
+// ServerConfig holds server configuration
+type ServerConfig struct {
+	Port int `yaml:"port"`
+	Host string `yaml:"host"`
+}
+
+// AppConfig holds application configuration
+type AppConfig struct {
+	Name        string `yaml:"name"`
+	Version     string `yaml:"version"`
+	Description string `yaml:"description"`
+}
+
+// CrawlerConfig holds crawler configuration
+type CrawlerConfig struct {
+	UserAgent string `yaml:"user_agent"`
+	Workers   int    `yaml:"workers"`
+	RateLimit string `yaml:"rate_limit"` // Format: "10/s" or "60/m"
+}
 
 // Config holds application configuration
 // Following Single Responsibility Principle
 type Config struct {
-	// Server configuration
-	Port int
-	Host string
+	// Nested configurations
+	Server  ServerConfig  `yaml:"server"`
+	App     AppConfig     `yaml:"app"`
+	Crawler CrawlerConfig `yaml:"crawler"`
 	
 	// Environment
-	Env      string
-	LogLevel string
+	Env      string `yaml:"env"`
+	LogLevel string `yaml:"log_level"`
 	
 	// SEO Analysis limits (NO HARDCODING!)
-	MaxPagesCrawl   int
-	TimeoutSeconds  int
-	MaxConcurrent   int
+	MaxPagesCrawl   int `yaml:"max_pages_crawl"`
+	TimeoutSeconds  int `yaml:"timeout_seconds"`
+	MaxConcurrent   int `yaml:"max_concurrent"`
 	
 	// Database
-	DBPath string
+	DBPath string `yaml:"db_path"`
 	
 	// External services
-	OpenAIAPIKey string
-	OpenAIModel  string
+	OpenAIAPIKey string `yaml:"openai_api_key"`
+	OpenAIModel  string `yaml:"openai_model"`
 	
 	// Reports
-	ReportsDir     string
-	EnablePDFExport bool
+	ReportsDir     string `yaml:"reports_dir"`
+	EnablePDFExport bool   `yaml:"enable_pdf_export"`
 }
 
 // Load loads configuration from environment variables
@@ -39,23 +62,32 @@ type Config struct {
 func Load() (*Config, error) {
 	cfg := &Config{}
 	
-	// Load PORT with default fallback
+	// Load Server configuration
 	if port := os.Getenv("PORT"); port != "" {
 		p, err := strconv.Atoi(port)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse PORT environment variable: %w", err)
 		}
-		cfg.Port = p
+		cfg.Server.Port = p
 	} else {
-		cfg.Port = 8080 // Default from .env.example
+		cfg.Server.Port = constants.DefaultPortInt // Default from constants
 	}
 	
-	// Load HOST with default fallback
 	if host := os.Getenv("HOST"); host != "" {
-		cfg.Host = host
+		cfg.Server.Host = host
 	} else {
-		cfg.Host = "localhost" // Default from .env.example
+		cfg.Server.Host = constants.ServerDefaultHost // Default from .env.example
 	}
+	
+	// Load App configuration
+	cfg.App.Name = constants.AppName
+	cfg.App.Version = constants.AppVersion
+	cfg.App.Description = constants.AppDescription
+	
+	// Load Crawler configuration
+	cfg.Crawler.UserAgent = constants.SEOBotUserAgent
+	cfg.Crawler.Workers = 5 // Default
+	cfg.Crawler.RateLimit = "10/s" // Default rate limit
 	
 	// Load ENV with default fallback
 	if env := os.Getenv("ENV"); env != "" {
@@ -149,14 +181,27 @@ func Load() (*Config, error) {
 // Validate validates the configuration
 // Returns wrapped error with context
 func (c *Config) Validate() error {
-	// Validate port range
-	if c.Port < 1 || c.Port > 65535 {
-		return fmt.Errorf("port must be between 1 and 65535, got %d", c.Port)
+	// Validate server configuration
+	if c.Server.Port < 1 || c.Server.Port > 65535 {
+		return fmt.Errorf("port must be between 1 and 65535, got %d", c.Server.Port)
 	}
 	
-	// Validate host is not empty
-	if c.Host == "" {
+	if c.Server.Host == "" {
 		return fmt.Errorf("host cannot be empty")
+	}
+	
+	// Validate app configuration
+	if c.App.Name == "" {
+		return fmt.Errorf("app name cannot be empty")
+	}
+	
+	// Validate crawler configuration
+	if c.Crawler.Workers <= 0 {
+		return fmt.Errorf("crawler workers must be positive, got %d", c.Crawler.Workers)
+	}
+	
+	if c.Crawler.RateLimit == "" {
+		return fmt.Errorf("crawler rate limit cannot be empty")
 	}
 	
 	// Validate positive values

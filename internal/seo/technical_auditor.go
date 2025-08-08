@@ -7,7 +7,8 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
-	"time"
+
+	"firesalamander/internal/constants"
 
 	"golang.org/x/net/html"
 )
@@ -102,7 +103,7 @@ type CrawlabilityAudit struct {
 // NewTechnicalAuditor crée un nouvel auditeur technique
 func NewTechnicalAuditor() *TechnicalAuditor {
 	client := &http.Client{
-		Timeout: 15 * time.Second,
+		Timeout: constants.DefaultRequestTimeout,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			if len(via) >= 5 {
 				return fmt.Errorf("stopped after 5 redirects")
@@ -177,14 +178,14 @@ func (ta *TechnicalAuditor) auditSecurity(ctx context.Context, targetURL string,
 
 	// Détecter le contenu mixte
 	if audit.HasHTTPS {
-		audit.MixedContent = strings.Contains(htmlContent, `http://`) ||
+		audit.MixedContent = strings.Contains(htmlContent, constants.HTTPPrefix) ||
 			strings.Contains(htmlContent, `src="http:`) ||
 			strings.Contains(htmlContent, `href="http:`)
 
 		// Identifier les liens non sécurisés
 		httpLinks := regexp.MustCompile(`https?://[^"'\s]+`).FindAllString(htmlContent, -1)
 		for _, link := range httpLinks {
-			if strings.HasPrefix(link, "http://") {
+			if strings.HasPrefix(link, constants.HTTPPrefix) {
 				audit.InsecureLinks = append(audit.InsecureLinks, link)
 			}
 		}
@@ -428,12 +429,12 @@ func (ta *TechnicalAuditor) consolidateResults(result *TechnicalAuditResult) {
 
 func (ta *TechnicalAuditor) testSSLCertificate(ctx context.Context, host string) bool {
 	// Test simple de connexion SSL
-	req, err := http.NewRequestWithContext(ctx, "HEAD", "https://"+host, nil)
+	req, err := http.NewRequestWithContext(ctx, "HEAD", constants.HTTPSPrefix+host, nil)
 	if err != nil {
 		return false
 	}
 
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: constants.FastRequestTimeout}
 	_, err = client.Do(req)
 	return err == nil
 }

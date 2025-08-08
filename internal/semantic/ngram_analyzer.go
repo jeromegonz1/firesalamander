@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+	"firesalamander/internal/constants"
 )
 
 // NGramAnalyzer analyseur de n-grammes pour analyse sémantique locale
@@ -352,13 +353,13 @@ func (nga *NGramAnalyzer) countUniqueTokens(tokens []string) int {
 func (nga *NGramAnalyzer) getNGramType(length int) string {
 	switch length {
 	case 1:
-		return "unigram"
+		return constants.SemanticAnalysisUnigram
 	case 2:
-		return "bigram"
+		return constants.SemanticAnalysisBigram
 	case 3:
-		return "trigram"
+		return constants.SemanticAnalysisTrigram
 	default:
-		return "n-gram"
+		return constants.SemanticAnalysisNGram
 	}
 }
 
@@ -414,7 +415,7 @@ func (nga *NGramAnalyzer) initStopWords() {
 	// Ajouter des mots vides communs du web
 	webStopWords := []string{
 		"www", "http", "https", "com", "org", "net", "html", "php", "asp", "jsp",
-		"page", "site", "web", "internet", "online", "click", "here", "more", "info",
+		"page", "site", "web", "internet", constants.SemanticDataTypeOnline, "click", "here", "more", "info",
 		"contact", "about", "home", "menu", "navigation", "footer", "header",
 	}
 	

@@ -10,6 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"firesalamander/internal/constants"
+
 	"golang.org/x/net/html"
 )
 
@@ -55,10 +57,10 @@ type SEOAnalysisResult struct {
 // NewSEOAnalyzer crée un nouvel analyseur SEO
 func NewSEOAnalyzer() *SEOAnalyzer {
 	client := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: constants.MaxHTTPTimeout,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			if len(via) >= 10 {
-				return fmt.Errorf("stopped after 10 redirects")
+			if len(via) >= constants.MaxRedirects {
+				return fmt.Errorf("stopped after %d redirects", constants.MaxRedirects)
 			}
 			return nil
 		},
@@ -66,9 +68,9 @@ func NewSEOAnalyzer() *SEOAnalyzer {
 
 	analyzer := &SEOAnalyzer{
 		client:       client,
-		userAgent:    "Fire Salamander SEO Bot/1.0 (+https://firesalamander.dev)",
-		timeout:      30 * time.Second,
-		maxRedirects: 10,
+		userAgent:    constants.SEOBotUserAgent,
+		timeout:      constants.MaxHTTPTimeout,
+		maxRedirects: constants.MaxRedirects,
 	}
 
 	// Initialiser les composants
@@ -343,11 +345,11 @@ func (seo *SEOAnalyzer) calculatePerformanceScore(perfMetrics *PerformanceMetric
 	score := 0.0
 
 	// Temps de chargement (40%)
-	if perfMetrics.LoadTime < 2*time.Second {
+	if perfMetrics.LoadTime < constants.FastLoadTime {
 		score += 0.4
-	} else if perfMetrics.LoadTime < 3*time.Second {
+	} else if perfMetrics.LoadTime < constants.AcceptableLoadTime {
 		score += 0.3
-	} else if perfMetrics.LoadTime < 5*time.Second {
+	} else if perfMetrics.LoadTime < constants.SlowLoadTime {
 		score += 0.2
 	}
 
@@ -428,11 +430,11 @@ func (seo *SEOAnalyzer) calculateBasicsScore(result *SEOAnalysisResult) float64 
 	}
 
 	// Response time (30%)
-	if result.ResponseTime < 200*time.Millisecond {
+	if result.ResponseTime < constants.FastResponseTime {
 		score += 0.3
-	} else if result.ResponseTime < 500*time.Millisecond {
+	} else if result.ResponseTime < constants.AcceptableResponseTime {
 		score += 0.2
-	} else if result.ResponseTime < 1*time.Second {
+	} else if result.ResponseTime < constants.SlowResponseTime {
 		score += 0.1
 	}
 
@@ -444,7 +446,7 @@ func (seo *SEOAnalyzer) calculateBasicsScore(result *SEOAnalysisResult) float64 
 	}
 
 	// Domain validity (10%)
-	if result.Domain != "" && !strings.Contains(result.Domain, "localhost") {
+	if result.Domain != "" && !strings.Contains(result.Domain, constants.ServerDefaultHost) {
 		score += 0.1
 	}
 

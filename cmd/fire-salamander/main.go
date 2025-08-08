@@ -8,9 +8,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 	"firesalamander/internal/integration"
 	"firesalamander/internal/web"
 )
@@ -29,12 +29,12 @@ Développé par SEPTEO
 func main() {
 	// Parse command line flags
 	var (
-		configPath = flag.String("config", "config.yaml", "Chemin vers le fichier de configuration")
-		port       = flag.Int("port", 8080, "Port du serveur web")
-		showVersion = flag.Bool("version", false, "Afficher la version")
-		webOnly    = flag.Bool("web-only", false, "Lancer uniquement l'interface web (sans orchestrateur)")
-		apiOnly    = flag.Bool("api-only", false, "Lancer uniquement l'API REST (sans interface web)")
-		verbose    = flag.Bool("verbose", false, "Activer les logs détaillés")
+		configPath = flag.String("config", constants.DefaultConfigPath, constants.ConfigPathDescription)
+		port       = flag.Int("port", constants.DefaultPortInt, constants.PortDescription)
+		showVersion = flag.Bool("version", false, constants.ShowVersionDescription)
+		webOnly    = flag.Bool("web-only", false, constants.WebOnlyDescription)
+		apiOnly    = flag.Bool("api-only", false, constants.APIOnlyDescription)
+		verbose    = flag.Bool("verbose", false, constants.VerboseDescription)
 	)
 	flag.Parse()
 
@@ -102,7 +102,7 @@ func main() {
 		}
 		
 		log.Printf("✅ Serveur API démarré sur le port %d", cfg.Server.Port)
-		log.Printf("📡 API disponible sur: http://localhost:%d/api/v1", cfg.Server.Port)
+		log.Printf(constants.LogAPIAvailableFormat, cfg.Server.Port)
 		
 	} else {
 		// Web mode (default) or web-only mode
@@ -114,8 +114,8 @@ func main() {
 		}
 		
 		log.Printf("✅ Serveur web démarré sur le port %d", cfg.Server.Port)
-		log.Printf("🔥 Interface Fire Salamander: http://localhost:%d", cfg.Server.Port)
-		log.Printf("📡 API REST intégrée: http://localhost:%d/api/v1", cfg.Server.Port)
+		log.Printf(constants.LogInterfaceAvailableFormat, cfg.Server.Port)
+		log.Printf(constants.LogAPIIntegratedFormat, cfg.Server.Port)
 	}
 
 	// Display startup summary
@@ -126,7 +126,7 @@ func main() {
 	log.Printf("🛑 Signal d'arrêt reçu, fermeture gracieuse...")
 
 	// Create shutdown context with timeout
-	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), 30*time.Second)
+	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), constants.ShutdownTimeout)
 	defer shutdownCancel()
 
 	// Shutdown services
@@ -161,19 +161,19 @@ func main() {
 // loadConfig charge la configuration depuis le fichier ou utilise les valeurs par défaut
 func loadConfig(configPath string, port int) (*config.Config, error) {
 	// Try to load from file
-	cfg, err := config.LoadConfig(configPath)
+	cfg, err := config.Load()
 	if err != nil {
 		// If file doesn't exist, create default config
 		if os.IsNotExist(err) {
 			log.Printf("📝 Fichier de configuration non trouvé, utilisation de la configuration par défaut")
-			cfg = config.DefaultConfig()
+			cfg = &config.Config{Server: config.ServerConfig{Port: 8080, Host: constants.ServerDefaultHost}}
 		} else {
 			return nil, fmt.Errorf("erreur lecture configuration: %w", err)
 		}
 	}
 
 	// Override port if specified
-	if port != 8080 {
+	if port != constants.DefaultPortInt {
 		cfg.Server.Port = port
 	}
 
@@ -186,12 +186,12 @@ func loadConfig(configPath string, port int) (*config.Config, error) {
 // getRunMode retourne le mode d'exécution
 func getRunMode(webOnly, apiOnly bool) string {
 	if webOnly {
-		return "Interface Web Uniquement"
+		return constants.RunModeWebOnly
 	}
 	if apiOnly {
-		return "API REST Uniquement"
+		return constants.RunModeAPIOnly
 	}
-	return "Complet (Web + API + Orchestrateur)"
+	return constants.RunModeComplete
 }
 
 // displayStartupSummary affiche un résumé du démarrage
@@ -206,13 +206,13 @@ func displayStartupSummary(cfg *config.Config, webOnly, apiOnly bool) {
 	}
 	
 	if !apiOnly {
-		fmt.Printf("🌐 Interface Web: http://localhost:%d\n", cfg.Server.Port)
+		fmt.Printf(constants.InterfaceWebFormat, cfg.Server.Port)
 		fmt.Printf("   - Dashboard de monitoring\n")
 		fmt.Printf("   - Outil d'analyse interactif\n")  
 		fmt.Printf("   - Historique et rapports\n")
 	}
 	
-	fmt.Printf("📡 API REST: http://localhost:%d/api/v1\n", cfg.Server.Port)
+	fmt.Printf(constants.APIRESTFormat, cfg.Server.Port)
 	fmt.Printf("   - POST /analyze (analyse complète)\n")
 	fmt.Printf("   - POST /analyze/quick (analyse rapide)\n")
 	fmt.Printf("   - POST /analyze/seo (analyse SEO)\n")
@@ -222,9 +222,9 @@ func displayStartupSummary(cfg *config.Config, webOnly, apiOnly bool) {
 	
 	fmt.Println()
 	fmt.Println("📚 Documentation:")
-	fmt.Printf("   - Interface: http://localhost:%d\n", cfg.Server.Port)
-	fmt.Printf("   - API: http://localhost:%d/api/v1/info\n", cfg.Server.Port)
-	fmt.Printf("   - Santé: http://localhost:%d/api/v1/health\n", cfg.Server.Port)
+	fmt.Printf(constants.DocInterfaceFormat, cfg.Server.Port)
+	fmt.Printf(constants.DocAPIFormat, cfg.Server.Port)
+	fmt.Printf(constants.DocHealthFormat, cfg.Server.Port)
 	
 	fmt.Println()
 	fmt.Println("🔥 Prêt à analyser vos sites web!")
@@ -233,9 +233,9 @@ func displayStartupSummary(cfg *config.Config, webOnly, apiOnly bool) {
 	if !webOnly && !apiOnly {
 		fmt.Println()
 		fmt.Println("💡 Exemple d'utilisation:")
-		fmt.Printf("curl -X POST http://localhost:%d/api/v1/analyze/quick \\\n", cfg.Server.Port)
-		fmt.Println("     -H \"Content-Type: application/json\" \\")
-		fmt.Println("     -d '{\"url\": \"https://example.com\"}'")
+		fmt.Printf(constants.CurlExampleFormat, cfg.Server.Port)
+		fmt.Println(constants.CurlHeaders)
+		fmt.Println(constants.CurlExampleData)
 		fmt.Println()
 	}
 	

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 	"firesalamander/internal/crawler"
 	"firesalamander/internal/semantic"
 	"firesalamander/internal/seo"
@@ -199,9 +200,9 @@ func NewOrchestrator(cfg *config.Config) (*Orchestrator, error) {
 		RateLimit:     cfg.Crawler.RateLimit,
 		MaxDepth:      3,
 		MaxPages:      100,
-		Timeout:       30 * time.Second,
+		Timeout:       constants.ClientTimeout,
 		RetryAttempts: 3,
-		RetryDelay:    1 * time.Second,
+		RetryDelay:    constants.DefaultRetryDelay,
 		RespectRobots: true,
 		EnableCache:   true,
 	}
@@ -382,8 +383,8 @@ func (o *Orchestrator) processTask(ctx context.Context, task *AnalysisTask) *Uni
 			defer wg.Done()
 			if cr, err := o.performCrawling(ctx, task); err != nil {
 				result.Errors = append(result.Errors, AnalysisError{
-					Module:      "crawler",
-					Type:        "crawling_error",
+					Module:      constants.OrchestratorAgentNameCrawler,
+					Type:        constants.OrchestratorErrorTypeCrawling,
 					Message:     err.Error(),
 					Timestamp:   time.Now(),
 					Recoverable: true,
@@ -401,8 +402,8 @@ func (o *Orchestrator) processTask(ctx context.Context, task *AnalysisTask) *Uni
 			defer wg.Done()
 			if sr, err := o.performSemanticAnalysis(ctx, task); err != nil {
 				result.Errors = append(result.Errors, AnalysisError{
-					Module:      "semantic",
-					Type:        "semantic_error",
+					Module:      constants.OrchestratorAnalysisTypeSemantic,
+					Type:        constants.OrchestratorErrorTypeSemantic,
 					Message:     err.Error(),
 					Timestamp:   time.Now(),
 					Recoverable: true,
@@ -420,8 +421,8 @@ func (o *Orchestrator) processTask(ctx context.Context, task *AnalysisTask) *Uni
 			defer wg.Done()
 			if seoRes, err := o.performSEOAnalysis(ctx, task); err != nil {
 				result.Errors = append(result.Errors, AnalysisError{
-					Module:      "seo",
-					Type:        "seo_error",
+					Module:      constants.OrchestratorAgentNameSEO,
+					Type:        constants.OrchestratorErrorTypeSEO,
 					Message:     err.Error(),
 					Timestamp:   time.Now(),
 					Recoverable: true,
@@ -551,15 +552,15 @@ func (o *Orchestrator) extractDomain(targetURL string) (string, error) {
 
 func (o *Orchestrator) extractDomainSimple(targetURL string) string {
 	// Implémentation simple - dans la vraie vie, utiliser net/url
-	if len(targetURL) > 8 && targetURL[:8] == "https://" {
-		domain := targetURL[8:]
+	if len(targetURL) > constants.HTTPSPrefixLength && targetURL[:constants.HTTPSPrefixLength] == constants.HTTPSPrefix {
+		domain := targetURL[constants.HTTPSPrefixLength:]
 		if idx := strings.Index(domain, "/"); idx != -1 {
 			domain = domain[:idx]
 		}
 		return domain
 	}
-	if len(targetURL) > 7 && targetURL[:7] == "http://" {
-		domain := targetURL[7:]
+	if len(targetURL) > constants.HTTPPrefixLength && targetURL[:constants.HTTPPrefixLength] == constants.HTTPPrefix {
+		domain := targetURL[constants.HTTPPrefixLength:]
 		if idx := strings.Index(domain, "/"); idx != -1 {
 			domain = domain[:idx]
 		}
@@ -593,10 +594,10 @@ func (o *Orchestrator) calculateUnifiedMetrics(result *UnifiedAnalysisResult) Un
 
 	// Score de santé technique (basé sur l'analyse SEO technique)
 	if result.SEOAnalysis != nil {
-		if techScore, exists := result.SEOAnalysis.CategoryScores["technical"]; exists {
+		if techScore, exists := result.SEOAnalysis.CategoryScores[constants.OrchestratorCategoryTechnical]; exists {
 			metrics.TechnicalHealthScore = techScore * 100
 		}
-		if perfScore, exists := result.SEOAnalysis.CategoryScores["performance"]; exists {
+		if perfScore, exists := result.SEOAnalysis.CategoryScores[constants.OrchestratorAgentNamePerformance]; exists {
 			metrics.PerformanceScore = perfScore * 100
 		}
 		metrics.SEOReadinessScore = result.SEOAnalysis.OverallScore
@@ -620,13 +621,13 @@ func (o *Orchestrator) generateCrossModuleInsights(result *UnifiedAnalysisResult
 	if result.SemanticAnalysis != nil && result.SEOAnalysis != nil {
 		if result.SEOAnalysis.TagAnalysis.Title.Present && len(result.SemanticAnalysis.LocalAnalysis.Keywords) > 0 {
 			insights = append(insights, CrossModuleInsight{
-				Type:        "content_seo_alignment",
-				Severity:    "info",
+				Type:        constants.OrchestratorInsightContentSEOAlignment,
+				Severity:    constants.OrchestratorStatusInfo,
 				Title:       "Alignement contenu-SEO détecté",
 				Description: "Le titre de la page est cohérent avec les mots-clés identifiés dans le contenu",
 				Evidence:    []string{"Titre présent", "Mots-clés identifiés"},
-				Modules:     []string{"semantic", "seo"},
-				Impact:      "positive",
+				Modules:     []string{constants.OrchestratorAnalysisTypeSemantic, constants.OrchestratorAgentNameSEO},
+				Impact:      constants.OrchestratorImpactPositive,
 			})
 		}
 	}
@@ -638,13 +639,13 @@ func (o *Orchestrator) generateCrossModuleInsights(result *UnifiedAnalysisResult
 		
 		if perfScore < 50 && contentScore > 70 {
 			insights = append(insights, CrossModuleInsight{
-				Type:        "performance_content_mismatch",
-				Severity:    "warning",
+				Type:        constants.OrchestratorInsightPerformanceContentMismatch,
+				Severity:    constants.OrchestratorStatusWarning,
 				Title:       "Décalage performance-contenu",
 				Description: "Bon contenu mais performances techniques faibles",
 				Evidence:    []string{fmt.Sprintf("Performance: %.1f%%", perfScore), fmt.Sprintf("Contenu: %.1f%%", contentScore)},
-				Modules:     []string{"semantic", "seo"},
-				Impact:      "negative",
+				Modules:     []string{constants.OrchestratorAnalysisTypeSemantic, constants.OrchestratorAgentNameSEO},
+				Impact:      constants.OrchestratorImpactNegative,
 			})
 		}
 	}
@@ -679,8 +680,8 @@ func (o *Orchestrator) identifyPriorityActions(result *UnifiedAnalysisResult) []
 				Priority:    priority,
 				Impact:      string(rec.Impact),
 				Effort:      string(rec.Effort),
-				Module:      "seo",
-				EstimatedTime: "Variable",
+				Module:      constants.OrchestratorAgentNameSEO,
+				EstimatedTime: constants.OrchestratorTimeVariable,
 			})
 		}
 	}
@@ -722,9 +723,9 @@ func (o *Orchestrator) calculateCategoryScores(result *UnifiedAnalysisResult) ma
 	}
 
 	// Ajouter les métriques unifiées
-	scores["content_quality"] = result.UnifiedMetrics.ContentQualityScore
-	scores["user_experience"] = result.UnifiedMetrics.UserExperienceScore
-	scores["mobile_friendliness"] = result.UnifiedMetrics.MobileFriendlinessScore
+	scores[constants.OrchestratorCategoryContentQuality] = result.UnifiedMetrics.ContentQualityScore
+	scores[constants.OrchestratorCategoryUserExperience] = result.UnifiedMetrics.UserExperienceScore
+	scores[constants.OrchestratorCategoryMobileFriendliness] = result.UnifiedMetrics.MobileFriendlinessScore
 
 	return scores
 }
@@ -792,7 +793,7 @@ func (o *Orchestrator) GetRecentAnalyses() []map[string]interface{} {
 			"url":              analysis.URL,
 			"domain":           analysis.Domain,
 			"analysis_type":    analysis.AnalysisType,
-			"status":           analysis.Status,
+			constants.OrchestratorJSONFieldStatus:           analysis.Status,
 			"overall_score":    analysis.OverallScore,
 			"created_at":       analysis.CreatedAt,
 			"processing_time":  analysis.ProcessingTime,

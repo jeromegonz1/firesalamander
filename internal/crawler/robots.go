@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -97,7 +98,7 @@ func (rc *RobotsCache) Set(domain string, robots *RobotsTxt) {
 
 // cleanup nettoie périodiquement le cache
 func (rc *RobotsCache) cleanup() {
-	ticker := time.NewTicker(1 * time.Hour)
+	ticker := time.NewTicker(constants.RobotsCleanupInterval)
 	defer ticker.Stop()
 
 	for range ticker.C {

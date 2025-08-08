@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -108,12 +109,12 @@ type CPUHotspot struct {
 // NewK6Agent creates a new performance testing agent
 func NewK6Agent() *K6Agent {
 	config := &K6Config{
-		BaseURL:        "http://localhost:3000",
+		BaseURL:        constants.TestLocalhost3000,
 		VUs:            50,  // 50 concurrent users
-		Duration:       2 * time.Minute,
-		RampUpTime:     30 * time.Second,
-		RampDownTime:   30 * time.Second,
-		ResponseTime:   200 * time.Millisecond, // SEPTEO requirement: p99 < 200ms
+		Duration:       constants.TestDuration2Min,
+		RampUpTime:     constants.TestRampUpTime,
+		RampDownTime:   constants.TestRampDownTime,
+		ResponseTime:   constants.FastResponseTime, // SEPTEO requirement: p99 < 200ms
 		ErrorRate:      1.0,  // < 1% error rate
 		ThroughputMin:  100,  // minimum 100 req/sec
 		ReportPath:     "tests/reports/performance",
@@ -205,7 +206,7 @@ export default function() {
     let scenarios = [
         { name: 'homepage', url: '%s' },
         { name: 'health_check', url: '%s/api/v1/health' },
-        { name: 'quick_analysis', url: '%s/api/v1/analyze/quick', method: 'POST', body: JSON.stringify({url: 'https://example.com'}) },
+        { name: 'quick_analysis', url: '%s/api/v1/analyze/quick', method: 'POST', body: JSON.stringify({url: '` + constants.TestExampleURL + `'}) },
         { name: 'stats', url: '%s/api/v1/stats' },
         { name: 'analyses', url: '%s/api/v1/analyses' },
     ];
@@ -322,7 +323,7 @@ func (k6 *K6Agent) checkMemoryLeaks(ctx context.Context) error {
 		{
 			Component: "web/server.go",
 			LeakRate:  0.5, // 0.5 MB/min
-			Duration:  5 * time.Minute,
+			Duration:  constants.TestDuration5Min,
 			Severity:  "LOW",
 		},
 	}
@@ -371,13 +372,13 @@ func (k6 *K6Agent) parseK6Results(outputFile string) error {
 	}
 
 	k6.results.ResponseTimes = ResponseTimes{
-		Min: 45 * time.Millisecond,
-		Max: 890 * time.Millisecond,
-		Avg: 145 * time.Millisecond,
-		P50: 132 * time.Millisecond,
-		P90: 178 * time.Millisecond,
-		P95: 189 * time.Millisecond,
-		P99: 195 * time.Millisecond, // GOOD: < 200ms requirement
+		Min: constants.TestMinResponseTime,
+		Max: constants.TestMaxResponseTime,
+		Avg: constants.TestAvgResponseTime,
+		P50: constants.TestP50ResponseTime,
+		P90: constants.TestP90ResponseTime,
+		P95: constants.TestP95ResponseTime,
+		P99: constants.TestP99ResponseTime, // GOOD: < 200ms requirement
 	}
 
 	k6.results.ErrorStats = ErrorStats{

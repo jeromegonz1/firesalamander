@@ -127,14 +127,16 @@
             <div class="space-y-4">
                 {{range $index, $issue := .Analysis.Issues}}
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.issue{{$index}} = !expandedIssues.issue{{$index}}">
+                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.{{printf "issue%d" $index}} = !expandedIssues.{{printf "issue%d" $index}}">
                         <div class="flex items-center">
                             <i class="fa-solid fa-times-circle text-septeo-red mr-3"></i>
                             <span class="font-medium">{{.Title}} ({{.Count}})</span>
                         </div>
-                        <i class="fa-solid transition-transform duration-200" :class="expandedIssues.issue{{$index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <i class="fa-solid transition-transform duration-200" :class="expandedIssues.{{printf "issue%d" $index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </button>
                     </div>
-                    <div x-show="expandedIssues.issue{{$index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
+                    <div x-show="expandedIssues.{{printf "issue%d" $index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
                         <div class="mb-4">
                             <p class="mb-2 text-gray-700">{{.Description}}</p>
                             {{if .Pages}}
@@ -164,14 +166,16 @@
             <div class="space-y-4">
                 {{range $index, $warning := .Analysis.WarningsList}}
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.warning{{$index}} = !expandedIssues.warning{{$index}}">
+                    <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50" @click="expandedIssues.{{printf "warning%d" $index}} = !expandedIssues.{{printf "warning%d" $index}}">
                         <div class="flex items-center">
                             <i class="fa-solid fa-exclamation-circle text-septeo-yellow mr-3"></i>
                             <span class="font-medium">{{.Title}} ({{.Count}})</span>
                         </div>
-                        <i class="fa-solid transition-transform duration-200" :class="expandedIssues.warning{{$index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <i class="fa-solid transition-transform duration-200" :class="expandedIssues.{{printf "warning%d" $index}} ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </button>
                     </div>
-                    <div x-show="expandedIssues.warning{{$index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
+                    <div x-show="expandedIssues.{{printf "warning%d" $index}}" x-transition class="p-4 bg-septeo-gray-50 border-t border-gray-200">
                         <p class="text-gray-700">{{.Description}}</p>
                     </div>
                 </div>
@@ -221,7 +225,14 @@
     <script>
         function app() {
             return {
-                expandedIssues: {},
+                expandedIssues: {
+                    {{- range $index, $issue := .Analysis.Issues}}
+                    {{printf "issue%d" $index}}: false,
+                    {{- end}}
+                    {{- range $index, $warning := .Analysis.WarningsList}}
+                    {{printf "warning%d" $index}}: false,
+                    {{- end}}
+                },
                 
                 downloadPdf() {
                     alert("Le rapport PDF a été généré et téléchargé.");

@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -93,7 +94,7 @@ type MCPPlaywrightClient struct {
 // NewPlaywrightAgent creates a new frontend test agent
 func NewPlaywrightAgent() *PlaywrightAgent {
 	config := &PlaywrightConfig{
-		BaseURL:     "http://localhost:3000",
+		BaseURL:     constants.TestLocalhost3000,
 		Browsers:    []string{"chromium", "firefox", "webkit"},
 		Viewports:   []string{"desktop", "tablet", "mobile"},
 		Screenshots: true,

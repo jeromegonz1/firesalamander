@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 )
 
 // APIServer serveur API REST pour Fire Salamander
@@ -58,9 +59,9 @@ func NewAPIServer(orchestrator *Orchestrator, cfg *config.Config) *APIServer {
 		server: &http.Server{
 			Addr:         fmt.Sprintf(":%d", cfg.Server.Port),
 			Handler:      mux,
-			ReadTimeout:  30 * time.Second,
-			WriteTimeout: 30 * time.Second,
-			IdleTimeout:  60 * time.Second,
+			ReadTimeout:  constants.ServerReadTimeout,
+			WriteTimeout: constants.ServerWriteTimeout,
+			IdleTimeout:  constants.ServerIdleTimeout,
 		},
 	}
 
@@ -76,32 +77,32 @@ func (api *APIServer) registerRoutes() {
 	api.mux.HandleFunc("/", api.withMiddleware(api.handleRoot))
 	
 	// Routes d'analyse
-	api.mux.HandleFunc("/api/v1/analyze", api.withMiddleware(api.handleAnalyze))
-	api.mux.HandleFunc("/api/v1/analyze/semantic", api.withMiddleware(api.handleSemanticAnalysis))
-	api.mux.HandleFunc("/api/v1/analyze/seo", api.withMiddleware(api.handleSEOAnalysis))
-	api.mux.HandleFunc("/api/v1/analyze/quick", api.withMiddleware(api.handleQuickAnalysis))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Analyze, api.withMiddleware(api.handleAnalyze))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1AnalyzeSemantic, api.withMiddleware(api.handleSemanticAnalysis))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1AnalyzeSEO, api.withMiddleware(api.handleSEOAnalysis))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1AnalyzeQuick, api.withMiddleware(api.handleQuickAnalysis))
 	
 	// Routes de monitoring
-	api.mux.HandleFunc("/api/v1/health", api.withMiddleware(api.handleHealth))
-	api.mux.HandleFunc("/api/v1/stats", api.withMiddleware(api.handleStats))
-	api.mux.HandleFunc("/api/v1/analyses", api.withMiddleware(api.handleAnalyses))
-	api.mux.HandleFunc("/api/v1/analysis/", api.withMiddleware(api.handleAnalysisDetails))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Health, api.withMiddleware(api.handleHealth))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Stats, api.withMiddleware(api.handleStats))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Analyses, api.withMiddleware(api.handleAnalyses))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Analysis, api.withMiddleware(api.handleAnalysisDetails))
 	
 	// Routes utilitaires
-	api.mux.HandleFunc("/api/v1/info", api.withMiddleware(api.handleInfo))
-	api.mux.HandleFunc("/api/v1/version", api.withMiddleware(api.handleVersion))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Info, api.withMiddleware(api.handleInfo))
+	api.mux.HandleFunc("/" + constants.APIEndpointV1Version, api.withMiddleware(api.handleVersion))
 }
 
 // withMiddleware applique les middlewares communs
 func (api *APIServer) withMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// CORS
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+		w.Header().Set(constants.APIHeaderAccessControlAllowOrigin, "*")
+		w.Header().Set(constants.APIHeaderAccessControlAllowMethods, "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set(constants.APIHeaderAccessControlAllowHeaders, "Content-Type, Authorization, X-Requested-With")
 		
 		// Content-Type
-		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set(constants.APIHeaderContentType, constants.APIContentTypeJSON)
 		
 		// Version header
 		w.Header().Set("X-Fire-Salamander-Version", config.Version())
@@ -111,7 +112,7 @@ func (api *APIServer) withMiddleware(handler http.HandlerFunc) http.HandlerFunc 
 		log.Printf("API Request: %s %s from %s", r.Method, r.URL.Path, r.RemoteAddr)
 		
 		// Gestion OPTIONS pour CORS
-		if r.Method == "OPTIONS" {
+		if r.Method == constants.APIMethodOptions {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
@@ -137,7 +138,7 @@ func (api *APIServer) Start() error {
 	}()
 	
 	log.Printf("Serveur API Fire Salamander démarré avec succès")
-	log.Printf("API Documentation disponible sur: http://localhost:%d/", api.config.Server.Port)
+	log.Printf(constants.APIDocAvailableFormat, api.config.Server.Port)
 	
 	return nil
 }
@@ -152,12 +153,12 @@ func (api *APIServer) Stop(ctx context.Context) error {
 
 // handleRoot affiche la documentation de l'API
 func (api *APIServer) handleRoot(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set(constants.APIHeaderContentType, constants.APIContentTypeHTML)
 	html := `
 <!DOCTYPE html>
 <html lang="fr">
@@ -184,7 +185,7 @@ func (api *APIServer) handleRoot(w http.ResponseWriter, r *http.Request) {
     <div class="endpoint">
         <span class="method post">POST</span> <code>/api/v1/analyze</code>
         <p>Analyse complète (sémantique + SEO + crawling)</p>
-        <pre>{"url": "https://example.com", "type": "full", "options": {...}}</pre>
+        <pre>{constants.APIJSONFieldURL: "` + constants.TestExampleURL + `", constants.APIJSONFieldType: "full", "options": {...}}</pre>
     </div>
     
     <div class="endpoint">
@@ -221,9 +222,7 @@ func (api *APIServer) handleRoot(w http.ResponseWriter, r *http.Request) {
     
     <h2>Exemple d'utilisation</h2>
     <pre>
-curl -X POST http://localhost:` + strconv.Itoa(api.config.Server.Port) + `/api/v1/analyze/quick \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://example.com"}'
+` + fmt.Sprintf(constants.APIExampleFormat, api.config.Server.Port) + `
     </pre>
 </body>
 </html>`
@@ -234,14 +233,14 @@ curl -X POST http://localhost:` + strconv.Itoa(api.config.Server.Port) + `/api/v
 
 // handleAnalyze traite les demandes d'analyse complète
 func (api *APIServer) handleAnalyze(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != constants.APIMethodPost {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var req AnalysisRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		api.sendError(w, "Requête JSON invalide: "+err.Error(), http.StatusBadRequest)
+		api.sendError(w, constants.APIErrorInvalidJSON + ": "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -257,7 +256,7 @@ func (api *APIServer) handleAnalyze(w http.ResponseWriter, r *http.Request) {
 
 	// Valeurs par défaut pour les options
 	if req.Options.Timeout == 0 {
-		req.Options.Timeout = 60 * time.Second
+		req.Options.Timeout = constants.LongRequestTimeout
 	} else {
 		// Si timeout envoyé en millisecondes depuis le frontend, convertir
 		if req.Options.Timeout > 1000 {
@@ -281,14 +280,14 @@ func (api *APIServer) handleAnalyze(w http.ResponseWriter, r *http.Request) {
 
 // handleSemanticAnalysis traite les demandes d'analyse sémantique
 func (api *APIServer) handleSemanticAnalysis(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != constants.APIMethodPost {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var req AnalysisRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		api.sendError(w, "Requête JSON invalide: "+err.Error(), http.StatusBadRequest)
+		api.sendError(w, constants.APIErrorInvalidJSON + ": "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -299,7 +298,7 @@ func (api *APIServer) handleSemanticAnalysis(w http.ResponseWriter, r *http.Requ
 
 	req.Type = AnalysisTypeSemantic
 	
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), constants.ShutdownTimeout)
 	defer cancel()
 
 	result, err := api.orchestrator.AnalyzeURL(ctx, req.URL, req.Type, req.Options)
@@ -313,14 +312,14 @@ func (api *APIServer) handleSemanticAnalysis(w http.ResponseWriter, r *http.Requ
 
 // handleSEOAnalysis traite les demandes d'analyse SEO
 func (api *APIServer) handleSEOAnalysis(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != constants.APIMethodPost {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var req AnalysisRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		api.sendError(w, "Requête JSON invalide: "+err.Error(), http.StatusBadRequest)
+		api.sendError(w, constants.APIErrorInvalidJSON + ": "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -331,7 +330,7 @@ func (api *APIServer) handleSEOAnalysis(w http.ResponseWriter, r *http.Request) 
 
 	req.Type = AnalysisTypeSEO
 	
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), constants.ShutdownTimeout)
 	defer cancel()
 
 	result, err := api.orchestrator.AnalyzeURL(ctx, req.URL, req.Type, req.Options)
@@ -345,14 +344,14 @@ func (api *APIServer) handleSEOAnalysis(w http.ResponseWriter, r *http.Request) 
 
 // handleQuickAnalysis traite les demandes d'analyse rapide
 func (api *APIServer) handleQuickAnalysis(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
+	if r.Method != constants.APIMethodPost {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var req AnalysisRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		api.sendError(w, "Requête JSON invalide: "+err.Error(), http.StatusBadRequest)
+		api.sendError(w, constants.APIErrorInvalidJSON + ": "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -363,7 +362,7 @@ func (api *APIServer) handleQuickAnalysis(w http.ResponseWriter, r *http.Request
 
 	req.Type = AnalysisTypeQuick
 	
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), constants.DefaultRequestTimeout)
 	defer cancel()
 
 	result, err := api.orchestrator.AnalyzeURL(ctx, req.URL, req.Type, req.Options)
@@ -377,7 +376,7 @@ func (api *APIServer) handleQuickAnalysis(w http.ResponseWriter, r *http.Request
 
 // handleHealth retourne l'état de santé du service
 func (api *APIServer) handleHealth(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
@@ -385,7 +384,7 @@ func (api *APIServer) handleHealth(w http.ResponseWriter, r *http.Request) {
 	stats := api.orchestrator.GetStats()
 	
 	health := HealthResponse{
-		Status:    "healthy",
+		Status:    constants.APIStatusHealthy,
 		Version:   config.Version(),
 		Uptime:    time.Since(stats.LastAnalysis),
 		Stats:     stats,
@@ -396,7 +395,7 @@ func (api *APIServer) handleHealth(w http.ResponseWriter, r *http.Request) {
 	if stats.TotalTasks > 0 {
 		failureRate := float64(stats.FailedTasks) / float64(stats.TotalTasks)
 		if failureRate > 0.5 {
-			health.Status = "degraded"
+			health.Status = constants.APIStatusDegraded
 		} else if failureRate > 0.8 {
 			health.Status = "unhealthy"
 		}
@@ -407,7 +406,7 @@ func (api *APIServer) handleHealth(w http.ResponseWriter, r *http.Request) {
 
 // handleStats retourne les statistiques détaillées
 func (api *APIServer) handleStats(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
@@ -418,7 +417,7 @@ func (api *APIServer) handleStats(w http.ResponseWriter, r *http.Request) {
 
 // handleAnalyses retourne la liste des analyses récentes
 func (api *APIServer) handleAnalyses(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
@@ -431,13 +430,13 @@ func (api *APIServer) handleAnalyses(w http.ResponseWriter, r *http.Request) {
 
 // handleAnalysisDetails retourne les détails complets d'une analyse spécifique
 func (api *APIServer) handleAnalysisDetails(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Extraire l'ID de l'analyse depuis l'URL
-	path := strings.TrimPrefix(r.URL.Path, "/api/v1/analysis/")
+	path := strings.TrimPrefix(r.URL.Path, "/" + constants.APIEndpointV1Analysis)
 	if path == "" {
 		api.sendError(w, "ID d'analyse requis", http.StatusBadRequest)
 		return
@@ -462,22 +461,22 @@ func (api *APIServer) handleAnalysisDetails(w http.ResponseWriter, r *http.Reque
 
 // handleInfo retourne les informations sur l'API
 func (api *APIServer) handleInfo(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	info := map[string]interface{}{
-		"name":        api.config.App.Name,
+		constants.APIJSONFieldName:        api.config.App.Name,
 		"version":     config.Version(),
-		"description": "API d'analyse SEO et sémantique avancée",
+		constants.APIJSONFieldDescription: "API d'analyse SEO et sémantique avancée",
 		"endpoints": map[string]interface{}{
-			"analyze":          "/api/v1/analyze",
-			"semantic":         "/api/v1/analyze/semantic",
-			"seo":              "/api/v1/analyze/seo",
-			"quick":            "/api/v1/analyze/quick",
-			"health":           "/api/v1/health",
-			"stats":            "/api/v1/stats",
+			"analyze":          "/" + constants.APIEndpointV1Analyze,
+			constants.APIAgentSemantic:         "/" + constants.APIEndpointV1AnalyzeSemantic,
+			constants.APIAgentSEO:              "/" + constants.APIEndpointV1AnalyzeSEO,
+			"quick":            "/" + constants.APIEndpointV1AnalyzeQuick,
+			"health":           "/" + constants.APIEndpointV1Health,
+			"stats":            "/" + constants.APIEndpointV1Stats,
 		},
 		"supported_analysis_types": []string{
 			string(AnalysisTypeFull),
@@ -500,14 +499,14 @@ func (api *APIServer) handleInfo(w http.ResponseWriter, r *http.Request) {
 
 // handleVersion retourne la version de l'API
 func (api *APIServer) handleVersion(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != constants.APIMethodGet {
 		api.sendError(w, "Méthode non autorisée", http.StatusMethodNotAllowed)
 		return
 	}
 
 	version := map[string]string{
 		"version":    config.Version(),
-		"name":       api.config.App.Name,
+		constants.APIJSONFieldName:       api.config.App.Name,
 		"build_time": time.Now().Format("2006-01-02 15:04:05"),
 	}
 

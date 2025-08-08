@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 	"firesalamander/internal/integration"
 )
 
@@ -38,9 +39,9 @@ func NewWebServer(orchestrator *integration.Orchestrator, cfg *config.Config) *W
 		server: &http.Server{
 			Addr:         fmt.Sprintf(":%d", cfg.Server.Port),
 			Handler:      mux,
-			ReadTimeout:  30 * time.Second,
-			WriteTimeout: 30 * time.Second,
-			IdleTimeout:  60 * time.Second,
+			ReadTimeout:  constants.ServerReadTimeout,
+			WriteTimeout: constants.ServerWriteTimeout,
+			IdleTimeout:  constants.ServerIdleTimeout,
 		},
 	}
 
@@ -56,135 +57,135 @@ func NewWebServer(orchestrator *integration.Orchestrator, cfg *config.Config) *W
 // registerRoutes enregistre toutes les routes
 func (ws *WebServer) registerRoutes() {
 	// Servir les fichiers statiques embarqués
-	staticFS, err := fs.Sub(staticFiles, "static")
+	staticFS, err := fs.Sub(staticFiles, constants.StaticDirectory)
 	if err != nil {
-		log.Fatalf("Erreur accès fichiers statiques: %v", err)
+		log.Fatalf(constants.MsgErrorStaticFiles, err)
 	}
 	
 	fileServer := http.FileServer(http.FS(staticFS))
 	
 	// Route pour les assets statiques
-	ws.mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
+	ws.mux.Handle(constants.StaticRoute, http.StripPrefix(constants.StaticRoute, fileServer))
 	
 	// Route racine - servir l'interface web
-	ws.mux.HandleFunc("/", ws.handleWebInterface)
+	ws.mux.HandleFunc(constants.WebRouteRoot, ws.handleWebInterface)
 	
 	// Routes API - proxy vers le serveur API
-	ws.mux.HandleFunc("/api/", ws.handleAPI)
+	ws.mux.HandleFunc(constants.ServerEndpointAPI, ws.handleAPI)
 	
 	// Route de santé spécifique au serveur web
-	ws.mux.HandleFunc("/web/health", ws.handleWebHealth)
+	ws.mux.HandleFunc(constants.WebRouteHealth, ws.handleWebHealth)
 	
 	// Route pour télécharger des rapports
-	ws.mux.HandleFunc("/web/download/", ws.handleDownload)
+	ws.mux.HandleFunc(constants.WebRouteDownload, ws.handleDownload)
 	
-	log.Printf("Routes web enregistrées:")
-	log.Printf("  GET  / - Interface web principale")
-	log.Printf("  GET  /static/* - Fichiers statiques")
-	log.Printf("  ALL  /api/* - API REST (proxy)")
-	log.Printf("  GET  /web/health - Santé du serveur web")
-	log.Printf("  GET  /web/download/* - Téléchargement de rapports")
+	log.Printf(constants.MsgRoutesRegistered)
+	log.Printf(constants.MsgRouteWebInterface)
+	log.Printf(constants.MsgRouteStaticFiles)
+	log.Printf(constants.MsgRouteAPIProxy)
+	log.Printf(constants.MsgRouteWebHealth)
+	log.Printf(constants.MsgRouteWebDownload)
 }
 
 // handleWebInterface sert l'interface web principale
 func (ws *WebServer) handleWebInterface(w http.ResponseWriter, r *http.Request) {
 	// Si ce n'est pas la racine, vérifier si c'est un fichier statique
-	if r.URL.Path != "/" {
+	if r.URL.Path != constants.WebRouteRoot {
 		// Essayer de servir comme fichier statique
-		staticFS, _ := fs.Sub(staticFiles, "static")
+		staticFS, _ := fs.Sub(staticFiles, constants.StaticDirectory)
 		if _, err := fs.Stat(staticFS, r.URL.Path[1:]); err == nil {
 			http.FileServer(http.FS(staticFS)).ServeHTTP(w, r)
 			return
 		}
 		
 		// Si pas trouvé, rediriger vers la page d'accueil (SPA routing)
-		if r.URL.Path != "/" {
-			http.Redirect(w, r, "/", http.StatusFound)
+		if r.URL.Path != constants.WebRouteRoot {
+			http.Redirect(w, r, constants.WebRouteRoot, http.StatusFound)
 			return
 		}
 	}
 
 	// Servir index.html pour toutes les routes SPA
-	staticFS, _ := fs.Sub(staticFiles, "static")
-	indexContent, err := fs.ReadFile(staticFS, "index.html")
+	staticFS, _ := fs.Sub(staticFiles, constants.StaticDirectory)
+	indexContent, err := fs.ReadFile(staticFS, constants.StaticIndexHTML)
 	if err != nil {
-		http.Error(w, "Interface web non disponible", http.StatusInternalServerError)
-		log.Printf("Erreur lecture index.html: %v", err)
+		http.Error(w, constants.MsgWebInterfaceUnavailable, http.StatusInternalServerError)
+		log.Printf(constants.MsgErrorIndexHTML, err)
 		return
 	}
 
 	// Définir les headers appropriés
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	w.Header().Set("X-Frame-Options", "DENY")
-	w.Header().Set("X-Content-Type-Options", "nosniff")
-	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(indexContent)))
+	w.Header().Set(constants.HeaderContentType, constants.ContentTypeHTMLCharset)
+	w.Header().Set(constants.HeaderCacheControl, constants.HeaderValueNoCache)
+	w.Header().Set(constants.HeaderXFrameOptions, constants.HeaderValueDeny)
+	w.Header().Set(constants.HeaderXContentType, constants.HeaderValueNoSniff)
+	w.Header().Set(constants.HeaderContentLength, fmt.Sprintf("%d", len(indexContent)))
 	
 	// Écrire le contenu
 	w.WriteHeader(http.StatusOK)
 	w.Write(indexContent)
 	
-	log.Printf("Interface web servie: %s %s", r.Method, r.URL.Path)
+	log.Printf(constants.MsgWebInterfaceServed, r.Method, r.URL.Path)
 }
 
 // handleAPI proxy les requêtes API vers le serveur API intégré
 func (ws *WebServer) handleAPI(w http.ResponseWriter, r *http.Request) {
 	// Ajouter les headers CORS
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+	w.Header().Set(constants.HeaderCORSOrigin, constants.HeaderValueCORSAll)
+	w.Header().Set(constants.HeaderCORSMethods, constants.HeaderValueCORSMethods)
+	w.Header().Set(constants.HeaderCORSHeaders, constants.HeaderValueCORSHeaders)
 	
 	// Gérer les requêtes OPTIONS pour CORS
-	if r.Method == "OPTIONS" {
+	if r.Method == constants.HTTPMethodOPTIONS {
 		w.WriteHeader(http.StatusOK)
 		return
 	}
 
 	// Log de la requête API
-	log.Printf("API Request: %s %s", r.Method, r.URL.Path)
+	log.Printf(constants.MsgAPIRequest, r.Method, r.URL.Path)
 	
 	// Proxy vers les handlers de l'API server
 	switch {
-	case r.URL.Path == "/api/v1/analyze":
+	case r.URL.Path == constants.APIRouteAnalyze:
 		ws.apiServer.HandleAnalyze(w, r)
-	case r.URL.Path == "/api/v1/analyze/semantic":
+	case r.URL.Path == constants.APIRouteAnalyzeSemantic:
 		ws.apiServer.HandleSemanticAnalysis(w, r)
-	case r.URL.Path == "/api/v1/analyze/seo":
+	case r.URL.Path == constants.APIRouteAnalyzeSEO:
 		ws.apiServer.HandleSEOAnalysis(w, r)
-	case r.URL.Path == "/api/v1/analyze/quick":
+	case r.URL.Path == constants.APIRouteAnalyzeQuick:
 		ws.apiServer.HandleQuickAnalysis(w, r)
-	case r.URL.Path == "/api/v1/health":
+	case r.URL.Path == constants.APIRouteHealth:
 		ws.apiServer.HandleHealth(w, r)
-	case r.URL.Path == "/api/v1/stats":
+	case r.URL.Path == constants.APIRouteStats:
 		ws.apiServer.HandleStats(w, r)
-	case r.URL.Path == "/api/v1/analyses":
+	case r.URL.Path == constants.APIRouteAnalyses:
 		ws.apiServer.HandleAnalyses(w, r)
-	case strings.HasPrefix(r.URL.Path, "/api/v1/analysis/"):
+	case strings.HasPrefix(r.URL.Path, constants.APIRouteAnalysisDetails):
 		ws.apiServer.HandleAnalysisDetails(w, r)
-	case r.URL.Path == "/api/v1/info":
+	case r.URL.Path == constants.APIRouteInfo:
 		ws.apiServer.HandleInfo(w, r)
-	case r.URL.Path == "/api/v1/version":
+	case r.URL.Path == constants.APIRouteVersion:
 		ws.apiServer.HandleVersion(w, r)
 	default:
 		// Route API non trouvée
-		http.Error(w, "API endpoint not found", http.StatusNotFound)
+		http.Error(w, constants.MsgAPIEndpointNotFound, http.StatusNotFound)
 	}
 }
 
 // handleWebHealth retourne l'état de santé du serveur web
 func (ws *WebServer) handleWebHealth(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	if r.Method != constants.HTTPMethodGET {
+		http.Error(w, constants.MsgMethodNotAllowed, http.StatusMethodNotAllowed)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set(constants.ServerHeaderContentType, constants.ServerContentTypeJSON)
 	
 	health := map[string]interface{}{
-		"status":     "healthy",
+		constants.ServerJSONFieldStatus:     "healthy",
 		"service":    "Fire Salamander Web Server",
-		"version":    ws.config.App.Version,
-		"timestamp":  time.Now().Format(time.RFC3339),
+		"version":    constants.AppVersion,
+		constants.ServerJSONFieldTimestamp:  time.Now().Format(time.RFC3339),
 		"uptime":     time.Since(time.Now()), // Placeholder - devrait être le vrai uptime
 		"components": map[string]string{
 			"web_server":    "healthy",
@@ -202,40 +203,40 @@ func (ws *WebServer) handleWebHealth(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		health["components"].(map[string]string)["orchestrator"] = "unavailable"
-		health["status"] = "degraded"
+		health[constants.ServerJSONFieldStatus] = "degraded"
 	}
 
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `{
-		"status": "%s",
+		constants.ServerJSONFieldStatus: "%s",
 		"service": "%s",
 		"version": "%s",
-		"timestamp": "%s",
+		constants.ServerJSONFieldTimestamp: "%s",
 		"components": %v
 	}`,
-		health["status"],
+		health[constants.ServerJSONFieldStatus],
 		health["service"],
 		health["version"],
-		health["timestamp"],
+		health[constants.ServerJSONFieldTimestamp],
 		`{"web_server":"healthy","static_files":"healthy","api_proxy":"healthy","orchestrator":"healthy"}`,
 	)
 }
 
 // handleDownload gère le téléchargement de rapports
 func (ws *WebServer) handleDownload(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	if r.Method != constants.HTTPMethodGET {
+		http.Error(w, constants.MsgMethodNotAllowed, http.StatusMethodNotAllowed)
 		return
 	}
 
 	// Extraire le nom du fichier de l'URL
 	filename := filepath.Base(r.URL.Path)
 	if filename == "." || filename == "/" {
-		http.Error(w, "Nom de fichier requis", http.StatusBadRequest)
+		http.Error(w, constants.MsgFilenameRequired, http.StatusBadRequest)
 		return
 	}
 
-	log.Printf("Téléchargement demandé: %s", filename)
+	log.Printf(constants.MsgDownloadRequested, filename)
 
 	// Pour l'instant, retourner un rapport d'exemple
 	// Dans une vraie implémentation, récupérer le rapport depuis le stockage
@@ -247,16 +248,16 @@ func (ws *WebServer) handleDownload(w http.ResponseWriter, r *http.Request) {
 	// Déterminer le type de contenu basé sur l'extension
 	ext := filepath.Ext(filename)
 	switch ext {
-	case ".html":
-		w.Header().Set("Content-Type", "text/html")
+	case constants.ServerExtensionHTML:
+		w.Header().Set(constants.ServerHeaderContentType, constants.ServerContentTypeHTML)
 	case ".pdf":
-		w.Header().Set("Content-Type", "application/pdf")
-	case ".json":
-		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set(constants.ServerHeaderContentType, "application/pdf")
+	case constants.ServerExtensionJSON:
+		w.Header().Set(constants.ServerHeaderContentType, constants.ServerContentTypeJSON)
 	case ".csv":
-		w.Header().Set("Content-Type", "text/csv")
+		w.Header().Set(constants.ServerHeaderContentType, "text/csv")
 	default:
-		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Header().Set(constants.ServerHeaderContentType, "application/octet-stream")
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -268,9 +269,9 @@ func (ws *WebServer) generateSampleReport(filename string) string {
 	ext := filepath.Ext(filename)
 	
 	switch ext {
-	case ".html":
+	case constants.ServerExtensionHTML:
 		return ws.generateHTMLReport()
-	case ".json":
+	case constants.ServerExtensionJSON:
 		return ws.generateJSONReport()
 	case ".csv":
 		return ws.generateCSVReport()
@@ -344,17 +345,17 @@ func (ws *WebServer) generateJSONReport() string {
     "title": "Rapport Fire Salamander",
     "generated_at": "` + time.Now().Format(time.RFC3339) + `",
     "version": "` + ws.config.App.Version + `",
-    "overall_score": 87,
-    "url": "https://example.com",
+    "overall_score": ` + fmt.Sprintf("%d", constants.SampleOverallScore) + `,
+    constants.ServerJSONFieldURL: "` + constants.TestExampleURL + `",
     "categories": {
-      "technical": 85,
-      "performance": 72,
-      "content": 90,
-      "mobile": 88
+      "technical": ` + fmt.Sprintf("%d", constants.SampleTechnicalScore) + `,
+      "performance": ` + fmt.Sprintf("%d", constants.SamplePerformanceScore) + `,
+      "content": ` + fmt.Sprintf("%d", constants.SampleContentScore) + `,
+      "mobile": ` + fmt.Sprintf("%d", constants.SampleMobileScore) + `
     },
     "recommendations": [
       {
-        "id": "optimize_images",
+        constants.ServerJSONFieldID: "optimize_images",
         "title": "Optimiser les images",
         "description": "Compresser les images pour améliorer les temps de chargement",
         "priority": "high",
@@ -362,7 +363,7 @@ func (ws *WebServer) generateJSONReport() string {
         "effort": "medium"
       },
       {
-        "id": "meta_descriptions",
+        constants.ServerJSONFieldID: "meta_descriptions",
         "title": "Améliorer les méta-descriptions",
         "description": "Ajouter des méta-descriptions optimisées sur les pages manquantes",
         "priority": "medium",
@@ -372,7 +373,7 @@ func (ws *WebServer) generateJSONReport() string {
     ],
     "insights": [
       {
-        "type": "content_seo_alignment",
+        constants.ServerJSONFieldType: "content_seo_alignment",
         "severity": "info",
         "title": "Alignement contenu-SEO détecté",
         "description": "Le titre de la page est cohérent avec les mots-clés identifiés"
@@ -391,9 +392,9 @@ func (ws *WebServer) generateJSONReport() string {
 // generateCSVReport génère un rapport CSV
 func (ws *WebServer) generateCSVReport() string {
 	return `URL,Score Global,SEO Technique,Performance,Contenu,Mobile,Statut,Date
-https://example.com,87,85,72,90,88,Succès,` + time.Now().Format("02/01/2006") + `
-https://test.com,72,78,65,85,70,Succès,` + time.Now().AddDate(0, 0, -1).Format("02/01/2006") + `
-https://demo.fr,91,92,88,95,89,Succès,` + time.Now().AddDate(0, 0, -2).Format("02/01/2006") + `
+` + constants.TestExampleURL + `,87,85,72,90,88,Succès,` + time.Now().Format("02/01/2006") + `
+` + constants.TestDemoURL + `,72,78,65,85,70,Succès,` + time.Now().AddDate(0, 0, -1).Format("02/01/2006") + `
+` + constants.TestDemoFrURL + `,91,92,88,95,89,Succès,` + time.Now().AddDate(0, 0, -2).Format("02/01/2006") + `
 
 Résumé:
 Score moyen,83.3
@@ -409,25 +410,25 @@ Recommandations principales:
 
 // Start démarre le serveur web
 func (ws *WebServer) Start() error {
-	log.Printf("🔥 Démarrage du serveur web Fire Salamander")
-	log.Printf("📡 Interface web disponible sur: http://localhost:%d", ws.config.Server.Port)
-	log.Printf("🔌 API REST disponible sur: http://localhost:%d/api/v1", ws.config.Server.Port)
+	log.Printf(constants.MsgWebServerStarting)
+	log.Printf(constants.WebInterfaceAvailableFormat, ws.config.Server.Port)
+	log.Printf(constants.APIRestAvailableFormat, ws.config.Server.Port)
 	
 	// Démarrer le serveur dans une goroutine
 	go func() {
 		if err := ws.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Erreur serveur web: %v", err)
+			log.Fatalf(constants.MsgWebServerError, err)
 		}
 	}()
 	
-	log.Printf("✅ Serveur web Fire Salamander démarré avec succès")
+	log.Printf(constants.MsgWebServerStarted)
 	
 	return nil
 }
 
 // Stop arrête le serveur web
 func (ws *WebServer) Stop(ctx context.Context) error {
-	log.Printf("Arrêt du serveur web Fire Salamander")
+	log.Printf(constants.MsgWebServerStopping)
 	return ws.server.Shutdown(ctx)
 }
 
@@ -435,9 +436,9 @@ func (ws *WebServer) Stop(ctx context.Context) error {
 func (ws *WebServer) GetStats() map[string]interface{} {
 	stats := map[string]interface{}{
 		"service":    "web_server",
-		"status":     "running",
-		"port":       ws.config.Server.Port,
-		"version":    ws.config.App.Version,
+		constants.ServerJSONFieldStatus:     "running",
+		constants.ServerConfigPort:       ws.config.Server.Port,
+		"version":    constants.AppVersion,
 		"started_at": time.Now().Format(time.RFC3339),
 	}
 	

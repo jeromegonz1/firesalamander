@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -96,10 +97,10 @@ func DefaultConfig() *Config {
 		RateLimit:      "10/s",
 		MaxDepth:       3,
 		MaxPages:       100,
-		Timeout:        30 * time.Second,
+		Timeout:        constants.ClientTimeout,
 		RetryAttempts:  3,
-		RetryDelay:     1 * time.Second,
-		CacheDuration:  7 * 24 * time.Hour,
+		RetryDelay:     constants.DefaultRetryDelay,
+		CacheDuration:  constants.RobotsCacheDuration,
 		RespectRobots:  true,
 		FollowSitemaps: true,
 		EnableCache:    true,
@@ -127,7 +128,7 @@ func New(config *Config) (*Crawler, error) {
 	crawler := &Crawler{
 		config:      config,
 		fetcher:     NewFetcher(config),
-		robotsCache: NewRobotsCache(7 * 24 * time.Hour), // Cache 7 jours
+		robotsCache: NewRobotsCache(constants.RobotsCacheDuration),
 		sitemapParser: NewSitemapParser(),
 		cache:       NewPageCache(config.CacheDuration),
 		rateLimiter: rateLimiter,
