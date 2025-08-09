@@ -16,10 +16,10 @@ import (
 )
 
 // 🔥🦎 FIRE SALAMANDER SPRINT 5 - TDD INTEGRATION TESTS
-// Ces tests DOIVENT échouer jusqu'à l'implémentation du RealOrchestrator
+// Ces tests DOIVENT échouer jusqu'à l'implémentation du Orchestrator
 
-// TestRealOrchestrator_StartAnalysis teste le démarrage d'une analyse réelle
-func TestRealOrchestrator_StartAnalysis(t *testing.T) {
+// TestOrchestrator_StartAnalysis teste le démarrage d'une analyse réelle
+func TestOrchestrator_StartAnalysis(t *testing.T) {
 	// Créer serveur de test avec contenu HTML réel
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
@@ -44,8 +44,8 @@ func TestRealOrchestrator_StartAnalysis(t *testing.T) {
 	}))
 	defer testServer.Close()
 
-	// Test RealOrchestrator creation and analysis start
-	orchestrator := integration.NewRealOrchestrator()
+	// Test Orchestrator creation and analysis start
+	orchestrator := integration.NewOrchestrator()
 	require.NotNil(t, orchestrator)
 
 	// Start analysis - should return unique ID
@@ -62,8 +62,8 @@ func TestRealOrchestrator_StartAnalysis(t *testing.T) {
 	assert.False(t, state.StartTime.IsZero())
 }
 
-// TestRealOrchestrator_CompleteAnalysisFlow teste le flow complet d'analyse
-func TestRealOrchestrator_CompleteAnalysisFlow(t *testing.T) {
+// TestOrchestrator_CompleteAnalysisFlow teste le flow complet d'analyse
+func TestOrchestrator_CompleteAnalysisFlow(t *testing.T) {
 	// Créer serveur multi-pages pour test réaliste
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
@@ -115,7 +115,7 @@ func TestRealOrchestrator_CompleteAnalysisFlow(t *testing.T) {
 	}))
 	defer testServer.Close()
 
-	orchestrator := integration.NewRealOrchestrator()
+	orchestrator := integration.NewOrchestrator()
 	analysisID, err := orchestrator.StartAnalysis(testServer.URL)
 	require.NoError(t, err)
 
@@ -187,8 +187,8 @@ completed:
 	assert.True(t, finalState.Duration < constants.MaxAnalysisWaitTime, "Analysis should complete within timeout")
 }
 
-// TestRealOrchestrator_RealTimeUpdates teste les mises à jour temps réel
-func TestRealOrchestrator_RealTimeUpdates(t *testing.T) {
+// TestOrchestrator_RealTimeUpdates teste les mises à jour temps réel
+func TestOrchestrator_RealTimeUpdates(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Simulate slower server for testing updates
 		time.Sleep(constants.TestServerDelay)
@@ -204,7 +204,7 @@ func TestRealOrchestrator_RealTimeUpdates(t *testing.T) {
 	}))
 	defer testServer.Close()
 
-	orchestrator := integration.NewRealOrchestrator()
+	orchestrator := integration.NewOrchestrator()
 	analysisID, err := orchestrator.StartAnalysis(testServer.URL)
 	require.NoError(t, err)
 
@@ -236,9 +236,9 @@ func TestRealOrchestrator_RealTimeUpdates(t *testing.T) {
 	assert.Greater(t, updateCount, 0, "Should have real-time updates during analysis")
 }
 
-// TestRealOrchestrator_ErrorHandling teste la gestion d'erreur
-func TestRealOrchestrator_ErrorHandling(t *testing.T) {
-	orchestrator := integration.NewRealOrchestrator()
+// TestOrchestrator_ErrorHandling teste la gestion d'erreur
+func TestOrchestrator_ErrorHandling(t *testing.T) {
+	orchestrator := integration.NewOrchestrator()
 
 	// Test avec URL invalide
 	_, err := orchestrator.StartAnalysis("invalid-url")
@@ -271,9 +271,9 @@ func TestRealOrchestrator_ErrorHandling(t *testing.T) {
 	}
 }
 
-// TestRealOrchestrator_NoHardcoding vérifie zéro hardcoding
-func TestRealOrchestrator_NoHardcoding(t *testing.T) {
-	orchestrator := integration.NewRealOrchestrator()
+// TestOrchestrator_NoHardcoding vérifie zéro hardcoding
+func TestOrchestrator_NoHardcoding(t *testing.T) {
+	orchestrator := integration.NewOrchestrator()
 	require.NotNil(t, orchestrator)
 	
 	// Vérifier que la configuration utilise des constantes
@@ -281,10 +281,10 @@ func TestRealOrchestrator_NoHardcoding(t *testing.T) {
 	require.NotNil(t, config)
 	
 	// Tous les paramètres doivent venir des constantes
-	assert.Equal(t, constants.RealOrchestratorMaxPages, config.MaxPages)
-	assert.Equal(t, constants.RealOrchestratorMaxWorkers, config.MaxWorkers)
-	assert.Equal(t, constants.RealOrchestratorInitialWorkers, config.InitialWorkers)
-	assert.Equal(t, time.Duration(constants.RealOrchestratorAnalysisTimeout), config.Timeout)
+	assert.Equal(t, constants.OrchestratorMaxPages, config.MaxPages)
+	assert.Equal(t, constants.OrchestratorMaxWorkers, config.MaxWorkers)
+	assert.Equal(t, constants.OrchestratorInitialWorkers, config.InitialWorkers)
+	assert.Equal(t, time.Duration(constants.OrchestratorAnalysisTimeout), config.Timeout)
 	
 	// Les seuils de scoring doivent utiliser des constantes
 	assert.True(t, constants.MaxSEOScore > 0)
@@ -292,8 +292,8 @@ func TestRealOrchestrator_NoHardcoding(t *testing.T) {
 	assert.True(t, constants.GradeBThreshold > 0)
 }
 
-// TestRealOrchestrator_PerformanceMetrics teste les métriques de performance
-func TestRealOrchestrator_PerformanceMetrics(t *testing.T) {
+// TestOrchestrator_PerformanceMetrics teste les métriques de performance
+func TestOrchestrator_PerformanceMetrics(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<!DOCTYPE html>
 <html>
@@ -303,7 +303,7 @@ func TestRealOrchestrator_PerformanceMetrics(t *testing.T) {
 	}))
 	defer testServer.Close()
 
-	orchestrator := integration.NewRealOrchestrator()
+	orchestrator := integration.NewOrchestrator()
 	analysisID, err := orchestrator.StartAnalysis(testServer.URL)
 	require.NoError(t, err)
 

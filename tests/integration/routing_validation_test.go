@@ -17,10 +17,10 @@ import (
 // 🔥🦎 TDD TEST - Validation des Routes Après Développement
 // S'assurer que les bonnes fonctions sont branchées sur les bonnes routes
 func TestRouting_RealHandlersConnected(t *testing.T) {
-	// SCENARIO: Vérifier que /api/analyze pointe vers RealAnalyzeHandler
+	// SCENARIO: Vérifier que /api/analyze pointe vers AnalyzeHandler
 	
 	// Initialize real orchestrator
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 	
 	testCases := []struct {
 		route           string
@@ -30,19 +30,19 @@ func TestRouting_RealHandlersConnected(t *testing.T) {
 	}{
 		{
 			route:           "/api/analyze", 
-			expectedHandler: "RealAnalyzeHandler",
+			expectedHandler: "AnalyzeHandler",
 			method:          "POST",
 			body:            `{"url":"https://example.com"}`,
 		},
 		{
 			route:           "/api/status/test-id-12345",
-			expectedHandler: "RealStatusHandler", 
+			expectedHandler: "StatusHandler", 
 			method:          "GET",
 			body:            "",
 		},
 		{
 			route:           "/api/results/test-id-12345",
-			expectedHandler: "RealResultsHandler",
+			expectedHandler: "ResultsHandler",
 			method:          "GET", 
 			body:            "",
 		},
@@ -68,11 +68,11 @@ func TestRouting_RealHandlersConnected(t *testing.T) {
 			// Route to appropriate handler
 			switch {
 			case tc.route == "/api/analyze":
-				api.RealAnalyzeHandler(rr, req)
+				api.AnalyzeHandler(rr, req)
 			case strings.HasPrefix(tc.route, "/api/status/"):
-				api.RealStatusHandler(rr, req)
+				api.StatusHandler(rr, req)
 			case strings.HasPrefix(tc.route, "/api/results/"):
-				api.RealResultsHandler(rr, req)
+				api.ResultsHandler(rr, req)
 			default:
 				t.Fatalf("Unknown route: %s", tc.route)
 			}
@@ -126,7 +126,7 @@ func TestRouting_LegacyRoutesAvailable(t *testing.T) {
 func TestRouting_NoFakeDataByDefault(t *testing.T) {
 	// SCENARIO: S'assurer que /api/analyze ne retourne PAS des données fake
 	
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 	
 	requestBody := `{"url":"https://test-uniqueness.com"}`
 	req, err := http.NewRequest("POST", "/api/analyze", bytes.NewBuffer([]byte(requestBody)))
@@ -134,7 +134,7 @@ func TestRouting_NoFakeDataByDefault(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 	
 	rr := httptest.NewRecorder()
-	api.RealAnalyzeHandler(rr, req)
+	api.AnalyzeHandler(rr, req)
 	
 	assert.Equal(t, http.StatusOK, rr.Code)
 	

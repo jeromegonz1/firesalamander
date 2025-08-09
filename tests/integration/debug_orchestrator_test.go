@@ -15,7 +15,7 @@ import (
 )
 
 // Test de debug pour comprendre pourquoi l'orchestrateur ne fonctionne pas
-func TestRealOrchestrator_DebugCrawling(t *testing.T) {
+func TestOrchestrator_DebugCrawling(t *testing.T) {
 	// Serveur de test ultra simple
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t.Logf("Server received request: %s %s", r.Method, r.URL.Path)
@@ -30,7 +30,7 @@ func TestRealOrchestrator_DebugCrawling(t *testing.T) {
 
 	t.Logf("Test server URL: %s", testServer.URL)
 
-	orchestrator := integration.NewRealOrchestrator()
+	orchestrator := integration.NewOrchestrator()
 	require.NotNil(t, orchestrator)
 
 	// Start analysis
@@ -92,7 +92,7 @@ func TestDirectCrawlerUsage(t *testing.T) {
 	}))
 	defer testServer.Close()
 
-	orchestrator := integration.NewRealOrchestrator()
+	orchestrator := integration.NewOrchestrator()
 	
 	// Test le crawling directement
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)

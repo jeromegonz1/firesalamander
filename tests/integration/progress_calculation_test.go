@@ -29,7 +29,7 @@ func TestRealProgressCalculation_NoBug98Percent(t *testing.T) {
 	
 	progress := api.CalculateRealProgressExposed(crawlingState)
 	
-	// Avec RealOrchestratorMaxPages=20, 45 pages = 40% max (pas 98%)
+	// Avec OrchestratorMaxPages=20, 45 pages = 40% max (pas 98%)
 	assert.LessOrEqual(t, progress, 40, "Crawling phase should max at 40%")
 	
 	// Phase Analyzing - 42/45 pages analysées 
@@ -53,7 +53,7 @@ func TestRealProgressCalculation_NoBug98Percent(t *testing.T) {
 }
 
 // Test que l'orchestrateur passe correctement entre les phases
-func TestRealOrchestrator_PhaseTransitions(t *testing.T) {
+func TestOrchestrator_PhaseTransitions(t *testing.T) {
 	// SCENARIO: Vérifier que les transitions de phases sont correctes
 	// Crawling → Analyzing → Aggregating → Complete
 	

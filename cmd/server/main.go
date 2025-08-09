@@ -176,8 +176,8 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Récupérer l'analyse depuis le RealOrchestrator (SPRINT 5)
-	status, err := api.GetRealOrchestrator().GetStatus(analysisID)
+	// Récupérer l'analyse depuis le Orchestrator (SPRINT 5)
+	status, err := api.GetOrchestrator().GetStatus(analysisID)
 	if err != nil {
 		http.Error(w, constants.AnalysisNotFound, http.StatusNotFound)
 		return
@@ -193,7 +193,7 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 	elapsed := time.Since(status.StartTime)
 	elapsedStr := fmt.Sprintf("%.0fs", elapsed.Seconds())
 	
-	// Construire les données pour le template depuis RealOrchestrator
+	// Construire les données pour le template depuis Orchestrator
 	data := AnalyzingData{
 		Title:    "Analyse",
 		URL:      status.URL,
@@ -319,22 +319,15 @@ func setupServer() http.Handler {
 	// Route pour la page de résultats
 	mux.HandleFunc("/results", resultsHandler)
 	
-	// 🔥🦎 SPRINT 5: REAL Fire Salamander API Routes (ZERO HARDCODING)
-	mux.HandleFunc(constants.APIEndpointAnalyze, api.RealAnalyzeHandler)
-	mux.HandleFunc(constants.APIEndpointStatus + "/", api.RealStatusHandler) 
-	mux.HandleFunc(constants.APIEndpointResults + "/", api.RealResultsHandler)
+	// 🔥🦎 FIRE SALAMANDER API Routes (CLEAN - NO DUPLICATES)
+	mux.HandleFunc(constants.APIEndpointAnalyze, api.AnalyzeHandler)
+	mux.HandleFunc(constants.APIEndpointStatus + "/", api.StatusHandler) 
+	mux.HandleFunc(constants.APIEndpointResults + "/", api.ResultsHandler)
 	
 	// 🔥🦎 MONITORING V2.0: Endpoints de surveillance anti-boucle infinie
 	mux.HandleFunc("/debug/metrics", monitoring.MetricsHandler)
 	mux.HandleFunc("/health", monitoring.HealthHandler)
 	mux.HandleFunc("/api/health", monitoring.HealthHandler)
-
-	// Legacy routes avec données fake (pour debug/comparaison)
-	mux.HandleFunc("/api/fake/analyze", analyzeHandler)
-	mux.HandleFunc("/api/fake/results", resultsHandler)
-	mux.HandleFunc("/api/legacy/analyze", api.AnalyzeHandler)
-	mux.HandleFunc("/api/legacy/status/", api.StatusHandler)
-	mux.HandleFunc("/api/legacy/results/", api.ResultsHandler)
 
 	// Appliquer les middlewares de logging
 	var handler http.Handler = mux
@@ -375,9 +368,9 @@ func main() {
 		appLogger.Fatal(constants.LogCategorySystem, "Erreur chargement config", err)
 	}
 
-	// Initialiser le RealOrchestrator pour les API réelles
-	appLogger.Info(constants.LogCategorySystem, "Initializing RealOrchestrator")
-	api.InitRealOrchestrator()
+	// Initialiser le Orchestrator pour les API réelles
+	appLogger.Info(constants.LogCategorySystem, "Initializing Orchestrator")
+	api.InitOrchestrator()
 
 	// Charger les templates
 	appLogger.Info(constants.LogCategorySystem, "Loading templates")

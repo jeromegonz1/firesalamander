@@ -51,7 +51,7 @@ func NewWebServer(orchestrator *integration.Orchestrator, cfg *config.Config) *W
 
 	// 🔥🦎 SPRINT 5: Initialize Real Orchestrator for API
 	log.Printf("🔥🦎 Initializing Real Fire Salamander API...")
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 	log.Printf("✅ Real Fire Salamander API ready!")
 
 	// Enregistrer les routes
@@ -182,19 +182,19 @@ func (ws *WebServer) handleAPI(w http.ResponseWriter, r *http.Request) {
 	// 🔥🦎 SPRINT 5: REAL API ROUTES - Fire Salamander Integration  
 	// Routes principales (utilisées par le frontend)
 	case r.URL.Path == "/api/analyze":
-		api.RealAnalyzeHandler(w, r)
+		api.AnalyzeHandler(w, r)
 	case strings.HasPrefix(r.URL.Path, "/api/status/"):
-		api.RealStatusHandler(w, r)
+		api.StatusHandler(w, r)
 	case strings.HasPrefix(r.URL.Path, "/api/results/"):
-		api.RealResultsHandler(w, r)
+		api.ResultsHandler(w, r)
 		
 	// Routes explicites /api/real/* (pour compatibilité)
 	case r.URL.Path == "/api/real/analyze":
-		api.RealAnalyzeHandler(w, r)
+		api.AnalyzeHandler(w, r)
 	case strings.HasPrefix(r.URL.Path, "/api/real/status/"):
-		api.RealStatusHandler(w, r)
+		api.StatusHandler(w, r)
 	case strings.HasPrefix(r.URL.Path, "/api/real/results/"):
-		api.RealResultsHandler(w, r)
+		api.ResultsHandler(w, r)
 	
 	default:
 		// Route API non trouvée

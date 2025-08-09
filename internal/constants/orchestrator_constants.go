@@ -392,10 +392,9 @@ const (
 
 // Real Orchestrator Configuration
 const (
-	RealOrchestratorMaxPages        = 20
-	RealOrchestratorMaxWorkers      = 10
-	RealOrchestratorInitialWorkers  = 5
-	RealOrchestratorAnalysisTimeout = 120000000000 // 2 minutes in nanoseconds
+	OrchestratorMaxPages        = 20
+	OrchestratorInitialWorkers  = 5
+	OrchestratorAnalysisTimeout = 120000000000 // 2 minutes in nanoseconds
 )
 
 // Test Constants

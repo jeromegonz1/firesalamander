@@ -101,7 +101,7 @@ func NewRecommendationEngine() *RecommendationEngine {
 }
 
 // GenerateRecommendations génère les recommandations basées sur l'analyse
-func (re *RecommendationEngine) GenerateRecommendations(analysis *SEOAnalysisResult) []SEORecommendation {
+func (re *RecommendationEngine) GenerateRecommendations(analysis *RealPageAnalysis) []SEORecommendation {
 	var recommendations []SEORecommendation
 
 	// 1. Recommandations basées sur les balises
@@ -320,7 +320,7 @@ func (re *RecommendationEngine) generateTechnicalRecommendations(techAudit *Tech
 }
 
 // generateScoreBasedRecommendations génère des recommandations basées sur les scores globaux
-func (re *RecommendationEngine) generateScoreBasedRecommendations(analysis *SEOAnalysisResult) []SEORecommendation {
+func (re *RecommendationEngine) generateScoreBasedRecommendations(analysis *RealPageAnalysis) []SEORecommendation {
 	var recs []SEORecommendation
 
 	// Score global faible

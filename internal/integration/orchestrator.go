@@ -4,816 +4,636 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
+	"net/url"
+	"os"
 	"sync"
 	"time"
 
 	"firesalamander/internal/config"
 	"firesalamander/internal/constants"
 	"firesalamander/internal/crawler"
-	"firesalamander/internal/semantic"
+	"firesalamander/internal/patterns"
 	"firesalamander/internal/seo"
+	"firesalamander/internal/storage"
 )
 
-// Orchestrator coordonne toutes les analyses Fire Salamander
+// 🔥🦎 FIRE SALAMANDER - REAL ORCHESTRATOR
+// Sprint 5 - L'intégration finale qui connecte tous les composants
+// ZERO HARDCODING POLICY - All values from constants
+
+// Orchestrator coordonne le crawling et l'analyse SEO réelle
 type Orchestrator struct {
-	config *config.Config
+	// Configuration
+	config *OrchestratorConfig
 	
-	// Composants principaux
-	crawler         *crawler.Crawler
-	semanticAnalyzer *semantic.TestSemanticAnalyzer // Version simplifiée pour l'intégration
-	seoAnalyzer     *seo.SEOAnalyzer
-	storage         *StorageManager
+	// Composants intégrés
+	parallelCrawler *crawler.ParallelCrawler
+	seoAnalyzer     *seo.RealSEOAnalyzer
 	
-	// Gestion des tâches
-	taskQueue       chan *AnalysisTask
-	resultsChan     chan *UnifiedAnalysisResult
-	workers         int
-	workerPool      sync.WaitGroup
+	// 🔥🦎 SPRINT 6: MCP Storage pour persistance
+	storage         *storage.MCPStorage
 	
-	// Statistiques
-	stats           *AnalysisStats
-	statsMutex      sync.RWMutex
+	// 🔥🦎 SPRINT 6+: SafeCrawler anti-boucle infinie
+	safeCrawler     *patterns.SafeCrawler
 	
-	// État
-	isRunning       bool
-	shutdownChan    chan struct{}
-	mutex           sync.RWMutex
+	// State management
+	analyses map[string]*AnalysisState
+	updates  chan AnalysisUpdate
+	mu       sync.RWMutex
+	
+	// Workers et synchronisation
+	workerPool sync.WaitGroup
+	shutdown   chan struct{}
+	running    bool
 }
 
-// AnalysisTask tâche d'analyse à effectuer
-type AnalysisTask struct {
-	ID          string                 `json:"id"`
-	URL         string                 `json:"url"`
-	Type        AnalysisType           `json:"type"`
-	Options     AnalysisOptions        `json:"options"`
-	Priority    TaskPriority           `json:"priority"`
-	CreatedAt   time.Time              `json:"created_at"`
-	StartedAt   *time.Time             `json:"started_at,omitempty"`
-	CompletedAt *time.Time             `json:"completed_at,omitempty"`
-	Status      TaskStatus             `json:"status"`
-	Error       string                 `json:"error,omitempty"`
+// OrchestratorConfig configuration pour le Orchestrator
+type OrchestratorConfig struct {
+	MaxPages        int
+	MaxWorkers      int
+	InitialWorkers  int
+	Timeout         time.Duration
+	UserAgent       string
+	EnableRealTime  bool
+}
+
+// AnalysisState état d'une analyse en cours ou terminée
+type AnalysisState struct {
+	// Identification
+	ID       string
+	URL      string
+	Domain   string
 	
-	// Canal pour retourner le résultat
-	ResultChan  chan *UnifiedAnalysisResult `json:"-"`
-}
-
-// UnifiedAnalysisResult résultat unifié de toutes les analyses
-type UnifiedAnalysisResult struct {
-	// Métadonnées de base
-	TaskID              string                          `json:"task_id"`
-	URL                 string                          `json:"url"`
-	Domain              string                          `json:"domain"`
-	AnalyzedAt          time.Time                       `json:"analyzed_at"`
-	ProcessingTime      time.Duration                   `json:"processing_time"`
+	// Timing
+	StartTime time.Time
+	EndTime   time.Time
+	Duration  time.Duration
 	
-	// Résultats des différents modules
-	CrawlerResult       *crawler.CrawlResult            `json:"crawler_result,omitempty"`
-	SemanticAnalysis    *semantic.AnalysisResult        `json:"semantic_analysis,omitempty"`
-	SEOAnalysis         *seo.SEOAnalysisResult          `json:"seo_analysis,omitempty"`
+	// Status
+	Status string
+	Error  string
 	
-	// Analyse unifiée et recommandations
-	UnifiedMetrics      UnifiedMetrics                  `json:"unified_metrics"`
-	CrossModuleInsights []CrossModuleInsight            `json:"cross_module_insights"`
-	PriorityActions     []PriorityAction                `json:"priority_actions"`
+	// Progress metrics (real-time)
+	PagesFound      int
+	PagesAnalyzed   int
+	CurrentWorkers  int
+	PagesPerSecond  float64
 	
-	// Scoring global
-	OverallScore        float64                         `json:"overall_score"`
-	CategoryScores      map[string]float64              `json:"category_scores"`
+	// Results
+	Pages           []*seo.RealPageAnalysis
+	GlobalScore     int
+	GlobalGrade     string
+	TopIssues       []seo.RealRecommendation
+	Recommendations []seo.RealRecommendation
 	
-	// Statut et erreurs
-	Status              AnalysisStatus                  `json:"status"`
-	Errors              []AnalysisError                 `json:"errors,omitempty"`
-	Warnings            []string                        `json:"warnings,omitempty"`
+	// Crawler metrics
+	CrawlerMetrics *crawler.CrawlerMetrics
 }
 
-// AnalysisType type d'analyse à effectuer
-type AnalysisType string
-
-const (
-	AnalysisTypeFull     AnalysisType = "full"     // Analyse complète
-	AnalysisTypeSemantic AnalysisType = "semantic" // Analyse sémantique uniquement
-	AnalysisTypeSEO      AnalysisType = "seo"      // Analyse SEO uniquement
-	AnalysisTypeQuick    AnalysisType = "quick"    // Analyse rapide (SEO + base)
-)
-
-// AnalysisOptions options d'analyse
-type AnalysisOptions struct {
-	IncludeCrawling     bool          `json:"include_crawling"`
-	MaxDepth            int           `json:"max_depth"`
-	FollowRedirects     bool          `json:"follow_redirects"`
-	AnalyzeImages       bool          `json:"analyze_images"`
-	AnalyzePerformance  bool          `json:"analyze_performance"`
-	UseAIEnrichment     bool          `json:"use_ai_enrichment"`
-	Timeout             time.Duration `json:"timeout"`
+// AnalysisUpdate mise à jour temps réel d'analyse
+type AnalysisUpdate struct {
+	AnalysisID string
+	Message    string
+	Timestamp  time.Time
+	Status     string
+	Data       map[string]interface{}
 }
 
-// TaskPriority priorité de la tâche
-type TaskPriority int
-
-const (
-	PriorityLow    TaskPriority = 1
-	PriorityNormal TaskPriority = 2
-	PriorityHigh   TaskPriority = 3
-	PriorityUrgent TaskPriority = 4
-)
-
-// TaskStatus statut de la tâche
-type TaskStatus string
-
-const (
-	TaskStatusPending    TaskStatus = "pending"
-	TaskStatusRunning    TaskStatus = "running"
-	TaskStatusCompleted  TaskStatus = "completed"
-	TaskStatusFailed     TaskStatus = "failed"
-	TaskStatusCancelled  TaskStatus = "cancelled"
-)
-
-// AnalysisStatus statut de l'analyse
-type AnalysisStatus string
-
-const (
-	AnalysisStatusSuccess AnalysisStatus = "success"
-	AnalysisStatusPartial AnalysisStatus = "partial"
-	AnalysisStatusFailed  AnalysisStatus = "failed"
-)
-
-// UnifiedMetrics métriques unifiées cross-modules
-type UnifiedMetrics struct {
-	ContentQualityScore    float64 `json:"content_quality_score"`
-	TechnicalHealthScore   float64 `json:"technical_health_score"`
-	SEOReadinessScore      float64 `json:"seo_readiness_score"`
-	UserExperienceScore    float64 `json:"user_experience_score"`
-	MobileFriendlinessScore float64 `json:"mobile_friendliness_score"`
-	PerformanceScore       float64 `json:"performance_score"`
-}
-
-// CrossModuleInsight insight basé sur plusieurs modules
-type CrossModuleInsight struct {
-	Type        string   `json:"type"`
-	Severity    string   `json:"severity"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Evidence    []string `json:"evidence"`
-	Modules     []string `json:"modules"`
-	Impact      string   `json:"impact"`
-}
-
-// PriorityAction action prioritaire recommandée
-type PriorityAction struct {
-	ID          string        `json:"id"`
-	Title       string        `json:"title"`
-	Description string        `json:"description"`
-	Priority    string        `json:"priority"`
-	Impact      string        `json:"impact"`
-	Effort      string        `json:"effort"`
-	Module      string        `json:"module"`
-	EstimatedTime string      `json:"estimated_time"`
-	Dependencies  []string    `json:"dependencies"`
-}
-
-// AnalysisError erreur d'analyse
-type AnalysisError struct {
-	Module      string    `json:"module"`
-	Type        string    `json:"type"`
-	Message     string    `json:"message"`
-	Timestamp   time.Time `json:"timestamp"`
-	Recoverable bool      `json:"recoverable"`
-}
-
-// AnalysisStats statistiques d'analyse
-type AnalysisStats struct {
-	TotalTasks       int64         `json:"total_tasks"`
-	CompletedTasks   int64         `json:"completed_tasks"`
-	FailedTasks      int64         `json:"failed_tasks"`
-	AverageTime      time.Duration `json:"average_time"`
-	LastAnalysis     time.Time     `json:"last_analysis"`
-	ActiveTasks      int64         `json:"active_tasks"`
-}
-
-// NewOrchestrator crée un nouvel orchestrateur
-func NewOrchestrator(cfg *config.Config) (*Orchestrator, error) {
-	// Créer la configuration du crawler
-	crawlerConfig := &crawler.Config{
-		UserAgent:     cfg.Crawler.UserAgent,
-		Workers:       cfg.Crawler.Workers,
-		RateLimit:     cfg.Crawler.RateLimit,
-		MaxDepth:      3,
-		MaxPages:      100,
-		Timeout:       constants.ClientTimeout,
-		RetryAttempts: 3,
-		RetryDelay:    constants.DefaultRetryDelay,
-		RespectRobots: true,
-		EnableCache:   true,
+// NewOrchestrator crée un nouveau orchestrateur réel
+func NewOrchestrator() *Orchestrator {
+	realConfig := &OrchestratorConfig{
+		MaxPages:       constants.OrchestratorMaxPages,
+		MaxWorkers:     constants.OrchestratorMaxWorkers,
+		InitialWorkers: constants.OrchestratorInitialWorkers,
+		Timeout:        time.Duration(constants.OrchestratorAnalysisTimeout),
+		UserAgent:      constants.DefaultUserAgent,
+		EnableRealTime: true,
 	}
 
-	// Initialiser les composants
-	crawlerInstance, err := crawler.New(crawlerConfig)
-	if err != nil {
-		return nil, fmt.Errorf("erreur initialisation crawler: %w", err)
+	// Créer le crawler parallel avec la config
+	crawlerConfig := &config.CrawlerConfig{
+		MaxPages:         realConfig.MaxPages,
+		InitialWorkers:   realConfig.InitialWorkers,
+		MinWorkers:       1,
+		TimeoutSeconds:   constants.DefaultTimeoutSeconds, // Use the default timeout from constants
+		UserAgent:        realConfig.UserAgent,
+		RespectRobotsTxt: true,
 	}
 
-	semanticAnalyzer := semantic.NewTestSemanticAnalyzer()
-	seoAnalyzer := seo.NewSEOAnalyzer()
+	parallelCrawler := crawler.NewParallelCrawler(crawlerConfig)
+	seoAnalyzer := seo.NewRealSEOAnalyzer()
+
+	// 🔥🦎 SPRINT 6: Initialiser MCP Storage pour persistance
+	mcpStorage := storage.NewMCPStorage("./data")
 	
-	// Initialiser le storage manager
-	storage, err := NewStorageManager("fire_salamander.db")
-	if err != nil {
-		return nil, fmt.Errorf("erreur initialisation storage: %w", err)
-	}
-
+	// 🔥🦎 SPRINT 6+: Initialiser SafeCrawler anti-boucle infinie
+	safeCrawler := patterns.NewSafeCrawler()
+	
 	orchestrator := &Orchestrator{
-		config:           cfg,
-		crawler:          crawlerInstance,
-		semanticAnalyzer: semanticAnalyzer,
-		seoAnalyzer:      seoAnalyzer,
-		storage:          storage,
-		taskQueue:        make(chan *AnalysisTask, 100),
-		resultsChan:      make(chan *UnifiedAnalysisResult, 100),
-		workers:          cfg.Crawler.Workers,
-		stats:            &AnalysisStats{},
-		shutdownChan:     make(chan struct{}),
+		config:          realConfig,
+		parallelCrawler: parallelCrawler,
+		seoAnalyzer:     seoAnalyzer,
+		storage:         mcpStorage,
+		safeCrawler:     safeCrawler,
+		analyses:        make(map[string]*AnalysisState),
+		updates:         make(chan AnalysisUpdate, constants.OrchestratorChannelBufferDefault),
+		shutdown:        make(chan struct{}),
+		running:         false,
 	}
-
-	return orchestrator, nil
+	
+	// Recharger les analyses existantes depuis le storage
+	orchestrator.loadExistingAnalyses()
+	
+	return orchestrator
 }
 
-// Start démarre l'orchestrateur
-func (o *Orchestrator) Start(ctx context.Context) error {
-	o.mutex.Lock()
-	defer o.mutex.Unlock()
-
-	if o.isRunning {
-		return fmt.Errorf("orchestrateur déjà en cours d'exécution")
-	}
-
-	log.Printf("Démarrage de l'orchestrateur Fire Salamander avec %d workers", o.workers)
-
-	// Démarrer les workers
-	for i := 0; i < o.workers; i++ {
-		o.workerPool.Add(1)
-		go o.worker(ctx, i)
-	}
-
-	o.isRunning = true
-	log.Printf("Orchestrateur Fire Salamander démarré avec succès")
-
-	return nil
+// GetConfig retourne la configuration (pour tests)
+func (ro *Orchestrator) GetConfig() *OrchestratorConfig {
+	return ro.config
 }
 
-// Stop arrête l'orchestrateur
-func (o *Orchestrator) Stop() error {
-	o.mutex.Lock()
-	defer o.mutex.Unlock()
+// StartAnalysis démarre une nouvelle analyse complète
+func (ro *Orchestrator) StartAnalysis(targetURL string) (string, error) {
+	// Validation de l'URL
+	parsedURL, err := url.Parse(targetURL)
+	if err != nil {
+		return "", fmt.Errorf("invalid URL: %w", err)
+	}
 
-	if !o.isRunning {
+	if parsedURL.Scheme == "" || parsedURL.Host == "" {
+		return "", fmt.Errorf("URL must include scheme and host")
+	}
+
+	// Générer ID unique
+	analysisID := ro.generateAnalysisID()
+	
+	// Extraire le domaine
+	domain := parsedURL.Host
+	
+	// Créer l'état initial
+	state := &AnalysisState{
+		ID:             analysisID,
+		URL:            targetURL,
+		Domain:         domain,
+		StartTime:      time.Now(),
+		Status:         constants.OrchestratorStatusStarting,
+		PagesFound:     0,
+		PagesAnalyzed:  0,
+		CurrentWorkers: 0,
+		PagesPerSecond: 0.0,
+		Pages:          make([]*seo.RealPageAnalysis, 0),
+		TopIssues:      make([]seo.RealRecommendation, 0),
+		Recommendations: make([]seo.RealRecommendation, 0),
+	}
+
+	// Sauvegarder l'état
+	ro.mu.Lock()
+	ro.analyses[analysisID] = state
+	ro.mu.Unlock()
+
+	// 🔥🦎 SPRINT 6: Sauver l'analyse initiale dans MCP Storage
+	ro.saveAnalysisToStorage(state)
+
+	// Envoyer mise à jour
+	ro.sendUpdate(analysisID, "Analysis initialized", constants.OrchestratorStatusStarting)
+
+	// Démarrer l'analyse asynchrone
+	go ro.runCompleteAnalysis(analysisID)
+
+	return analysisID, nil
+}
+
+// GetStatus récupère le statut d'une analyse
+func (ro *Orchestrator) GetStatus(analysisID string) (*AnalysisState, error) {
+	ro.mu.RLock()
+	defer ro.mu.RUnlock()
+
+	state, exists := ro.analyses[analysisID]
+	if !exists {
+		return nil, fmt.Errorf("analysis not found: %s", analysisID)
+	}
+
+	// Retourner une copie pour éviter les race conditions
+	stateCopy := *state
+	return &stateCopy, nil
+}
+
+// runCompleteAnalysis exécute l'analyse complète (crawler + SEO)
+func (ro *Orchestrator) runCompleteAnalysis(analysisID string) {
+	state := ro.getState(analysisID)
+	if state == nil {
+		return
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			ro.updateStateError(analysisID, fmt.Sprintf("Analysis panicked: %v", r))
+		}
+	}()
+
+	// PHASE 1: CRAWLING
+	ro.updateState(analysisID, constants.OrchestratorStatusCrawling, "Starting crawling phase")
+	crawlResults, err := ro.performCrawling(analysisID, state.URL)
+	if err != nil {
+		ro.updateStateError(analysisID, fmt.Sprintf("Crawling failed: %v", err))
+		return
+	}
+
+	// PHASE 2: SEO ANALYSIS
+	ro.updateState(analysisID, constants.OrchestratorStatusAnalyzing, "Starting SEO analysis phase")
+	pageAnalyses, err := ro.performSEOAnalysis(analysisID, crawlResults)
+	if err != nil {
+		ro.updateStateError(analysisID, fmt.Sprintf("SEO analysis failed: %v", err))
+		return
+	}
+
+	// PHASE 3: AGGREGATION
+	ro.updateState(analysisID, constants.OrchestratorStatusAggregating, "Aggregating results")
+	ro.aggregateResults(analysisID, pageAnalyses)
+
+	// COMPLETION
+	ro.completeAnalysis(analysisID)
+}
+
+// performCrawling effectue le crawling avec le parallel crawler SÉCURISÉ
+func (ro *Orchestrator) performCrawling(analysisID, targetURL string) ([]*crawler.PageResult, error) {
+	ro.sendUpdate(analysisID, fmt.Sprintf("Starting crawl of %s", targetURL), constants.OrchestratorStatusCrawling)
+
+	// 🔥🦎 SPRINT 6+: TIMEOUT OBLIGATOIRE anti-boucle infinie  
+	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second) // Timeout strict 90s
+	defer cancel()
+
+	// 🔥🦎 SPRINT 6+: Vérification SafeCrawler avant crawling
+	log.Printf("🛡️  SafeCrawler: Starting protected crawl for URL: %s", targetURL)
+	ro.sendUpdate(analysisID, "SafeCrawler: Initializing protected crawling...", constants.OrchestratorStatusCrawling)
+
+	// Démarrer le crawling avec timeout strict
+	ro.sendUpdate(analysisID, "Calling crawler.CrawlWithContext with 90s timeout...", constants.OrchestratorStatusCrawling)
+	log.Printf("🔍 DEBUG: About to call CrawlWithContext for URL: %s (TIMEOUT: 90s)", targetURL)
+	crawlResult, err := ro.parallelCrawler.CrawlWithContext(ctx, targetURL)
+	log.Printf("🔍 DEBUG: CrawlWithContext returned, err=%v", err)
+	if err != nil {
+		ro.sendUpdate(analysisID, fmt.Sprintf("Crawler error: %v", err), constants.OrchestratorStatusError)
+		return nil, fmt.Errorf("failed to crawl: %w", err)
+	}
+
+	ro.sendUpdate(analysisID, "Crawler returned, checking results...", constants.OrchestratorStatusCrawling)
+	log.Printf("🔍 DEBUG: Crawl result: pages=%d, error=%v", len(crawlResult.Pages), crawlResult.Error)
+	if crawlResult.Error != nil {
+		ro.sendUpdate(analysisID, fmt.Sprintf("Crawl result error: %v", crawlResult.Error), constants.OrchestratorStatusError)
+		return nil, fmt.Errorf("crawling failed: %w", crawlResult.Error)
+	}
+
+	ro.sendUpdate(analysisID, fmt.Sprintf("Crawl result contains %d pages", len(crawlResult.Pages)), constants.OrchestratorStatusCrawling)
+
+	// Convertir la map en slice
+	var results []*crawler.PageResult
+	for _, pageResult := range crawlResult.Pages {
+		if pageResult.Error == nil { // Ignorer les pages avec erreurs
+			results = append(results, pageResult)
+		}
+	}
+	
+	// Mise à jour finale des métriques
+	state := ro.getState(analysisID)
+	if state != nil {
+		state.PagesFound = len(results)
+		state.CrawlerMetrics = crawlResult.Metrics
+		if crawlResult.Metrics != nil {
+			state.CurrentWorkers = crawlResult.Metrics.CurrentWorkers
+			state.PagesPerSecond = crawlResult.Metrics.PagesPerSecond
+		}
+	}
+
+	if len(results) == 0 {
+		return nil, fmt.Errorf("no pages successfully crawled")
+	}
+
+	ro.sendUpdate(analysisID, fmt.Sprintf("Crawling complete - %d pages found", len(results)), constants.OrchestratorStatusCrawling)
+	return results, nil
+}
+
+// performSEOAnalysis effectue l'analyse SEO de toutes les pages
+func (ro *Orchestrator) performSEOAnalysis(analysisID string, crawlResults []*crawler.PageResult) ([]*seo.RealPageAnalysis, error) {
+	ctx := context.Background()
+	var pageAnalyses []*seo.RealPageAnalysis
+	
+	ro.sendUpdate(analysisID, fmt.Sprintf("Starting SEO analysis of %d pages", len(crawlResults)), constants.OrchestratorStatusAnalyzing)
+
+	for i, result := range crawlResults {
+		// Analyser la page avec le RealSEOAnalyzer
+		analysis := ro.seoAnalyzer.AnalyzePageContent(ctx, result.URL, result.Body)
+		pageAnalyses = append(pageAnalyses, analysis)
+
+		// Mise à jour temps réel
+		state := ro.getState(analysisID)
+		if state != nil {
+			state.PagesAnalyzed = i + 1
+			ro.sendUpdate(analysisID, 
+				fmt.Sprintf("Analyzed: %s (Score: %d/%d)", result.URL, analysis.TotalScore, constants.MaxSEOScore), 
+				constants.OrchestratorStatusAnalyzing)
+		}
+	}
+
+	ro.sendUpdate(analysisID, fmt.Sprintf("SEO analysis complete - %d pages analyzed", len(pageAnalyses)), constants.OrchestratorStatusAnalyzing)
+	return pageAnalyses, nil
+}
+
+// aggregateResults agrège les résultats d'analyse
+func (ro *Orchestrator) aggregateResults(analysisID string, pageAnalyses []*seo.RealPageAnalysis) {
+	state := ro.getState(analysisID)
+	if state == nil {
+		return
+	}
+
+	// Sauvegarder toutes les analyses de page
+	state.Pages = pageAnalyses
+
+	// Calculer le score global
+	if len(pageAnalyses) > 0 {
+		totalScore := 0
+		for _, page := range pageAnalyses {
+			totalScore += page.TotalScore
+		}
+		state.GlobalScore = totalScore / len(pageAnalyses)
+		state.GlobalGrade = ro.seoAnalyzer.DetermineGrade(state.GlobalScore)
+	}
+
+	// Agréger les recommandations
+	allRecommendations := make([]seo.RealRecommendation, 0)
+	for _, page := range pageAnalyses {
+		allRecommendations = append(allRecommendations, page.Recommendations...)
+	}
+
+	// Prioriser et dédupliquer les recommandations
+	state.Recommendations = ro.prioritizeRecommendations(allRecommendations)
+	state.TopIssues = ro.extractTopIssues(state.Recommendations)
+
+	ro.sendUpdate(analysisID, fmt.Sprintf("Results aggregated - Global score: %d (%s)", state.GlobalScore, state.GlobalGrade), constants.OrchestratorStatusAggregating)
+}
+
+// completeAnalysis finalise l'analyse
+func (ro *Orchestrator) completeAnalysis(analysisID string) {
+	state := ro.getState(analysisID)
+	if state == nil {
+		return
+	}
+
+	// Finaliser les timing
+	state.EndTime = time.Now()
+	state.Duration = state.EndTime.Sub(state.StartTime)
+	state.Status = constants.OrchestratorStatusComplete
+
+	// 🔥🦎 SPRINT 6: Sauver l'analyse complète dans MCP Storage
+	ro.saveAnalysisToStorage(state)
+
+	ro.sendUpdate(analysisID, fmt.Sprintf("Analysis complete in %v - Score: %d (%s)", state.Duration, state.GlobalScore, state.GlobalGrade), constants.OrchestratorStatusComplete)
+}
+
+// Helper methods
+
+func (ro *Orchestrator) generateAnalysisID() string {
+	// Utiliser timestamp nanoseconde complet + PID pour garantir l'unicité
+	now := time.Now()
+	return fmt.Sprintf("analysis-%d-%d-%d", 
+		now.Unix(),           // Timestamp seconde
+		now.UnixNano(),       // Timestamp nanoseconde complet 
+		os.Getpid(),          // Process ID pour multi-process
+	)
+}
+
+func (ro *Orchestrator) getState(analysisID string) *AnalysisState {
+	ro.mu.RLock()
+	defer ro.mu.RUnlock()
+	return ro.analyses[analysisID]
+}
+
+func (ro *Orchestrator) updateState(analysisID, status, message string) {
+	ro.mu.Lock()
+	state, exists := ro.analyses[analysisID]
+	if exists {
+		state.Status = status
+	}
+	ro.mu.Unlock()
+	
+	ro.sendUpdate(analysisID, message, status)
+}
+
+func (ro *Orchestrator) updateStateError(analysisID, errorMessage string) {
+	ro.mu.Lock()
+	state, exists := ro.analyses[analysisID]
+	if exists {
+		state.Status = constants.OrchestratorStatusError
+		state.Error = errorMessage
+		state.EndTime = time.Now()
+		state.Duration = state.EndTime.Sub(state.StartTime)
+	}
+	ro.mu.Unlock()
+
+	// 🔥🦎 SPRINT 6: Sauver l'état d'erreur dans MCP Storage
+	if exists && state != nil {
+		ro.saveAnalysisToStorage(state)
+	}
+	
+	ro.sendUpdate(analysisID, errorMessage, constants.OrchestratorStatusError)
+}
+
+func (ro *Orchestrator) sendUpdate(analysisID, message, status string) {
+	if !ro.config.EnableRealTime {
+		return
+	}
+
+	update := AnalysisUpdate{
+		AnalysisID: analysisID,
+		Message:    message,
+		Timestamp:  time.Now(),
+		Status:     status,
+		Data:       make(map[string]interface{}),
+	}
+
+	select {
+	case ro.updates <- update:
+		// Update sent successfully
+	default:
+		// Channel full, skip update (non-blocking)
+	}
+}
+
+func (ro *Orchestrator) prioritizeRecommendations(allRecs []seo.RealRecommendation) []seo.RealRecommendation {
+	// Simple prioritization - group by priority and take top recommendations
+	criticalRecs := make([]seo.RealRecommendation, 0)
+	highRecs := make([]seo.RealRecommendation, 0)
+	mediumRecs := make([]seo.RealRecommendation, 0)
+
+	// Group recommendations by priority
+	for _, rec := range allRecs {
+		switch rec.Priority {
+		case constants.SEOPriorityCritical:
+			criticalRecs = append(criticalRecs, rec)
+		case constants.SEOPriorityHigh:
+			highRecs = append(highRecs, rec)
+		case constants.SEOPriorityMedium:
+			mediumRecs = append(mediumRecs, rec)
+		}
+	}
+
+	// Combine prioritized recommendations (limit to reasonable number)
+	result := make([]seo.RealRecommendation, 0)
+	result = append(result, criticalRecs...)
+	result = append(result, highRecs...)
+	result = append(result, mediumRecs...)
+
+	// Limit to top 10 recommendations
+	maxRecs := constants.MaxRecommendations
+	if len(result) > maxRecs {
+		result = result[:maxRecs]
+	}
+
+	return result
+}
+
+func (ro *Orchestrator) extractTopIssues(recommendations []seo.RealRecommendation) []seo.RealRecommendation {
+	// Extract top 5 critical issues
+	topIssues := make([]seo.RealRecommendation, 0)
+	
+	for _, rec := range recommendations {
+		if rec.Priority == constants.SEOPriorityCritical && len(topIssues) < constants.MaxTopIssues {
+			topIssues = append(topIssues, rec)
+		}
+	}
+
+	return topIssues
+}
+
+// GetUpdatesChannel retourne le canal des mises à jour (pour WebSocket future)
+func (ro *Orchestrator) GetUpdatesChannel() <-chan AnalysisUpdate {
+	return ro.updates
+}
+
+// Shutdown arrête proprement l'orchestrateur
+func (ro *Orchestrator) Shutdown() error {
+	ro.mu.Lock()
+	defer ro.mu.Unlock()
+
+	if !ro.running {
 		return nil
 	}
 
-	log.Printf("Arrêt de l'orchestrateur Fire Salamander")
-
-	close(o.shutdownChan)
-	close(o.taskQueue)
-
-	// Attendre la fin des workers
-	o.workerPool.Wait()
-
-	o.isRunning = false
-	log.Printf("Orchestrateur Fire Salamander arrêté")
+	close(ro.shutdown)
+	ro.workerPool.Wait()
+	close(ro.updates)
+	ro.running = false
 
 	return nil
 }
 
-// AnalyzeURL lance une analyse complète d'une URL
-func (o *Orchestrator) AnalyzeURL(ctx context.Context, targetURL string, analysisType AnalysisType, options AnalysisOptions) (*UnifiedAnalysisResult, error) {
-	taskID := fmt.Sprintf("task_%d", time.Now().UnixNano())
+// 🔥🦎 SPRINT 6: Persistance MCP Functions
 
-	task := &AnalysisTask{
-		ID:         taskID,
-		URL:        targetURL,
-		Type:       analysisType,
-		Options:    options,
-		Priority:   PriorityNormal,
-		CreatedAt:  time.Now(),
-		Status:     TaskStatusPending,
-		ResultChan: make(chan *UnifiedAnalysisResult, 1),
+// loadExistingAnalyses - Recharge les analyses depuis le storage MCP
+func (ro *Orchestrator) loadExistingAnalyses() {
+	stored, err := ro.storage.ListAllAnalyses()
+	if err != nil {
+		log.Printf("⚠️  Failed to load existing analyses from storage: %v", err)
+		return
 	}
-
-	// Envoyer la tâche dans la queue
-	select {
-	case o.taskQueue <- task:
-		log.Printf("Tâche %s ajoutée à la queue pour %s", taskID, targetURL)
-	case <-ctx.Done():
-		return nil, ctx.Err()
+	
+	log.Printf("🔄 Loading %d existing analyses from MCP storage", len(stored))
+	
+	for _, storageAnalysis := range stored {
+		// Convertir storage.AnalysisState -> integration.AnalysisState
+		integrationAnalysis := ro.convertFromStorage(storageAnalysis)
+		ro.analyses[integrationAnalysis.ID] = integrationAnalysis
 	}
-
-	// Attendre le résultat
-	select {
-	case result := <-task.ResultChan:
-		return result, nil
-	case <-ctx.Done():
-		return nil, ctx.Err()
-	}
+	
+	log.Printf("✅ Loaded %d analyses from storage successfully", len(stored))
 }
 
-// worker traite les tâches d'analyse
-func (o *Orchestrator) worker(ctx context.Context, workerID int) {
-	defer o.workerPool.Done()
-
-	log.Printf("Worker %d démarré", workerID)
-
-	for {
-		select {
-		case task, ok := <-o.taskQueue:
-			if !ok {
-				log.Printf("Worker %d: queue fermée, arrêt", workerID)
-				return
-			}
-
-			log.Printf("Worker %d: traitement tâche %s pour %s", workerID, task.ID, task.URL)
-			result := o.processTask(ctx, task)
-			
-			// Envoyer le résultat
-			select {
-			case task.ResultChan <- result:
-			default:
-				log.Printf("Worker %d: impossible d'envoyer le résultat pour %s", workerID, task.ID)
-			}
-
-		case <-o.shutdownChan:
-			log.Printf("Worker %d: signal d'arrêt reçu", workerID)
-			return
-
-		case <-ctx.Done():
-			log.Printf("Worker %d: contexte annulé", workerID)
-			return
-		}
-	}
-}
-
-// processTask traite une tâche d'analyse
-func (o *Orchestrator) processTask(ctx context.Context, task *AnalysisTask) *UnifiedAnalysisResult {
-	startTime := time.Now()
-	task.Status = TaskStatusRunning
-	task.StartedAt = &startTime
-
-	result := &UnifiedAnalysisResult{
-		TaskID:         task.ID,
-		URL:            task.URL,
-		AnalyzedAt:     startTime,
-		CategoryScores: make(map[string]float64),
-		Errors:         []AnalysisError{},
-		Warnings:       []string{},
-	}
-
-	// Extraire le domaine
-	if domain, err := o.extractDomain(task.URL); err == nil {
-		result.Domain = domain
-	}
-
-	var wg sync.WaitGroup
-	var crawlResult *crawler.CrawlResult
-	var semanticResult *semantic.AnalysisResult
-	var seoResult *seo.SEOAnalysisResult
-
-	// 1. Crawling (si demandé)
-	if task.Options.IncludeCrawling && (task.Type == AnalysisTypeFull || task.Type == AnalysisTypeQuick) {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			if cr, err := o.performCrawling(ctx, task); err != nil {
-				result.Errors = append(result.Errors, AnalysisError{
-					Module:      constants.OrchestratorAgentNameCrawler,
-					Type:        constants.OrchestratorErrorTypeCrawling,
-					Message:     err.Error(),
-					Timestamp:   time.Now(),
-					Recoverable: true,
-				})
-			} else {
-				crawlResult = cr
-			}
-		}()
-	}
-
-	// 2. Analyse sémantique
-	if task.Type == AnalysisTypeFull || task.Type == AnalysisTypeSemantic {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			if sr, err := o.performSemanticAnalysis(ctx, task); err != nil {
-				result.Errors = append(result.Errors, AnalysisError{
-					Module:      constants.OrchestratorAnalysisTypeSemantic,
-					Type:        constants.OrchestratorErrorTypeSemantic,
-					Message:     err.Error(),
-					Timestamp:   time.Now(),
-					Recoverable: true,
-				})
-			} else {
-				semanticResult = sr
-			}
-		}()
-	}
-
-	// 3. Analyse SEO
-	if task.Type == AnalysisTypeFull || task.Type == AnalysisTypeSEO || task.Type == AnalysisTypeQuick {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			if seoRes, err := o.performSEOAnalysis(ctx, task); err != nil {
-				result.Errors = append(result.Errors, AnalysisError{
-					Module:      constants.OrchestratorAgentNameSEO,
-					Type:        constants.OrchestratorErrorTypeSEO,
-					Message:     err.Error(),
-					Timestamp:   time.Now(),
-					Recoverable: true,
-				})
-			} else {
-				seoResult = seoRes
-			}
-		}()
-	}
-
-	// Attendre toutes les analyses
-	wg.Wait()
-
-	// Assigner les résultats
-	result.CrawlerResult = crawlResult
-	result.SemanticAnalysis = semanticResult
-	result.SEOAnalysis = seoResult
-
-	// 4. Analyse unifiée et cross-module
-	o.performUnifiedAnalysis(result)
-
-	// 5. Finaliser
-	result.ProcessingTime = time.Since(startTime)
-	task.Status = TaskStatusCompleted
-	task.CompletedAt = &result.AnalyzedAt
-
-	// Déterminer le statut final
-	if len(result.Errors) == 0 {
-		result.Status = AnalysisStatusSuccess
-	} else if crawlResult != nil || semanticResult != nil || seoResult != nil {
-		result.Status = AnalysisStatusPartial
-		result.Warnings = append(result.Warnings, fmt.Sprintf("Analyse partielle - %d erreurs", len(result.Errors)))
+// saveAnalysisToStorage - Sauve une analyse dans le storage MCP
+func (ro *Orchestrator) saveAnalysisToStorage(analysis *AnalysisState) {
+	// Convertir integration.AnalysisState -> storage.AnalysisState
+	storageAnalysis := ro.convertToStorage(analysis)
+	
+	err := ro.storage.SaveAnalysis(storageAnalysis)
+	if err != nil {
+		log.Printf("❌ Failed to save analysis %s to storage: %v", analysis.ID, err)
 	} else {
-		result.Status = AnalysisStatusFailed
-		task.Status = TaskStatusFailed
-	}
-
-	// Mettre à jour les statistiques
-	o.updateStats(result)
-
-	log.Printf("Tâche %s terminée - Statut: %s, Durée: %v, Score: %.1f", 
-		task.ID, result.Status, result.ProcessingTime, result.OverallScore)
-
-	return result
-}
-
-// performCrawling effectue le crawling
-func (o *Orchestrator) performCrawling(ctx context.Context, task *AnalysisTask) (*crawler.CrawlResult, error) {
-	log.Printf("Début crawling pour %s", task.URL)
-	
-	// Configuration du crawler basée sur les options
-	maxDepth := task.Options.MaxDepth
-	if maxDepth == 0 {
-		maxDepth = 2 // Valeur par défaut
-	}
-
-	// Utiliser CrawlPage pour une seule page
-	result, err := o.crawler.CrawlPage(ctx, task.URL)
-	if err != nil {
-		return nil, fmt.Errorf("erreur crawling page: %w", err)
-	}
-
-	log.Printf("Crawling terminé - Page: %s, Status: %d", task.URL, result.StatusCode)
-	return result, nil
-}
-
-// performSemanticAnalysis effectue l'analyse sémantique
-func (o *Orchestrator) performSemanticAnalysis(ctx context.Context, task *AnalysisTask) (*semantic.AnalysisResult, error) {
-	log.Printf("Début analyse sémantique pour %s", task.URL)
-
-	// Pour l'intégration, on utilise du contenu HTML simulé
-	// Dans une vraie implémentation, on récupérerait le HTML via HTTP
-	htmlContent := o.fetchHTMLContent(ctx, task.URL)
-	if htmlContent == "" {
-		return nil, fmt.Errorf("impossible de récupérer le contenu HTML")
-	}
-
-	result, err := o.semanticAnalyzer.AnalyzePage(ctx, task.URL, htmlContent)
-	if err != nil {
-		return nil, fmt.Errorf("erreur analyse sémantique: %w", err)
-	}
-
-	log.Printf("Analyse sémantique terminée - Score: %.1f", result.SEOScore.Overall)
-	return result, nil
-}
-
-// performSEOAnalysis effectue l'analyse SEO
-func (o *Orchestrator) performSEOAnalysis(ctx context.Context, task *AnalysisTask) (*seo.SEOAnalysisResult, error) {
-	log.Printf("Début analyse SEO pour %s", task.URL)
-
-	result, err := o.seoAnalyzer.AnalyzePage(ctx, task.URL)
-	if err != nil {
-		return nil, fmt.Errorf("erreur analyse SEO: %w", err)
-	}
-
-	log.Printf("Analyse SEO terminée - Score: %.1f", result.OverallScore)
-	return result, nil
-}
-
-// performUnifiedAnalysis effectue l'analyse unifiée
-func (o *Orchestrator) performUnifiedAnalysis(result *UnifiedAnalysisResult) {
-	// 1. Calculer les métriques unifiées
-	result.UnifiedMetrics = o.calculateUnifiedMetrics(result)
-
-	// 2. Générer les insights cross-module
-	result.CrossModuleInsights = o.generateCrossModuleInsights(result)
-
-	// 3. Identifier les actions prioritaires
-	result.PriorityActions = o.identifyPriorityActions(result)
-
-	// 4. Calculer le score global unifié
-	result.OverallScore = o.calculateUnifiedScore(result)
-
-	// 5. Calculer les scores par catégorie
-	result.CategoryScores = o.calculateCategoryScores(result)
-}
-
-// Fonctions utilitaires et de calcul (implémentations simplifiées)
-
-func (o *Orchestrator) extractDomain(targetURL string) (string, error) {
-	domain := o.extractDomainSimple(targetURL)
-	if domain == "" {
-		return "", fmt.Errorf("URL invalide")
-	}
-	return domain, nil
-}
-
-func (o *Orchestrator) extractDomainSimple(targetURL string) string {
-	// Implémentation simple - dans la vraie vie, utiliser net/url
-	if len(targetURL) > constants.HTTPSPrefixLength && targetURL[:constants.HTTPSPrefixLength] == constants.HTTPSPrefix {
-		domain := targetURL[constants.HTTPSPrefixLength:]
-		if idx := strings.Index(domain, "/"); idx != -1 {
-			domain = domain[:idx]
-		}
-		return domain
-	}
-	if len(targetURL) > constants.HTTPPrefixLength && targetURL[:constants.HTTPPrefixLength] == constants.HTTPPrefix {
-		domain := targetURL[constants.HTTPPrefixLength:]
-		if idx := strings.Index(domain, "/"); idx != -1 {
-			domain = domain[:idx]
-		}
-		return domain
-	}
-	return ""
-}
-
-func (o *Orchestrator) fetchHTMLContent(ctx context.Context, targetURL string) string {
-	// Contenu HTML simulé pour les tests
-	return `<!DOCTYPE html>
-<html lang="fr">
-<head>
-	<title>Page de test Fire Salamander</title>
-	<meta name="description" content="Page de test pour l'orchestrateur Fire Salamander avec analyse complète SEO et sémantique.">
-</head>
-<body>
-	<h1>Test Fire Salamander</h1>
-	<p>Contenu de test pour valider l'intégration des modules d'analyse.</p>
-</body>
-</html>`
-}
-
-func (o *Orchestrator) calculateUnifiedMetrics(result *UnifiedAnalysisResult) UnifiedMetrics {
-	metrics := UnifiedMetrics{}
-
-	// Score de qualité du contenu (basé sur l'analyse sémantique)
-	if result.SemanticAnalysis != nil {
-		metrics.ContentQualityScore = result.SemanticAnalysis.SEOScore.Overall
-	}
-
-	// Score de santé technique (basé sur l'analyse SEO technique)
-	if result.SEOAnalysis != nil {
-		if techScore, exists := result.SEOAnalysis.CategoryScores[constants.OrchestratorCategoryTechnical]; exists {
-			metrics.TechnicalHealthScore = techScore * 100
-		}
-		if perfScore, exists := result.SEOAnalysis.CategoryScores[constants.OrchestratorAgentNamePerformance]; exists {
-			metrics.PerformanceScore = perfScore * 100
-		}
-		metrics.SEOReadinessScore = result.SEOAnalysis.OverallScore
-	}
-
-	// Score d'expérience utilisateur (moyenne pondérée)
-	metrics.UserExperienceScore = (metrics.PerformanceScore*0.4 + metrics.ContentQualityScore*0.3 + metrics.TechnicalHealthScore*0.3)
-
-	// Score mobile (basé sur l'audit technique SEO)
-	if result.SEOAnalysis != nil {
-		metrics.MobileFriendlinessScore = result.SEOAnalysis.TechnicalAudit.Mobile.MobileScore * 100
-	}
-
-	return metrics
-}
-
-func (o *Orchestrator) generateCrossModuleInsights(result *UnifiedAnalysisResult) []CrossModuleInsight {
-	var insights []CrossModuleInsight
-
-	// Insight 1: Cohérence titre/contenu
-	if result.SemanticAnalysis != nil && result.SEOAnalysis != nil {
-		if result.SEOAnalysis.TagAnalysis.Title.Present && len(result.SemanticAnalysis.LocalAnalysis.Keywords) > 0 {
-			insights = append(insights, CrossModuleInsight{
-				Type:        constants.OrchestratorInsightContentSEOAlignment,
-				Severity:    constants.OrchestratorStatusInfo,
-				Title:       "Alignement contenu-SEO détecté",
-				Description: "Le titre de la page est cohérent avec les mots-clés identifiés dans le contenu",
-				Evidence:    []string{"Titre présent", "Mots-clés identifiés"},
-				Modules:     []string{constants.OrchestratorAnalysisTypeSemantic, constants.OrchestratorAgentNameSEO},
-				Impact:      constants.OrchestratorImpactPositive,
-			})
-		}
-	}
-
-	// Insight 2: Performance vs Contenu
-	if result.SEOAnalysis != nil {
-		perfScore := result.UnifiedMetrics.PerformanceScore
-		contentScore := result.UnifiedMetrics.ContentQualityScore
-		
-		if perfScore < 50 && contentScore > 70 {
-			insights = append(insights, CrossModuleInsight{
-				Type:        constants.OrchestratorInsightPerformanceContentMismatch,
-				Severity:    constants.OrchestratorStatusWarning,
-				Title:       "Décalage performance-contenu",
-				Description: "Bon contenu mais performances techniques faibles",
-				Evidence:    []string{fmt.Sprintf("Performance: %.1f%%", perfScore), fmt.Sprintf("Contenu: %.1f%%", contentScore)},
-				Modules:     []string{constants.OrchestratorAnalysisTypeSemantic, constants.OrchestratorAgentNameSEO},
-				Impact:      constants.OrchestratorImpactNegative,
-			})
-		}
-	}
-
-	return insights
-}
-
-func (o *Orchestrator) identifyPriorityActions(result *UnifiedAnalysisResult) []PriorityAction {
-	var actions []PriorityAction
-
-	// Actions basées sur l'analyse SEO
-	if result.SEOAnalysis != nil {
-		for _, rec := range result.SEOAnalysis.Recommendations {
-			if len(actions) >= 10 { // Limiter à 10 actions max
-				break
-			}
-
-			priority := "medium"
-			switch rec.Priority {
-			case seo.PriorityCritical:
-				priority = "critical"
-			case seo.PriorityHigh:
-				priority = "high"
-			case seo.PriorityLow:
-				priority = "low"
-			}
-
-			actions = append(actions, PriorityAction{
-				ID:          rec.ID,
-				Title:       rec.Title,
-				Description: rec.Description,
-				Priority:    priority,
-				Impact:      string(rec.Impact),
-				Effort:      string(rec.Effort),
-				Module:      constants.OrchestratorAgentNameSEO,
-				EstimatedTime: constants.OrchestratorTimeVariable,
-			})
-		}
-	}
-
-	return actions
-}
-
-func (o *Orchestrator) calculateUnifiedScore(result *UnifiedAnalysisResult) float64 {
-	var totalScore float64
-	var components int
-
-	// Score sémantique (30%)
-	if result.SemanticAnalysis != nil {
-		totalScore += result.SemanticAnalysis.SEOScore.Overall * 0.3
-		components++
-	}
-
-	// Score SEO (70%)
-	if result.SEOAnalysis != nil {
-		totalScore += result.SEOAnalysis.OverallScore * 0.7
-		components++
-	}
-
-	if components == 0 {
-		return 0
-	}
-
-	return totalScore
-}
-
-func (o *Orchestrator) calculateCategoryScores(result *UnifiedAnalysisResult) map[string]float64 {
-	scores := make(map[string]float64)
-
-	// Reprendre les scores SEO si disponibles
-	if result.SEOAnalysis != nil {
-		for category, score := range result.SEOAnalysis.CategoryScores {
-			scores[category] = score * 100 // Convertir en pourcentage
-		}
-	}
-
-	// Ajouter les métriques unifiées
-	scores[constants.OrchestratorCategoryContentQuality] = result.UnifiedMetrics.ContentQualityScore
-	scores[constants.OrchestratorCategoryUserExperience] = result.UnifiedMetrics.UserExperienceScore
-	scores[constants.OrchestratorCategoryMobileFriendliness] = result.UnifiedMetrics.MobileFriendlinessScore
-
-	return scores
-}
-
-func (o *Orchestrator) updateStats(result *UnifiedAnalysisResult) {
-	o.statsMutex.Lock()
-	defer o.statsMutex.Unlock()
-
-	o.stats.TotalTasks++
-	
-	if result.Status == AnalysisStatusSuccess || result.Status == AnalysisStatusPartial {
-		o.stats.CompletedTasks++
-	} else {
-		o.stats.FailedTasks++
-	}
-
-	// Calculer le temps moyen
-	if o.stats.CompletedTasks > 0 {
-		o.stats.AverageTime = time.Duration(
-			(int64(o.stats.AverageTime)*o.stats.CompletedTasks + int64(result.ProcessingTime)) / (o.stats.CompletedTasks + 1),
-		)
-	} else {
-		o.stats.AverageTime = result.ProcessingTime
-	}
-
-	o.stats.LastAnalysis = result.AnalyzedAt
-	
-	// Sauvegarder l'analyse dans le storage
-	if o.storage != nil {
-		err := o.storage.SaveAnalysis(result)
-		if err != nil {
-			log.Printf("Erreur sauvegarde analyse %s: %v", result.TaskID, err)
-		}
+		log.Printf("💾 Saved analysis %s to MCP storage", analysis.ID)
 	}
 }
 
-// GetStats retourne les statistiques actuelles
-func (o *Orchestrator) GetStats() *AnalysisStats {
-	o.statsMutex.RLock()
-	defer o.statsMutex.RUnlock()
-
-	// Retourner une copie
-	stats := *o.stats
-	return &stats
-}
-
-// GetRecentAnalyses retourne la liste des analyses récentes
-func (o *Orchestrator) GetRecentAnalyses() []map[string]interface{} {
-	if o.storage == nil {
-		return []map[string]interface{}{}
+// convertToStorage - Convertit integration.AnalysisState vers storage.AnalysisState
+func (ro *Orchestrator) convertToStorage(integrationAnalysis *AnalysisState) *storage.AnalysisState {
+	// Convertir les recommandations en chaînes simples
+	var topIssues []string
+	for _, issue := range integrationAnalysis.TopIssues {
+		topIssues = append(topIssues, issue.Issue)
 	}
 	
-	analyses, err := o.storage.GetRecentAnalyses(20)
-	if err != nil {
-		log.Printf("Erreur récupération analyses récentes: %v", err)
-		return []map[string]interface{}{}
+	var recommendations []string
+	for _, rec := range integrationAnalysis.Recommendations {
+		recommendations = append(recommendations, fmt.Sprintf("%s: %s", rec.Issue, rec.Action))
 	}
 	
-	// Convertir en format JSON générique pour l'API
-	result := make([]map[string]interface{}, len(analyses))
-	for i, analysis := range analyses {
-		result[i] = map[string]interface{}{
-			"id":               analysis.ID,
-			"task_id":          analysis.TaskID,
-			"url":              analysis.URL,
-			"domain":           analysis.Domain,
-			"analysis_type":    analysis.AnalysisType,
-			constants.OrchestratorJSONFieldStatus:           analysis.Status,
-			"overall_score":    analysis.OverallScore,
-			"created_at":       analysis.CreatedAt,
-			"processing_time":  analysis.ProcessingTime,
-		}
+	return &storage.AnalysisState{
+		ID:              integrationAnalysis.ID,
+		URL:             integrationAnalysis.URL,
+		Domain:          integrationAnalysis.Domain,
+		Status:          integrationAnalysis.Status,
+		StartTime:       integrationAnalysis.StartTime,
+		Duration:        integrationAnalysis.Duration,
+		Score:           integrationAnalysis.GlobalScore,
+		PagesFound:      integrationAnalysis.PagesFound,
+		PagesAnalyzed:   integrationAnalysis.PagesAnalyzed,
+		CurrentWorkers:  integrationAnalysis.CurrentWorkers,
+		PagesPerSecond:  integrationAnalysis.PagesPerSecond,
+		TopIssues:       topIssues,
+		Recommendations: recommendations,
+		GlobalGrade:     integrationAnalysis.GlobalGrade,
+		CreatedAt:       integrationAnalysis.StartTime,
+		UpdatedAt:       time.Now(),
 	}
-	
-	return result
 }
 
-// GetAnalysisDetails retourne les détails complets d'une analyse spécifique
-func (o *Orchestrator) GetAnalysisDetails(analysisID int64) (interface{}, error) {
-	if o.storage == nil {
-		return nil, fmt.Errorf("storage non disponible")
+// convertFromStorage - Convertit storage.AnalysisState vers integration.AnalysisState
+func (ro *Orchestrator) convertFromStorage(storageAnalysis *storage.AnalysisState) *AnalysisState {
+	// Convertir les issues simples en RealRecommendations
+	var topIssues []seo.RealRecommendation
+	for _, issue := range storageAnalysis.TopIssues {
+		topIssues = append(topIssues, seo.RealRecommendation{
+			Priority: constants.SEOPriorityCritical,
+			Issue:    issue,
+			Action:   "Corriger ce problème",
+		})
 	}
 	
-	// Récupérer l'analyse complète avec les données JSON
-	analysis, err := o.storage.GetAnalysisById(analysisID)
-	if err != nil {
-		return nil, fmt.Errorf("analyse non trouvée: %w", err)
+	var recommendations []seo.RealRecommendation
+	for _, rec := range storageAnalysis.Recommendations {
+		recommendations = append(recommendations, seo.RealRecommendation{
+			Priority: constants.SEOPriorityMedium,
+			Issue:    rec,
+			Action:   "Voir les détails",
+		})
 	}
 	
-	return analysis, nil
+	return &AnalysisState{
+		ID:              storageAnalysis.ID,
+		URL:             storageAnalysis.URL,
+		Domain:          storageAnalysis.Domain,
+		StartTime:       storageAnalysis.StartTime,
+		Duration:        storageAnalysis.Duration,
+		Status:          storageAnalysis.Status,
+		PagesFound:      storageAnalysis.PagesFound,
+		PagesAnalyzed:   storageAnalysis.PagesAnalyzed,
+		CurrentWorkers:  storageAnalysis.CurrentWorkers,
+		PagesPerSecond:  storageAnalysis.PagesPerSecond,
+		GlobalScore:     storageAnalysis.Score,
+		GlobalGrade:     storageAnalysis.GlobalGrade,
+		TopIssues:       topIssues,
+		Recommendations: recommendations,
+	}
+}
+
+// TestCrawl teste directement le crawling (pour debug des tests)
+func (ro *Orchestrator) TestCrawl(ctx context.Context, url string) (*crawler.ParallelCrawlResult, error) {
+	return ro.parallelCrawler.CrawlWithContext(ctx, url)
 }

@@ -16,12 +16,12 @@ import (
 )
 
 // 🔥🦎 FIRE SALAMANDER - REAL API INTEGRATION TESTS
-// Sprint 5 - Tester l'API connectée au RealOrchestrator
+// Sprint 5 - Tester l'API connectée au Orchestrator
 
 // TestRealAPI_AnalyzeEndpoint teste l'endpoint d'analyse réelle
 func TestRealAPI_AnalyzeEndpoint(t *testing.T) {
 	// Initialize the real orchestrator
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 
 	// Create test request
 	requestBody := map[string]string{
@@ -38,7 +38,7 @@ func TestRealAPI_AnalyzeEndpoint(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	// Call the handler
-	api.RealAnalyzeHandler(rr, req)
+	api.AnalyzeHandler(rr, req)
 
 	// Check response
 	assert.Equal(t, http.StatusOK, rr.Code)
@@ -59,7 +59,7 @@ func TestRealAPI_AnalyzeEndpoint(t *testing.T) {
 // TestRealAPI_StatusEndpoint teste l'endpoint de statut réel
 func TestRealAPI_StatusEndpoint(t *testing.T) {
 	// Initialize the real orchestrator
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 
 	// First start an analysis to get an ID
 	requestBody := map[string]string{
@@ -72,7 +72,7 @@ func TestRealAPI_StatusEndpoint(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
-	api.RealAnalyzeHandler(rr, req)
+	api.AnalyzeHandler(rr, req)
 
 	var analyzeResponse api.RealAnalyzeResponse
 	err = json.Unmarshal(rr.Body.Bytes(), &analyzeResponse)
@@ -87,7 +87,7 @@ func TestRealAPI_StatusEndpoint(t *testing.T) {
 	require.NoError(t, err)
 
 	rr = httptest.NewRecorder()
-	api.RealStatusHandler(rr, req)
+	api.StatusHandler(rr, req)
 
 	// Check response
 	assert.Equal(t, http.StatusOK, rr.Code)
@@ -112,7 +112,7 @@ func TestRealAPI_StatusEndpoint(t *testing.T) {
 // TestRealAPI_ResultsEndpoint teste l'endpoint de résultats (avec mock completion)
 func TestRealAPI_ResultsEndpoint_NotComplete(t *testing.T) {
 	// Initialize the real orchestrator
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 
 	// Start an analysis
 	requestBody := map[string]string{
@@ -125,7 +125,7 @@ func TestRealAPI_ResultsEndpoint_NotComplete(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
-	api.RealAnalyzeHandler(rr, req)
+	api.AnalyzeHandler(rr, req)
 
 	var analyzeResponse api.RealAnalyzeResponse
 	err = json.Unmarshal(rr.Body.Bytes(), &analyzeResponse)
@@ -137,7 +137,7 @@ func TestRealAPI_ResultsEndpoint_NotComplete(t *testing.T) {
 	require.NoError(t, err)
 
 	rr = httptest.NewRecorder()
-	api.RealResultsHandler(rr, req)
+	api.ResultsHandler(rr, req)
 
 	// Should return 202 Accepted (not complete yet)
 	assert.Equal(t, http.StatusAccepted, rr.Code)
@@ -148,7 +148,7 @@ func TestRealAPI_ResultsEndpoint_NotComplete(t *testing.T) {
 // TestRealAPI_ValidationErrors teste la validation des erreurs
 func TestRealAPI_ValidationErrors(t *testing.T) {
 	// Initialize the real orchestrator
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 
 	tests := []struct {
 		name           string
@@ -222,9 +222,9 @@ func TestRealAPI_ValidationErrors(t *testing.T) {
 			// Route to the appropriate handler
 			switch {
 			case tt.url == "/api/real/analyze":
-				api.RealAnalyzeHandler(rr, req)
+				api.AnalyzeHandler(rr, req)
 			case tt.url == "/api/real/status/" || tt.url == "/api/real/status/nonexistent-id":
-				api.RealStatusHandler(rr, req)
+				api.StatusHandler(rr, req)
 			}
 
 			assert.Equal(t, tt.expectedStatus, rr.Code, 
@@ -236,7 +236,7 @@ func TestRealAPI_ValidationErrors(t *testing.T) {
 // TestRealAPI_CompareWithMockAPI teste que l'API réelle retourne des données différentes du mock
 func TestRealAPI_CompareWithMockAPI(t *testing.T) {
 	// Initialize the real orchestrator
-	api.InitRealOrchestrator()
+	api.InitOrchestrator()
 
 	// Test avec URL réelle (mais on ne va pas attendre la completion pour ce test)
 	requestBody := map[string]string{
@@ -250,7 +250,7 @@ func TestRealAPI_CompareWithMockAPI(t *testing.T) {
 	req.Header.Set("Content-Type", "application/json")
 
 	rr := httptest.NewRecorder()
-	api.RealAnalyzeHandler(rr, req)
+	api.AnalyzeHandler(rr, req)
 
 	var realResponse api.RealAnalyzeResponse
 	err = json.Unmarshal(rr.Body.Bytes(), &realResponse)

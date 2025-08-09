@@ -11,8 +11,8 @@ import (
 
 // 🔥🦎 TDD TEST - Multi-Audits avec IDs Uniques
 // Vérifier que plusieurs audits du même site ont des IDs différents
-func TestRealOrchestrator_MultipleAuditsUniqueIDs(t *testing.T) {
-	orchestrator := integration.NewRealOrchestrator()
+func TestOrchestrator_MultipleAuditsUniqueIDs(t *testing.T) {
+	orchestrator := integration.NewOrchestrator()
 	
 	// SCENARIO: 5 audits simultanés du même site
 	sameURL := "https://septeo.com"
@@ -56,8 +56,8 @@ func TestRealOrchestrator_MultipleAuditsUniqueIDs(t *testing.T) {
 }
 
 // Test concurrent access to analysis states
-func TestRealOrchestrator_ConcurrentAccess(t *testing.T) {
-	orchestrator := integration.NewRealOrchestrator()
+func TestOrchestrator_ConcurrentAccess(t *testing.T) {
+	orchestrator := integration.NewOrchestrator()
 	
 	// Démarrer une analyse
 	analysisID, err := orchestrator.StartAnalysis("https://example.com")
