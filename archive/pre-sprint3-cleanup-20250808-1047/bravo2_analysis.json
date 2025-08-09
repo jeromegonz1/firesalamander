@@ -1,0 +1,1594 @@
+{
+  "total_violations": 251,
+  "categories": {
+    "json_field_names": 73,
+    "regex_patterns": 71,
+    "html_attributes": 20,
+    "length_thresholds": 12,
+    "error_messages": 8,
+    "recommendations": 19,
+    "magic_numbers": 6,
+    "meta_names": 3,
+    "call_to_action_words": 16,
+    "heading_levels": 8,
+    "html_values": 9,
+    "bad_anchor_texts": 6
+  },
+  "violations": [
+    {
+      "line": 23,
+      "category": "json_field_names",
+      "value": "title",
+      "context": "Title           TitleAnalysis       `json:\"title\"`"
+    },
+    {
+      "line": 23,
+      "category": "regex_patterns",
+      "value": "`json:\"title\"`",
+      "context": "Title           TitleAnalysis       `json:\"title\"`"
+    },
+    {
+      "line": 24,
+      "category": "json_field_names",
+      "value": "meta_description",
+      "context": "MetaDescription MetaDescAnalysis    `json:\"meta_description\"`"
+    },
+    {
+      "line": 24,
+      "category": "regex_patterns",
+      "value": "`json:\"meta_description\"`",
+      "context": "MetaDescription MetaDescAnalysis    `json:\"meta_description\"`"
+    },
+    {
+      "line": 25,
+      "category": "json_field_names",
+      "value": "headings",
+      "context": "Headings        HeadingAnalysis     `json:\"headings\"`"
+    },
+    {
+      "line": 25,
+      "category": "regex_patterns",
+      "value": "`json:\"headings\"`",
+      "context": "Headings        HeadingAnalysis     `json:\"headings\"`"
+    },
+    {
+      "line": 26,
+      "category": "json_field_names",
+      "value": "meta_tags",
+      "context": "MetaTags        MetaTagsAnalysis    `json:\"meta_tags\"`"
+    },
+    {
+      "line": 26,
+      "category": "regex_patterns",
+      "value": "`json:\"meta_tags\"`",
+      "context": "MetaTags        MetaTagsAnalysis    `json:\"meta_tags\"`"
+    },
+    {
+      "line": 27,
+      "category": "json_field_names",
+      "value": "images",
+      "context": "Images          ImageAnalysis       `json:\"images\"`"
+    },
+    {
+      "line": 27,
+      "category": "regex_patterns",
+      "value": "`json:\"images\"`",
+      "context": "Images          ImageAnalysis       `json:\"images\"`"
+    },
+    {
+      "line": 28,
+      "category": "json_field_names",
+      "value": "links",
+      "context": "Links           LinkAnalysis        `json:\"links\"`"
+    },
+    {
+      "line": 28,
+      "category": "regex_patterns",
+      "value": "`json:\"links\"`",
+      "context": "Links           LinkAnalysis        `json:\"links\"`"
+    },
+    {
+      "line": 29,
+      "category": "json_field_names",
+      "value": "microdata",
+      "context": "Microdata       MicrodataAnalysis   `json:\"microdata\"`"
+    },
+    {
+      "line": 29,
+      "category": "regex_patterns",
+      "value": "`json:\"microdata\"`",
+      "context": "Microdata       MicrodataAnalysis   `json:\"microdata\"`"
+    },
+    {
+      "line": 34,
+      "category": "json_field_names",
+      "value": "present",
+      "context": "Present          bool     `json:\"present\"`"
+    },
+    {
+      "line": 34,
+      "category": "regex_patterns",
+      "value": "`json:\"present\"`",
+      "context": "Present          bool     `json:\"present\"`"
+    },
+    {
+      "line": 35,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "Content          string   `json:\"content\"`"
+    },
+    {
+      "line": 35,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "Content          string   `json:\"content\"`"
+    },
+    {
+      "line": 35,
+      "category": "regex_patterns",
+      "value": "`json:\"content\"`",
+      "context": "Content          string   `json:\"content\"`"
+    },
+    {
+      "line": 36,
+      "category": "json_field_names",
+      "value": "length",
+      "context": "Length           int      `json:\"length\"`"
+    },
+    {
+      "line": 36,
+      "category": "regex_patterns",
+      "value": "`json:\"length\"`",
+      "context": "Length           int      `json:\"length\"`"
+    },
+    {
+      "line": 37,
+      "category": "json_field_names",
+      "value": "optimal_length",
+      "context": "OptimalLength    bool     `json:\"optimal_length\"`"
+    },
+    {
+      "line": 37,
+      "category": "regex_patterns",
+      "value": "`json:\"optimal_length\"`",
+      "context": "OptimalLength    bool     `json:\"optimal_length\"`"
+    },
+    {
+      "line": 38,
+      "category": "json_field_names",
+      "value": "has_keywords",
+      "context": "HasKeywords      bool     `json:\"has_keywords\"`"
+    },
+    {
+      "line": 38,
+      "category": "regex_patterns",
+      "value": "`json:\"has_keywords\"`",
+      "context": "HasKeywords      bool     `json:\"has_keywords\"`"
+    },
+    {
+      "line": 39,
+      "category": "json_field_names",
+      "value": "duplicate_words",
+      "context": "DuplicateWords   []string `json:\"duplicate_words\"`"
+    },
+    {
+      "line": 39,
+      "category": "regex_patterns",
+      "value": "`json:\"duplicate_words\"`",
+      "context": "DuplicateWords   []string `json:\"duplicate_words\"`"
+    },
+    {
+      "line": 40,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 40,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 41,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 41,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 46,
+      "category": "json_field_names",
+      "value": "present",
+      "context": "Present          bool     `json:\"present\"`"
+    },
+    {
+      "line": 46,
+      "category": "regex_patterns",
+      "value": "`json:\"present\"`",
+      "context": "Present          bool     `json:\"present\"`"
+    },
+    {
+      "line": 47,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "Content          string   `json:\"content\"`"
+    },
+    {
+      "line": 47,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "Content          string   `json:\"content\"`"
+    },
+    {
+      "line": 47,
+      "category": "regex_patterns",
+      "value": "`json:\"content\"`",
+      "context": "Content          string   `json:\"content\"`"
+    },
+    {
+      "line": 48,
+      "category": "json_field_names",
+      "value": "length",
+      "context": "Length           int      `json:\"length\"`"
+    },
+    {
+      "line": 48,
+      "category": "regex_patterns",
+      "value": "`json:\"length\"`",
+      "context": "Length           int      `json:\"length\"`"
+    },
+    {
+      "line": 49,
+      "category": "json_field_names",
+      "value": "optimal_length",
+      "context": "OptimalLength    bool     `json:\"optimal_length\"`"
+    },
+    {
+      "line": 49,
+      "category": "regex_patterns",
+      "value": "`json:\"optimal_length\"`",
+      "context": "OptimalLength    bool     `json:\"optimal_length\"`"
+    },
+    {
+      "line": 50,
+      "category": "json_field_names",
+      "value": "has_call_to_action",
+      "context": "HasCallToAction  bool     `json:\"has_call_to_action\"`"
+    },
+    {
+      "line": 50,
+      "category": "regex_patterns",
+      "value": "`json:\"has_call_to_action\"`",
+      "context": "HasCallToAction  bool     `json:\"has_call_to_action\"`"
+    },
+    {
+      "line": 51,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 51,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 52,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 52,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 57,
+      "category": "json_field_names",
+      "value": "h1_count",
+      "context": "H1Count         int                    `json:\"h1_count\"`"
+    },
+    {
+      "line": 57,
+      "category": "regex_patterns",
+      "value": "`json:\"h1_count\"`",
+      "context": "H1Count         int                    `json:\"h1_count\"`"
+    },
+    {
+      "line": 58,
+      "category": "json_field_names",
+      "value": "h1_content",
+      "context": "H1Content       []string               `json:\"h1_content\"`"
+    },
+    {
+      "line": 58,
+      "category": "regex_patterns",
+      "value": "`json:\"h1_content\"`",
+      "context": "H1Content       []string               `json:\"h1_content\"`"
+    },
+    {
+      "line": 59,
+      "category": "json_field_names",
+      "value": "heading_structure",
+      "context": "HeadingStructure map[string][]string   `json:\"heading_structure\"`"
+    },
+    {
+      "line": 59,
+      "category": "regex_patterns",
+      "value": "`json:\"heading_structure\"`",
+      "context": "HeadingStructure map[string][]string   `json:\"heading_structure\"`"
+    },
+    {
+      "line": 60,
+      "category": "json_field_names",
+      "value": "has_hierarchy",
+      "context": "HasHierarchy    bool                   `json:\"has_hierarchy\"`"
+    },
+    {
+      "line": 60,
+      "category": "regex_patterns",
+      "value": "`json:\"has_hierarchy\"`",
+      "context": "HasHierarchy    bool                   `json:\"has_hierarchy\"`"
+    },
+    {
+      "line": 61,
+      "category": "json_field_names",
+      "value": "missing_levels",
+      "context": "MissingLevels   []string               `json:\"missing_levels\"`"
+    },
+    {
+      "line": 61,
+      "category": "regex_patterns",
+      "value": "`json:\"missing_levels\"`",
+      "context": "MissingLevels   []string               `json:\"missing_levels\"`"
+    },
+    {
+      "line": 62,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues          []string               `json:\"issues\"`"
+    },
+    {
+      "line": 62,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues          []string               `json:\"issues\"`"
+    },
+    {
+      "line": 63,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations []string               `json:\"recommendations\"`"
+    },
+    {
+      "line": 63,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations []string               `json:\"recommendations\"`"
+    },
+    {
+      "line": 68,
+      "category": "json_field_names",
+      "value": "has_robots",
+      "context": "HasRobots       bool     `json:\"has_robots\"`"
+    },
+    {
+      "line": 68,
+      "category": "regex_patterns",
+      "value": "`json:\"has_robots\"`",
+      "context": "HasRobots       bool     `json:\"has_robots\"`"
+    },
+    {
+      "line": 69,
+      "category": "json_field_names",
+      "value": "robots_content",
+      "context": "RobotsContent   string   `json:\"robots_content\"`"
+    },
+    {
+      "line": 69,
+      "category": "regex_patterns",
+      "value": "`json:\"robots_content\"`",
+      "context": "RobotsContent   string   `json:\"robots_content\"`"
+    },
+    {
+      "line": 70,
+      "category": "json_field_names",
+      "value": "has_canonical",
+      "context": "HasCanonical    bool     `json:\"has_canonical\"`"
+    },
+    {
+      "line": 70,
+      "category": "regex_patterns",
+      "value": "`json:\"has_canonical\"`",
+      "context": "HasCanonical    bool     `json:\"has_canonical\"`"
+    },
+    {
+      "line": 71,
+      "category": "json_field_names",
+      "value": "canonical_url",
+      "context": "CanonicalURL    string   `json:\"canonical_url\"`"
+    },
+    {
+      "line": 71,
+      "category": "regex_patterns",
+      "value": "`json:\"canonical_url\"`",
+      "context": "CanonicalURL    string   `json:\"canonical_url\"`"
+    },
+    {
+      "line": 72,
+      "category": "json_field_names",
+      "value": "has_og_tags",
+      "context": "HasOGTags       bool     `json:\"has_og_tags\"`"
+    },
+    {
+      "line": 72,
+      "category": "regex_patterns",
+      "value": "`json:\"has_og_tags\"`",
+      "context": "HasOGTags       bool     `json:\"has_og_tags\"`"
+    },
+    {
+      "line": 73,
+      "category": "json_field_names",
+      "value": "og_tags",
+      "context": "OGTags          []OGTag  `json:\"og_tags\"`"
+    },
+    {
+      "line": 73,
+      "category": "regex_patterns",
+      "value": "`json:\"og_tags\"`",
+      "context": "OGTags          []OGTag  `json:\"og_tags\"`"
+    },
+    {
+      "line": 74,
+      "category": "json_field_names",
+      "value": "has_twitter_card",
+      "context": "HasTwitterCard  bool     `json:\"has_twitter_card\"`"
+    },
+    {
+      "line": 74,
+      "category": "regex_patterns",
+      "value": "`json:\"has_twitter_card\"`",
+      "context": "HasTwitterCard  bool     `json:\"has_twitter_card\"`"
+    },
+    {
+      "line": 75,
+      "category": "json_field_names",
+      "value": "twitter_card",
+      "context": "TwitterCard     []TwitterTag `json:\"twitter_card\"`"
+    },
+    {
+      "line": 75,
+      "category": "regex_patterns",
+      "value": "`json:\"twitter_card\"`",
+      "context": "TwitterCard     []TwitterTag `json:\"twitter_card\"`"
+    },
+    {
+      "line": 76,
+      "category": "json_field_names",
+      "value": "has_viewport",
+      "context": "HasViewport     bool     `json:\"has_viewport\"`"
+    },
+    {
+      "line": 76,
+      "category": "regex_patterns",
+      "value": "`json:\"has_viewport\"`",
+      "context": "HasViewport     bool     `json:\"has_viewport\"`"
+    },
+    {
+      "line": 77,
+      "category": "json_field_names",
+      "value": "viewport_content",
+      "context": "ViewportContent string   `json:\"viewport_content\"`"
+    },
+    {
+      "line": 77,
+      "category": "regex_patterns",
+      "value": "`json:\"viewport_content\"`",
+      "context": "ViewportContent string   `json:\"viewport_content\"`"
+    },
+    {
+      "line": 78,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues          []string `json:\"issues\"`"
+    },
+    {
+      "line": 78,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues          []string `json:\"issues\"`"
+    },
+    {
+      "line": 79,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 79,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 84,
+      "category": "json_field_names",
+      "value": "total_images",
+      "context": "TotalImages      int      `json:\"total_images\"`"
+    },
+    {
+      "line": 84,
+      "category": "regex_patterns",
+      "value": "`json:\"total_images\"`",
+      "context": "TotalImages      int      `json:\"total_images\"`"
+    },
+    {
+      "line": 85,
+      "category": "json_field_names",
+      "value": "images_with_alt",
+      "context": "ImagesWithAlt    int      `json:\"images_with_alt\"`"
+    },
+    {
+      "line": 85,
+      "category": "regex_patterns",
+      "value": "`json:\"images_with_alt\"`",
+      "context": "ImagesWithAlt    int      `json:\"images_with_alt\"`"
+    },
+    {
+      "line": 86,
+      "category": "json_field_names",
+      "value": "alt_text_coverage",
+      "context": "AltTextCoverage  float64  `json:\"alt_text_coverage\"`"
+    },
+    {
+      "line": 86,
+      "category": "regex_patterns",
+      "value": "`json:\"alt_text_coverage\"`",
+      "context": "AltTextCoverage  float64  `json:\"alt_text_coverage\"`"
+    },
+    {
+      "line": 87,
+      "category": "json_field_names",
+      "value": "missing_alt_images",
+      "context": "MissingAltImages []string `json:\"missing_alt_images\"`"
+    },
+    {
+      "line": 87,
+      "category": "regex_patterns",
+      "value": "`json:\"missing_alt_images\"`",
+      "context": "MissingAltImages []string `json:\"missing_alt_images\"`"
+    },
+    {
+      "line": 88,
+      "category": "json_field_names",
+      "value": "optimized_formats",
+      "context": "OptimizedFormats int      `json:\"optimized_formats\"`"
+    },
+    {
+      "line": 88,
+      "category": "regex_patterns",
+      "value": "`json:\"optimized_formats\"`",
+      "context": "OptimizedFormats int      `json:\"optimized_formats\"`"
+    },
+    {
+      "line": 89,
+      "category": "json_field_names",
+      "value": "lazy_loading",
+      "context": "LazyLoading      int      `json:\"lazy_loading\"`"
+    },
+    {
+      "line": 89,
+      "category": "regex_patterns",
+      "value": "`json:\"lazy_loading\"`",
+      "context": "LazyLoading      int      `json:\"lazy_loading\"`"
+    },
+    {
+      "line": 90,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 90,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 91,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 91,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 96,
+      "category": "json_field_names",
+      "value": "internal_links",
+      "context": "InternalLinks    int      `json:\"internal_links\"`"
+    },
+    {
+      "line": 96,
+      "category": "regex_patterns",
+      "value": "`json:\"internal_links\"`",
+      "context": "InternalLinks    int      `json:\"internal_links\"`"
+    },
+    {
+      "line": 97,
+      "category": "json_field_names",
+      "value": "external_links",
+      "context": "ExternalLinks    int      `json:\"external_links\"`"
+    },
+    {
+      "line": 97,
+      "category": "regex_patterns",
+      "value": "`json:\"external_links\"`",
+      "context": "ExternalLinks    int      `json:\"external_links\"`"
+    },
+    {
+      "line": 98,
+      "category": "json_field_names",
+      "value": "nofollow_links",
+      "context": "NoFollowLinks    int      `json:\"nofollow_links\"`"
+    },
+    {
+      "line": 98,
+      "category": "regex_patterns",
+      "value": "`json:\"nofollow_links\"`",
+      "context": "NoFollowLinks    int      `json:\"nofollow_links\"`"
+    },
+    {
+      "line": 99,
+      "category": "json_field_names",
+      "value": "broken_links",
+      "context": "BrokenLinks      int      `json:\"broken_links\"`"
+    },
+    {
+      "line": 99,
+      "category": "regex_patterns",
+      "value": "`json:\"broken_links\"`",
+      "context": "BrokenLinks      int      `json:\"broken_links\"`"
+    },
+    {
+      "line": 100,
+      "category": "json_field_names",
+      "value": "anchor_optimization",
+      "context": "AnchorOptimization float64 `json:\"anchor_optimization\"`"
+    },
+    {
+      "line": 100,
+      "category": "regex_patterns",
+      "value": "`json:\"anchor_optimization\"`",
+      "context": "AnchorOptimization float64 `json:\"anchor_optimization\"`"
+    },
+    {
+      "line": 101,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 101,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 102,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 102,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 107,
+      "category": "json_field_names",
+      "value": "has_json_ld",
+      "context": "HasJSONLD        bool     `json:\"has_json_ld\"`"
+    },
+    {
+      "line": 107,
+      "category": "regex_patterns",
+      "value": "`json:\"has_json_ld\"`",
+      "context": "HasJSONLD        bool     `json:\"has_json_ld\"`"
+    },
+    {
+      "line": 108,
+      "category": "json_field_names",
+      "value": "json_ld_types",
+      "context": "JSONLDTypes      []string `json:\"json_ld_types\"`"
+    },
+    {
+      "line": 108,
+      "category": "regex_patterns",
+      "value": "`json:\"json_ld_types\"`",
+      "context": "JSONLDTypes      []string `json:\"json_ld_types\"`"
+    },
+    {
+      "line": 109,
+      "category": "json_field_names",
+      "value": "has_microdata",
+      "context": "HasMicrodata     bool     `json:\"has_microdata\"`"
+    },
+    {
+      "line": 109,
+      "category": "regex_patterns",
+      "value": "`json:\"has_microdata\"`",
+      "context": "HasMicrodata     bool     `json:\"has_microdata\"`"
+    },
+    {
+      "line": 110,
+      "category": "json_field_names",
+      "value": "microdata_types",
+      "context": "MicrodataTypes   []string `json:\"microdata_types\"`"
+    },
+    {
+      "line": 110,
+      "category": "regex_patterns",
+      "value": "`json:\"microdata_types\"`",
+      "context": "MicrodataTypes   []string `json:\"microdata_types\"`"
+    },
+    {
+      "line": 111,
+      "category": "json_field_names",
+      "value": "has_rdfa",
+      "context": "HasRDFa          bool     `json:\"has_rdfa\"`"
+    },
+    {
+      "line": 111,
+      "category": "regex_patterns",
+      "value": "`json:\"has_rdfa\"`",
+      "context": "HasRDFa          bool     `json:\"has_rdfa\"`"
+    },
+    {
+      "line": 112,
+      "category": "json_field_names",
+      "value": "issues",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 112,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "Issues           []string `json:\"issues\"`"
+    },
+    {
+      "line": 113,
+      "category": "json_field_names",
+      "value": "recommendations",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 113,
+      "category": "regex_patterns",
+      "value": "`json:\"recommendations\"`",
+      "context": "Recommendations  []string `json:\"recommendations\"`"
+    },
+    {
+      "line": 118,
+      "category": "json_field_names",
+      "value": "property",
+      "context": "Property string `json:\"property\"`"
+    },
+    {
+      "line": 118,
+      "category": "html_attributes",
+      "value": "property",
+      "context": "Property string `json:\"property\"`"
+    },
+    {
+      "line": 118,
+      "category": "regex_patterns",
+      "value": "`json:\"property\"`",
+      "context": "Property string `json:\"property\"`"
+    },
+    {
+      "line": 119,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "Content  string `json:\"content\"`"
+    },
+    {
+      "line": 119,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "Content  string `json:\"content\"`"
+    },
+    {
+      "line": 119,
+      "category": "regex_patterns",
+      "value": "`json:\"content\"`",
+      "context": "Content  string `json:\"content\"`"
+    },
+    {
+      "line": 124,
+      "category": "json_field_names",
+      "value": "name",
+      "context": "Name    string `json:\"name\"`"
+    },
+    {
+      "line": 124,
+      "category": "html_attributes",
+      "value": "name",
+      "context": "Name    string `json:\"name\"`"
+    },
+    {
+      "line": 124,
+      "category": "regex_patterns",
+      "value": "`json:\"name\"`",
+      "context": "Name    string `json:\"name\"`"
+    },
+    {
+      "line": 125,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "Content string `json:\"content\"`"
+    },
+    {
+      "line": 125,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "Content string `json:\"content\"`"
+    },
+    {
+      "line": 125,
+      "category": "regex_patterns",
+      "value": "`json:\"content\"`",
+      "context": "Content string `json:\"content\"`"
+    },
+    {
+      "line": 131,
+      "category": "regex_patterns",
+      "value": "`^.{1,200}$`",
+      "context": "titleRegex:    regexp.MustCompile(`^.{1,200}$`),"
+    },
+    {
+      "line": 131,
+      "category": "length_thresholds",
+      "value": "200",
+      "context": "titleRegex:    regexp.MustCompile(`^.{1,200}$`),"
+    },
+    {
+      "line": 132,
+      "category": "regex_patterns",
+      "value": "`^.{1,300}$`",
+      "context": "metaDescRegex: regexp.MustCompile(`^.{1,300}$`),"
+    },
+    {
+      "line": 132,
+      "category": "length_thresholds",
+      "value": "300",
+      "context": "metaDescRegex: regexp.MustCompile(`^.{1,300}$`),"
+    },
+    {
+      "line": 133,
+      "category": "regex_patterns",
+      "value": "`^https?://[^\\s/$.?#].[^\\s]*$`",
+      "context": "urlRegex:      regexp.MustCompile(`^https?://[^\\s/$.?#].[^\\s]*$`),"
+    },
+    {
+      "line": 134,
+      "category": "regex_patterns",
+      "value": "`\\.(webp|avif|jpg|jpeg|png|gif|svg)$`",
+      "context": "imageExtRegex: regexp.MustCompile(`\\.(webp|avif|jpg|jpeg|png|gif|svg)$`),"
+    },
+    {
+      "line": 176,
+      "category": "error_messages",
+      "value": "Balise title manquante",
+      "context": "analysis.Issues = append(analysis.Issues, \"Balise title manquante\")"
+    },
+    {
+      "line": 177,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter une balise <title> descriptive\")"
+    },
+    {
+      "line": 186,
+      "category": "length_thresholds",
+      "value": "30",
+      "context": "if analysis.Length >= 30 && analysis.Length <= 60 {"
+    },
+    {
+      "line": 186,
+      "category": "length_thresholds",
+      "value": "60",
+      "context": "if analysis.Length >= 30 && analysis.Length <= 60 {"
+    },
+    {
+      "line": 188,
+      "category": "length_thresholds",
+      "value": "30",
+      "context": "} else if analysis.Length < 30 {"
+    },
+    {
+      "line": 189,
+      "category": "error_messages",
+      "value": "Titre trop court",
+      "context": "analysis.Issues = append(analysis.Issues, \"Titre trop court\")"
+    },
+    {
+      "line": 190,
+      "category": "recommendations",
+      "value": "\u00c9tendre",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9tendre le titre (30-60 caract\u00e8res optimal)\")"
+    },
+    {
+      "line": 190,
+      "category": "length_thresholds",
+      "value": "30",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9tendre le titre (30-60 caract\u00e8res optimal)\")"
+    },
+    {
+      "line": 190,
+      "category": "length_thresholds",
+      "value": "60",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9tendre le titre (30-60 caract\u00e8res optimal)\")"
+    },
+    {
+      "line": 192,
+      "category": "error_messages",
+      "value": "Titre trop long",
+      "context": "analysis.Issues = append(analysis.Issues, \"Titre trop long\")"
+    },
+    {
+      "line": 193,
+      "category": "recommendations",
+      "value": "Raccourcir",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Raccourcir le titre (risque de troncature)\")"
+    },
+    {
+      "line": 204,
+      "category": "magic_numbers",
+      "value": "3",
+      "context": "if count > 1 && len(word) > 3 {"
+    },
+    {
+      "line": 211,
+      "category": "recommendations",
+      "value": "\u00c9viter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9viter la r\u00e9p\u00e9tition de mots dans le titre\")"
+    },
+    {
+      "line": 215,
+      "category": "magic_numbers",
+      "value": "3",
+      "context": "if len(words) >= 3 {"
+    },
+    {
+      "line": 230,
+      "category": "meta_names",
+      "value": "description",
+      "context": "metaDesc := ta.findMetaByName(doc, \"description\")"
+    },
+    {
+      "line": 232,
+      "category": "error_messages",
+      "value": "Meta description manquante",
+      "context": "analysis.Issues = append(analysis.Issues, \"Meta description manquante\")"
+    },
+    {
+      "line": 233,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter une meta description attrayante\")"
+    },
+    {
+      "line": 242,
+      "category": "length_thresholds",
+      "value": "120",
+      "context": "if analysis.Length >= 120 && analysis.Length <= 160 {"
+    },
+    {
+      "line": 242,
+      "category": "length_thresholds",
+      "value": "160",
+      "context": "if analysis.Length >= 120 && analysis.Length <= 160 {"
+    },
+    {
+      "line": 244,
+      "category": "length_thresholds",
+      "value": "120",
+      "context": "} else if analysis.Length < 120 {"
+    },
+    {
+      "line": 245,
+      "category": "error_messages",
+      "value": "Meta description trop courte",
+      "context": "analysis.Issues = append(analysis.Issues, \"Meta description trop courte\")"
+    },
+    {
+      "line": 246,
+      "category": "recommendations",
+      "value": "\u00c9tendre",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9tendre la meta description (120-160 caract\u00e8res)\")"
+    },
+    {
+      "line": 246,
+      "category": "length_thresholds",
+      "value": "120",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9tendre la meta description (120-160 caract\u00e8res)\")"
+    },
+    {
+      "line": 246,
+      "category": "length_thresholds",
+      "value": "160",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"\u00c9tendre la meta description (120-160 caract\u00e8res)\")"
+    },
+    {
+      "line": 248,
+      "category": "error_messages",
+      "value": "Meta description trop longue",
+      "context": "analysis.Issues = append(analysis.Issues, \"Meta description trop longue\")"
+    },
+    {
+      "line": 249,
+      "category": "recommendations",
+      "value": "Raccourcir",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Raccourcir la meta description\")"
+    },
+    {
+      "line": 254,
+      "category": "call_to_action_words",
+      "value": "d\u00e9couvrir",
+      "context": "\"d\u00e9couvrir\", \"en savoir plus\", \"contacter\", \"commander\", \"acheter\","
+    },
+    {
+      "line": 254,
+      "category": "call_to_action_words",
+      "value": "contacter",
+      "context": "\"d\u00e9couvrir\", \"en savoir plus\", \"contacter\", \"commander\", \"acheter\","
+    },
+    {
+      "line": 254,
+      "category": "call_to_action_words",
+      "value": "commander",
+      "context": "\"d\u00e9couvrir\", \"en savoir plus\", \"contacter\", \"commander\", \"acheter\","
+    },
+    {
+      "line": 254,
+      "category": "call_to_action_words",
+      "value": "acheter",
+      "context": "\"d\u00e9couvrir\", \"en savoir plus\", \"contacter\", \"commander\", \"acheter\","
+    },
+    {
+      "line": 255,
+      "category": "call_to_action_words",
+      "value": "t\u00e9l\u00e9charger",
+      "context": "\"t\u00e9l\u00e9charger\", \"s'inscrire\", \"essayer\", \"commencer\", \"cliquer\","
+    },
+    {
+      "line": 255,
+      "category": "call_to_action_words",
+      "value": "essayer",
+      "context": "\"t\u00e9l\u00e9charger\", \"s'inscrire\", \"essayer\", \"commencer\", \"cliquer\","
+    },
+    {
+      "line": 255,
+      "category": "call_to_action_words",
+      "value": "commencer",
+      "context": "\"t\u00e9l\u00e9charger\", \"s'inscrire\", \"essayer\", \"commencer\", \"cliquer\","
+    },
+    {
+      "line": 255,
+      "category": "call_to_action_words",
+      "value": "cliquer",
+      "context": "\"t\u00e9l\u00e9charger\", \"s'inscrire\", \"essayer\", \"commencer\", \"cliquer\","
+    },
+    {
+      "line": 256,
+      "category": "call_to_action_words",
+      "value": "discover",
+      "context": "\"discover\", \"learn more\", \"contact\", \"order\", \"buy\", \"download\","
+    },
+    {
+      "line": 256,
+      "category": "call_to_action_words",
+      "value": "contact",
+      "context": "\"discover\", \"learn more\", \"contact\", \"order\", \"buy\", \"download\","
+    },
+    {
+      "line": 256,
+      "category": "call_to_action_words",
+      "value": "order",
+      "context": "\"discover\", \"learn more\", \"contact\", \"order\", \"buy\", \"download\","
+    },
+    {
+      "line": 256,
+      "category": "call_to_action_words",
+      "value": "buy",
+      "context": "\"discover\", \"learn more\", \"contact\", \"order\", \"buy\", \"download\","
+    },
+    {
+      "line": 256,
+      "category": "call_to_action_words",
+      "value": "download",
+      "context": "\"discover\", \"learn more\", \"contact\", \"order\", \"buy\", \"download\","
+    },
+    {
+      "line": 257,
+      "category": "call_to_action_words",
+      "value": "try",
+      "context": "\"sign up\", \"try\", \"start\", \"click\","
+    },
+    {
+      "line": 257,
+      "category": "call_to_action_words",
+      "value": "start",
+      "context": "\"sign up\", \"try\", \"start\", \"click\","
+    },
+    {
+      "line": 257,
+      "category": "call_to_action_words",
+      "value": "click",
+      "context": "\"sign up\", \"try\", \"start\", \"click\","
+    },
+    {
+      "line": 269,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter un appel \u00e0 l'action dans la meta description\")"
+    },
+    {
+      "line": 286,
+      "category": "heading_levels",
+      "value": "h1",
+      "context": "levelNames := []string{\"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\"}"
+    },
+    {
+      "line": 286,
+      "category": "heading_levels",
+      "value": "h2",
+      "context": "levelNames := []string{\"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\"}"
+    },
+    {
+      "line": 286,
+      "category": "heading_levels",
+      "value": "h3",
+      "context": "levelNames := []string{\"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\"}"
+    },
+    {
+      "line": 286,
+      "category": "heading_levels",
+      "value": "h4",
+      "context": "levelNames := []string{\"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\"}"
+    },
+    {
+      "line": 286,
+      "category": "heading_levels",
+      "value": "h5",
+      "context": "levelNames := []string{\"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\"}"
+    },
+    {
+      "line": 286,
+      "category": "heading_levels",
+      "value": "h6",
+      "context": "levelNames := []string{\"h1\", \"h2\", \"h3\", \"h4\", \"h5\", \"h6\"}"
+    },
+    {
+      "line": 309,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter un titre H1 principal\")"
+    },
+    {
+      "line": 318,
+      "category": "error_messages",
+      "value": "Hi\u00e9rarchie des titres incorrecte",
+      "context": "analysis.Issues = append(analysis.Issues, \"Hi\u00e9rarchie des titres incorrecte\")"
+    },
+    {
+      "line": 319,
+      "category": "recommendations",
+      "value": "Respecter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Respecter la hi\u00e9rarchie H1 > H2 > H3...\")"
+    },
+    {
+      "line": 335,
+      "category": "meta_names",
+      "value": "robots",
+      "context": "robots := ta.findMetaByName(doc, \"robots\")"
+    },
+    {
+      "line": 342,
+      "category": "html_values",
+      "value": "canonical",
+      "context": "canonical := ta.findLinkByRel(doc, \"canonical\")"
+    },
+    {
+      "line": 347,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter une URL canonique\")"
+    },
+    {
+      "line": 351,
+      "category": "meta_names",
+      "value": "viewport",
+      "context": "viewport := ta.findMetaByName(doc, \"viewport\")"
+    },
+    {
+      "line": 356,
+      "category": "error_messages",
+      "value": "Meta viewport manquante",
+      "context": "analysis.Issues = append(analysis.Issues, \"Meta viewport manquante\")"
+    },
+    {
+      "line": 357,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter meta viewport pour le responsive\")"
+    },
+    {
+      "line": 361,
+      "category": "html_values",
+      "value": "og:",
+      "context": "ogTags := ta.findAllMetaByProperty(doc, \"og:\")"
+    },
+    {
+      "line": 371,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter les balises Open Graph\")"
+    },
+    {
+      "line": 375,
+      "category": "html_values",
+      "value": "twitter:",
+      "context": "twitterTags := ta.findAllMetaByName(doc, \"twitter:\")"
+    },
+    {
+      "line": 385,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter les balises Twitter Card\")"
+    },
+    {
+      "line": 407,
+      "category": "html_attributes",
+      "value": "src",
+      "context": "src := ta.getAttr(img, \"src\")"
+    },
+    {
+      "line": 408,
+      "category": "html_attributes",
+      "value": "alt",
+      "context": "alt := ta.getAttr(img, \"alt\")"
+    },
+    {
+      "line": 409,
+      "category": "html_attributes",
+      "value": "loading",
+      "context": "loading := ta.getAttr(img, \"loading\")"
+    },
+    {
+      "line": 423,
+      "category": "html_values",
+      "value": "lazy",
+      "context": "if loading == \"lazy\" {"
+    },
+    {
+      "line": 431,
+      "category": "magic_numbers",
+      "value": "1.0",
+      "context": "if analysis.AltTextCoverage < 1.0 {"
+    },
+    {
+      "line": 433,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter des textes alternatifs \u00e0 toutes les images\")"
+    },
+    {
+      "line": 437,
+      "category": "recommendations",
+      "value": "Impl\u00e9menter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Impl\u00e9menter le lazy loading pour les images\")"
+    },
+    {
+      "line": 452,
+      "category": "bad_anchor_texts",
+      "value": "cliquez ici",
+      "context": "badAnchors := []string{\"cliquez ici\", \"click here\", \"lire la suite\", \"read more\", \"ici\", \"here\"}"
+    },
+    {
+      "line": 452,
+      "category": "bad_anchor_texts",
+      "value": "click here",
+      "context": "badAnchors := []string{\"cliquez ici\", \"click here\", \"lire la suite\", \"read more\", \"ici\", \"here\"}"
+    },
+    {
+      "line": 452,
+      "category": "bad_anchor_texts",
+      "value": "lire la suite",
+      "context": "badAnchors := []string{\"cliquez ici\", \"click here\", \"lire la suite\", \"read more\", \"ici\", \"here\"}"
+    },
+    {
+      "line": 452,
+      "category": "bad_anchor_texts",
+      "value": "read more",
+      "context": "badAnchors := []string{\"cliquez ici\", \"click here\", \"lire la suite\", \"read more\", \"ici\", \"here\"}"
+    },
+    {
+      "line": 452,
+      "category": "bad_anchor_texts",
+      "value": "ici",
+      "context": "badAnchors := []string{\"cliquez ici\", \"click here\", \"lire la suite\", \"read more\", \"ici\", \"here\"}"
+    },
+    {
+      "line": 452,
+      "category": "bad_anchor_texts",
+      "value": "here",
+      "context": "badAnchors := []string{\"cliquez ici\", \"click here\", \"lire la suite\", \"read more\", \"ici\", \"here\"}"
+    },
+    {
+      "line": 455,
+      "category": "html_attributes",
+      "value": "href",
+      "context": "href := ta.getAttr(link, \"href\")"
+    },
+    {
+      "line": 456,
+      "category": "html_attributes",
+      "value": "rel",
+      "context": "rel := ta.getAttr(link, \"rel\")"
+    },
+    {
+      "line": 471,
+      "category": "html_values",
+      "value": "nofollow",
+      "context": "if strings.Contains(rel, \"nofollow\") {"
+    },
+    {
+      "line": 486,
+      "category": "magic_numbers",
+      "value": "3",
+      "context": "if isGoodAnchor && len(text) > 3 {"
+    },
+    {
+      "line": 497,
+      "category": "magic_numbers",
+      "value": "3",
+      "context": "if analysis.InternalLinks < 3 {"
+    },
+    {
+      "line": 498,
+      "category": "recommendations",
+      "value": "Am\u00e9liorer",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Am\u00e9liorer le maillage interne\")"
+    },
+    {
+      "line": 501,
+      "category": "magic_numbers",
+      "value": "0.7",
+      "context": "if analysis.AnchorOptimization < 0.7 {"
+    },
+    {
+      "line": 503,
+      "category": "recommendations",
+      "value": "Optimiser",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Optimiser les textes d'ancres des liens\")"
+    },
+    {
+      "line": 521,
+      "category": "html_attributes",
+      "value": "type",
+      "context": "scriptType := ta.getAttr(script, \"type\")"
+    },
+    {
+      "line": 522,
+      "category": "html_values",
+      "value": "application/ld+json",
+      "context": "if scriptType == \"application/ld+json\" {"
+    },
+    {
+      "line": 530,
+      "category": "html_values",
+      "value": "itemscope",
+      "context": "if strings.Contains(htmlContent, \"itemscope\") {"
+    },
+    {
+      "line": 535,
+      "category": "html_values",
+      "value": "typeof",
+      "context": "if strings.Contains(htmlContent, \"typeof\") || strings.Contains(htmlContent, \"vocab\") {"
+    },
+    {
+      "line": 535,
+      "category": "html_values",
+      "value": "vocab",
+      "context": "if strings.Contains(htmlContent, \"typeof\") || strings.Contains(htmlContent, \"vocab\") {"
+    },
+    {
+      "line": 541,
+      "category": "recommendations",
+      "value": "Ajouter",
+      "context": "analysis.Recommendations = append(analysis.Recommendations, \"Ajouter des donn\u00e9es structur\u00e9es (JSON-LD recommand\u00e9)\")"
+    },
+    {
+      "line": 573,
+      "category": "json_field_names",
+      "value": "name",
+      "context": "nameAttr := ta.getAttr(n, \"name\")"
+    },
+    {
+      "line": 573,
+      "category": "html_attributes",
+      "value": "name",
+      "context": "nameAttr := ta.getAttr(n, \"name\")"
+    },
+    {
+      "line": 575,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "content = ta.getAttr(n, \"content\")"
+    },
+    {
+      "line": 575,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "content = ta.getAttr(n, \"content\")"
+    },
+    {
+      "line": 586,
+      "category": "html_attributes",
+      "value": "rel",
+      "context": "relAttr := ta.getAttr(n, \"rel\")"
+    },
+    {
+      "line": 588,
+      "category": "html_attributes",
+      "value": "href",
+      "context": "href = ta.getAttr(n, \"href\")"
+    },
+    {
+      "line": 599,
+      "category": "json_field_names",
+      "value": "property",
+      "context": "property := ta.getAttr(n, \"property\")"
+    },
+    {
+      "line": 599,
+      "category": "html_attributes",
+      "value": "property",
+      "context": "property := ta.getAttr(n, \"property\")"
+    },
+    {
+      "line": 601,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "content := ta.getAttr(n, \"content\")"
+    },
+    {
+      "line": 601,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "content := ta.getAttr(n, \"content\")"
+    },
+    {
+      "line": 613,
+      "category": "json_field_names",
+      "value": "name",
+      "context": "name := ta.getAttr(n, \"name\")"
+    },
+    {
+      "line": 613,
+      "category": "html_attributes",
+      "value": "name",
+      "context": "name := ta.getAttr(n, \"name\")"
+    },
+    {
+      "line": 615,
+      "category": "json_field_names",
+      "value": "content",
+      "context": "content := ta.getAttr(n, \"content\")"
+    },
+    {
+      "line": 615,
+      "category": "html_attributes",
+      "value": "content",
+      "context": "content := ta.getAttr(n, \"content\")"
+    },
+    {
+      "line": 625,
+      "category": "heading_levels",
+      "value": "h1",
+      "context": "h1Count := len(structure[\"h1\"])"
+    },
+    {
+      "line": 626,
+      "category": "heading_levels",
+      "value": "h2",
+      "context": "h2Count := len(structure[\"h2\"])"
+    }
+  ],
+  "constants_mapping": {
+    "\"title\"": "constants.TagJSONFieldTitle",
+    "\"meta_description\"": "constants.TagJSONFieldMetaDescription",
+    "\"headings\"": "constants.TagJSONFieldHeadings",
+    "\"meta_tags\"": "constants.TagJSONFieldMetaTags",
+    "\"images\"": "constants.TagJSONFieldImages",
+    "\"links\"": "constants.TagJSONFieldLinks",
+    "\"microdata\"": "constants.TagJSONFieldMicrodata",
+    "\"present\"": "constants.TagJSONFieldPresent",
+    "\"content\"": "constants.TagAttrContent",
+    "\"length\"": "constants.TagJSONFieldLength",
+    "\"optimal_length\"": "constants.TagJSONFieldOptimalLength",
+    "\"has_keywords\"": "constants.TagJSONFieldHasKeywords",
+    "\"duplicate_words\"": "constants.TagJSONFieldDuplicateWords",
+    "\"issues\"": "constants.TagJSONFieldIssues",
+    "\"recommendations\"": "constants.TagJSONFieldRecommendations",
+    "\"has_call_to_action\"": "constants.TagJSONFieldHasCallToAction",
+    "\"h1_count\"": "constants.TagJSONFieldH1Count",
+    "\"h1_content\"": "constants.TagJSONFieldH1Content",
+    "\"heading_structure\"": "constants.TagJSONFieldHeadingStructure",
+    "\"has_hierarchy\"": "constants.TagJSONFieldHasHierarchy",
+    "\"missing_levels\"": "constants.TagJSONFieldMissingLevels",
+    "\"has_robots\"": "constants.TagJSONFieldHasRobots",
+    "\"robots_content\"": "constants.TagJSONFieldRobotsContent",
+    "\"has_canonical\"": "constants.TagJSONFieldHasCanonical",
+    "\"canonical_url\"": "constants.TagJSONFieldCanonicalURL",
+    "\"has_og_tags\"": "constants.TagJSONFieldHasOGTags",
+    "\"og_tags\"": "constants.TagJSONFieldOGTags",
+    "\"has_twitter_card\"": "constants.TagJSONFieldHasTwitterCard",
+    "\"twitter_card\"": "constants.TagJSONFieldTwitterCard",
+    "\"has_viewport\"": "constants.TagJSONFieldHasViewport",
+    "\"viewport_content\"": "constants.TagJSONFieldViewportContent",
+    "\"total_images\"": "constants.TagJSONFieldTotalImages",
+    "\"images_with_alt\"": "constants.TagJSONFieldImagesWithAlt",
+    "\"alt_text_coverage\"": "constants.TagJSONFieldAltTextCoverage",
+    "\"missing_alt_images\"": "constants.TagJSONFieldMissingAltImages",
+    "\"optimized_formats\"": "constants.TagJSONFieldOptimizedFormats",
+    "\"lazy_loading\"": "constants.TagJSONFieldLazyLoading",
+    "\"internal_links\"": "constants.TagJSONFieldInternalLinks",
+    "\"external_links\"": "constants.TagJSONFieldExternalLinks",
+    "\"nofollow_links\"": "constants.TagJSONFieldNoFollowLinks",
+    "\"broken_links\"": "constants.TagJSONFieldBrokenLinks",
+    "\"anchor_optimization\"": "constants.TagJSONFieldAnchorOptimization",
+    "\"has_json_ld\"": "constants.TagJSONFieldHasJSONLD",
+    "\"json_ld_types\"": "constants.TagJSONFieldJSONLDTypes",
+    "\"has_microdata\"": "constants.TagJSONFieldHasMicrodata",
+    "\"microdata_types\"": "constants.TagJSONFieldMicrodataTypes",
+    "\"has_rdfa\"": "constants.TagJSONFieldHasRDFa",
+    "\"property\"": "constants.TagAttrProperty",
+    "\"name\"": "constants.TagAttrName",
+    "\"description\"": "constants.TagMetaNameDescription",
+    "\"robots\"": "constants.TagMetaNameRobots",
+    "\"viewport\"": "constants.TagMetaNameViewport",
+    "\"src\"": "constants.TagAttrSrc",
+    "\"alt\"": "constants.TagAttrAlt",
+    "\"loading\"": "constants.TagAttrLoading",
+    "\"href\"": "constants.TagAttrHref",
+    "\"rel\"": "constants.TagAttrRel",
+    "\"type\"": "constants.TagAttrType",
+    "\"canonical\"": "constants.TagValueCanonical",
+    "\"og:\"": "constants.TagPrefixOG",
+    "\"twitter:\"": "constants.TagPrefixTwitter",
+    "\"lazy\"": "constants.TagValueLazy",
+    "\"nofollow\"": "constants.TagValueNoFollow",
+    "\"application/ld+json\"": "constants.TagValueJSONLD",
+    "\"itemscope\"": "constants.TagValueItemScope",
+    "\"typeof\"": "constants.TagValueTypeOf",
+    "\"vocab\"": "constants.TagValueVocab"
+  }
+}

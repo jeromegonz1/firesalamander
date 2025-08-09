@@ -1,0 +1,213 @@
+{
+  "total_violations": 32,
+  "categories": {
+    "test_names": 2,
+    "success_messages": 9,
+    "error_messages": 4,
+    "test_data": 6,
+    "analysis_types": 6,
+    "agent_names": 4,
+    "test_categories": 1
+  },
+  "violations": [
+    {
+      "line": 7,
+      "category": "test_names",
+      "value": "testing",
+      "context": "\"testing\""
+    },
+    {
+      "line": 115,
+      "category": "success_messages",
+      "value": "\"URL incorrecte: %s\"",
+      "context": "t.Errorf(\"URL incorrecte: %s\", result.URL)"
+    },
+    {
+      "line": 119,
+      "category": "error_messages",
+      "value": "\"Score global invalide: %.1f\"",
+      "context": "t.Errorf(\"Score global invalide: %.1f\", result.OverallScore)"
+    },
+    {
+      "line": 119,
+      "category": "success_messages",
+      "value": "\"Score global invalide: %.1f\"",
+      "context": "t.Errorf(\"Score global invalide: %.1f\", result.OverallScore)"
+    },
+    {
+      "line": 127,
+      "category": "error_messages",
+      "value": "\"Temps de traitement invalide\"",
+      "context": "t.Error(\"Temps de traitement invalide\")"
+    },
+    {
+      "line": 127,
+      "category": "success_messages",
+      "value": "\"Temps de traitement invalide\"",
+      "context": "t.Error(\"Temps de traitement invalide\")"
+    },
+    {
+      "line": 197,
+      "category": "test_data",
+      "value": "test_task_123",
+      "context": "TaskID:         \"test_task_123\","
+    },
+    {
+      "line": 205,
+      "category": "analysis_types",
+      "value": "content",
+      "context": "\"content\":     80.0,"
+    },
+    {
+      "line": 206,
+      "category": "analysis_types",
+      "value": "technical",
+      "context": "\"technical\":   70.0,"
+    },
+    {
+      "line": 207,
+      "category": "agent_names",
+      "value": "performance",
+      "context": "\"performance\": 75.0,"
+    },
+    {
+      "line": 207,
+      "category": "analysis_types",
+      "value": "performance",
+      "context": "\"performance\": 75.0,"
+    },
+    {
+      "line": 207,
+      "category": "test_categories",
+      "value": "performance",
+      "context": "\"performance\": 75.0,"
+    },
+    {
+      "line": 220,
+      "category": "test_names",
+      "value": "test_insight",
+      "context": "Type:        \"test_insight\","
+    },
+    {
+      "line": 220,
+      "category": "test_data",
+      "value": "test_insight",
+      "context": "Type:        \"test_insight\","
+    },
+    {
+      "line": 225,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "Modules:     []string{\"seo\", \"semantic\"},"
+    },
+    {
+      "line": 225,
+      "category": "agent_names",
+      "value": "semantic",
+      "context": "Modules:     []string{\"seo\", \"semantic\"},"
+    },
+    {
+      "line": 225,
+      "category": "analysis_types",
+      "value": "seo",
+      "context": "Modules:     []string{\"seo\", \"semantic\"},"
+    },
+    {
+      "line": 225,
+      "category": "analysis_types",
+      "value": "semantic",
+      "context": "Modules:     []string{\"seo\", \"semantic\"},"
+    },
+    {
+      "line": 231,
+      "category": "test_data",
+      "value": "test_action_1",
+      "context": "ID:          \"test_action_1\","
+    },
+    {
+      "line": 237,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "Module:      \"seo\","
+    },
+    {
+      "line": 237,
+      "category": "analysis_types",
+      "value": "seo",
+      "context": "Module:      \"seo\","
+    },
+    {
+      "line": 275,
+      "category": "error_messages",
+      "value": "\"Taille de rapport invalide\"",
+      "context": "t.Error(\"Taille de rapport invalide\")"
+    },
+    {
+      "line": 275,
+      "category": "success_messages",
+      "value": "\"Taille de rapport invalide\"",
+      "context": "t.Error(\"Taille de rapport invalide\")"
+    },
+    {
+      "line": 312,
+      "category": "test_data",
+      "value": "test_firesalamander.db",
+      "context": "dbPath := filepath.Join(tempDir, \"test_firesalamander.db\")"
+    },
+    {
+      "line": 328,
+      "category": "test_data",
+      "value": "test_storage_123",
+      "context": "TaskID:         \"test_storage_123\","
+    },
+    {
+      "line": 343,
+      "category": "test_data",
+      "value": "test_storage_123",
+      "context": "retrieved, err := storage.GetAnalysis(\"test_storage_123\")"
+    },
+    {
+      "line": 349,
+      "category": "success_messages",
+      "value": "\"TaskID incorrect: %s vs %s\"",
+      "context": "t.Errorf(\"TaskID incorrect: %s vs %s\", retrieved.TaskID, result.TaskID)"
+    },
+    {
+      "line": 353,
+      "category": "success_messages",
+      "value": "\"Score incorrect: %.1f vs %.1f\"",
+      "context": "t.Errorf(\"Score incorrect: %.1f vs %.1f\", retrieved.OverallScore, result.OverallScore)"
+    },
+    {
+      "line": 363,
+      "category": "success_messages",
+      "value": "\"Nombre d'analyses incorrect: %d\"",
+      "context": "t.Errorf(\"Nombre d'analyses incorrect: %d\", len(history.Analyses))"
+    },
+    {
+      "line": 373,
+      "category": "success_messages",
+      "value": "\"Nombre total d'analyses incorrect: %v\"",
+      "context": "t.Errorf(\"Nombre total d'analyses incorrect: %v\", stats[\"total_analyses\"])"
+    },
+    {
+      "line": 464,
+      "category": "error_messages",
+      "value": "\"Score global invalide: %.1f\"",
+      "context": "t.Errorf(\"Score global invalide: %.1f\", result.OverallScore)"
+    },
+    {
+      "line": 464,
+      "category": "success_messages",
+      "value": "\"Score global invalide: %.1f\"",
+      "context": "t.Errorf(\"Score global invalide: %.1f\", result.OverallScore)"
+    }
+  ],
+  "constants_mapping": {
+    "\"testing\"": "constants.IntegrationTestNameTesting",
+    "\"test_insight\"": "constants.IntegrationTestNameInsight",
+    "\"performance\"": "constants.IntegrationAgentPerformance",
+    "\"seo\"": "constants.IntegrationAgentSEO",
+    "\"semantic\"": "constants.IntegrationAgentSemantic"
+  }
+}

@@ -1,0 +1,1 @@
+./scripts/detect-hardcoding.sh: line 21: golangci-lint: command not found

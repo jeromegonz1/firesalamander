@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 	"firesalamander/internal/integration"
 )
 
@@ -277,7 +278,7 @@ func TestWebServerStartStop(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 
 	// Tester que le serveur répond
-	resp, err := http.Get("http://localhost:8083/web/health")
+	resp, err := http.Get(constants.TestServerLocalhost8083 + constants.TestEndpointHealthPath)
 	if err != nil {
 		t.Logf("Serveur probablement non démarré ou port occupé: %v", err)
 	} else {
@@ -351,7 +352,7 @@ func TestWebServerIntegration(t *testing.T) {
 	}
 
 	for _, route := range routes {
-		resp, err := http.Get("http://localhost:8084" + route)
+		resp, err := http.Get(constants.TestServerLocalhost8084 + route)
 		if err != nil {
 			t.Logf("Erreur requête %s: %v", route, err)
 			continue

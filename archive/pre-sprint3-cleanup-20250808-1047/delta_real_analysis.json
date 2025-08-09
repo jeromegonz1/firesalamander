@@ -1,0 +1,309 @@
+{
+  "real_violations": 2710,
+  "files_affected": 49,
+  "top_files": [
+    [
+      "internal/web/server.go",
+      146
+    ],
+    [
+      "internal/integration/api.go",
+      146
+    ],
+    [
+      "internal/semantic/ngram_analyzer.go",
+      111
+    ],
+    [
+      "internal/integration/integration_test.go",
+      108
+    ],
+    [
+      "tests/agents/security/security_agent.go",
+      97
+    ],
+    [
+      "internal/crawler/crawler_test.go",
+      96
+    ],
+    [
+      "internal/seo/seo_test.go",
+      94
+    ],
+    [
+      "internal/web/web_test.go",
+      93
+    ],
+    [
+      "internal/integration/reports.go",
+      87
+    ],
+    [
+      "internal/messages/messages.go",
+      78
+    ],
+    [
+      "tests/agents/qa/qa_agent.go",
+      77
+    ],
+    [
+      "internal/integration/orchestrator.go",
+      76
+    ],
+    [
+      "tests/agents/data/data_integrity_agent.go",
+      74
+    ],
+    [
+      "internal/seo/performance_analyzer.go",
+      74
+    ],
+    [
+      "tests/agents/frontend/playwright_agent.go",
+      73
+    ],
+    [
+      "internal/crawler/fetcher.go",
+      72
+    ],
+    [
+      "internal/semantic/ai_enricher.go",
+      71
+    ],
+    [
+      "internal/config/config_test.go",
+      70
+    ],
+    [
+      "internal/seo/technical_auditor.go",
+      68
+    ],
+    [
+      "cmd/server/main.go",
+      63
+    ],
+    [
+      "internal/integration/storage.go",
+      60
+    ],
+    [
+      "internal/semantic/content_extractor.go",
+      58
+    ],
+    [
+      "internal/api/handlers_test.go",
+      57
+    ],
+    [
+      "internal/api/handlers.go",
+      57
+    ],
+    [
+      "tests/agents/performance/k6_agent.go",
+      56
+    ],
+    [
+      "internal/seo/tag_analyzer.go",
+      54
+    ],
+    [
+      "internal/crawler/crawler.go",
+      46
+    ],
+    [
+      "internal/config/config.go",
+      45
+    ],
+    [
+      "cmd/server/main_test.go",
+      42
+    ],
+    [
+      "internal/crawler/sitemap.go",
+      42
+    ],
+    [
+      "internal/seo/recommendation_engine.go",
+      42
+    ],
+    [
+      "internal/crawler/robots.go",
+      37
+    ],
+    [
+      "internal/qa/hardcoding_test.go",
+      37
+    ],
+    [
+      "internal/seo/analyzer.go",
+      37
+    ],
+    [
+      "tests/agents/qa/qa_agent_test.go",
+      36
+    ],
+    [
+      "cmd/firesalamander/main.go",
+      33
+    ],
+    [
+      "internal/semantic/analyzer.go",
+      32
+    ],
+    [
+      "internal/crawler/cache.go",
+      27
+    ],
+    [
+      "internal/semantic/simple_test.go",
+      27
+    ],
+    [
+      "internal/api/simulator.go",
+      24
+    ],
+    [
+      "cmd/fire-salamander/main.go",
+      18
+    ],
+    [
+      "internal/logger/logger.go",
+      16
+    ],
+    [
+      "internal/debug/phase_tests.go",
+      16
+    ],
+    [
+      "internal/debug/checker.go",
+      16
+    ],
+    [
+      "internal/semantic/test_analyzer.go",
+      8
+    ],
+    [
+      "main.go",
+      4
+    ],
+    [
+      "internal/semantic/seo_scorer.go",
+      4
+    ],
+    [
+      "internal/config/version.go",
+      3
+    ],
+    [
+      "internal/api/models.go",
+      2
+    ]
+  ],
+  "delta_sprints": [
+    {
+      "sprint": "DELTA-1",
+      "target": "server.go",
+      "filepath": "internal/web/server.go",
+      "violations": 146,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-2",
+      "target": "api.go",
+      "filepath": "internal/integration/api.go",
+      "violations": 146,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-3",
+      "target": "ngram_analyzer.go",
+      "filepath": "internal/semantic/ngram_analyzer.go",
+      "violations": 111,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-4",
+      "target": "integration_test.go",
+      "filepath": "internal/integration/integration_test.go",
+      "violations": 108,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-5",
+      "target": "security_agent.go",
+      "filepath": "tests/agents/security/security_agent.go",
+      "violations": 97,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-6",
+      "target": "crawler_test.go",
+      "filepath": "internal/crawler/crawler_test.go",
+      "violations": 96,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-7",
+      "target": "seo_test.go",
+      "filepath": "internal/seo/seo_test.go",
+      "violations": 94,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-8",
+      "target": "web_test.go",
+      "filepath": "internal/web/web_test.go",
+      "violations": 93,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-9",
+      "target": "reports.go",
+      "filepath": "internal/integration/reports.go",
+      "violations": 87,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-10",
+      "target": "messages.go",
+      "filepath": "internal/messages/messages.go",
+      "violations": 78,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-11",
+      "target": "qa_agent.go",
+      "filepath": "tests/agents/qa/qa_agent.go",
+      "violations": 77,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-12",
+      "target": "orchestrator.go",
+      "filepath": "internal/integration/orchestrator.go",
+      "violations": 76,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-13",
+      "target": "data_integrity_agent.go",
+      "filepath": "tests/agents/data/data_integrity_agent.go",
+      "violations": 74,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-14",
+      "target": "performance_analyzer.go",
+      "filepath": "internal/seo/performance_analyzer.go",
+      "violations": 74,
+      "effort": "1.5h"
+    },
+    {
+      "sprint": "DELTA-15",
+      "target": "playwright_agent.go",
+      "filepath": "tests/agents/frontend/playwright_agent.go",
+      "violations": 73,
+      "effort": "1.5h"
+    }
+  ]
+}

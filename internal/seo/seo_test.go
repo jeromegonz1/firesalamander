@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"firesalamander/internal/constants"
 	"golang.org/x/net/html"
 )
 
@@ -20,7 +21,7 @@ func TestTagAnalyzerBasic(t *testing.T) {
 		<title>Test SEO Page - Guide Complet</title>
 		<meta name="description" content="Découvrez notre guide complet pour améliorer votre référencement naturel avec des techniques SEO éprouvées et efficaces.">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="canonical" href="https://example.com/guide-seo">
+		<link rel="canonical" href="` + constants.TestCanonicalExample + `">
 		<meta property="og:title" content="Guide SEO Complet">
 		<meta property="og:description" content="Le meilleur guide SEO pour optimiser votre site web">
 	</head>
@@ -32,7 +33,7 @@ func TestTagAnalyzerBasic(t *testing.T) {
 		<h2>Techniques avancées</h2>
 		<p>Découvrez les meilleures pratiques.</p>
 		<a href="/page-interne">Lien interne</a>
-		<a href="https://external.com">Lien externe</a>
+		<a href="` + constants.TestURLExternal + `">Lien externe</a>
 	</body>
 	</html>
 	`
@@ -166,7 +167,7 @@ func TestTechnicalAuditorBasic(t *testing.T) {
 		<title>Test Audit Technique</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="robots" content="index, follow">
-		<link rel="canonical" href="https://example.com/test">
+		<link rel="canonical" href="` + constants.TestCanonicalTest + `">
 	</head>
 	<body>
 		<h1>Test Audit</h1>
@@ -182,7 +183,7 @@ func TestTechnicalAuditorBasic(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	result, err := auditor.Audit(ctx, "https://example.com/test", doc, htmlContent)
+	result, err := auditor.Audit(ctx, constants.TestURLExampleTest, doc, htmlContent)
 	if err != nil {
 		t.Fatalf("Erreur audit: %v", err)
 	}
@@ -225,10 +226,10 @@ func TestRecommendationEngineBasic(t *testing.T) {
 
 	// Créer une analyse simulée avec des problèmes
 	analysis := &SEOAnalysisResult{
-		URL:          "https://example.com/test",
+		URL:          constants.TestURLExampleTest,
 		Domain:       "example.com",
 		Protocol:     "https",
-		StatusCode:   200,
+		StatusCode:   constants.HTTPStatusOK,
 		OverallScore: 45.5, // Score faible
 		CategoryScores: map[string]float64{
 			"tags":        0.3, // 30% - faible
@@ -272,7 +273,7 @@ func TestRecommendationEngineBasic(t *testing.T) {
 					Score: "poor",
 				},
 				FID: EstimatedMetric{
-					Value: 200, // Problème
+					Value: constants.HTTPStatusOK, // OK
 					Score: "needs-improvement",
 				},
 				CLS: EstimatedMetric{
@@ -307,7 +308,7 @@ func TestRecommendationEngineBasic(t *testing.T) {
 			},
 			Crawlability: CrawlabilityAudit{
 				InternalLinks: 1, // Problème
-				BrokenLinks:   []string{"http://broken.com"},
+				BrokenLinks:   []string{constants.TestURLBroken},
 			},
 		},
 	}

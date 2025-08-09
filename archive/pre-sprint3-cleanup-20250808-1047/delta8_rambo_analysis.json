@@ -1,0 +1,821 @@
+{
+  "mission": "DELTA-8 RAMBO ASSAULT",
+  "target": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/web/web_test.go",
+  "total_kills": 95,
+  "rambo_quote": "They drew first blood, not me!",
+  "violations": [
+    {
+      "line_number": 6,
+      "line_content": "\"net/http/httptest\"",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "net/http/httptest",
+      "suggested_constant": "WEB_NETHTTPHTTPTEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 7,
+      "line_content": "\"testing\"",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "testing",
+      "suggested_constant": "WEB_TESTING",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 19,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 19,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 20,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 23,
+      "line_content": "Port: 8080,",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8080",
+      "suggested_constant": "TEST_PORT_8080",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 28,
+      "line_content": "UserAgent: \"Fire Salamander Test Bot\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test Bot",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 28,
+      "line_content": "UserAgent: \"Fire Salamander Test Bot\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test Bot",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 39,
+      "line_content": "t.Fatalf(\"Erreur création orchestrateur: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 68,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 68,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 69,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 71,
+      "line_content": "Server: config.ServerConfig{Port: 8080},",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8080",
+      "suggested_constant": "TEST_PORT_8080",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 77,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/\", nil)",
+      "violation_type": "http_methods",
+      "hardcoded_value": "GET",
+      "suggested_constant": "HTTP_METHOD_GET",
+      "rambo_comment": "FIRST BLOOD! HTTP method needs extraction 💀"
+    },
+    {
+      "line_number": 85,
+      "line_content": "if resp.StatusCode != http.StatusOK {",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 86,
+      "line_content": "t.Errorf(\"Status code attendu: %d, reçu: %d\", http.StatusOK, resp.StatusCode)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 89,
+      "line_content": "contentType := resp.Header.Get(\"Content-Type\")",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Type",
+      "suggested_constant": "HEADER_CONTENT_TYPE",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 90,
+      "line_content": "if contentType != \"text/html; charset=utf-8\" {",
+      "violation_type": "content_types",
+      "hardcoded_value": "text/html",
+      "suggested_constant": "CONTENT_TYPE_HTML",
+      "rambo_comment": "Content-Type headers in crosshairs! ⚔️"
+    },
+    {
+      "line_number": 91,
+      "line_content": "t.Errorf(\"Content-Type attendu: text/html; charset=utf-8, reçu: %s\", contentType)",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Type",
+      "suggested_constant": "HEADER_CONTENT_TYPE",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 94,
+      "line_content": "t.Log(\"Interface web testée avec succès\")",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Interface web testée avec succès",
+      "suggested_constant": "WEB_INTERFACE_WEB",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 101,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 101,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 102,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 104,
+      "line_content": "Server: config.ServerConfig{Port: 8080},",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8080",
+      "suggested_constant": "TEST_PORT_8080",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 110,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/health\", nil)",
+      "violation_type": "http_methods",
+      "hardcoded_value": "GET",
+      "suggested_constant": "HTTP_METHOD_GET",
+      "rambo_comment": "FIRST BLOOD! HTTP method needs extraction 💀"
+    },
+    {
+      "line_number": 110,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/health\", nil)",
+      "violation_type": "urls_endpoints",
+      "hardcoded_value": "/web/health",
+      "suggested_constant": "ENDPOINT_HEALTH",
+      "rambo_comment": "URL endpoint detected - neutralize! 🔥"
+    },
+    {
+      "line_number": 110,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/health\", nil)",
+      "violation_type": "route_patterns",
+      "hardcoded_value": "/web/health",
+      "suggested_constant": "WEB_WEBHEALTH",
+      "rambo_comment": "Route pattern exposed - tactical assault! ⚔️"
+    },
+    {
+      "line_number": 118,
+      "line_content": "if resp.StatusCode != http.StatusOK {",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 119,
+      "line_content": "t.Errorf(\"Status code attendu: %d, reçu: %d\", http.StatusOK, resp.StatusCode)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 122,
+      "line_content": "contentType := resp.Header.Get(\"Content-Type\")",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Type",
+      "suggested_constant": "HEADER_CONTENT_TYPE",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 123,
+      "line_content": "if contentType != \"application/json\" {",
+      "violation_type": "content_types",
+      "hardcoded_value": "application/json",
+      "suggested_constant": "CONTENT_TYPE_JSON",
+      "rambo_comment": "Content-Type headers in crosshairs! ⚔️"
+    },
+    {
+      "line_number": 124,
+      "line_content": "t.Errorf(\"Content-Type attendu: application/json, reçu: %s\", contentType)",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Type",
+      "suggested_constant": "HEADER_CONTENT_TYPE",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 127,
+      "line_content": "t.Log(\"Route de santé web testée avec succès\")",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Route de santé web testée avec succès",
+      "suggested_constant": "WEB_ROUTE_DE",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 134,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 134,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 135,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 137,
+      "line_content": "Server: config.ServerConfig{Port: 8080},",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8080",
+      "suggested_constant": "TEST_PORT_8080",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 146,
+      "line_content": "filename := \"test-report.\" + format",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "test-report.",
+      "suggested_constant": "WEB_TEST-REPORT.",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 156,
+      "line_content": "if !contains(report, \"<!DOCTYPE html>\") {",
+      "violation_type": "html_content",
+      "hardcoded_value": "<!DOCTYPE html>",
+      "suggested_constant": "WEB_DOCTYPE_HTML",
+      "rambo_comment": "HTML content hardcoded - eliminate! ⚡"
+    },
+    {
+      "line_number": 160,
+      "line_content": "if !contains(report, `\"report\"`) {",
+      "violation_type": "json_fields",
+      "hardcoded_value": "report",
+      "suggested_constant": "WEB_REPORT",
+      "rambo_comment": "JSON field exposed - take the shot! 🎯"
+    },
+    {
+      "line_number": 177,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 177,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 178,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 180,
+      "line_content": "Server: config.ServerConfig{Port: 8080},",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8080",
+      "suggested_constant": "TEST_PORT_8080",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 186,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/download/test-report.html\", nil)",
+      "violation_type": "http_methods",
+      "hardcoded_value": "GET",
+      "suggested_constant": "HTTP_METHOD_GET",
+      "rambo_comment": "FIRST BLOOD! HTTP method needs extraction 💀"
+    },
+    {
+      "line_number": 186,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/download/test-report.html\", nil)",
+      "violation_type": "urls_endpoints",
+      "hardcoded_value": "/web/download/test-report.html",
+      "suggested_constant": "ENDPOINT_DOWNLOAD",
+      "rambo_comment": "URL endpoint detected - neutralize! 🔥"
+    },
+    {
+      "line_number": 186,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/download/test-report.html\", nil)",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "/web/download/test-report.html",
+      "suggested_constant": "WEB_WEBDOWNLOADTEST-REPORT.HTML",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 186,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/download/test-report.html\", nil)",
+      "violation_type": "file_extensions",
+      "hardcoded_value": "html",
+      "suggested_constant": "FILE_FORMAT_HTML",
+      "rambo_comment": "File extension hardcoded - explosive ordnance! 💥"
+    },
+    {
+      "line_number": 186,
+      "line_content": "req := httptest.NewRequest(\"GET\", \"/web/download/test-report.html\", nil)",
+      "violation_type": "route_patterns",
+      "hardcoded_value": "/web/download/test-report.html",
+      "suggested_constant": "WEB_WEBDOWNLOADTEST-REPORT.HTML",
+      "rambo_comment": "Route pattern exposed - tactical assault! ⚔️"
+    },
+    {
+      "line_number": 194,
+      "line_content": "if resp.StatusCode != http.StatusOK {",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 195,
+      "line_content": "t.Errorf(\"Status code attendu: %d, reçu: %d\", http.StatusOK, resp.StatusCode)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 198,
+      "line_content": "contentDisposition := resp.Header.Get(\"Content-Disposition\")",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Disposition",
+      "suggested_constant": "HEADER_CONTENT_DISPOSITION",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 199,
+      "line_content": "expectedDisposition := \"attachment; filename=test-report.html\"",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "attachment; filename=test-report.html",
+      "suggested_constant": "WEB_ATTACHMENT_FILENAMETEST-REPORT.HTML",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 199,
+      "line_content": "expectedDisposition := \"attachment; filename=test-report.html\"",
+      "violation_type": "file_extensions",
+      "hardcoded_value": "html",
+      "suggested_constant": "FILE_FORMAT_HTML",
+      "rambo_comment": "File extension hardcoded - explosive ordnance! 💥"
+    },
+    {
+      "line_number": 199,
+      "line_content": "expectedDisposition := \"attachment; filename=test-report.html\"",
+      "violation_type": "mime_types",
+      "hardcoded_value": "attachment; filename=",
+      "suggested_constant": "WEB_ATTACHMENT_FILENAME",
+      "rambo_comment": "MIME type in the open - sniper shot! 🎯"
+    },
+    {
+      "line_number": 201,
+      "line_content": "t.Errorf(\"Content-Disposition attendu: %s, reçu: %s\", expectedDisposition, contentDisposition)",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Disposition",
+      "suggested_constant": "HEADER_CONTENT_DISPOSITION",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 204,
+      "line_content": "contentType := resp.Header.Get(\"Content-Type\")",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Type",
+      "suggested_constant": "HEADER_CONTENT_TYPE",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 205,
+      "line_content": "if contentType != \"text/html\" {",
+      "violation_type": "content_types",
+      "hardcoded_value": "text/html",
+      "suggested_constant": "CONTENT_TYPE_HTML",
+      "rambo_comment": "Content-Type headers in crosshairs! ⚔️"
+    },
+    {
+      "line_number": 206,
+      "line_content": "t.Errorf(\"Content-Type attendu: text/html, reçu: %s\", contentType)",
+      "violation_type": "http_headers",
+      "hardcoded_value": "Content-Type",
+      "suggested_constant": "HEADER_CONTENT_TYPE",
+      "rambo_comment": "HTTP headers spotted - engage! 💥"
+    },
+    {
+      "line_number": 209,
+      "line_content": "t.Log(\"Téléchargement de rapport testé avec succès\")",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Téléchargement de rapport testé avec succès",
+      "suggested_constant": "WEB_TÉLÉCHARGEMENT_DE",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 216,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 216,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 217,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 219,
+      "line_content": "Server: config.ServerConfig{Port: 8080},",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8080",
+      "suggested_constant": "TEST_PORT_8080",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 228,
+      "line_content": "if stats[\"service\"] != \"web_server\" {",
+      "violation_type": "config_values",
+      "hardcoded_value": "web_server",
+      "suggested_constant": "SERVICE_WEB_SERVER",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 232,
+      "line_content": "if stats[\"status\"] != \"running\" {",
+      "violation_type": "config_values",
+      "hardcoded_value": "running",
+      "suggested_constant": "STATUS_RUNNING",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 251,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 251,
+      "line_content": "Name:    \"Fire Salamander Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 252,
+      "line_content": "Version: \"1.0.0-test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "1.0.0-test",
+      "suggested_constant": "WEB_1.0.0-TEST",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 254,
+      "line_content": "Server: config.ServerConfig{Port: 8083}, // Port différent pour éviter les conflits",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8083",
+      "suggested_constant": "TEST_PORT_8083",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 261,
+      "line_content": "t.Fatalf(\"Erreur démarrage serveur web: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 265,
+      "line_content": "time.Sleep(100 * time.Millisecond)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "100",
+      "suggested_constant": "HTTP_STATUS_100",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 268,
+      "line_content": "resp, err := http.Get(\"http://localhost:8083/web/health\")",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8083",
+      "suggested_constant": "TEST_PORT_8083",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 268,
+      "line_content": "resp, err := http.Get(\"http://localhost:8083/web/health\")",
+      "violation_type": "protocols",
+      "hardcoded_value": "http://",
+      "suggested_constant": "PROTOCOL_HTTP",
+      "rambo_comment": "Protocol scheme detected - air strike! ✈️"
+    },
+    {
+      "line_number": 273,
+      "line_content": "if resp.StatusCode != http.StatusOK {",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 274,
+      "line_content": "t.Errorf(\"Status code santé attendu: %d, reçu: %d\", http.StatusOK, resp.StatusCode)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 284,
+      "line_content": "t.Errorf(\"Erreur arrêt serveur web: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 295,
+      "line_content": "Name:    \"Fire Salamander Integration Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Integration Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 295,
+      "line_content": "Name:    \"Fire Salamander Integration Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Integration Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 298,
+      "line_content": "Server: config.ServerConfig{Port: 8084},",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8084",
+      "suggested_constant": "TEST_PORT_8084",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 302,
+      "line_content": "UserAgent: \"Fire Salamander Integration Test\",",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "Fire Salamander Integration Test",
+      "suggested_constant": "WEB_FIRE_SALAMANDER",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    },
+    {
+      "line_number": 302,
+      "line_content": "UserAgent: \"Fire Salamander Integration Test\",",
+      "violation_type": "config_values",
+      "hardcoded_value": "Fire Salamander Integration Test",
+      "suggested_constant": "APP_NAME_TEST",
+      "rambo_comment": "Config value exposed - breach and clear! 🏴‍☠️"
+    },
+    {
+      "line_number": 313,
+      "line_content": "t.Fatalf(\"Erreur création orchestrateur: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 324,
+      "line_content": "t.Fatalf(\"Erreur démarrage orchestrateur: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 330,
+      "line_content": "t.Fatalf(\"Erreur démarrage serveur web: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 333,
+      "line_content": "time.Sleep(100 * time.Millisecond)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "100",
+      "suggested_constant": "HTTP_STATUS_100",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 338,
+      "line_content": "\"/web/health\",",
+      "violation_type": "urls_endpoints",
+      "hardcoded_value": "/web/health",
+      "suggested_constant": "ENDPOINT_HEALTH",
+      "rambo_comment": "URL endpoint detected - neutralize! 🔥"
+    },
+    {
+      "line_number": 338,
+      "line_content": "\"/web/health\",",
+      "violation_type": "route_patterns",
+      "hardcoded_value": "/web/health",
+      "suggested_constant": "WEB_WEBHEALTH",
+      "rambo_comment": "Route pattern exposed - tactical assault! ⚔️"
+    },
+    {
+      "line_number": 342,
+      "line_content": "resp, err := http.Get(\"http://localhost:8084\" + route)",
+      "violation_type": "port_numbers",
+      "hardcoded_value": "8084",
+      "suggested_constant": "TEST_PORT_8084",
+      "rambo_comment": "Port number hardcoded - tactical strike needed! 💣"
+    },
+    {
+      "line_number": 342,
+      "line_content": "resp, err := http.Get(\"http://localhost:8084\" + route)",
+      "violation_type": "protocols",
+      "hardcoded_value": "http://",
+      "suggested_constant": "PROTOCOL_HTTP",
+      "rambo_comment": "Protocol scheme detected - air strike! ✈️"
+    },
+    {
+      "line_number": 344,
+      "line_content": "t.Logf(\"Erreur requête %s: %v\", route, err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 349,
+      "line_content": "if resp.StatusCode != http.StatusOK {",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 350,
+      "line_content": "t.Errorf(\"Route %s - Status attendu: %d, reçu: %d\", route, http.StatusOK, resp.StatusCode)",
+      "violation_type": "status_codes",
+      "hardcoded_value": "http.StatusOK",
+      "suggested_constant": "HTTP_STATUS_OK",
+      "rambo_comment": "Target locked on status codes! 🎯"
+    },
+    {
+      "line_number": 361,
+      "line_content": "t.Errorf(\"Erreur arrêt serveur web: %v\", err)",
+      "violation_type": "error_messages",
+      "hardcoded_value": "Erreur",
+      "suggested_constant": "ERROR_MSG_ERREUR",
+      "rambo_comment": "Error message needs extraction - go loud! 🚨"
+    },
+    {
+      "line_number": 364,
+      "line_content": "t.Log(\"🎉 Test d'intégration web complète réussi!\")",
+      "violation_type": "test_descriptions",
+      "hardcoded_value": "🎉 Test d'intégration web complète réussi!",
+      "suggested_constant": "WEB_TEST_DINTÉGRATION",
+      "rambo_comment": "Test string hardcoded - silent takedown! 🔫"
+    }
+  ],
+  "constants_mapping": {
+    "net/http/httptest": "WEB_NETHTTPHTTPTEST",
+    "testing": "WEB_TESTING",
+    "Fire Salamander Test": "APP_NAME_TEST",
+    "1.0.0-test": "WEB_1.0.0-TEST",
+    "8080": "TEST_PORT_8080",
+    "Fire Salamander Test Bot": "APP_NAME_TEST",
+    "Erreur": "ERROR_MSG_ERREUR",
+    "GET": "HTTP_METHOD_GET",
+    "http.StatusOK": "HTTP_STATUS_OK",
+    "Content-Type": "HEADER_CONTENT_TYPE",
+    "text/html": "CONTENT_TYPE_HTML",
+    "Interface web testée avec succès": "WEB_INTERFACE_WEB",
+    "/web/health": "WEB_WEBHEALTH",
+    "application/json": "CONTENT_TYPE_JSON",
+    "Route de santé web testée avec succès": "WEB_ROUTE_DE",
+    "test-report.": "WEB_TEST-REPORT.",
+    "<!DOCTYPE html>": "WEB_DOCTYPE_HTML",
+    "report": "WEB_REPORT",
+    "/web/download/test-report.html": "WEB_WEBDOWNLOADTEST-REPORT.HTML",
+    "html": "FILE_FORMAT_HTML",
+    "Content-Disposition": "HEADER_CONTENT_DISPOSITION",
+    "attachment; filename=test-report.html": "WEB_ATTACHMENT_FILENAMETEST-REPORT.HTML",
+    "attachment; filename=": "WEB_ATTACHMENT_FILENAME",
+    "Téléchargement de rapport testé avec succès": "WEB_TÉLÉCHARGEMENT_DE",
+    "web_server": "SERVICE_WEB_SERVER",
+    "running": "STATUS_RUNNING",
+    "8083": "TEST_PORT_8083",
+    "100": "HTTP_STATUS_100",
+    "http://": "PROTOCOL_HTTP",
+    "Fire Salamander Integration Test": "APP_NAME_TEST",
+    "8084": "TEST_PORT_8084",
+    "🎉 Test d'intégration web complète réussi!": "WEB_TEST_DINTÉGRATION"
+  },
+  "rambo_stats": {
+    "violations_by_type": {
+      "test_descriptions": 26,
+      "config_values": 12,
+      "port_numbers": 10,
+      "error_messages": 8,
+      "http_methods": 3,
+      "status_codes": 12,
+      "http_headers": 8,
+      "content_types": 3,
+      "urls_endpoints": 3,
+      "route_patterns": 3,
+      "html_content": 1,
+      "json_fields": 1,
+      "file_extensions": 2,
+      "mime_types": 1,
+      "protocols": 2
+    }
+  }
+}

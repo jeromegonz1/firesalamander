@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Performance Fire Salamander</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .metric {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ff6b35;
+        }
+        .status-ok { color: #27ae60; font-weight: bold; }
+        .status-warning { color: #f39c12; font-weight: bold; }
+        .status-error { color: #e74c3c; font-weight: bold; }
+        .button {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .button:hover { background: #e55a2e; }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Test de Performance Fire Salamander</h1>
+        
+        <div class="test-section">
+            <h2>📊 Métriques de Chargement</h2>
+            <button class="button" onclick="runPerformanceTest()">🧪 Lancer le Test</button>
+            <div id="performance-results"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔍 Comparaison des Interfaces</h2>
+            <div class="comparison">
+                <div>
+                    <h3>Interface Originale</h3>
+                    <div id="original-metrics"></div>
+                    <iframe src="http://localhost:8080" title="Interface Originale"></iframe>
+                </div>
+                <div>
+                    <h3>Interface Légère</h3>
+                    <div id="light-metrics"></div>
+                    <iframe src="simple_interface.html" title="Interface Légère"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🐛 Diagnostic des Problèmes</h2>
+            <div id="diagnostic-results">
+                <button class="button" onclick="runDiagnostics()">🔧 Diagnostic Complet</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>💡 Solutions Recommandées</h2>
+            <div id="recommendations">
+                <p>Cliquez sur "Diagnostic Complet" pour obtenir des recommandations personnalisées.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test de performance
+        async function runPerformanceTest() {
+            const container = document.getElementById('performance-results');
+            container.innerHTML = '<p>Test en cours...</p>';
+            
+            const results = {};
+            
+            try {
+                // Test 1: Temps de chargement de l'interface originale
+                const startTime = performance.now();
+                const response = await fetch('http://localhost:8080/');
+                const html = await response.text();
+                const loadTime = performance.now() - startTime;
+                
+                results.htmlLoadTime = loadTime;
+                results.htmlSize = html.length;
+                
+                // Test 2: Temps de chargement CSS
+                const cssStart = performance.now();
+                const cssResponse = await fetch('http://localhost:8080/styles.css');
+                const css = await cssResponse.text();
+                const cssLoadTime = performance.now() - cssStart;
+                
+                results.cssLoadTime = cssLoadTime;
+                results.cssSize = css.length;
+                
+                // Test 3: Temps de chargement JS
+                const jsStart = performance.now();
+                const jsResponse = await fetch('http://localhost:8080/app.js');
+                const js = await jsResponse.text();
+                const jsLoadTime = performance.now() - jsStart;
+                
+                results.jsLoadTime = jsLoadTime;
+                results.jsSize = js.length;
+                
+                // Test 4: Temps de réponse API
+                const apiStart = performance.now();
+                const apiResponse = await fetch('http://localhost:8080/api/v1/health');
+                const apiData = await apiResponse.json();
+                const apiLoadTime = performance.now() - apiStart;
+                
+                results.apiLoadTime = apiLoadTime;
+                
+                // Afficher les résultats
+                const totalTime = results.htmlLoadTime + results.cssLoadTime + results.jsLoadTime;
+                const totalSize = results.htmlSize + results.cssSize + results.jsSize;
+                
+                container.innerHTML = `
+                    <h3>Résultats du Test de Performance:</h3>
+                    
+                    <div class="metric">
+                        <strong>📄 HTML:</strong> ${results.htmlSize.toLocaleString()} bytes - ${results.htmlLoadTime.toFixed(2)}ms
+                        <span class="${results.htmlLoadTime < 100 ? 'status-ok' : results.htmlLoadTime < 300 ? 'status-warning' : 'status-error'}">
+                            ${results.htmlLoadTime < 100 ? '✅ Rapide' : results.htmlLoadTime < 300 ? '⚠️ Moyen' : '❌ Lent'}
+                        </span>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>🎨 CSS:</strong> ${results.cssSize.toLocaleString()} bytes - ${results.cssLoadTime.toFixed(2)}ms
+                        <span class="${results.cssLoadTime < 50 ? 'status-ok' : results.cssLoadTime < 150 ? 'status-warning' : 'status-error'}">
+                            ${results.cssLoadTime < 50 ? '✅ Rapide' : results.cssLoadTime < 150 ? '⚠️ Moyen' : '❌ Lent'}
+                        </span>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>⚡ JavaScript:</strong> ${results.jsSize.toLocaleString()} bytes - ${results.jsLoadTime.toFixed(2)}ms
+                        <span class="${results.jsLoadTime < 100 ? 'status-ok' : results.jsLoadTime < 300 ? 'status-warning' : 'status-error'}">
+                            ${results.jsLoadTime < 100 ? '✅ Rapide' : results.jsLoadTime < 300 ? '⚠️ Moyen' : '❌ Lent'}
+                        </span>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>📡 API:</strong> ${results.apiLoadTime.toFixed(2)}ms
+                        <span class="${results.apiLoadTime < 50 ? 'status-ok' : results.apiLoadTime < 200 ? 'status-warning' : 'status-error'}">
+                            ${results.apiLoadTime < 50 ? '✅ Rapide' : results.apiLoadTime < 200 ? '⚠️ Moyen' : '❌ Lent'}
+                        </span>
+                    </div>
+                    
+                    <div class="metric">
+                        <strong>📊 Total:</strong> ${totalSize.toLocaleString()} bytes - ${totalTime.toFixed(2)}ms
+                        <span class="${totalTime < 500 ? 'status-ok' : totalTime < 1000 ? 'status-warning' : 'status-error'}">
+                            ${totalTime < 500 ? '✅ Performance Excellente' : totalTime < 1000 ? '⚠️ Performance Correcte' : '❌ Performance Lente'}
+                        </span>
+                    </div>
+                `;
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="metric">
+                        <span class="status-error">❌ Erreur de test:</span> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // Diagnostic complet
+        async function runDiagnostics() {
+            const container = document.getElementById('diagnostic-results');
+            const recommendations = document.getElementById('recommendations');
+            
+            container.innerHTML = '<p>Diagnostic en cours...</p>';
+            
+            const issues = [];
+            const fixes = [];
+            
+            try {
+                // Test des ressources externes (CDN)
+                const cdnTests = [
+                    'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js',
+                    'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'
+                ];
+                
+                for (const url of cdnTests) {
+                    try {
+                        const start = performance.now();
+                        const response = await fetch(url, { method: 'HEAD' });
+                        const loadTime = performance.now() - start;
+                        
+                        if (!response.ok) {
+                            issues.push(`CDN inaccessible: ${url}`);
+                            fixes.push('Utiliser des versions locales des bibliothèques externes');
+                        } else if (loadTime > 2000) {
+                            issues.push(`CDN lent: ${url} (${loadTime.toFixed(0)}ms)`);
+                            fixes.push('Considérer un CDN plus rapide ou des versions locales');
+                        }
+                    } catch (e) {
+                        issues.push(`Erreur CDN: ${url} - ${e.message}`);
+                        fixes.push('Vérifier la connexion Internet et utiliser des versions locales');
+                    }
+                }
+                
+                // Test de la mémoire du navigateur
+                if (performance.memory) {
+                    const memory = performance.memory;
+                    if (memory.usedJSHeapSize > 50 * 1024 * 1024) { // 50MB
+                        issues.push(`Utilisation mémoire élevée: ${(memory.usedJSHeapSize / 1024 / 1024).toFixed(1)}MB`);
+                        fixes.push('Optimiser le JavaScript et libérer les références inutiles');
+                    }
+                }
+                
+                // Test de la compatibilité navigateur
+                const features = [
+                    { name: 'fetch', test: () => typeof fetch !== 'undefined' },
+                    { name: 'Promise', test: () => typeof Promise !== 'undefined' },
+                    { name: 'CSS Grid', test: () => CSS.supports('display', 'grid') },
+                    { name: 'CSS Variables', test: () => CSS.supports('color', 'var(--test)') }
+                ];
+                
+                for (const feature of features) {
+                    if (!feature.test()) {
+                        issues.push(`Fonctionnalité non supportée: ${feature.name}`);
+                        fixes.push(`Ajouter un polyfill pour ${feature.name} ou simplifier l'interface`);
+                    }
+                }
+                
+                // Afficher les résultats
+                let html = '<h3>Résultats du Diagnostic:</h3>';
+                
+                if (issues.length === 0) {
+                    html += '<div class="metric"><span class="status-ok">✅ Aucun problème technique détecté!</span></div>';
+                    recommendations.innerHTML = `
+                        <h3>✅ Interface Techniquement Saine</h3>
+                        <p>Les tests ne révèlent aucun problème technique majeur. Si l'affichage reste incohérent, le problème peut venir de :</p>
+                        <ul>
+                            <li><strong>Cache du navigateur:</strong> Videz le cache (Ctrl+F5)</li>
+                            <li><strong>Extensions:</strong> Désactivez les extensions (mode incognito)</li>
+                            <li><strong>Navigateur:</strong> Testez avec un autre navigateur</li>
+                            <li><strong>Résolution:</strong> Testez avec différentes tailles d'écran</li>
+                        </ul>
+                        <p><strong>Actions recommandées:</strong></p>
+                        <ol>
+                            <li>Ouvrir en mode incognito: <code>Ctrl+Shift+N</code></li>
+                            <li>Vider le cache: <code>Ctrl+Shift+Del</code></li>
+                            <li>Forcer le rechargement: <code>Ctrl+F5</code></li>
+                            <li>Tester l'interface légère: <a href="simple_interface.html">simple_interface.html</a></li>
+                        </ol>
+                    `;
+                } else {
+                    issues.forEach(issue => {
+                        html += `<div class="metric"><span class="status-warning">⚠️ ${issue}</span></div>`;
+                    });
+                    
+                    let recHtml = '<h3>🔧 Solutions Recommandées:</h3><ol>';
+                    fixes.forEach(fix => {
+                        recHtml += `<li>${fix}</li>`;
+                    });
+                    recHtml += '</ol>';
+                    
+                    recommendations.innerHTML = recHtml;
+                }
+                
+                container.innerHTML = html;
+                
+            } catch (error) {
+                container.innerHTML = `<div class="metric"><span class="status-error">❌ Erreur de diagnostic:</span> ${error.message}</div>`;
+            }
+        }
+        
+        // Mesurer les performances des iframes
+        function measureIframePerformance() {
+            const originalMetrics = document.getElementById('original-metrics');
+            const lightMetrics = document.getElementById('light-metrics');
+            
+            // Observer les iframes
+            const originalIframe = document.querySelector('iframe[src="http://localhost:8080"]');
+            const lightIframe = document.querySelector('iframe[src="simple_interface.html"]');
+            
+            const originalStart = performance.now();
+            originalIframe.onload = () => {
+                const originalTime = performance.now() - originalStart;
+                originalMetrics.innerHTML = `<div class="metric">Temps de chargement: ${originalTime.toFixed(2)}ms</div>`;
+            };
+            
+            const lightStart = performance.now();
+            lightIframe.onload = () => {
+                const lightTime = performance.now() - lightStart;
+                lightMetrics.innerHTML = `<div class="metric">Temps de chargement: ${lightTime.toFixed(2)}ms</div>`;
+            };
+        }
+        
+        // Initialiser au chargement
+        window.onload = () => {
+            measureIframePerformance();
+        };
+    </script>
+</body>
+</html>

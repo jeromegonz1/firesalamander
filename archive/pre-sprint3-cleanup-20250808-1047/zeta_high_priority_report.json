@@ -1,0 +1,43 @@
+{
+  "mission": "ZETA HIGH PRIORITY ELIMINATOR",
+  "timestamp": "2025-08-08T00:57:25.682427",
+  "summary": {
+    "total_violations": 4,
+    "fixed_violations": 3,
+    "failed_violations": 1
+  },
+  "details": [
+    {
+      "file": "cmd/fire-salamander/main.go",
+      "line": 169,
+      "description": "Configuration serveur hardcodée - main.go",
+      "status": "FAILED",
+      "pattern": "Host: \"localhost\"",
+      "replacement": "Host: constants.ServerDefaultHost"
+    },
+    {
+      "file": "internal/config/config.go",
+      "line": 79,
+      "description": "Configuration serveur hardcodée - config.go",
+      "status": "FIXED",
+      "pattern": "cfg.Server.Host = \"localhost\"",
+      "replacement": "cfg.Server.Host = constants.ServerDefaultHost"
+    },
+    {
+      "file": "internal/seo/analyzer.go",
+      "line": 449,
+      "description": "Configuration serveur hardcodée - analyzer.go",
+      "status": "FIXED",
+      "pattern": "\"localhost\"",
+      "replacement": "constants.ServerDefaultHost"
+    },
+    {
+      "file": "internal/debug/phase_tests.go",
+      "line": 279,
+      "description": "Configuration serveur hardcodée - phase_tests.go",
+      "status": "FIXED",
+      "pattern": "constants.HTTPPrefix+\"localhost:%d\"",
+      "replacement": "constants.HTTPPrefix+constants.ServerDefaultHost+\":%d\""
+    }
+  ]
+}

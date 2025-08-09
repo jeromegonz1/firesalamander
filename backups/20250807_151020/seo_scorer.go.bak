@@ -1,0 +1,769 @@
+package semantic
+
+import (
+	"log"
+	"math"
+	"regexp"
+	"strings"
+)
+
+// SEOScorer système de scoring SEO intelligent
+type SEOScorer struct {
+	// Seuils de scoring
+	thresholds SEOThresholds
+	
+	// Regex pour validation
+	titleRegex       *regexp.Regexp
+	metaDescRegex    *regexp.Regexp
+	keywordRegex     *regexp.Regexp
+}
+
+// SEOThresholds seuils pour le scoring SEO
+type SEOThresholds struct {
+	TitleMinLength        int     `json:"title_min_length"`
+	TitleMaxLength        int     `json:"title_max_length"`
+	MetaDescMinLength     int     `json:"meta_desc_min_length"`
+	MetaDescMaxLength     int     `json:"meta_desc_max_length"`
+	MinWordCount          int     `json:"min_word_count"`
+	OptimalWordCount      int     `json:"optimal_word_count"`
+	MinKeywordDensity     float64 `json:"min_keyword_density"`
+	MaxKeywordDensity     float64 `json:"max_keyword_density"`
+	MinInternalLinks      int     `json:"min_internal_links"`
+	MinHeadings           int     `json:"min_headings"`
+	MinReadabilityScore   float64 `json:"min_readability_score"`
+}
+
+// SEOFactorScore score d'un facteur SEO individuel
+type SEOFactorScore struct {
+	Name        string  `json:"name"`
+	Score       float64 `json:"score"`
+	Weight      float64 `json:"weight"`
+	Status      string  `json:"status"` // excellent, good, warning, critical
+	Message     string  `json:"message"`
+	Suggestions []string `json:"suggestions"`
+}
+
+// NewSEOScorer crée un nouveau scorer SEO
+func NewSEOScorer() *SEOScorer {
+	return &SEOScorer{
+		thresholds: SEOThresholds{
+			TitleMinLength:        30,
+			TitleMaxLength:        60,
+			MetaDescMinLength:     120,
+			MetaDescMaxLength:     160,
+			MinWordCount:          300,
+			OptimalWordCount:      1000,
+			MinKeywordDensity:     0.5,
+			MaxKeywordDensity:     3.0,
+			MinInternalLinks:      3,
+			MinHeadings:           2,
+			MinReadabilityScore:   60.0,
+		},
+		titleRegex:    regexp.MustCompile(`^.{1,200}$`),
+		metaDescRegex: regexp.MustCompile(`^.{1,300}$`),
+		keywordRegex:  regexp.MustCompile(`\b\w+\b`),
+	}
+}
+
+// Score calcule le score SEO global
+func (seo *SEOScorer) Score(content *ExtractedContent, localAnalysis LocalAnalysis, aiAnalysis *AIAnalysis) SEOScore {
+	log.Printf("Début scoring SEO - Title:%s WordCount:%d HasAI:%t", content.Title, content.WordCount, aiAnalysis != nil)
+
+	factors := make(map[string]float64)
+	var issues []string
+	var recommendations []string
+	
+	// 1. Score du titre
+	titleScore := seo.scoreTitleOptimization(content, localAnalysis)
+	factors["title"] = titleScore.Score
+	if titleScore.Status != "excellent" && titleScore.Status != "good" {
+		issues = append(issues, titleScore.Message)
+		recommendations = append(recommendations, titleScore.Suggestions...)
+	}
+
+	// 2. Score de la meta description
+	metaScore := seo.scoreMetaDescription(content, localAnalysis)
+	factors["meta_description"] = metaScore.Score
+	if metaScore.Status != "excellent" && metaScore.Status != "good" {
+		issues = append(issues, metaScore.Message)
+		recommendations = append(recommendations, metaScore.Suggestions...)
+	}
+
+	// 3. Score du contenu
+	contentScore := seo.scoreContentQuality(content, localAnalysis)
+	factors["content_quality"] = contentScore.Score
+	if contentScore.Status != "excellent" && contentScore.Status != "good" {
+		issues = append(issues, contentScore.Message)
+		recommendations = append(recommendations, contentScore.Suggestions...)
+	}
+
+	// 4. Score des mots-clés
+	keywordScore := seo.scoreKeywordOptimization(content, localAnalysis)
+	factors["keyword_optimization"] = keywordScore.Score
+	if keywordScore.Status != "excellent" && keywordScore.Status != "good" {
+		issues = append(issues, keywordScore.Message)
+		recommendations = append(recommendations, keywordScore.Suggestions...)
+	}
+
+	// 5. Score de la structure
+	structureScore := seo.scoreContentStructure(content, localAnalysis)
+	factors["content_structure"] = structureScore.Score
+	if structureScore.Status != "excellent" && structureScore.Status != "good" {
+		issues = append(issues, structureScore.Message)
+		recommendations = append(recommendations, structureScore.Suggestions...)
+	}
+
+	// 6. Score de la lisibilité
+	readabilityScore := seo.scoreReadability(content, localAnalysis)
+	factors["readability"] = readabilityScore.Score
+	if readabilityScore.Status != "excellent" && readabilityScore.Status != "good" {
+		issues = append(issues, readabilityScore.Message)
+		recommendations = append(recommendations, readabilityScore.Suggestions...)
+	}
+
+	// 7. Score des liens
+	linkScore := seo.scoreLinkOptimization(content, localAnalysis)
+	factors["link_optimization"] = linkScore.Score
+	if linkScore.Status != "excellent" && linkScore.Status != "good" {
+		issues = append(issues, linkScore.Message)
+		recommendations = append(recommendations, linkScore.Suggestions...)
+	}
+
+	// 8. Score des images
+	imageScore := seo.scoreImageOptimization(content, localAnalysis)
+	factors["image_optimization"] = imageScore.Score
+	if imageScore.Status != "excellent" && imageScore.Status != "good" {
+		issues = append(issues, imageScore.Message)
+		recommendations = append(recommendations, imageScore.Suggestions...)
+	}
+
+	// 9. Bonus IA (si disponible)
+	aiBonus := 0.0
+	if aiAnalysis != nil {
+		aiBonus = seo.calculateAIBonus(aiAnalysis)
+		factors["ai_enrichment"] = aiBonus
+		
+		// Ajouter les recommandations IA
+		recommendations = append(recommendations, aiAnalysis.Recommendations...)
+	}
+
+	// Calcul du score global pondéré
+	overallScore := seo.calculateWeightedScore(factors, aiBonus)
+
+	log.Printf("Scoring SEO terminé - OverallScore:%.1f FactorsCount:%d IssuesCount:%d RecommendationsCount:%d", overallScore, len(factors), len(issues), len(recommendations))
+
+	return SEOScore{
+		Overall:         overallScore,
+		Factors:         factors,
+		Recommendations: recommendations,
+		Issues:          issues,
+	}
+}
+
+// scoreTitleOptimization évalue l'optimisation du titre
+func (seo *SEOScorer) scoreTitleOptimization(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 0.0
+	status := "critical"
+	message := ""
+	suggestions := []string{}
+
+	if content.Title == "" {
+		message = "Titre manquant"
+		suggestions = append(suggestions, "Ajouter un titre H1 descriptif")
+	} else {
+		titleLength := len(content.Title)
+		
+		// Score basé sur la longueur
+		if titleLength < seo.thresholds.TitleMinLength {
+			score = 0.3
+			status = "warning"
+			message = "Titre trop court"
+			suggestions = append(suggestions, "Allonger le titre (30-60 caractères optimal)")
+		} else if titleLength > seo.thresholds.TitleMaxLength {
+			score = 0.6
+			status = "warning"
+			message = "Titre trop long"
+			suggestions = append(suggestions, "Raccourcir le titre (risque de troncature)")
+		} else {
+			score = 0.8
+			status = "good"
+			message = "Longueur du titre optimale"
+		}
+
+		// Bonus pour présence de mots-clés dans le titre
+		keywordsInTitle := 0
+		for _, keyword := range analysis.Keywords {
+			if keyword.InTitle && keyword.Relevance > 0.3 {
+				keywordsInTitle++
+				score += 0.05
+			}
+		}
+
+		if keywordsInTitle == 0 {
+			suggestions = append(suggestions, "Inclure des mots-clés pertinents dans le titre")
+		} else if keywordsInTitle >= 2 {
+			score += 0.1
+			if status == "good" {
+				status = "excellent"
+			}
+		}
+
+		// Pénalité pour sur-optimisation
+		if keywordsInTitle > 4 {
+			score -= 0.2
+			suggestions = append(suggestions, "Éviter la sur-optimisation du titre")
+		}
+	}
+
+	return SEOFactorScore{
+		Name:        "title_optimization",
+		Score:       math.Min(1.0, score),
+		Weight:      0.20, // 20% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreMetaDescription évalue la meta description
+func (seo *SEOScorer) scoreMetaDescription(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 0.0
+	status := "critical"
+	message := ""
+	suggestions := []string{}
+
+	if content.MetaDescription == "" {
+		message = "Meta description manquante"
+		suggestions = append(suggestions, "Ajouter une meta description attrayante")
+	} else {
+		descLength := len(content.MetaDescription)
+		
+		// Score basé sur la longueur
+		if descLength < seo.thresholds.MetaDescMinLength {
+			score = 0.4
+			status = "warning"
+			message = "Meta description trop courte"
+			suggestions = append(suggestions, "Étoffer la meta description (120-160 caractères)")
+		} else if descLength > seo.thresholds.MetaDescMaxLength {
+			score = 0.6
+			status = "warning"
+			message = "Meta description trop longue"
+			suggestions = append(suggestions, "Raccourcir la meta description")
+		} else {
+			score = 0.8
+			status = "good"
+			message = "Longueur de meta description optimale"
+		}
+
+		// Bonus pour présence de mots-clés
+		keywordsInMeta := 0
+		for _, keyword := range analysis.Keywords {
+			if keyword.InMeta && keyword.Relevance > 0.3 {
+				keywordsInMeta++
+				score += 0.05
+			}
+		}
+
+		if keywordsInMeta == 0 {
+			suggestions = append(suggestions, "Inclure des mots-clés dans la meta description")
+		} else if keywordsInMeta >= 2 {
+			score += 0.1
+			if status == "good" {
+				status = "excellent"
+			}
+		}
+
+		// Bonus pour appel à l'action
+		if seo.hasCallToAction(content.MetaDescription) {
+			score += 0.05
+		} else {
+			suggestions = append(suggestions, "Ajouter un appel à l'action dans la meta description")
+		}
+	}
+
+	return SEOFactorScore{
+		Name:        "meta_description",
+		Score:       math.Min(1.0, score),
+		Weight:      0.15, // 15% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreContentQuality évalue la qualité du contenu
+func (seo *SEOScorer) scoreContentQuality(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 0.0
+	status := "critical"
+	message := ""
+	suggestions := []string{}
+
+	wordCount := content.WordCount
+
+	// Score basé sur la longueur du contenu
+	if wordCount < seo.thresholds.MinWordCount {
+		score = 0.3
+		status = "warning"
+		message = "Contenu trop court"
+		suggestions = append(suggestions, "Étoffer le contenu (minimum 300 mots)")
+	} else if wordCount >= seo.thresholds.OptimalWordCount {
+		score = 1.0
+		status = "excellent"
+		message = "Longueur de contenu optimale"
+	} else {
+		// Score proportionnel entre min et optimal
+		ratio := float64(wordCount-seo.thresholds.MinWordCount) / float64(seo.thresholds.OptimalWordCount-seo.thresholds.MinWordCount)
+		score = 0.5 + (ratio * 0.5)
+		status = "good"
+		message = "Longueur de contenu correcte"
+	}
+
+	// Bonus pour diversité lexicale
+	if analysis.Statistics.LexicalDiversity > 0.5 {
+		score += 0.1
+		if status != "excellent" {
+			status = "good"
+		}
+	} else if analysis.Statistics.LexicalDiversity < 0.3 {
+		suggestions = append(suggestions, "Améliorer la diversité du vocabulaire")
+	}
+
+	// Pénalité pour contenu dupliqué détecté (heuristique simple)
+	if seo.detectDuplicateContent(content) {
+		score -= 0.2
+		suggestions = append(suggestions, "Éviter le contenu dupliqué")
+	}
+
+	return SEOFactorScore{
+		Name:        "content_quality",
+		Score:       math.Min(1.0, math.Max(0.0, score)),
+		Weight:      0.15, // 15% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreKeywordOptimization évalue l'optimisation des mots-clés
+func (seo *SEOScorer) scoreKeywordOptimization(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 0.0
+	status := "critical"
+	message := ""
+	suggestions := []string{}
+
+	if len(analysis.Keywords) == 0 {
+		message = "Aucun mot-clé identifié"
+		suggestions = append(suggestions, "Ajouter des mots-clés pertinents au contenu")
+	} else {
+		// Score basé sur le nombre de mots-clés pertinents
+		relevantKeywords := 0
+		totalDensity := 0.0
+
+		for _, keyword := range analysis.Keywords {
+			if keyword.Relevance > 0.3 {
+				relevantKeywords++
+				totalDensity += keyword.Density
+			}
+		}
+
+		if relevantKeywords < 5 {
+			score = 0.4
+			status = "warning"
+			message = "Peu de mots-clés pertinents"
+			suggestions = append(suggestions, "Enrichir le contenu avec plus de mots-clés")
+		} else if relevantKeywords >= 10 {
+			score = 0.8
+			status = "good"
+			message = "Bonne couverture de mots-clés"
+		} else {
+			score = 0.6
+			status = "good"
+			message = "Couverture de mots-clés correcte"
+		}
+
+		// Vérifier la densité moyenne
+		avgDensity := totalDensity / float64(relevantKeywords)
+		if avgDensity < seo.thresholds.MinKeywordDensity {
+			suggestions = append(suggestions, "Augmenter la densité des mots-clés principaux")
+		} else if avgDensity > seo.thresholds.MaxKeywordDensity {
+			score -= 0.2
+			suggestions = append(suggestions, "Éviter la sur-optimisation (densité trop élevée)")
+		} else {
+			score += 0.1
+			if status == "good" && score >= 0.9 {
+				status = "excellent"
+			}
+		}
+
+		// Bonus pour mots-clés en position stratégique
+		strategicKeywords := 0
+		for _, keyword := range analysis.Keywords[:min(5, len(analysis.Keywords))] {
+			if keyword.InTitle || keyword.InMeta || keyword.InHeadings {
+				strategicKeywords++
+			}
+		}
+
+		if strategicKeywords >= 3 {
+			score += 0.1
+		} else {
+			suggestions = append(suggestions, "Placer des mots-clés dans les positions stratégiques")
+		}
+	}
+
+	return SEOFactorScore{
+		Name:        "keyword_optimization",
+		Score:       math.Min(1.0, math.Max(0.0, score)),
+		Weight:      0.15, // 15% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreContentStructure évalue la structure du contenu
+func (seo *SEOScorer) scoreContentStructure(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 0.0
+	status := "critical"
+	message := ""
+	suggestions := []string{}
+
+	headingCount := len(content.Headings)
+
+	// Score basé sur le nombre de headings
+	if headingCount == 0 {
+		message = "Aucun titre de section"
+		suggestions = append(suggestions, "Structurer le contenu avec des titres H2, H3")
+	} else if headingCount < seo.thresholds.MinHeadings {
+		score = 0.4
+		status = "warning"
+		message = "Peu de titres de section"
+		suggestions = append(suggestions, "Améliorer la structure avec plus de sous-titres")
+	} else {
+		score = 0.7
+		status = "good"
+		message = "Structure de contenu correcte"
+	}
+
+	// Vérifier la hiérarchie des headings
+	if seo.hasGoodHeadingHierarchy(content.HeadingStructure) {
+		score += 0.2
+		if status == "good" {
+			status = "excellent"
+		}
+	} else {
+		suggestions = append(suggestions, "Respecter la hiérarchie H1 > H2 > H3")
+	}
+
+	// Bonus pour présence de listes
+	if len(content.Lists) > 0 {
+		score += 0.1
+	} else {
+		suggestions = append(suggestions, "Utiliser des listes pour améliorer la lisibilité")
+	}
+
+	// Vérifier la longueur des paragraphes
+	if analysis.Statistics.AvgSentencesPerParagraph > 10 {
+		suggestions = append(suggestions, "Raccourcir les paragraphes pour améliorer la lisibilité")
+	} else if analysis.Statistics.AvgSentencesPerParagraph < 2 {
+		suggestions = append(suggestions, "Développer davantage les paragraphes")
+	} else {
+		score += 0.05
+	}
+
+	return SEOFactorScore{
+		Name:        "content_structure",
+		Score:       math.Min(1.0, math.Max(0.0, score)),
+		Weight:      0.10, // 10% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreReadability évalue la lisibilité
+func (seo *SEOScorer) scoreReadability(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := analysis.ReadabilityScore / 100.0
+	status := "critical"
+	message := ""
+	suggestions := []string{}
+
+	if analysis.ReadabilityScore < 30 {
+		status = "critical"
+		message = "Lisibilité très faible"
+		suggestions = append(suggestions, "Simplifier les phrases et le vocabulaire")
+	} else if analysis.ReadabilityScore < seo.thresholds.MinReadabilityScore {
+		status = "warning"
+		message = "Lisibilité faible"
+		suggestions = append(suggestions, "Améliorer la lisibilité du contenu")
+	} else if analysis.ReadabilityScore < 80 {
+		status = "good"
+		message = "Lisibilité correcte"
+	} else {
+		status = "excellent"
+		message = "Excellente lisibilité"
+	}
+
+	// Vérifier la longueur des phrases
+	if analysis.Statistics.AvgWordsPerSentence > 25 {
+		score -= 0.1
+		suggestions = append(suggestions, "Raccourcir les phrases (max 20-25 mots)")
+	} else if analysis.Statistics.AvgWordsPerSentence < 10 {
+		suggestions = append(suggestions, "Varier la longueur des phrases")
+	}
+
+	return SEOFactorScore{
+		Name:        "readability",
+		Score:       math.Min(1.0, math.Max(0.0, score)),
+		Weight:      0.10, // 10% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreLinkOptimization évalue l'optimisation des liens
+func (seo *SEOScorer) scoreLinkOptimization(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 0.0
+	status := "warning"
+	message := ""
+	suggestions := []string{}
+
+	internalLinks := 0
+	externalLinks := 0
+
+	for _, link := range content.Links {
+		if link.IsInternal {
+			internalLinks++
+		} else if link.IsExternal {
+			externalLinks++
+		}
+	}
+
+	// Score basé sur les liens internes
+	if internalLinks == 0 {
+		message = "Aucun lien interne"
+		suggestions = append(suggestions, "Ajouter des liens internes vers d'autres pages")
+	} else if internalLinks < seo.thresholds.MinInternalLinks {
+		score = 0.4
+		message = "Peu de liens internes"
+		suggestions = append(suggestions, "Augmenter le maillage interne")
+	} else {
+		score = 0.7
+		status = "good"
+		message = "Bon maillage interne"
+	}
+
+	// Bonus pour liens externes de qualité
+	if externalLinks > 0 && externalLinks <= 3 {
+		score += 0.1
+	} else if externalLinks > 5 {
+		suggestions = append(suggestions, "Limiter le nombre de liens externes")
+	}
+
+	// Vérifier les ancres de liens
+	if seo.hasGoodLinkAnchors(content.Links) {
+		score += 0.2
+		if status == "good" {
+			status = "excellent"
+		}
+	} else {
+		suggestions = append(suggestions, "Optimiser les textes d'ancres des liens")
+	}
+
+	return SEOFactorScore{
+		Name:        "link_optimization",
+		Score:       math.Min(1.0, math.Max(0.0, score)),
+		Weight:      0.05, // 5% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// scoreImageOptimization évalue l'optimisation des images
+func (seo *SEOScorer) scoreImageOptimization(content *ExtractedContent, analysis LocalAnalysis) SEOFactorScore {
+	score := 1.0 // Par défaut excellent si pas d'images
+	status := "excellent"
+	message := "Pas d'images à optimiser"
+	suggestions := []string{}
+
+	if len(content.Images) > 0 {
+		score = 0.0
+		imagesWithAlt := 0
+
+		for _, image := range content.Images {
+			if image.Alt != "" {
+				imagesWithAlt++
+			}
+		}
+
+		// Score basé sur le pourcentage d'images avec alt
+		altRatio := float64(imagesWithAlt) / float64(len(content.Images))
+		score = altRatio
+
+		if altRatio == 0 {
+			status = "critical"
+			message = "Aucune image n'a de texte alternatif"
+			suggestions = append(suggestions, "Ajouter des textes alternatifs à toutes les images")
+		} else if altRatio < 0.5 {
+			status = "warning"
+			message = "Peu d'images ont un texte alternatif"
+			suggestions = append(suggestions, "Compléter les textes alternatifs manquants")
+		} else if altRatio < 1.0 {
+			status = "good"
+			message = "La plupart des images ont un texte alternatif"
+			suggestions = append(suggestions, "Compléter les derniers textes alternatifs")
+		} else {
+			status = "excellent"
+			message = "Toutes les images ont un texte alternatif"
+		}
+	}
+
+	return SEOFactorScore{
+		Name:        "image_optimization",
+		Score:       score,
+		Weight:      0.05, // 5% du score total
+		Status:      status,
+		Message:     message,
+		Suggestions: suggestions,
+	}
+}
+
+// calculateAIBonus calcule le bonus IA
+func (seo *SEOScorer) calculateAIBonus(aiAnalysis *AIAnalysis) float64 {
+	bonus := 0.0
+
+	// Bonus pour intention claire
+	if aiAnalysis.Intent != "" {
+		bonus += 0.02
+	}
+
+	// Bonus pour topics bien définis
+	if len(aiAnalysis.MainTopics) >= 3 {
+		bonus += 0.03
+	}
+
+	// Bonus pour audience cible identifiée
+	if aiAnalysis.TargetAudience != "" {
+		bonus += 0.02
+	}
+
+	// Bonus pour recommandations actionables
+	if len(aiAnalysis.Recommendations) >= 3 {
+		bonus += 0.03
+	}
+
+	return bonus
+}
+
+// calculateWeightedScore calcule le score pondéré final
+func (seo *SEOScorer) calculateWeightedScore(factors map[string]float64, aiBonus float64) float64 {
+	// Poids des facteurs (total = 1.0)
+	weights := map[string]float64{
+		"title":                0.20,
+		"meta_description":     0.15,
+		"content_quality":      0.15,
+		"keyword_optimization": 0.15,
+		"content_structure":    0.10,
+		"readability":          0.10,
+		"link_optimization":    0.10,
+		"image_optimization":   0.05,
+	}
+
+	totalScore := 0.0
+	for factor, score := range factors {
+		if weight, exists := weights[factor]; exists {
+			totalScore += score * weight
+		}
+	}
+
+	// Ajouter le bonus IA
+	totalScore += aiBonus
+
+	// Convertir en score sur 100
+	return math.Min(100.0, totalScore*100.0)
+}
+
+// Fonctions utilitaires
+
+func (seo *SEOScorer) hasCallToAction(text string) bool {
+	ctas := []string{
+		"découvrir", "en savoir plus", "contacter", "commander", "acheter",
+		"télécharger", "s'inscrire", "essayer", "commencer", "cliquer",
+		"discover", "learn more", "contact", "order", "buy", "download",
+		"sign up", "try", "start", "click",
+	}
+
+	lowerText := strings.ToLower(text)
+	for _, cta := range ctas {
+		if strings.Contains(lowerText, cta) {
+			return true
+		}
+	}
+	return false
+}
+
+func (seo *SEOScorer) detectDuplicateContent(content *ExtractedContent) bool {
+	// Heuristique simple : détecter les répétitions excessives
+	words := strings.Fields(content.CleanText)
+	if len(words) < 50 {
+		return false
+	}
+
+	wordCount := make(map[string]int)
+	for _, word := range words {
+		wordCount[strings.ToLower(word)]++
+	}
+
+	// Si plus de 30% des mots sont répétés plus de 5 fois
+	repeatedWords := 0
+	for _, count := range wordCount {
+		if count > 5 {
+			repeatedWords += count
+		}
+	}
+
+	return float64(repeatedWords)/float64(len(words)) > 0.3
+}
+
+func (seo *SEOScorer) hasGoodHeadingHierarchy(headings map[string][]string) bool {
+	h1Count := len(headings["h1"])
+	h2Count := len(headings["h2"])
+
+	// Il devrait y avoir exactement un H1 et au moins un H2
+	return h1Count == 1 && h2Count >= 1
+}
+
+func (seo *SEOScorer) hasGoodLinkAnchors(links []Link) bool {
+	if len(links) == 0 {
+		return true
+	}
+
+	goodAnchors := 0
+	badAnchors := []string{"cliquez ici", "click here", "lire la suite", "read more", "ici", "here"}
+
+	for _, link := range links {
+		isGood := true
+		lowerText := strings.ToLower(link.Text)
+		
+		for _, badAnchor := range badAnchors {
+			if strings.Contains(lowerText, badAnchor) {
+				isGood = false
+				break
+			}
+		}
+		
+		if isGood && len(link.Text) > 3 {
+			goodAnchors++
+		}
+	}
+
+	return float64(goodAnchors)/float64(len(links)) > 0.7
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}

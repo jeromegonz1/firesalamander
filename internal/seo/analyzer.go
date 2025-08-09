@@ -423,9 +423,9 @@ func (seo *SEOAnalyzer) calculateBasicsScore(result *SEOAnalysisResult) float64 
 	score := 0.0
 
 	// Status code (40%)
-	if result.StatusCode == 200 {
+	if result.StatusCode == constants.HTTPStatusOK {
 		score += 0.4
-	} else if result.StatusCode >= 300 && result.StatusCode < 400 {
+	} else if result.StatusCode >= constants.HTTPStatusMultipleChoices && result.StatusCode < constants.HTTPStatusBadRequest {
 		score += 0.2 // Redirections
 	}
 

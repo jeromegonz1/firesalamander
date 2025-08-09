@@ -96,7 +96,7 @@ func TestFullAnalysis(t *testing.T) {
 		Timeout:            15 * time.Second,
 	}
 
-	result, err := orchestrator.AnalyzeURL(ctx, "https://example.com", AnalysisTypeQuick, options)
+	result, err := orchestrator.AnalyzeURL(ctx, constants.TestURLExample, AnalysisTypeQuick, options)
 	if err != nil {
 		t.Fatalf("Erreur analyse: %v", err)
 	}
@@ -106,7 +106,7 @@ func TestFullAnalysis(t *testing.T) {
 		t.Fatal("Résultat d'analyse nil")
 	}
 
-	if result.URL != "https://example.com" {
+	if result.URL != constants.TestURLExample {
 		t.Errorf("URL incorrecte: %s", result.URL)
 	}
 
@@ -187,7 +187,7 @@ func TestReportGenerator(t *testing.T) {
 	// Créer un résultat d'analyse simulé
 	result := &UnifiedAnalysisResult{
 		TaskID:         constants.IntegrationTestDataTask + "_123",
-		URL:            "https://example.com",
+		URL:            constants.TestURLExample,
 		Domain:         "example.com",
 		AnalyzedAt:     time.Now(),
 		ProcessingTime: 2 * time.Second,
@@ -318,7 +318,7 @@ func TestStorageManager(t *testing.T) {
 	// Créer un résultat d'analyse de test
 	result := &UnifiedAnalysisResult{
 		TaskID:         "test_storage_123",
-		URL:            "https://test-storage.com",
+		URL:            constants.TestURLStorageTest,
 		Domain:         "test-storage.com",
 		AnalyzedAt:     time.Now(),
 		ProcessingTime: 1 * time.Second,
@@ -346,7 +346,7 @@ func TestStorageManager(t *testing.T) {
 	}
 
 	// Tester l'historique
-	history, err := storage.GetAnalysisHistory("https://test-storage.com", 10)
+	history, err := storage.GetAnalysisHistory(constants.TestURLStorageTest, 10)
 	if err != nil {
 		t.Fatalf("Erreur récupération historique: %v", err)
 	}
@@ -425,7 +425,7 @@ func TestCompleteIntegration(t *testing.T) {
 		Timeout:            10 * time.Second,
 	}
 
-	result, err := orchestrator.AnalyzeURL(ctx, "https://integration-test.com", AnalysisTypeQuick, options)
+	result, err := orchestrator.AnalyzeURL(ctx, constants.TestURLIntegrationTest, AnalysisTypeQuick, options)
 	if err != nil {
 		t.Fatalf("Erreur analyse intégration: %v", err)
 	}

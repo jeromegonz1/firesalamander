@@ -16,7 +16,7 @@ import (
 // sendJSONError - Helper pour envoyer des erreurs JSON
 func sendJSONError(w http.ResponseWriter, message string, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
-	errorJSON := fmt.Sprintf(`{"error":"%s"}`, message)
+	errorJSON := fmt.Sprintf(`{"%s":"%s"}`, constants.JSONKeyError, message)
 	http.Error(w, errorJSON, statusCode)
 }
 
@@ -91,7 +91,7 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	// Extraire l'ID depuis l'URL
 	analysisID := extractAnalysisID(r.URL.Path)
 	if analysisID == "" {
-		http.Error(w, `{"error":"Invalid analysis ID"}`, http.StatusBadRequest)
+		sendJSONError(w, constants.ErrorInvalidAnalysisID, http.StatusBadRequest)
 		return
 	}
 
@@ -129,7 +129,7 @@ func ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	// Extraire l'ID depuis l'URL
 	analysisID := extractAnalysisID(r.URL.Path)
 	if analysisID == "" {
-		http.Error(w, `{"error":"Invalid analysis ID"}`, http.StatusBadRequest)
+		sendJSONError(w, constants.ErrorInvalidAnalysisID, http.StatusBadRequest)
 		return
 	}
 

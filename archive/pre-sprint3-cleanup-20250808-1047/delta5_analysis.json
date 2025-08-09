@@ -1,0 +1,241 @@
+{
+  "total_violations": 36,
+  "categories": {
+    "security_levels": 19,
+    "security_tests": 1,
+    "cve_patterns": 2,
+    "security_config_keys": 1,
+    "owasp_categories": 8,
+    "security_vulnerabilities": 4,
+    "security_actions": 1
+  },
+  "violations": [
+    {
+      "line": 116,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgStaticAnalysisFailed, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 122,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgDependencyCheckFailed, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 129,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgSecretScanningFailed, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 136,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgDynamicAnalysisFailed, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 143,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgSecurityHeadersFailed, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 152,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgReportGenerationFailed, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 191,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Error(constants.SecurityMsgFailedParseGosec, map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 228,
+      "category": "security_levels",
+      "value": "error",
+      "context": "log.Warn(\"Failed to install govulncheck\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 241,
+      "category": "security_tests",
+      "value": "vulnerability",
+      "context": "if strings.Contains(string(output), \"vulnerability\") {"
+    },
+    {
+      "line": 246,
+      "category": "cve_patterns",
+      "value": "CVE-2023-12345",
+      "context": "CVE:         []string{\"CVE-2023-12345\"},"
+    },
+    {
+      "line": 247,
+      "category": "security_levels",
+      "value": "MEDIUM",
+      "context": "Severity:    \"MEDIUM\","
+    },
+    {
+      "line": 265,
+      "category": "security_config_keys",
+      "value": "PASSWORD",
+      "context": "\"PASSWORD\":    `(?i)(password|passwd|pwd)\\s*[:=]\\s*['\"\"]?([^'\"\\s]{8,})['\"\"]?`,"
+    },
+    {
+      "line": 306,
+      "category": "owasp_categories",
+      "value": "injection",
+      "context": "\"injection\","
+    },
+    {
+      "line": 307,
+      "category": "security_vulnerabilities",
+      "value": "broken_authentication",
+      "context": "\"broken_authentication\","
+    },
+    {
+      "line": 307,
+      "category": "owasp_categories",
+      "value": "broken_authentication",
+      "context": "\"broken_authentication\","
+    },
+    {
+      "line": 308,
+      "category": "security_vulnerabilities",
+      "value": "sensitive_data_exposure",
+      "context": "\"sensitive_data_exposure\","
+    },
+    {
+      "line": 309,
+      "category": "owasp_categories",
+      "value": "xml_external_entities",
+      "context": "\"xml_external_entities\","
+    },
+    {
+      "line": 310,
+      "category": "owasp_categories",
+      "value": "broken_access_control",
+      "context": "\"broken_access_control\","
+    },
+    {
+      "line": 311,
+      "category": "security_vulnerabilities",
+      "value": "security_misconfiguration",
+      "context": "\"security_misconfiguration\","
+    },
+    {
+      "line": 311,
+      "category": "owasp_categories",
+      "value": "security_misconfiguration",
+      "context": "\"security_misconfiguration\","
+    },
+    {
+      "line": 312,
+      "category": "owasp_categories",
+      "value": "cross_site_scripting",
+      "context": "\"cross_site_scripting\","
+    },
+    {
+      "line": 313,
+      "category": "owasp_categories",
+      "value": "insecure_deserialization",
+      "context": "\"insecure_deserialization\","
+    },
+    {
+      "line": 320,
+      "category": "security_actions",
+      "value": "test",
+      "context": "log.Debug(\"Running OWASP test\", map[string]interface{}{\"test\": test})"
+    },
+    {
+      "line": 323,
+      "category": "security_vulnerabilities",
+      "value": "security_misconfiguration",
+      "context": "if test == \"security_misconfiguration\" {"
+    },
+    {
+      "line": 323,
+      "category": "owasp_categories",
+      "value": "security_misconfiguration",
+      "context": "if test == \"security_misconfiguration\" {"
+    },
+    {
+      "line": 327,
+      "category": "security_levels",
+      "value": "LOW",
+      "context": "Severity:    \"LOW\","
+    },
+    {
+      "line": 408,
+      "category": "cve_patterns",
+      "value": "CVE-2023-99999",
+      "context": "CVE:         []string{\"CVE-2023-99999\"},"
+    },
+    {
+      "line": 409,
+      "category": "security_levels",
+      "value": "MEDIUM",
+      "context": "Severity:    \"MEDIUM\","
+    },
+    {
+      "line": 424,
+      "category": "security_levels",
+      "value": "CRITICAL",
+      "context": "case \"CRITICAL\":"
+    },
+    {
+      "line": 426,
+      "category": "security_levels",
+      "value": "HIGH",
+      "context": "case \"HIGH\":"
+    },
+    {
+      "line": 428,
+      "category": "security_levels",
+      "value": "MEDIUM",
+      "context": "case \"MEDIUM\":"
+    },
+    {
+      "line": 430,
+      "category": "security_levels",
+      "value": "LOW",
+      "context": "case \"LOW\":"
+    },
+    {
+      "line": 438,
+      "category": "security_levels",
+      "value": "CRITICAL",
+      "context": "case \"CRITICAL\":"
+    },
+    {
+      "line": 440,
+      "category": "security_levels",
+      "value": "HIGH",
+      "context": "case \"HIGH\":"
+    },
+    {
+      "line": 442,
+      "category": "security_levels",
+      "value": "MEDIUM",
+      "context": "case \"MEDIUM\":"
+    },
+    {
+      "line": 444,
+      "category": "security_levels",
+      "value": "LOW",
+      "context": "case \"LOW\":"
+    }
+  ],
+  "constants_mapping": {
+    "\"broken_authentication\"": "constants.SecurityOWASPBrokenAuthentication",
+    "\"error\"": "constants.SecurityLevelError",
+    "\"test\"": "constants.SecurityActionTest",
+    "\"injection\"": "constants.SecurityOWASPInjection",
+    "\"xml_external_entities\"": "constants.SecurityOWASPXMLExternalEntities",
+    "\"broken_access_control\"": "constants.SecurityOWASPBrokenAccessControl",
+    "\"security_misconfiguration\"": "constants.SecurityOWASPSecurityMisconfiguration",
+    "\"cross_site_scripting\"": "constants.SecurityOWASPCrossSiteScripting",
+    "\"insecure_deserialization\"": "constants.SecurityOWASPInsecureDeserialization"
+  }
+}

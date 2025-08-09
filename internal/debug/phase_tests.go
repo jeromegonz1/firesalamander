@@ -339,7 +339,7 @@ func testEndpoint(name, url, expectedContentType string) PhaseTest {
 		test.Details[constants.DetailStatusCode] = resp.StatusCode
 		test.Details[constants.DetailContentType] = resp.Header.Get("Content-Type")
 		
-		if resp.StatusCode == 200 {
+		if resp.StatusCode == constants.HTTPStatusOK {
 			contentType := resp.Header.Get("Content-Type")
 			if strings.Contains(contentType, expectedContentType) {
 				test.Status = constants.StatusPassed

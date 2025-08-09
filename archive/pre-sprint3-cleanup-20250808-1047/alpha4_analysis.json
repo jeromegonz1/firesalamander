@@ -1,0 +1,472 @@
+{
+  "total_violations": 70,
+  "categories": {
+    "paths": 6,
+    "status_values": 25,
+    "messages": 14,
+    "error_codes": 3,
+    "db_types": 9,
+    "db_paths": 1,
+    "hardcoded_booleans": 4,
+    "numeric_literals": 2,
+    "environments": 2,
+    "content_types": 4
+  },
+  "violations": [
+    {
+      "line": 22,
+      "category": "paths",
+      "value": "config",
+      "context": "Config    ConfigInfo             `json:\"config\"`"
+    },
+    {
+      "line": 66,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "Status:    \"healthy\","
+    },
+    {
+      "line": 102,
+      "category": "paths",
+      "value": "config",
+      "context": "\"config\":     checkConfig,"
+    },
+    {
+      "line": 114,
+      "category": "status_values",
+      "value": "ok",
+      "context": "if result.Status != \"ok\" {"
+    },
+    {
+      "line": 115,
+      "category": "messages",
+      "value": "Check failed",
+      "context": "log.Warn(\"Check failed\", map[string]interface{}{"
+    },
+    {
+      "line": 119,
+      "category": "status_values",
+      "value": "error",
+      "context": "\"error\":   result.Error,"
+    },
+    {
+      "line": 121,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "if hc.Status == \"healthy\" {"
+    },
+    {
+      "line": 122,
+      "category": "status_values",
+      "value": "degraded",
+      "context": "hc.Status = \"degraded\""
+    },
+    {
+      "line": 138,
+      "category": "status_values",
+      "value": "error",
+      "context": "Status:  \"error\","
+    },
+    {
+      "line": 139,
+      "category": "messages",
+      "value": "Configuration is nil",
+      "context": "Message: \"Configuration is nil\","
+    },
+    {
+      "line": 140,
+      "category": "error_codes",
+      "value": "config_nil",
+      "context": "Error:   \"config_nil\","
+    },
+    {
+      "line": 158,
+      "category": "status_values",
+      "value": "error",
+      "context": "Status:  \"error\","
+    },
+    {
+      "line": 159,
+      "category": "messages",
+      "value": "Configuration validation failed",
+      "context": "Message: \"Configuration validation failed\","
+    },
+    {
+      "line": 165,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 166,
+      "category": "messages",
+      "value": "Configuration is valid",
+      "context": "Message: \"Configuration is valid\","
+    },
+    {
+      "line": 170,
+      "category": "db_types",
+      "value": "sqlite",
+      "context": "\"database_type\": \"sqlite\","
+    },
+    {
+      "line": 176,
+      "category": "db_types",
+      "value": "sqlite",
+      "context": "switch \"sqlite\" {"
+    },
+    {
+      "line": 177,
+      "category": "db_types",
+      "value": "sqlite",
+      "context": "case \"sqlite\":"
+    },
+    {
+      "line": 180,
+      "category": "status_values",
+      "value": "error",
+      "context": "Status:  \"error\","
+    },
+    {
+      "line": 181,
+      "category": "messages",
+      "value": "SQLite path is empty",
+      "context": "Message: \"SQLite path is empty\","
+    },
+    {
+      "line": 182,
+      "category": "error_codes",
+      "value": "sqlite_path_missing",
+      "context": "Error:   \"sqlite_path_missing\","
+    },
+    {
+      "line": 187,
+      "category": "db_paths",
+      "value": "\"/firesalamander.db\"",
+      "context": "dir := cfg.DBPath[:len(cfg.DBPath)-len(\"/firesalamander.db\")]"
+    },
+    {
+      "line": 190,
+      "category": "status_values",
+      "value": "warning",
+      "context": "Status:  \"warning\","
+    },
+    {
+      "line": 191,
+      "category": "messages",
+      "value": "SQLite directory doesn't exist yet",
+      "context": "Message: \"SQLite directory doesn't exist yet\","
+    },
+    {
+      "line": 197,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 198,
+      "category": "messages",
+      "value": "SQLite configuration is valid",
+      "context": "Message: \"SQLite configuration is valid\","
+    },
+    {
+      "line": 202,
+      "category": "db_types",
+      "value": "mysql",
+      "context": "case \"mysql\":"
+    },
+    {
+      "line": 203,
+      "category": "db_types",
+      "value": "localhost",
+      "context": "if \"localhost\" == \"\" || \"firesalamander\" == \"\" {"
+    },
+    {
+      "line": 203,
+      "category": "db_types",
+      "value": "firesalamander",
+      "context": "if \"localhost\" == \"\" || \"firesalamander\" == \"\" {"
+    },
+    {
+      "line": 205,
+      "category": "status_values",
+      "value": "error",
+      "context": "Status:  \"error\","
+    },
+    {
+      "line": 206,
+      "category": "messages",
+      "value": "MySQL configuration incomplete",
+      "context": "Message: \"MySQL configuration incomplete\","
+    },
+    {
+      "line": 207,
+      "category": "error_codes",
+      "value": "mysql_config_incomplete",
+      "context": "Error:   \"mysql_config_incomplete\","
+    },
+    {
+      "line": 212,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 213,
+      "category": "messages",
+      "value": "MySQL configuration is valid",
+      "context": "Message: \"MySQL configuration is valid\","
+    },
+    {
+      "line": 215,
+      "category": "db_types",
+      "value": "localhost",
+      "context": "\"host\": \"localhost\","
+    },
+    {
+      "line": 216,
+      "category": "db_types",
+      "value": "firesalamander",
+      "context": "\"name\": \"firesalamander\","
+    },
+    {
+      "line": 222,
+      "category": "status_values",
+      "value": "error",
+      "context": "Status:  \"error\","
+    },
+    {
+      "line": 225,
+      "category": "db_types",
+      "value": "sqlite",
+      "context": "Data:    map[string]interface{}{\"type\": \"sqlite\"},"
+    },
+    {
+      "line": 231,
+      "category": "paths",
+      "value": "config",
+      "context": "dirs := []string{\"config\", \"deploy\"}"
+    },
+    {
+      "line": 231,
+      "category": "paths",
+      "value": "deploy",
+      "context": "dirs := []string{\"config\", \"deploy\"}"
+    },
+    {
+      "line": 232,
+      "category": "paths",
+      "value": "go.mod",
+      "context": "files := []string{\"go.mod\", \"main.go\"}"
+    },
+    {
+      "line": 232,
+      "category": "paths",
+      "value": "main.go",
+      "context": "files := []string{\"go.mod\", \"main.go\"}"
+    },
+    {
+      "line": 250,
+      "category": "status_values",
+      "value": "error",
+      "context": "Status:  \"error\","
+    },
+    {
+      "line": 251,
+      "category": "messages",
+      "value": "Required files/directories missing",
+      "context": "Message: \"Required files/directories missing\","
+    },
+    {
+      "line": 257,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 267,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 268,
+      "category": "messages",
+      "value": "Network configuration valid",
+      "context": "Message: \"Network configuration valid\","
+    },
+    {
+      "line": 279,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 280,
+      "category": "messages",
+      "value": "AI is disabled",
+      "context": "Message: \"AI is disabled\","
+    },
+    {
+      "line": 281,
+      "category": "hardcoded_booleans",
+      "value": "false",
+      "context": "Data:    map[string]interface{}{\"enabled\": false},"
+    },
+    {
+      "line": 287,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 288,
+      "category": "messages",
+      "value": "AI is in mock mode",
+      "context": "Message: \"AI is in mock mode\","
+    },
+    {
+      "line": 289,
+      "category": "hardcoded_booleans",
+      "value": "true",
+      "context": "Data:    map[string]interface{}{\"mock_mode\": true},"
+    },
+    {
+      "line": 297,
+      "category": "status_values",
+      "value": "ok",
+      "context": "Status:  \"ok\","
+    },
+    {
+      "line": 298,
+      "category": "messages",
+      "value": "AI configuration is valid",
+      "context": "Message: \"AI configuration is valid\","
+    },
+    {
+      "line": 300,
+      "category": "hardcoded_booleans",
+      "value": "true",
+      "context": "\"enabled\":   true,"
+    },
+    {
+      "line": 301,
+      "category": "hardcoded_booleans",
+      "value": "false",
+      "context": "\"mock_mode\": false,"
+    },
+    {
+      "line": 310,
+      "category": "numeric_literals",
+      "value": "1024",
+      "context": "return fmt.Sprintf(\"%.1f MB\", float64(m.Alloc)/1024/1024)"
+    },
+    {
+      "line": 310,
+      "category": "numeric_literals",
+      "value": "1024",
+      "context": "return fmt.Sprintf(\"%.1f MB\", float64(m.Alloc)/1024/1024)"
+    },
+    {
+      "line": 316,
+      "category": "environments",
+      "value": "development",
+      "context": "return \"development\""
+    },
+    {
+      "line": 331,
+      "category": "environments",
+      "value": "test",
+      "context": "if strings.Contains(r.URL.Query().Get(\"test\"), \"phase1\") {"
+    },
+    {
+      "line": 336,
+      "category": "content_types",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 336,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 337,
+      "category": "status_values",
+      "value": "passed",
+      "context": "if phaseTests.Status == \"passed\" {"
+    },
+    {
+      "line": 345,
+      "category": "status_values",
+      "value": "error",
+      "context": "\"error\": err.Error(),"
+    },
+    {
+      "line": 355,
+      "category": "content_types",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 355,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 359,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "case \"healthy\":"
+    },
+    {
+      "line": 361,
+      "category": "status_values",
+      "value": "degraded",
+      "context": "case \"degraded\":"
+    },
+    {
+      "line": 369,
+      "category": "status_values",
+      "value": "error",
+      "context": "\"error\": err.Error(),"
+    }
+  ],
+  "constants_mapping": {
+    "\"healthy\"": "constants.HealthStatusHealthy",
+    "\"ok\"": "constants.CheckStatusOK",
+    "\"error\"": "constants.CheckStatusError",
+    "\"degraded\"": "constants.HealthStatusDegraded",
+    "\"warning\"": "constants.CheckStatusWarning",
+    "\"passed\"": "constants.TestStatusPassed",
+    "\"Configuration is nil\"": "constants.MsgConfigIsNil",
+    "\"Configuration validation failed\"": "constants.MsgConfigValidationFailed",
+    "\"Configuration is valid\"": "constants.MsgConfigIsValid",
+    "\"SQLite path is empty\"": "constants.MsgSQLitePathEmpty",
+    "\"SQLite configuration is valid\"": "constants.MsgSQLiteConfigValid",
+    "\"MySQL configuration incomplete\"": "constants.MsgMySQLConfigIncomplete",
+    "\"MySQL configuration is valid\"": "constants.MsgMySQLConfigValid",
+    "\"Required files/directories missing\"": "constants.MsgRequiredFilesMissing",
+    "\"Network configuration valid\"": "constants.MsgNetworkConfigValid",
+    "\"AI is disabled\"": "constants.MsgAIDisabled",
+    "\"AI is in mock mode\"": "constants.MsgAIMockMode",
+    "\"AI configuration is valid\"": "constants.MsgAIConfigValid",
+    "\"sqlite\"": "constants.DatabaseTypeSQLite",
+    "\"mysql\"": "constants.DatabaseTypeMySQL",
+    "\"localhost\"": "constants.DefaultHost",
+    "\"firesalamander\"": "constants.DefaultDatabaseName",
+    "\"config\"": "constants.ConfigDir",
+    "\"deploy\"": "constants.DeployDir",
+    "\"go.mod\"": "constants.GoModFile",
+    "\"main.go\"": "constants.MainGoFile",
+    "\"Content-Type\"": "constants.HeaderContentType",
+    "\"application/json\"": "constants.ContentTypeJSON",
+    "\"development\"": "constants.EnvDevelopment",
+    "\"config_nil\"": "constants.ErrorCodeConfigNil",
+    "\"sqlite_path_missing\"": "constants.ErrorCodeSQLitePathMissing",
+    "\"mysql_config_incomplete\"": "constants.ErrorCodeMySQLConfigIncomplete",
+    "\"/firesalamander.db\"": "constants.DefaultDatabaseFile"
+  }
+}

@@ -1,0 +1,12 @@
+./scripts/detect-hardcoding.sh: line 31: revive: command not found
+./scripts/detect-hardcoding.sh: line 42: staticcheck: command not found
+./cmd/fire-salamander/main.go:4:	"context"
+./cmd/fire-salamander/main.go:10:	"syscall"
+./cmd/server/main.go:48:	Domain         string        `json:"domain"`
+./cmd/server/main.go:50:	Score          int           `json:"score"`
+./cmd/server/main.go:54:	Warnings       int           `json:"warnings"`
+./cmd/server/main.go:55:	Issues         []Issue       `json:"issues"`
+./cmd/server/main.go:62:	Title       string   `json:"title"`
+./cmd/server/main.go:63:	Count       int      `json:"count"`
+./cmd/server/main.go:64:	Description string   `json:"description"`
+./cmd/server/main.go:65:	Pages       []string `json:"pages"`

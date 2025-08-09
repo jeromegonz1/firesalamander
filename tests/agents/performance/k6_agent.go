@@ -229,12 +229,12 @@ export default function() {
     
     // Record metrics
     responseTime.add(response.timings.duration);
-    errorRate.add(response.status !== 200);
+    errorRate.add(response.status !== %d);
     
     // Validate response
     check(response, {
-        'status is 200': (r) => r.status === 200,
-        'response time < 200ms': (r) => r.timings.duration < 200,
+        'status is 200': (r) => r.status === %d,
+        'response time < 200ms': (r) => r.timings.duration < %d,
         'body contains data': (r) => r.body.length > 0,
     });
     
@@ -254,6 +254,9 @@ export default function() {
 		k6.config.BaseURL,
 		k6.config.BaseURL,
 		k6.config.BaseURL,
+		constants.HTTPStatusOK,
+		constants.HTTPStatusOK,
+		constants.HTTPStatusOK,
 	)
 
 	scriptPath := filepath.Join(os.TempDir(), "fire_salamander_load_test.js")
@@ -383,8 +386,8 @@ func (k6 *K6Agent) parseK6Results(outputFile string) error {
 
 	k6.results.ErrorStats = ErrorStats{
 		HTTPErrors: map[string]int{
-			"500": 30,
-			"503": 15,
+			fmt.Sprintf("%d", constants.HTTPStatusInternalServerError): 30,
+			fmt.Sprintf("%d", constants.HTTPStatusServiceUnavailable): 15,
 			"timeout": 5,
 		},
 		NetworkErrors: 3,

@@ -33,10 +33,10 @@ const (
 	APIEndpointRoot     = "/api/"
 	APIEndpointHealthy  = "/health"
 	APIEndpointMetrics  = "/metrics"
-	APIEndpointStatus   = "/status"
+	APIEndpointStatus   = "/api/status"
 	APIEndpointDebug    = "/debug"
-	APIEndpointAnalyze  = "/analyze"
-	APIEndpointResults  = "/results"
+	APIEndpointAnalyze  = "/api/analyze"
+	APIEndpointResults  = "/api/results"
 	APIEndpointReports  = "/reports"
 )
 

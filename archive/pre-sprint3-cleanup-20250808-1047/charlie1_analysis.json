@@ -1,0 +1,1455 @@
+{
+  "total_violations": 232,
+  "categories": {
+    "json_field_names": 18,
+    "category_names": 7,
+    "priority_levels": 10,
+    "impact_levels": 9,
+    "effort_levels": 9,
+    "numeric_thresholds": 18,
+    "template_ids": 45,
+    "error_messages": 1,
+    "seo_issues": 33,
+    "content_ranges": 2,
+    "score_comparisons": 3,
+    "target_values": 5,
+    "tag_names": 15,
+    "resource_types": 1,
+    "placeholders": 11,
+    "time_estimates": 4,
+    "recommendation_titles": 11,
+    "action_descriptions": 16,
+    "url_docs": 4,
+    "metric_names": 10
+  },
+  "violations": [
+    {
+      "line": 22,
+      "category": "json_field_names",
+      "value": "id",
+      "context": "ID           string                 `json:\"id\"`"
+    },
+    {
+      "line": 23,
+      "category": "json_field_names",
+      "value": "title",
+      "context": "Title        string                 `json:\"title\"`"
+    },
+    {
+      "line": 24,
+      "category": "json_field_names",
+      "value": "description",
+      "context": "Description  string                 `json:\"description\"`"
+    },
+    {
+      "line": 25,
+      "category": "json_field_names",
+      "value": "category",
+      "context": "Category     string                 `json:\"category\"`"
+    },
+    {
+      "line": 26,
+      "category": "json_field_names",
+      "value": "priority",
+      "context": "Priority     Priority               `json:\"priority\"`"
+    },
+    {
+      "line": 27,
+      "category": "json_field_names",
+      "value": "impact",
+      "context": "Impact       Impact                 `json:\"impact\"`"
+    },
+    {
+      "line": 28,
+      "category": "json_field_names",
+      "value": "effort",
+      "context": "Effort       Effort                 `json:\"effort\"`"
+    },
+    {
+      "line": 29,
+      "category": "json_field_names",
+      "value": "actions",
+      "context": "Actions      []ActionItem           `json:\"actions\"`"
+    },
+    {
+      "line": 30,
+      "category": "json_field_names",
+      "value": "resources",
+      "context": "Resources    []Resource             `json:\"resources\"`"
+    },
+    {
+      "line": 31,
+      "category": "json_field_names",
+      "value": "metrics",
+      "context": "Metrics      []string               `json:\"metrics\"`"
+    },
+    {
+      "line": 32,
+      "category": "json_field_names",
+      "value": "tags",
+      "context": "Tags         []string               `json:\"tags\"`"
+    },
+    {
+      "line": 32,
+      "category": "category_names",
+      "value": "tags",
+      "context": "Tags         []string               `json:\"tags\"`"
+    },
+    {
+      "line": 53,
+      "category": "json_field_names",
+      "value": "task",
+      "context": "Task        string `json:\"task\"`"
+    },
+    {
+      "line": 54,
+      "category": "json_field_names",
+      "value": "description",
+      "context": "Description string `json:\"description\"`"
+    },
+    {
+      "line": 55,
+      "category": "json_field_names",
+      "value": "technical",
+      "context": "Technical   bool   `json:\"technical\"`"
+    },
+    {
+      "line": 56,
+      "category": "json_field_names",
+      "value": "estimated_time",
+      "context": "Estimated   string `json:\"estimated_time\"`"
+    },
+    {
+      "line": 63,
+      "category": "priority_levels",
+      "value": "critical",
+      "context": "PriorityCritical Priority = \"critical\""
+    },
+    {
+      "line": 64,
+      "category": "priority_levels",
+      "value": "high",
+      "context": "PriorityHigh     Priority = \"high\""
+    },
+    {
+      "line": 64,
+      "category": "impact_levels",
+      "value": "high",
+      "context": "PriorityHigh     Priority = \"high\""
+    },
+    {
+      "line": 64,
+      "category": "effort_levels",
+      "value": "high",
+      "context": "PriorityHigh     Priority = \"high\""
+    },
+    {
+      "line": 65,
+      "category": "priority_levels",
+      "value": "medium",
+      "context": "PriorityMedium   Priority = \"medium\""
+    },
+    {
+      "line": 65,
+      "category": "impact_levels",
+      "value": "medium",
+      "context": "PriorityMedium   Priority = \"medium\""
+    },
+    {
+      "line": 65,
+      "category": "effort_levels",
+      "value": "medium",
+      "context": "PriorityMedium   Priority = \"medium\""
+    },
+    {
+      "line": 66,
+      "category": "priority_levels",
+      "value": "low",
+      "context": "PriorityLow      Priority = \"low\""
+    },
+    {
+      "line": 66,
+      "category": "impact_levels",
+      "value": "low",
+      "context": "PriorityLow      Priority = \"low\""
+    },
+    {
+      "line": 66,
+      "category": "effort_levels",
+      "value": "low",
+      "context": "PriorityLow      Priority = \"low\""
+    },
+    {
+      "line": 73,
+      "category": "priority_levels",
+      "value": "high",
+      "context": "ImpactHigh   Impact = \"high\""
+    },
+    {
+      "line": 73,
+      "category": "impact_levels",
+      "value": "high",
+      "context": "ImpactHigh   Impact = \"high\""
+    },
+    {
+      "line": 73,
+      "category": "effort_levels",
+      "value": "high",
+      "context": "ImpactHigh   Impact = \"high\""
+    },
+    {
+      "line": 74,
+      "category": "priority_levels",
+      "value": "medium",
+      "context": "ImpactMedium Impact = \"medium\""
+    },
+    {
+      "line": 74,
+      "category": "impact_levels",
+      "value": "medium",
+      "context": "ImpactMedium Impact = \"medium\""
+    },
+    {
+      "line": 74,
+      "category": "effort_levels",
+      "value": "medium",
+      "context": "ImpactMedium Impact = \"medium\""
+    },
+    {
+      "line": 75,
+      "category": "priority_levels",
+      "value": "low",
+      "context": "ImpactLow    Impact = \"low\""
+    },
+    {
+      "line": 75,
+      "category": "impact_levels",
+      "value": "low",
+      "context": "ImpactLow    Impact = \"low\""
+    },
+    {
+      "line": 75,
+      "category": "effort_levels",
+      "value": "low",
+      "context": "ImpactLow    Impact = \"low\""
+    },
+    {
+      "line": 82,
+      "category": "priority_levels",
+      "value": "low",
+      "context": "EffortLow    Effort = \"low\""
+    },
+    {
+      "line": 82,
+      "category": "impact_levels",
+      "value": "low",
+      "context": "EffortLow    Effort = \"low\""
+    },
+    {
+      "line": 82,
+      "category": "effort_levels",
+      "value": "low",
+      "context": "EffortLow    Effort = \"low\""
+    },
+    {
+      "line": 83,
+      "category": "priority_levels",
+      "value": "medium",
+      "context": "EffortMedium Effort = \"medium\""
+    },
+    {
+      "line": 83,
+      "category": "impact_levels",
+      "value": "medium",
+      "context": "EffortMedium Effort = \"medium\""
+    },
+    {
+      "line": 83,
+      "category": "effort_levels",
+      "value": "medium",
+      "context": "EffortMedium Effort = \"medium\""
+    },
+    {
+      "line": 84,
+      "category": "priority_levels",
+      "value": "high",
+      "context": "EffortHigh   Effort = \"high\""
+    },
+    {
+      "line": 84,
+      "category": "impact_levels",
+      "value": "high",
+      "context": "EffortHigh   Effort = \"high\""
+    },
+    {
+      "line": 84,
+      "category": "effort_levels",
+      "value": "high",
+      "context": "EffortHigh   Effort = \"high\""
+    },
+    {
+      "line": 126,
+      "category": "numeric_thresholds",
+      "value": "20",
+      "context": "if len(recommendations) > 20 {"
+    },
+    {
+      "line": 127,
+      "category": "numeric_thresholds",
+      "value": "20",
+      "context": "recommendations = recommendations[:20]"
+    },
+    {
+      "line": 139,
+      "category": "template_ids",
+      "value": "missing-title",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-title\", map[string]interface{}{"
+    },
+    {
+      "line": 140,
+      "category": "error_messages",
+      "value": "Titre manquant",
+      "context": "\"issue\": \"Titre manquant\","
+    },
+    {
+      "line": 140,
+      "category": "seo_issues",
+      "value": "Titre manquant",
+      "context": "\"issue\": \"Titre manquant\","
+    },
+    {
+      "line": 143,
+      "category": "template_ids",
+      "value": "title-length",
+      "context": "recs = append(recs, re.createRecommendation(\"title-length\", map[string]interface{}{"
+    },
+    {
+      "line": 145,
+      "category": "content_ranges",
+      "value": "30-60 caract\u00e8res",
+      "context": "\"optimal_range\":  \"30-60 caract\u00e8res\","
+    },
+    {
+      "line": 151,
+      "category": "template_ids",
+      "value": "missing-meta-desc",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-meta-desc\", map[string]interface{}{}))"
+    },
+    {
+      "line": 151,
+      "category": "seo_issues",
+      "value": "missing-meta-desc",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-meta-desc\", map[string]interface{}{}))"
+    },
+    {
+      "line": 153,
+      "category": "template_ids",
+      "value": "meta-desc-length",
+      "context": "recs = append(recs, re.createRecommendation(\"meta-desc-length\", map[string]interface{}{"
+    },
+    {
+      "line": 153,
+      "category": "seo_issues",
+      "value": "meta-desc-length",
+      "context": "recs = append(recs, re.createRecommendation(\"meta-desc-length\", map[string]interface{}{"
+    },
+    {
+      "line": 155,
+      "category": "content_ranges",
+      "value": "120-160 caract\u00e8res",
+      "context": "\"optimal_range\":  \"120-160 caract\u00e8res\","
+    },
+    {
+      "line": 161,
+      "category": "template_ids",
+      "value": "missing-h1",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-h1\", map[string]interface{}{}))"
+    },
+    {
+      "line": 161,
+      "category": "seo_issues",
+      "value": "missing-h1",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-h1\", map[string]interface{}{}))"
+    },
+    {
+      "line": 163,
+      "category": "template_ids",
+      "value": "multiple-h1",
+      "context": "recs = append(recs, re.createRecommendation(\"multiple-h1\", map[string]interface{}{"
+    },
+    {
+      "line": 163,
+      "category": "seo_issues",
+      "value": "multiple-h1",
+      "context": "recs = append(recs, re.createRecommendation(\"multiple-h1\", map[string]interface{}{"
+    },
+    {
+      "line": 169,
+      "category": "template_ids",
+      "value": "heading-hierarchy",
+      "context": "recs = append(recs, re.createRecommendation(\"heading-hierarchy\", map[string]interface{}{}))"
+    },
+    {
+      "line": 173,
+      "category": "numeric_thresholds",
+      "value": "1.0",
+      "context": "if tagAnalysis.Images.AltTextCoverage < 1.0 {"
+    },
+    {
+      "line": 174,
+      "category": "template_ids",
+      "value": "missing-alt-tags",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-alt-tags\", map[string]interface{}{"
+    },
+    {
+      "line": 175,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "\"coverage\": fmt.Sprintf(\"%.1f%%\", tagAnalysis.Images.AltTextCoverage*100),"
+    },
+    {
+      "line": 182,
+      "category": "template_ids",
+      "value": "missing-viewport",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-viewport\", map[string]interface{}{}))"
+    },
+    {
+      "line": 186,
+      "category": "template_ids",
+      "value": "missing-canonical",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-canonical\", map[string]interface{}{}))"
+    },
+    {
+      "line": 190,
+      "category": "template_ids",
+      "value": "missing-og-tags",
+      "context": "recs = append(recs, re.createRecommendation(\"missing-og-tags\", map[string]interface{}{}))"
+    },
+    {
+      "line": 201,
+      "category": "score_comparisons",
+      "value": "poor",
+      "context": "if perfMetrics.CoreWebVitals.LCP.Score == \"poor\" {"
+    },
+    {
+      "line": 202,
+      "category": "template_ids",
+      "value": "improve-lcp",
+      "context": "recs = append(recs, re.createRecommendation(\"improve-lcp\", map[string]interface{}{"
+    },
+    {
+      "line": 202,
+      "category": "seo_issues",
+      "value": "improve-lcp",
+      "context": "recs = append(recs, re.createRecommendation(\"improve-lcp\", map[string]interface{}{"
+    },
+    {
+      "line": 204,
+      "category": "target_values",
+      "value": "\u2264 2.5s",
+      "context": "\"target\":        \"\u2264 2.5s\","
+    },
+    {
+      "line": 208,
+      "category": "score_comparisons",
+      "value": "poor",
+      "context": "if perfMetrics.CoreWebVitals.FID.Score == \"poor\" {"
+    },
+    {
+      "line": 209,
+      "category": "template_ids",
+      "value": "improve-fid",
+      "context": "recs = append(recs, re.createRecommendation(\"improve-fid\", map[string]interface{}{"
+    },
+    {
+      "line": 211,
+      "category": "target_values",
+      "value": "\u2264 100ms",
+      "context": "\"target\":        \"\u2264 100ms\","
+    },
+    {
+      "line": 215,
+      "category": "score_comparisons",
+      "value": "poor",
+      "context": "if perfMetrics.CoreWebVitals.CLS.Score == \"poor\" {"
+    },
+    {
+      "line": 216,
+      "category": "template_ids",
+      "value": "improve-cls",
+      "context": "recs = append(recs, re.createRecommendation(\"improve-cls\", map[string]interface{}{"
+    },
+    {
+      "line": 218,
+      "category": "target_values",
+      "value": "\u2264 0.1",
+      "context": "\"target\":        \"\u2264 0.1\","
+    },
+    {
+      "line": 218,
+      "category": "numeric_thresholds",
+      "value": "0.1",
+      "context": "\"target\":        \"\u2264 0.1\","
+    },
+    {
+      "line": 224,
+      "category": "template_ids",
+      "value": "enable-compression",
+      "context": "recs = append(recs, re.createRecommendation(\"enable-compression\", map[string]interface{}{}))"
+    },
+    {
+      "line": 229,
+      "category": "template_ids",
+      "value": "configure-caching",
+      "context": "recs = append(recs, re.createRecommendation(\"configure-caching\", map[string]interface{}{}))"
+    },
+    {
+      "line": 234,
+      "category": "template_ids",
+      "value": "optimize-images",
+      "context": "recs = append(recs, re.createRecommendation(\"optimize-images\", map[string]interface{}{"
+    },
+    {
+      "line": 241,
+      "category": "template_ids",
+      "value": "minify-resources",
+      "context": "recs = append(recs, re.createRecommendation(\"minify-resources\", map[string]interface{}{}))"
+    },
+    {
+      "line": 245,
+      "category": "numeric_thresholds",
+      "value": "2*1024*1024",
+      "context": "if perfMetrics.PageSize > 2*1024*1024 { // > 2MB"
+    },
+    {
+      "line": 246,
+      "category": "template_ids",
+      "value": "reduce-page-size",
+      "context": "recs = append(recs, re.createRecommendation(\"reduce-page-size\", map[string]interface{}{"
+    },
+    {
+      "line": 248,
+      "category": "target_values",
+      "value": "< 2 MB",
+      "context": "\"target\":       \"< 2 MB\","
+    },
+    {
+      "line": 261,
+      "category": "template_ids",
+      "value": "migrate-https",
+      "context": "recs = append(recs, re.createRecommendation(\"migrate-https\", map[string]interface{}{}))"
+    },
+    {
+      "line": 261,
+      "category": "seo_issues",
+      "value": "migrate-https",
+      "context": "recs = append(recs, re.createRecommendation(\"migrate-https\", map[string]interface{}{}))"
+    },
+    {
+      "line": 265,
+      "category": "template_ids",
+      "value": "fix-mixed-content",
+      "context": "recs = append(recs, re.createRecommendation(\"fix-mixed-content\", map[string]interface{}{"
+    },
+    {
+      "line": 271,
+      "category": "template_ids",
+      "value": "add-hsts",
+      "context": "recs = append(recs, re.createRecommendation(\"add-hsts\", map[string]interface{}{}))"
+    },
+    {
+      "line": 276,
+      "category": "template_ids",
+      "value": "make-responsive",
+      "context": "recs = append(recs, re.createRecommendation(\"make-responsive\", map[string]interface{}{}))"
+    },
+    {
+      "line": 281,
+      "category": "template_ids",
+      "value": "add-sitemap",
+      "context": "recs = append(recs, re.createRecommendation(\"add-sitemap\", map[string]interface{}{}))"
+    },
+    {
+      "line": 285,
+      "category": "template_ids",
+      "value": "add-robots-txt",
+      "context": "recs = append(recs, re.createRecommendation(\"add-robots-txt\", map[string]interface{}{}))"
+    },
+    {
+      "line": 290,
+      "category": "template_ids",
+      "value": "remove-noindex",
+      "context": "recs = append(recs, re.createRecommendation(\"remove-noindex\", map[string]interface{}{}))"
+    },
+    {
+      "line": 294,
+      "category": "template_ids",
+      "value": "fix-duplicate-content",
+      "context": "recs = append(recs, re.createRecommendation(\"fix-duplicate-content\", map[string]interface{}{}))"
+    },
+    {
+      "line": 298,
+      "category": "numeric_thresholds",
+      "value": "0.7",
+      "context": "if techAudit.Accessibility.Score < 0.7 {"
+    },
+    {
+      "line": 299,
+      "category": "template_ids",
+      "value": "improve-accessibility",
+      "context": "recs = append(recs, re.createRecommendation(\"improve-accessibility\", map[string]interface{}{"
+    },
+    {
+      "line": 300,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "\"current_score\": fmt.Sprintf(\"%.1f%%\", techAudit.Accessibility.Score*100),"
+    },
+    {
+      "line": 307,
+      "category": "template_ids",
+      "value": "fix-broken-links",
+      "context": "recs = append(recs, re.createRecommendation(\"fix-broken-links\", map[string]interface{}{"
+    },
+    {
+      "line": 313,
+      "category": "template_ids",
+      "value": "improve-internal-linking",
+      "context": "recs = append(recs, re.createRecommendation(\"improve-internal-linking\", map[string]interface{}{"
+    },
+    {
+      "line": 327,
+      "category": "numeric_thresholds",
+      "value": "50",
+      "context": "if analysis.OverallScore < 50 {"
+    },
+    {
+      "line": 328,
+      "category": "template_ids",
+      "value": "overall-seo-audit",
+      "context": "recs = append(recs, re.createRecommendation(\"overall-seo-audit\", map[string]interface{}{"
+    },
+    {
+      "line": 330,
+      "category": "numeric_thresholds",
+      "value": "70",
+      "context": "\"target\":        \"\u2265 70\","
+    },
+    {
+      "line": 336,
+      "category": "numeric_thresholds",
+      "value": "0.5",
+      "context": "if score < 0.5 { // Score < 50%"
+    },
+    {
+      "line": 336,
+      "category": "numeric_thresholds",
+      "value": "50",
+      "context": "if score < 0.5 { // Score < 50%"
+    },
+    {
+      "line": 338,
+      "category": "json_field_names",
+      "value": "category",
+      "context": "\"category\":      category,"
+    },
+    {
+      "line": 339,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "\"current_score\": fmt.Sprintf(\"%.1f%%\", score*100),"
+    },
+    {
+      "line": 340,
+      "category": "target_values",
+      "value": "\u2265 70%",
+      "context": "\"target\":        \"\u2265 70%\","
+    },
+    {
+      "line": 340,
+      "category": "numeric_thresholds",
+      "value": "70",
+      "context": "\"target\":        \"\u2265 70%\","
+    },
+    {
+      "line": 357,
+      "category": "category_names",
+      "value": "general",
+      "context": "Category:    \"general\","
+    },
+    {
+      "line": 384,
+      "category": "tag_names",
+      "value": "technique",
+      "context": "Technical:   strings.Contains(actionTemplate, \"technique\") || strings.Contains(actionTemplate, \"code\"),"
+    },
+    {
+      "line": 394,
+      "category": "resource_types",
+      "value": "documentation",
+      "context": "Type: \"documentation\","
+    },
+    {
+      "line": 406,
+      "category": "placeholders",
+      "value": "{%s}",
+      "context": "placeholder := fmt.Sprintf(\"{%s}\", key)"
+    },
+    {
+      "line": 416,
+      "category": "time_estimates",
+      "value": "1-2 heures",
+      "context": "return \"1-2 heures\""
+    },
+    {
+      "line": 418,
+      "category": "time_estimates",
+      "value": "4-8 heures",
+      "context": "return \"4-8 heures\""
+    },
+    {
+      "line": 420,
+      "category": "time_estimates",
+      "value": "1-2 jours",
+      "context": "return \"1-2 jours\""
+    },
+    {
+      "line": 422,
+      "category": "time_estimates",
+      "value": "Variable",
+      "context": "return \"Variable\""
+    },
+    {
+      "line": 493,
+      "category": "template_ids",
+      "value": "missing-title",
+      "context": "re.priorityRules[\"missing-title\"] = 90"
+    },
+    {
+      "line": 493,
+      "category": "numeric_thresholds",
+      "value": "90",
+      "context": "re.priorityRules[\"missing-title\"] = 90"
+    },
+    {
+      "line": 494,
+      "category": "template_ids",
+      "value": "missing-meta-desc",
+      "context": "re.priorityRules[\"missing-meta-desc\"] = constants.HighQualityScore"
+    },
+    {
+      "line": 494,
+      "category": "seo_issues",
+      "value": "missing-meta-desc",
+      "context": "re.priorityRules[\"missing-meta-desc\"] = constants.HighQualityScore"
+    },
+    {
+      "line": 495,
+      "category": "template_ids",
+      "value": "migrate-https",
+      "context": "re.priorityRules[\"migrate-https\"] = 95"
+    },
+    {
+      "line": 495,
+      "category": "numeric_thresholds",
+      "value": "95",
+      "context": "re.priorityRules[\"migrate-https\"] = 95"
+    },
+    {
+      "line": 495,
+      "category": "seo_issues",
+      "value": "migrate-https",
+      "context": "re.priorityRules[\"migrate-https\"] = 95"
+    },
+    {
+      "line": 496,
+      "category": "template_ids",
+      "value": "missing-viewport",
+      "context": "re.priorityRules[\"missing-viewport\"] = 85"
+    },
+    {
+      "line": 496,
+      "category": "numeric_thresholds",
+      "value": "85",
+      "context": "re.priorityRules[\"missing-viewport\"] = 85"
+    },
+    {
+      "line": 497,
+      "category": "template_ids",
+      "value": "improve-lcp",
+      "context": "re.priorityRules[\"improve-lcp\"] = 75"
+    },
+    {
+      "line": 497,
+      "category": "seo_issues",
+      "value": "improve-lcp",
+      "context": "re.priorityRules[\"improve-lcp\"] = 75"
+    },
+    {
+      "line": 498,
+      "category": "template_ids",
+      "value": "missing-h1",
+      "context": "re.priorityRules[\"missing-h1\"] = 70"
+    },
+    {
+      "line": 498,
+      "category": "numeric_thresholds",
+      "value": "70",
+      "context": "re.priorityRules[\"missing-h1\"] = 70"
+    },
+    {
+      "line": 498,
+      "category": "seo_issues",
+      "value": "missing-h1",
+      "context": "re.priorityRules[\"missing-h1\"] = 70"
+    },
+    {
+      "line": 505,
+      "category": "template_ids",
+      "value": "missing-title",
+      "context": "re.templates[\"missing-title\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 506,
+      "category": "template_ids",
+      "value": "missing-title",
+      "context": "ID:          \"missing-title\","
+    },
+    {
+      "line": 507,
+      "category": "recommendation_titles",
+      "value": "Ajouter",
+      "context": "Title:       \"Ajouter un titre de page\","
+    },
+    {
+      "line": 507,
+      "category": "seo_issues",
+      "value": "Ajouter un titre de page",
+      "context": "Title:       \"Ajouter un titre de page\","
+    },
+    {
+      "line": 509,
+      "category": "json_field_names",
+      "value": "tags",
+      "context": "Category:    \"tags\","
+    },
+    {
+      "line": 509,
+      "category": "category_names",
+      "value": "tags",
+      "context": "Category:    \"tags\","
+    },
+    {
+      "line": 514,
+      "category": "recommendation_titles",
+      "value": "Ajouter",
+      "context": "\"Ajouter une balise <title> descriptive et unique\","
+    },
+    {
+      "line": 514,
+      "category": "action_descriptions",
+      "value": "Ajouter une",
+      "context": "\"Ajouter une balise <title> descriptive et unique\","
+    },
+    {
+      "line": 515,
+      "category": "recommendation_titles",
+      "value": "Inclure",
+      "context": "\"Inclure les mots-cl\u00e9s principaux\","
+    },
+    {
+      "line": 515,
+      "category": "action_descriptions",
+      "value": "Inclure",
+      "context": "\"Inclure les mots-cl\u00e9s principaux\","
+    },
+    {
+      "line": 516,
+      "category": "action_descriptions",
+      "value": "Respecter",
+      "context": "\"Respecter la longueur optimale (30-60 caract\u00e8res)\","
+    },
+    {
+      "line": 519,
+      "category": "url_docs",
+      "value": "Google",
+      "context": "constants.GoogleTitleLinkDocs,"
+    },
+    {
+      "line": 521,
+      "category": "metric_names",
+      "value": "Taux de clic",
+      "context": "Metrics: []string{\"Taux de clic\", \"Position dans les SERP\"},"
+    },
+    {
+      "line": 521,
+      "category": "metric_names",
+      "value": "Position dans les SERP",
+      "context": "Metrics: []string{\"Taux de clic\", \"Position dans les SERP\"},"
+    },
+    {
+      "line": 521,
+      "category": "placeholders",
+      "value": "{\"Taux de clic\", \"Position dans les SERP\"}",
+      "context": "Metrics: []string{\"Taux de clic\", \"Position dans les SERP\"},"
+    },
+    {
+      "line": 522,
+      "category": "tag_names",
+      "value": "critique",
+      "context": "Tags:    []string{\"critique\", \"balises\", \"onpage\"},"
+    },
+    {
+      "line": 522,
+      "category": "tag_names",
+      "value": "balises",
+      "context": "Tags:    []string{\"critique\", \"balises\", \"onpage\"},"
+    },
+    {
+      "line": 522,
+      "category": "tag_names",
+      "value": "onpage",
+      "context": "Tags:    []string{\"critique\", \"balises\", \"onpage\"},"
+    },
+    {
+      "line": 522,
+      "category": "placeholders",
+      "value": "{\"critique\", \"balises\", \"onpage\"}",
+      "context": "Tags:    []string{\"critique\", \"balises\", \"onpage\"},"
+    },
+    {
+      "line": 526,
+      "category": "template_ids",
+      "value": "missing-meta-desc",
+      "context": "re.templates[\"missing-meta-desc\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 526,
+      "category": "seo_issues",
+      "value": "missing-meta-desc",
+      "context": "re.templates[\"missing-meta-desc\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 527,
+      "category": "template_ids",
+      "value": "missing-meta-desc",
+      "context": "ID:          \"missing-meta-desc\","
+    },
+    {
+      "line": 527,
+      "category": "seo_issues",
+      "value": "missing-meta-desc",
+      "context": "ID:          \"missing-meta-desc\","
+    },
+    {
+      "line": 528,
+      "category": "recommendation_titles",
+      "value": "Ajouter",
+      "context": "Title:       \"Ajouter une meta description\","
+    },
+    {
+      "line": 528,
+      "category": "action_descriptions",
+      "value": "Ajouter une",
+      "context": "Title:       \"Ajouter une meta description\","
+    },
+    {
+      "line": 528,
+      "category": "seo_issues",
+      "value": "Ajouter une meta description",
+      "context": "Title:       \"Ajouter une meta description\","
+    },
+    {
+      "line": 529,
+      "category": "seo_issues",
+      "value": "La page n'a pas de meta description. Elle influence le taux de clic dans les r\u00e9sultats de recherche.",
+      "context": "Description: \"La page n'a pas de meta description. Elle influence le taux de clic dans les r\u00e9sultats de recherche.\","
+    },
+    {
+      "line": 530,
+      "category": "json_field_names",
+      "value": "tags",
+      "context": "Category:    \"tags\","
+    },
+    {
+      "line": 530,
+      "category": "category_names",
+      "value": "tags",
+      "context": "Category:    \"tags\","
+    },
+    {
+      "line": 535,
+      "category": "recommendation_titles",
+      "value": "Ajouter",
+      "context": "\"Ajouter une meta description attrayante\","
+    },
+    {
+      "line": 535,
+      "category": "action_descriptions",
+      "value": "Ajouter une",
+      "context": "\"Ajouter une meta description attrayante\","
+    },
+    {
+      "line": 535,
+      "category": "seo_issues",
+      "value": "Ajouter une meta description attrayante",
+      "context": "\"Ajouter une meta description attrayante\","
+    },
+    {
+      "line": 536,
+      "category": "recommendation_titles",
+      "value": "Inclure",
+      "context": "\"Inclure un appel \u00e0 l'action\","
+    },
+    {
+      "line": 536,
+      "category": "action_descriptions",
+      "value": "Inclure",
+      "context": "\"Inclure un appel \u00e0 l'action\","
+    },
+    {
+      "line": 537,
+      "category": "action_descriptions",
+      "value": "Respecter",
+      "context": "\"Respecter la longueur optimale (120-160 caract\u00e8res)\","
+    },
+    {
+      "line": 540,
+      "category": "url_docs",
+      "value": "Google",
+      "context": "constants.GoogleSnippetDocs,"
+    },
+    {
+      "line": 542,
+      "category": "metric_names",
+      "value": "Taux de clic",
+      "context": "Metrics: []string{\"Taux de clic\", \"Impressions\"},"
+    },
+    {
+      "line": 542,
+      "category": "metric_names",
+      "value": "Impressions",
+      "context": "Metrics: []string{\"Taux de clic\", \"Impressions\"},"
+    },
+    {
+      "line": 542,
+      "category": "placeholders",
+      "value": "{\"Taux de clic\", \"Impressions\"}",
+      "context": "Metrics: []string{\"Taux de clic\", \"Impressions\"},"
+    },
+    {
+      "line": 543,
+      "category": "tag_names",
+      "value": "meta",
+      "context": "Tags:    []string{\"meta\", \"balises\", \"ctr\"},"
+    },
+    {
+      "line": 543,
+      "category": "tag_names",
+      "value": "balises",
+      "context": "Tags:    []string{\"meta\", \"balises\", \"ctr\"},"
+    },
+    {
+      "line": 543,
+      "category": "tag_names",
+      "value": "ctr",
+      "context": "Tags:    []string{\"meta\", \"balises\", \"ctr\"},"
+    },
+    {
+      "line": 543,
+      "category": "placeholders",
+      "value": "{\"meta\", \"balises\", \"ctr\"}",
+      "context": "Tags:    []string{\"meta\", \"balises\", \"ctr\"},"
+    },
+    {
+      "line": 543,
+      "category": "seo_issues",
+      "value": "meta",
+      "context": "Tags:    []string{\"meta\", \"balises\", \"ctr\"},"
+    },
+    {
+      "line": 547,
+      "category": "template_ids",
+      "value": "migrate-https",
+      "context": "re.templates[\"migrate-https\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 547,
+      "category": "seo_issues",
+      "value": "migrate-https",
+      "context": "re.templates[\"migrate-https\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 548,
+      "category": "template_ids",
+      "value": "migrate-https",
+      "context": "ID:          \"migrate-https\","
+    },
+    {
+      "line": 548,
+      "category": "seo_issues",
+      "value": "migrate-https",
+      "context": "ID:          \"migrate-https\","
+    },
+    {
+      "line": 549,
+      "category": "recommendation_titles",
+      "value": "Migrer",
+      "context": "Title:       \"Migrer vers HTTPS\","
+    },
+    {
+      "line": 549,
+      "category": "seo_issues",
+      "value": "Migrer vers HTTPS",
+      "context": "Title:       \"Migrer vers HTTPS\","
+    },
+    {
+      "line": 550,
+      "category": "seo_issues",
+      "value": "Le site utilise HTTP au lieu de HTTPS. Google favorise les sites s\u00e9curis\u00e9s.",
+      "context": "Description: \"Le site utilise HTTP au lieu de HTTPS. Google favorise les sites s\u00e9curis\u00e9s.\","
+    },
+    {
+      "line": 551,
+      "category": "category_names",
+      "value": "security",
+      "context": "Category:    \"security\","
+    },
+    {
+      "line": 556,
+      "category": "action_descriptions",
+      "value": "Obtenir",
+      "context": "\"Obtenir un certificat SSL/TLS\","
+    },
+    {
+      "line": 557,
+      "category": "recommendation_titles",
+      "value": "Configurer",
+      "context": "\"Configurer le serveur pour HTTPS\","
+    },
+    {
+      "line": 557,
+      "category": "action_descriptions",
+      "value": "Configurer",
+      "context": "\"Configurer le serveur pour HTTPS\","
+    },
+    {
+      "line": 557,
+      "category": "seo_issues",
+      "value": "Configurer le serveur pour HTTPS",
+      "context": "\"Configurer le serveur pour HTTPS\","
+    },
+    {
+      "line": 558,
+      "category": "action_descriptions",
+      "value": "Rediriger",
+      "context": "\"Rediriger tout le trafic HTTP vers HTTPS\","
+    },
+    {
+      "line": 558,
+      "category": "seo_issues",
+      "value": "Rediriger tout le trafic HTTP vers HTTPS",
+      "context": "\"Rediriger tout le trafic HTTP vers HTTPS\","
+    },
+    {
+      "line": 559,
+      "category": "action_descriptions",
+      "value": "Mettre \u00e0 jour",
+      "context": "\"Mettre \u00e0 jour les liens internes\","
+    },
+    {
+      "line": 562,
+      "category": "url_docs",
+      "value": "Google",
+      "context": "constants.GoogleHTTPSDocs,"
+    },
+    {
+      "line": 564,
+      "category": "metric_names",
+      "value": "Trust signals",
+      "context": "Metrics: []string{\"Trust signals\", \"Ranking boost\"},"
+    },
+    {
+      "line": 564,
+      "category": "metric_names",
+      "value": "Ranking boost",
+      "context": "Metrics: []string{\"Trust signals\", \"Ranking boost\"},"
+    },
+    {
+      "line": 564,
+      "category": "placeholders",
+      "value": "{\"Trust signals\", \"Ranking boost\"}",
+      "context": "Metrics: []string{\"Trust signals\", \"Ranking boost\"},"
+    },
+    {
+      "line": 565,
+      "category": "tag_names",
+      "value": "critique",
+      "context": "Tags:    []string{\"critique\", \"s\u00e9curit\u00e9\", \"technique\"},"
+    },
+    {
+      "line": 565,
+      "category": "tag_names",
+      "value": "s\u00e9curit\u00e9",
+      "context": "Tags:    []string{\"critique\", \"s\u00e9curit\u00e9\", \"technique\"},"
+    },
+    {
+      "line": 565,
+      "category": "tag_names",
+      "value": "technique",
+      "context": "Tags:    []string{\"critique\", \"s\u00e9curit\u00e9\", \"technique\"},"
+    },
+    {
+      "line": 565,
+      "category": "placeholders",
+      "value": "{\"critique\", \"s\u00e9curit\u00e9\", \"technique\"}",
+      "context": "Tags:    []string{\"critique\", \"s\u00e9curit\u00e9\", \"technique\"},"
+    },
+    {
+      "line": 565,
+      "category": "seo_issues",
+      "value": "s\u00e9curit\u00e9",
+      "context": "Tags:    []string{\"critique\", \"s\u00e9curit\u00e9\", \"technique\"},"
+    },
+    {
+      "line": 569,
+      "category": "template_ids",
+      "value": "improve-lcp",
+      "context": "re.templates[\"improve-lcp\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 569,
+      "category": "seo_issues",
+      "value": "improve-lcp",
+      "context": "re.templates[\"improve-lcp\"] = RecommendationTemplate{"
+    },
+    {
+      "line": 570,
+      "category": "template_ids",
+      "value": "improve-lcp",
+      "context": "ID:          \"improve-lcp\","
+    },
+    {
+      "line": 570,
+      "category": "seo_issues",
+      "value": "improve-lcp",
+      "context": "ID:          \"improve-lcp\","
+    },
+    {
+      "line": 571,
+      "category": "recommendation_titles",
+      "value": "Am\u00e9liorer",
+      "context": "Title:       \"Am\u00e9liorer le Largest Contentful Paint (LCP)\","
+    },
+    {
+      "line": 571,
+      "category": "action_descriptions",
+      "value": "Am\u00e9liorer",
+      "context": "Title:       \"Am\u00e9liorer le Largest Contentful Paint (LCP)\","
+    },
+    {
+      "line": 571,
+      "category": "seo_issues",
+      "value": "Am\u00e9liorer le Largest Contentful Paint (LCP)",
+      "context": "Title:       \"Am\u00e9liorer le Largest Contentful Paint (LCP)\","
+    },
+    {
+      "line": 572,
+      "category": "placeholders",
+      "value": "{current_value}",
+      "context": "Description: \"Le LCP actuel est de {current_value}, l'objectif est {target}. Optimisez le chargement du contenu principa..."
+    },
+    {
+      "line": 572,
+      "category": "placeholders",
+      "value": "{target}",
+      "context": "Description: \"Le LCP actuel est de {current_value}, l'objectif est {target}. Optimisez le chargement du contenu principa..."
+    },
+    {
+      "line": 572,
+      "category": "seo_issues",
+      "value": "Le LCP actuel est de {current_value}, l'objectif est {target}. Optimisez le chargement du contenu principal.",
+      "context": "Description: \"Le LCP actuel est de {current_value}, l'objectif est {target}. Optimisez le chargement du contenu principa..."
+    },
+    {
+      "line": 573,
+      "category": "category_names",
+      "value": "performance",
+      "context": "Category:    \"performance\","
+    },
+    {
+      "line": 573,
+      "category": "tag_names",
+      "value": "performance",
+      "context": "Category:    \"performance\","
+    },
+    {
+      "line": 573,
+      "category": "seo_issues",
+      "value": "performance",
+      "context": "Category:    \"performance\","
+    },
+    {
+      "line": 578,
+      "category": "recommendation_titles",
+      "value": "Optimiser",
+      "context": "\"Optimiser les images de l'above-the-fold\","
+    },
+    {
+      "line": 578,
+      "category": "action_descriptions",
+      "value": "Optimiser",
+      "context": "\"Optimiser les images de l'above-the-fold\","
+    },
+    {
+      "line": 579,
+      "category": "recommendation_titles",
+      "value": "Am\u00e9liorer",
+      "context": "\"Am\u00e9liorer le temps de r\u00e9ponse du serveur\","
+    },
+    {
+      "line": 579,
+      "category": "action_descriptions",
+      "value": "Am\u00e9liorer",
+      "context": "\"Am\u00e9liorer le temps de r\u00e9ponse du serveur\","
+    },
+    {
+      "line": 580,
+      "category": "action_descriptions",
+      "value": "Pr\u00e9charger",
+      "context": "\"Pr\u00e9charger les ressources critiques\","
+    },
+    {
+      "line": 581,
+      "category": "action_descriptions",
+      "value": "Utiliser",
+      "context": "\"Utiliser un CDN\","
+    },
+    {
+      "line": 584,
+      "category": "url_docs",
+      "value": "WebDev",
+      "context": "constants.WebDevLCPDocs,"
+    },
+    {
+      "line": 586,
+      "category": "metric_names",
+      "value": "LCP",
+      "context": "Metrics: []string{\"LCP\", \"Page Experience\", \"Core Web Vitals\"},"
+    },
+    {
+      "line": 586,
+      "category": "metric_names",
+      "value": "Page Experience",
+      "context": "Metrics: []string{\"LCP\", \"Page Experience\", \"Core Web Vitals\"},"
+    },
+    {
+      "line": 586,
+      "category": "metric_names",
+      "value": "Core Web Vitals",
+      "context": "Metrics: []string{\"LCP\", \"Page Experience\", \"Core Web Vitals\"},"
+    },
+    {
+      "line": 586,
+      "category": "tag_names",
+      "value": "LCP",
+      "context": "Metrics: []string{\"LCP\", \"Page Experience\", \"Core Web Vitals\"},"
+    },
+    {
+      "line": 586,
+      "category": "placeholders",
+      "value": "{\"LCP\", \"Page Experience\", \"Core Web Vitals\"}",
+      "context": "Metrics: []string{\"LCP\", \"Page Experience\", \"Core Web Vitals\"},"
+    },
+    {
+      "line": 586,
+      "category": "seo_issues",
+      "value": "LCP",
+      "context": "Metrics: []string{\"LCP\", \"Page Experience\", \"Core Web Vitals\"},"
+    },
+    {
+      "line": 587,
+      "category": "category_names",
+      "value": "performance",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "metric_names",
+      "value": "lcp",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "tag_names",
+      "value": "performance",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "tag_names",
+      "value": "core-web-vitals",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "tag_names",
+      "value": "lcp",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "placeholders",
+      "value": "{\"performance\", \"core-web-vitals\", \"lcp\"}",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "seo_issues",
+      "value": "performance",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    },
+    {
+      "line": 587,
+      "category": "seo_issues",
+      "value": "lcp",
+      "context": "Tags:    []string{\"performance\", \"core-web-vitals\", \"lcp\"},"
+    }
+  ],
+  "constants_mapping": {
+    "\"id\"": "constants.RecommendationJSONFieldID",
+    "\"title\"": "constants.RecommendationJSONFieldTitle",
+    "\"description\"": "constants.RecommendationJSONFieldDescription",
+    "\"category\"": "constants.RecommendationJSONFieldCategory",
+    "\"priority\"": "constants.RecommendationJSONFieldPriority",
+    "\"impact\"": "constants.RecommendationJSONFieldImpact",
+    "\"effort\"": "constants.RecommendationJSONFieldEffort",
+    "\"actions\"": "constants.RecommendationJSONFieldActions",
+    "\"resources\"": "constants.RecommendationJSONFieldResources",
+    "\"metrics\"": "constants.RecommendationJSONFieldMetrics",
+    "\"tags\"": "constants.RecommendationCategoryTags",
+    "\"task\"": "constants.RecommendationJSONFieldTask",
+    "\"technical\"": "constants.RecommendationJSONFieldTechnical",
+    "\"estimated_time\"": "constants.RecommendationJSONFieldEstimatedTime",
+    "\"critical\"": "constants.RecommendationPriorityCritical",
+    "\"high\"": "constants.RecommendationEffortHigh",
+    "\"medium\"": "constants.RecommendationEffortMedium",
+    "\"low\"": "constants.RecommendationEffortLow",
+    "\"general\"": "constants.RecommendationCategoryGeneral",
+    "\"security\"": "constants.RecommendationCategorySecurity",
+    "\"performance\"": "constants.RecommendationCategoryPerformance",
+    "\"poor\"": "constants.RecommendationScorePoor",
+    "\"1-2 heures\"": "constants.RecommendationTimeLow",
+    "\"4-8 heures\"": "constants.RecommendationTimeMedium",
+    "\"1-2 jours\"": "constants.RecommendationTimeHigh",
+    "\"Variable\"": "constants.RecommendationTimeVariable",
+    "\"30-60 caract\u00e8res\"": "constants.RecommendationTitleRange",
+    "\"120-160 caract\u00e8res\"": "constants.RecommendationMetaDescRange",
+    "\"\u2264 2.5s\"": "constants.RecommendationTargetLCP",
+    "\"\u2264 100ms\"": "constants.RecommendationTargetFID",
+    "\"\u2264 0.1\"": "constants.RecommendationTargetCLS",
+    "\"< 2 MB\"": "constants.RecommendationTargetPageSize",
+    "\"\u2265 70%\"": "constants.RecommendationTargetScore",
+    "\"documentation\"": "constants.RecommendationResourceTypeDoc"
+  }
+}

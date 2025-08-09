@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test expandedIssues</title>
+</head>
+<body>
+    <h1>Test de la fonctionnalité expandedIssues</h1>
+    
+    <h2>1. Accès direct à la page des résultats</h2>
+    <a href="http://localhost:8080/results?url=https://example.com" target="_blank">
+        Ouvrir la page des résultats
+    </a>
+    
+    <h2>2. Test du flow complet</h2>
+    <ol>
+        <li>Aller sur <a href="http://localhost:8080/" target="_blank">la page d'accueil</a></li>
+        <li>Entrer une URL (ex: https://example.com)</li>
+        <li>Cliquer sur "ANALYSER MON SITE"</li>
+        <li>Attendre la fin de l'analyse (100%)</li>
+        <li>Être redirigé automatiquement vers les résultats</li>
+    </ol>
+    
+    <h2>3. Points à vérifier sur la page des résultats</h2>
+    <ul>
+        <li>✅ Les sections "Problèmes Critiques" doivent être cliquables</li>
+        <li>✅ Les sections "Avertissements" doivent être cliquables</li>
+        <li>✅ Au clic, la flèche doit tourner (↓ devient ↑)</li>
+        <li>✅ Au clic, le contenu détaillé doit s'afficher/se masquer</li>
+    </ul>
+    
+    <h2>4. Vérification dans la console</h2>
+    <p>Ouvrir la console du navigateur (F12) et vérifier :</p>
+    <ul>
+        <li>Pas d'erreurs JavaScript</li>
+        <li>Alpine.js est bien chargé</li>
+        <li>L'objet expandedIssues contient bien les clés issue0, issue1, warning0, etc.</li>
+    </ul>
+    
+    <p>Pour vérifier dans la console : <code>Alpine.$data(document.querySelector('[x-data]')).expandedIssues</code></p>
+</body>
+</html>

@@ -1,8 +1,76 @@
 package constants
 
 // ========================================
-// DELTA-6 CRAWLER CONSTANTS
-// Web Crawling and Testing Configuration Constants
+// CRAWLER CONSTANTS - SPRINT 3 PARALLEL CRAWLER
+// Zero Hardcoding Policy: All values externalized
+// ========================================
+
+// ========================================
+// PARALLEL CRAWLER WORKER CONFIGURATION
+// ========================================
+
+// Worker Pool Limits
+const (
+	// Worker counts - configured, not hardcoded
+	DefaultMinWorkers     = 1
+	DefaultMaxWorkers     = 15  // Avoid hardcoded 20
+	DefaultInitialWorkers = 3   // Avoid hardcoded 5
+)
+
+// Performance Adaptation Thresholds
+const (
+	// Response time thresholds (milliseconds)
+	DefaultFastThresholdMs = 300   // Avoid hardcoded 500
+	DefaultSlowThresholdMs = 1500  // Avoid hardcoded 2000
+	
+	// Error rate threshold (percentage)
+	DefaultErrorThresholdPercent = 10
+	
+	// Adaptation interval (seconds)
+	DefaultAdaptIntervalSeconds = 5
+)
+
+// Worker Adaptation Actions
+const (
+	WorkerIncreaseAction = "INCREASE_WORKERS"
+	WorkerDecreaseAction = "DECREASE_WORKERS"
+	WorkerMaintainAction = "MAINTAIN_WORKERS"
+)
+
+// Crawler Limits (using existing DefaultMaxPages from constants.go)
+const (
+	DefaultMaxDepth        = 3
+	DefaultTimeoutSeconds  = 120
+	DefaultDelayMs         = 100
+)
+
+// Crawler Messages
+const (
+	CrawlerStartingMsg   = "Crawler starting with %d workers for %s"
+	AdaptingWorkersMsg   = "Adapting workers: %s (current: %d, new: %d, reason: %s)"
+	CrawlCompleteMsg     = "Crawl complete: %d pages in %s (%.2f pages/sec)"
+	SlowSiteDetectedMsg  = "Slow site detected: avg response time %.2fms"
+	FastSiteDetectedMsg  = "Fast site detected: avg response time %.2fms"
+	ErrorThresholdMsg    = "High error rate detected: %.2f%% errors"
+)
+
+// Performance Metrics
+const (
+	MetricPagesPerSecond   = "pages_per_second"
+	MetricAvgResponseTime  = "avg_response_time"
+	MetricCurrentWorkers   = "current_workers"
+	MetricErrorRate        = "error_rate"
+	MetricPagesProcessed   = "pages_processed"
+	MetricTotalDuration    = "total_duration"
+)
+
+// Parallel Crawler User Agent (specific to crawler module)
+const (
+	ParallelCrawlerUserAgent = "FireSalamander/1.0 (SEPTEO Bot; +https://septeo.com/bot)"
+)
+
+// ========================================
+// EXISTING CRAWLER CONSTANTS (PRESERVED)
 // ========================================
 
 // ========================================

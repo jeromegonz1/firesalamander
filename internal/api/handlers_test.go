@@ -6,6 +6,8 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	
+	"firesalamander/internal/constants"
 )
 
 // TestAnalyzeEndpoint - Test TDD pour démarrer une analyse
@@ -18,7 +20,7 @@ func TestAnalyzeEndpoint(t *testing.T) {
 	}{
 		{
 			name:           "Valid URL analysis request",
-			requestBody:    `{"url":"https://example.com"}`,
+			requestBody:    constants.TestRequestBodyExample,
 			expectedStatus: http.StatusOK,
 			expectedFields: []string{"id", "status"},
 		},
@@ -115,11 +117,11 @@ func TestStatusEndpoint(t *testing.T) {
 			// GIVEN - Une analyse existante (pour les cas valides)
 			if tt.expectedStatus == http.StatusOK {
 				// Créer une analyse de test
-				CreateTestAnalysis(tt.analysisID, "https://example.com")
+				CreateTestAnalysis(tt.analysisID, constants.TestURLExample)
 			}
 
 			// GIVEN - Une requête GET vers /api/status/{id}
-			req := httptest.NewRequest(http.MethodGet, "/api/status/"+tt.analysisID, nil)
+			req := httptest.NewRequest(http.MethodGet, constants.RouteAPIStatus+"/"+tt.analysisID, nil)
 			w := httptest.NewRecorder()
 
 			// WHEN - Appel du handler
@@ -158,11 +160,11 @@ func TestStatusEndpoint(t *testing.T) {
 func TestResultsEndpoint(t *testing.T) {
 	// GIVEN - Une analyse complétée
 	analysisID := "analysis-completed-test"
-	CreateTestAnalysis(analysisID, "https://example.com")
+	CreateTestAnalysis(analysisID, constants.TestURLExample)
 	CompleteTestAnalysis(analysisID)
 
 	// GIVEN - Une requête GET vers /api/results/{id}
-	req := httptest.NewRequest(http.MethodGet, "/api/results/"+analysisID, nil)
+	req := httptest.NewRequest(http.MethodGet, constants.RouteAPIResults+"/"+analysisID, nil)
 	w := httptest.NewRecorder()
 
 	// WHEN - Appel du handler
@@ -200,7 +202,7 @@ func TestProgressionSimulation(t *testing.T) {
 	analysisID := "analysis-simulation-test"
 	analysis := &AnalysisState{
 		ID:             analysisID,
-		URL:            "https://example.com",
+		URL:            constants.TestURLExample,
 		Status:         "started",
 		Progress:       0, // Commencer à 0 pour ce test
 		PagesFound:     0,

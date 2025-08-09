@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"firesalamander/internal/api"
 	"firesalamander/internal/config"
 	"firesalamander/internal/constants"
 	"firesalamander/internal/integration"
@@ -47,6 +48,11 @@ func NewWebServer(orchestrator *integration.Orchestrator, cfg *config.Config) *W
 
 	// Créer le serveur API intégré
 	webServer.apiServer = integration.NewAPIServer(orchestrator, cfg)
+
+	// 🔥🦎 SPRINT 5: Initialize Real Orchestrator for API
+	log.Printf("🔥🦎 Initializing Real Fire Salamander API...")
+	api.InitRealOrchestrator()
+	log.Printf("✅ Real Fire Salamander API ready!")
 
 	// Enregistrer les routes
 	webServer.registerRoutes()
@@ -85,6 +91,12 @@ func (ws *WebServer) registerRoutes() {
 	log.Printf(constants.MsgRouteAPIProxy)
 	log.Printf(constants.MsgRouteWebHealth)
 	log.Printf(constants.MsgRouteWebDownload)
+	
+	// 🔥🦎 SPRINT 5: Log Real API Routes
+	log.Printf("🔥🦎 REAL Fire Salamander API Routes:")
+	log.Printf("  POST /api/real/analyze - Start real SEO analysis")
+	log.Printf("  GET  /api/real/status/{id} - Get real-time analysis status") 
+	log.Printf("  GET  /api/real/results/{id} - Get real analysis results")
 }
 
 // handleWebInterface sert l'interface web principale
@@ -166,6 +178,24 @@ func (ws *WebServer) handleAPI(w http.ResponseWriter, r *http.Request) {
 		ws.apiServer.HandleInfo(w, r)
 	case r.URL.Path == constants.APIRouteVersion:
 		ws.apiServer.HandleVersion(w, r)
+	
+	// 🔥🦎 SPRINT 5: REAL API ROUTES - Fire Salamander Integration  
+	// Routes principales (utilisées par le frontend)
+	case r.URL.Path == "/api/analyze":
+		api.RealAnalyzeHandler(w, r)
+	case strings.HasPrefix(r.URL.Path, "/api/status/"):
+		api.RealStatusHandler(w, r)
+	case strings.HasPrefix(r.URL.Path, "/api/results/"):
+		api.RealResultsHandler(w, r)
+		
+	// Routes explicites /api/real/* (pour compatibilité)
+	case r.URL.Path == "/api/real/analyze":
+		api.RealAnalyzeHandler(w, r)
+	case strings.HasPrefix(r.URL.Path, "/api/real/status/"):
+		api.RealStatusHandler(w, r)
+	case strings.HasPrefix(r.URL.Path, "/api/real/results/"):
+		api.RealResultsHandler(w, r)
+	
 	default:
 		// Route API non trouvée
 		http.Error(w, constants.MsgAPIEndpointNotFound, http.StatusNotFound)

@@ -1,0 +1,921 @@
+{
+  "total_violations": 144,
+  "categories": {
+    "tool_names": 9,
+    "json_field_names": 53,
+    "coverage_messages": 32,
+    "report_templates": 14,
+    "status_values": 11,
+    "output_formats": 4,
+    "log_messages": 12,
+    "error_messages": 2,
+    "command_strings": 3,
+    "hardcoded_extensions": 1,
+    "numeric_literals": 1,
+    "severity_levels": 1,
+    "confidence_levels": 1
+  },
+  "violations": [
+    {
+      "line": 19,
+      "category": "tool_names",
+      "value": "QA-AGENT",
+      "context": "var log = logger.New(\"QA-AGENT\")"
+    },
+    {
+      "line": 29,
+      "category": "json_field_names",
+      "value": "min_coverage",
+      "context": "MinCoverage      float64 `json:\"min_coverage\"`"
+    },
+    {
+      "line": 29,
+      "category": "coverage_messages",
+      "value": "min_coverage",
+      "context": "MinCoverage      float64 `json:\"min_coverage\"`"
+    },
+    {
+      "line": 30,
+      "category": "json_field_names",
+      "value": "enable_vet",
+      "context": "EnableVet        bool    `json:\"enable_vet\"`"
+    },
+    {
+      "line": 31,
+      "category": "json_field_names",
+      "value": "enable_lint",
+      "context": "EnableLint       bool    `json:\"enable_lint\"`"
+    },
+    {
+      "line": 32,
+      "category": "json_field_names",
+      "value": "enable_security",
+      "context": "EnableSecurity   bool    `json:\"enable_security\"`"
+    },
+    {
+      "line": 33,
+      "category": "json_field_names",
+      "value": "enable_complexity",
+      "context": "EnableComplexity bool    `json:\"enable_complexity\"`"
+    },
+    {
+      "line": 34,
+      "category": "json_field_names",
+      "value": "output_format",
+      "context": "OutputFormat     string  `json:\"output_format\"` // json, text, html"
+    },
+    {
+      "line": 35,
+      "category": "json_field_names",
+      "value": "report_path",
+      "context": "ReportPath       string  `json:\"report_path\"`"
+    },
+    {
+      "line": 35,
+      "category": "report_templates",
+      "value": "report_path",
+      "context": "ReportPath       string  `json:\"report_path\"`"
+    },
+    {
+      "line": 41,
+      "category": "coverage_messages",
+      "value": "coverage",
+      "context": "Coverage         CoverageStats  `json:\"coverage\"`"
+    },
+    {
+      "line": 46,
+      "category": "coverage_messages",
+      "value": "test_results",
+      "context": "TestResults      TestResults    `json:\"test_results\"`"
+    },
+    {
+      "line": 46,
+      "category": "report_templates",
+      "value": "test_results",
+      "context": "TestResults      TestResults    `json:\"test_results\"`"
+    },
+    {
+      "line": 47,
+      "category": "json_field_names",
+      "value": "overall_score",
+      "context": "OverallScore     float64        `json:\"overall_score\"`"
+    },
+    {
+      "line": 48,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "Status           string         `json:\"status\"` // pass, fail, warning"
+    },
+    {
+      "line": 53,
+      "category": "json_field_names",
+      "value": "total_coverage",
+      "context": "TotalCoverage float64            `json:\"total_coverage\"`"
+    },
+    {
+      "line": 53,
+      "category": "coverage_messages",
+      "value": "total_coverage",
+      "context": "TotalCoverage float64            `json:\"total_coverage\"`"
+    },
+    {
+      "line": 54,
+      "category": "json_field_names",
+      "value": "packages_coverage",
+      "context": "PackagesCov   map[string]float64 `json:\"packages_coverage\"`"
+    },
+    {
+      "line": 54,
+      "category": "coverage_messages",
+      "value": "packages_coverage",
+      "context": "PackagesCov   map[string]float64 `json:\"packages_coverage\"`"
+    },
+    {
+      "line": 55,
+      "category": "json_field_names",
+      "value": "threshold",
+      "context": "Threshold     float64            `json:\"threshold\"`"
+    },
+    {
+      "line": 56,
+      "category": "json_field_names",
+      "value": "passed",
+      "context": "Passed        bool               `json:\"passed\"`"
+    },
+    {
+      "line": 56,
+      "category": "status_values",
+      "value": "passed",
+      "context": "Passed        bool               `json:\"passed\"`"
+    },
+    {
+      "line": 61,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File     string `json:\"file\"`"
+    },
+    {
+      "line": 62,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line     int    `json:\"line\"`"
+    },
+    {
+      "line": 63,
+      "category": "json_field_names",
+      "value": "column",
+      "context": "Column   int    `json:\"column\"`"
+    },
+    {
+      "line": 64,
+      "category": "json_field_names",
+      "value": "message",
+      "context": "Message  string `json:\"message\"`"
+    },
+    {
+      "line": 65,
+      "category": "json_field_names",
+      "value": "category",
+      "context": "Category string `json:\"category\"`"
+    },
+    {
+      "line": 70,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File     string `json:\"file\"`"
+    },
+    {
+      "line": 71,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line     int    `json:\"line\"`"
+    },
+    {
+      "line": 72,
+      "category": "json_field_names",
+      "value": "column",
+      "context": "Column   int    `json:\"column\"`"
+    },
+    {
+      "line": 73,
+      "category": "json_field_names",
+      "value": "message",
+      "context": "Message  string `json:\"message\"`"
+    },
+    {
+      "line": 74,
+      "category": "json_field_names",
+      "value": "rule",
+      "context": "Rule     string `json:\"rule\"`"
+    },
+    {
+      "line": 75,
+      "category": "json_field_names",
+      "value": "severity",
+      "context": "Severity string `json:\"severity\"`"
+    },
+    {
+      "line": 80,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 81,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line        int    `json:\"line\"`"
+    },
+    {
+      "line": 82,
+      "category": "json_field_names",
+      "value": "rule",
+      "context": "Rule        string `json:\"rule\"`"
+    },
+    {
+      "line": 83,
+      "category": "json_field_names",
+      "value": "severity",
+      "context": "Severity    string `json:\"severity\"`"
+    },
+    {
+      "line": 84,
+      "category": "json_field_names",
+      "value": "message",
+      "context": "Message     string `json:\"message\"`"
+    },
+    {
+      "line": 85,
+      "category": "json_field_names",
+      "value": "confidence",
+      "context": "Confidence  string `json:\"confidence\"`"
+    },
+    {
+      "line": 90,
+      "category": "json_field_names",
+      "value": "function",
+      "context": "Function   string  `json:\"function\"`"
+    },
+    {
+      "line": 91,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File       string  `json:\"file\"`"
+    },
+    {
+      "line": 92,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line       int     `json:\"line\"`"
+    },
+    {
+      "line": 93,
+      "category": "json_field_names",
+      "value": "complexity",
+      "context": "Complexity int     `json:\"complexity\"`"
+    },
+    {
+      "line": 94,
+      "category": "json_field_names",
+      "value": "threshold",
+      "context": "Threshold  int     `json:\"threshold\"`"
+    },
+    {
+      "line": 99,
+      "category": "json_field_names",
+      "value": "total_tests",
+      "context": "TotalTests  int           `json:\"total_tests\"`"
+    },
+    {
+      "line": 99,
+      "category": "coverage_messages",
+      "value": "total_tests",
+      "context": "TotalTests  int           `json:\"total_tests\"`"
+    },
+    {
+      "line": 100,
+      "category": "json_field_names",
+      "value": "passed_tests",
+      "context": "PassedTests int           `json:\"passed_tests\"`"
+    },
+    {
+      "line": 100,
+      "category": "coverage_messages",
+      "value": "passed_tests",
+      "context": "PassedTests int           `json:\"passed_tests\"`"
+    },
+    {
+      "line": 101,
+      "category": "json_field_names",
+      "value": "failed_tests",
+      "context": "FailedTests int           `json:\"failed_tests\"`"
+    },
+    {
+      "line": 101,
+      "category": "coverage_messages",
+      "value": "failed_tests",
+      "context": "FailedTests int           `json:\"failed_tests\"`"
+    },
+    {
+      "line": 102,
+      "category": "json_field_names",
+      "value": "duration",
+      "context": "Duration    time.Duration `json:\"duration\"`"
+    },
+    {
+      "line": 109,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "Status  string        `json:\"status\"`"
+    },
+    {
+      "line": 111,
+      "category": "coverage_messages",
+      "value": "tests",
+      "context": "Tests   []TestCase    `json:\"tests\"`"
+    },
+    {
+      "line": 117,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "Status   string        `json:\"status\"`"
+    },
+    {
+      "line": 118,
+      "category": "json_field_names",
+      "value": "duration",
+      "context": "Duration time.Duration `json:\"duration\"`"
+    },
+    {
+      "line": 130,
+      "category": "output_formats",
+      "value": "json",
+      "context": "OutputFormat:     \"json\","
+    },
+    {
+      "line": 131,
+      "category": "coverage_messages",
+      "value": "tests/reports/qa",
+      "context": "ReportPath:       \"tests/reports/qa\","
+    },
+    {
+      "line": 131,
+      "category": "report_templates",
+      "value": "tests/reports/qa",
+      "context": "ReportPath:       \"tests/reports/qa\","
+    },
+    {
+      "line": 142,
+      "category": "json_field_names",
+      "value": "min_coverage",
+      "context": "\"min_coverage\": config.MinCoverage,"
+    },
+    {
+      "line": 142,
+      "category": "coverage_messages",
+      "value": "min_coverage",
+      "context": "\"min_coverage\": config.MinCoverage,"
+    },
+    {
+      "line": 154,
+      "category": "coverage_messages",
+      "value": "\ud83d\udd0d Starting full QA analysis",
+      "context": "log.Info(\"\ud83d\udd0d Starting full QA analysis\")"
+    },
+    {
+      "line": 154,
+      "category": "report_templates",
+      "value": "\ud83d\udd0d Starting full QA analysis",
+      "context": "log.Info(\"\ud83d\udd0d Starting full QA analysis\")"
+    },
+    {
+      "line": 162,
+      "category": "coverage_messages",
+      "value": "Running unit tests",
+      "context": "log.Debug(\"Running unit tests\")"
+    },
+    {
+      "line": 164,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Error(\"Unit tests failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 164,
+      "category": "log_messages",
+      "value": "Unit tests failed",
+      "context": "log.Error(\"Unit tests failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 164,
+      "category": "error_messages",
+      "value": "Unit tests failed",
+      "context": "log.Error(\"Unit tests failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 164,
+      "category": "coverage_messages",
+      "value": "Unit tests failed",
+      "context": "log.Error(\"Unit tests failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 168,
+      "category": "coverage_messages",
+      "value": "Analyzing test coverage",
+      "context": "log.Debug(\"Analyzing test coverage\")"
+    },
+    {
+      "line": 170,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Error(\"Coverage analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 170,
+      "category": "log_messages",
+      "value": "Coverage analysis failed",
+      "context": "log.Error(\"Coverage analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 170,
+      "category": "error_messages",
+      "value": "Coverage analysis failed",
+      "context": "log.Error(\"Coverage analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 170,
+      "category": "coverage_messages",
+      "value": "Coverage analysis failed",
+      "context": "log.Error(\"Coverage analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 170,
+      "category": "report_templates",
+      "value": "Coverage analysis failed",
+      "context": "log.Error(\"Coverage analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 177,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Warn(\"Go vet issues found\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 177,
+      "category": "command_strings",
+      "value": "Go vet issues found",
+      "context": "log.Warn(\"Go vet issues found\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 177,
+      "category": "log_messages",
+      "value": "Go vet issues found",
+      "context": "log.Warn(\"Go vet issues found\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 185,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Warn(\"Linting issues found\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 185,
+      "category": "log_messages",
+      "value": "Linting issues found",
+      "context": "log.Warn(\"Linting issues found\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 191,
+      "category": "coverage_messages",
+      "value": "Running security analysis",
+      "context": "log.Debug(\"Running security analysis\")"
+    },
+    {
+      "line": 191,
+      "category": "report_templates",
+      "value": "Running security analysis",
+      "context": "log.Debug(\"Running security analysis\")"
+    },
+    {
+      "line": 193,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Warn(\"Security analysis issues\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 193,
+      "category": "coverage_messages",
+      "value": "Security analysis issues",
+      "context": "log.Warn(\"Security analysis issues\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 193,
+      "category": "report_templates",
+      "value": "Security analysis issues",
+      "context": "log.Warn(\"Security analysis issues\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 201,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Warn(\"Complexity analysis issues\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 201,
+      "category": "coverage_messages",
+      "value": "Complexity analysis issues",
+      "context": "log.Warn(\"Complexity analysis issues\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 201,
+      "category": "report_templates",
+      "value": "Complexity analysis issues",
+      "context": "log.Warn(\"Complexity analysis issues\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 210,
+      "category": "status_values",
+      "value": "error",
+      "context": "log.Error(\"Failed to generate report\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 210,
+      "category": "report_templates",
+      "value": "Failed to generate report",
+      "context": "log.Error(\"Failed to generate report\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 213,
+      "category": "log_messages",
+      "value": "QA analysis completed",
+      "context": "log.Info(\"QA analysis completed\", map[string]interface{}{"
+    },
+    {
+      "line": 213,
+      "category": "coverage_messages",
+      "value": "QA analysis completed",
+      "context": "log.Info(\"QA analysis completed\", map[string]interface{}{"
+    },
+    {
+      "line": 213,
+      "category": "report_templates",
+      "value": "QA analysis completed",
+      "context": "log.Info(\"QA analysis completed\", map[string]interface{}{"
+    },
+    {
+      "line": 214,
+      "category": "json_field_names",
+      "value": "overall_score",
+      "context": "\"overall_score\": qa.stats.OverallScore,"
+    },
+    {
+      "line": 215,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "\"status\":        qa.stats.Status,"
+    },
+    {
+      "line": 216,
+      "category": "coverage_messages",
+      "value": "coverage",
+      "context": "\"coverage\":      qa.stats.Coverage.TotalCoverage,"
+    },
+    {
+      "line": 224,
+      "category": "tool_names",
+      "value": "go",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-v\", \"-json\", \"./...\")"
+    },
+    {
+      "line": 224,
+      "category": "tool_names",
+      "value": "test",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-v\", \"-json\", \"./...\")"
+    },
+    {
+      "line": 224,
+      "category": "coverage_messages",
+      "value": "test",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-v\", \"-json\", \"./...\")"
+    },
+    {
+      "line": 227,
+      "category": "coverage_messages",
+      "value": "failed to run tests: %w",
+      "context": "return fmt.Errorf(\"failed to run tests: %w\", err)"
+    },
+    {
+      "line": 238,
+      "category": "tool_names",
+      "value": "go",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-coverprofile=coverage.out\", \"./...\")"
+    },
+    {
+      "line": 238,
+      "category": "tool_names",
+      "value": "test",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-coverprofile=coverage.out\", \"./...\")"
+    },
+    {
+      "line": 238,
+      "category": "coverage_messages",
+      "value": "test",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-coverprofile=coverage.out\", \"./...\")"
+    },
+    {
+      "line": 238,
+      "category": "coverage_messages",
+      "value": "-coverprofile=coverage.out",
+      "context": "cmd := exec.Command(\"go\", \"test\", \"-coverprofile=coverage.out\", \"./...\")"
+    },
+    {
+      "line": 240,
+      "category": "coverage_messages",
+      "value": "failed to generate coverage: %w",
+      "context": "return fmt.Errorf(\"failed to generate coverage: %w\", err)"
+    },
+    {
+      "line": 244,
+      "category": "tool_names",
+      "value": "go",
+      "context": "cmd = exec.Command(\"go\", \"tool\", \"cover\", \"-func=coverage.out\")"
+    },
+    {
+      "line": 244,
+      "category": "coverage_messages",
+      "value": "-func=coverage.out",
+      "context": "cmd = exec.Command(\"go\", \"tool\", \"cover\", \"-func=coverage.out\")"
+    },
+    {
+      "line": 247,
+      "category": "coverage_messages",
+      "value": "failed to analyze coverage: %w",
+      "context": "return fmt.Errorf(\"failed to analyze coverage: %w\", err)"
+    },
+    {
+      "line": 253,
+      "category": "coverage_messages",
+      "value": "coverage.out",
+      "context": "os.Remove(\"coverage.out\")"
+    },
+    {
+      "line": 260,
+      "category": "tool_names",
+      "value": "go",
+      "context": "cmd := exec.Command(\"go\", \"vet\", \"./...\")"
+    },
+    {
+      "line": 260,
+      "category": "tool_names",
+      "value": "vet",
+      "context": "cmd := exec.Command(\"go\", \"vet\", \"./...\")"
+    },
+    {
+      "line": 265,
+      "category": "command_strings",
+      "value": "go vet found issues",
+      "context": "return fmt.Errorf(\"go vet found issues\")"
+    },
+    {
+      "line": 265,
+      "category": "log_messages",
+      "value": "go vet found issues",
+      "context": "return fmt.Errorf(\"go vet found issues\")"
+    },
+    {
+      "line": 275,
+      "category": "log_messages",
+      "value": "golangci-lint not found, skipping lint analysis",
+      "context": "log.Warn(\"golangci-lint not found, skipping lint analysis\")"
+    },
+    {
+      "line": 275,
+      "category": "coverage_messages",
+      "value": "golangci-lint not found, skipping lint analysis",
+      "context": "log.Warn(\"golangci-lint not found, skipping lint analysis\")"
+    },
+    {
+      "line": 275,
+      "category": "report_templates",
+      "value": "golangci-lint not found, skipping lint analysis",
+      "context": "log.Warn(\"golangci-lint not found, skipping lint analysis\")"
+    },
+    {
+      "line": 279,
+      "category": "output_formats",
+      "value": "json",
+      "context": "cmd := exec.Command(\"golangci-lint\", \"run\", \"--out-format\", \"json\")"
+    },
+    {
+      "line": 284,
+      "category": "log_messages",
+      "value": "linting issues found",
+      "context": "return fmt.Errorf(\"linting issues found\")"
+    },
+    {
+      "line": 294,
+      "category": "log_messages",
+      "value": "gosec not found, skipping security analysis",
+      "context": "log.Warn(\"gosec not found, skipping security analysis\")"
+    },
+    {
+      "line": 294,
+      "category": "coverage_messages",
+      "value": "gosec not found, skipping security analysis",
+      "context": "log.Warn(\"gosec not found, skipping security analysis\")"
+    },
+    {
+      "line": 294,
+      "category": "report_templates",
+      "value": "gosec not found, skipping security analysis",
+      "context": "log.Warn(\"gosec not found, skipping security analysis\")"
+    },
+    {
+      "line": 298,
+      "category": "output_formats",
+      "value": "json",
+      "context": "cmd := exec.Command(\"gosec\", \"-fmt\", \"json\", \"./...\")"
+    },
+    {
+      "line": 303,
+      "category": "log_messages",
+      "value": "security issues found",
+      "context": "return fmt.Errorf(\"security issues found\")"
+    },
+    {
+      "line": 313,
+      "category": "log_messages",
+      "value": "gocyclo not found, skipping complexity analysis",
+      "context": "log.Warn(\"gocyclo not found, skipping complexity analysis\")"
+    },
+    {
+      "line": 313,
+      "category": "coverage_messages",
+      "value": "gocyclo not found, skipping complexity analysis",
+      "context": "log.Warn(\"gocyclo not found, skipping complexity analysis\")"
+    },
+    {
+      "line": 313,
+      "category": "report_templates",
+      "value": "gocyclo not found, skipping complexity analysis",
+      "context": "log.Warn(\"gocyclo not found, skipping complexity analysis\")"
+    },
+    {
+      "line": 322,
+      "category": "log_messages",
+      "value": "high complexity functions found",
+      "context": "return fmt.Errorf(\"high complexity functions found\")"
+    },
+    {
+      "line": 344,
+      "category": "status_values",
+      "value": "pass",
+      "context": "case \"pass\", \"fail\":"
+    },
+    {
+      "line": 344,
+      "category": "status_values",
+      "value": "fail",
+      "context": "case \"pass\", \"fail\":"
+    },
+    {
+      "line": 346,
+      "category": "status_values",
+      "value": "pass",
+      "context": "if action == \"pass\" {"
+    },
+    {
+      "line": 368,
+      "category": "hardcoded_extensions",
+      "value": "go",
+      "context": "} else if strings.Contains(line, \".go\") && strings.Contains(line, \"%\") {"
+    },
+    {
+      "line": 402,
+      "category": "tool_names",
+      "value": "vet",
+      "context": "Category: \"vet\","
+    },
+    {
+      "line": 413,
+      "category": "output_formats",
+      "value": "Text",
+      "context": "Text        string `json:\"Text\"`"
+    },
+    {
+      "line": 416,
+      "category": "json_field_names",
+      "value": "Line",
+      "context": "Line     int    `json:\"Line\"`"
+    },
+    {
+      "line": 417,
+      "category": "json_field_names",
+      "value": "Column",
+      "context": "Column   int    `json:\"Column\"`"
+    },
+    {
+      "line": 419,
+      "category": "json_field_names",
+      "value": "Severity",
+      "context": "Severity string `json:\"Severity\"`"
+    },
+    {
+      "line": 443,
+      "category": "json_field_names",
+      "value": "rule",
+      "context": "Rule        string `json:\"rule\"`"
+    },
+    {
+      "line": 445,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 446,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line        string `json:\"line\"`"
+    },
+    {
+      "line": 447,
+      "category": "json_field_names",
+      "value": "confidence",
+      "context": "Confidence  string `json:\"confidence\"`"
+    },
+    {
+      "line": 448,
+      "category": "json_field_names",
+      "value": "severity",
+      "context": "Severity    string `json:\"severity\"`"
+    },
+    {
+      "line": 504,
+      "category": "numeric_literals",
+      "value": "100",
+      "context": "score := 100.0"
+    },
+    {
+      "line": 527,
+      "category": "severity_levels",
+      "value": "HIGH",
+      "context": "if issue.Severity == \"HIGH\" {"
+    },
+    {
+      "line": 527,
+      "category": "confidence_levels",
+      "value": "HIGH",
+      "context": "if issue.Severity == \"HIGH\" {"
+    },
+    {
+      "line": 565,
+      "category": "report_templates",
+      "value": "qa_report.json",
+      "context": "reportFile := filepath.Join(qa.config.ReportPath, \"qa_report.json\")"
+    },
+    {
+      "line": 583,
+      "category": "command_strings",
+      "value": "go vet",
+      "context": "tools = append(tools, \"go vet\")"
+    }
+  ],
+  "constants_mapping": {
+    "\"min_coverage\"": "constants.JSONFieldMinCoverage",
+    "\"enable_vet\"": "constants.JSONFieldEnableVet",
+    "\"enable_lint\"": "constants.JSONFieldEnableLint",
+    "\"enable_security\"": "constants.JSONFieldEnableSecurity",
+    "\"enable_complexity\"": "constants.JSONFieldEnableComplexity",
+    "\"output_format\"": "constants.JSONFieldOutputFormat",
+    "\"report_path\"": "constants.JSONFieldReportPath",
+    "\"overall_score\"": "constants.JSONFieldOverallScore",
+    "\"status\"": "constants.JSONFieldStatus",
+    "\"total_coverage\"": "constants.JSONFieldTotalCoverage",
+    "\"packages_coverage\"": "constants.JSONFieldPackagesCoverage",
+    "\"threshold\"": "constants.JSONFieldThreshold",
+    "\"passed\"": "constants.TestStatusPassed",
+    "\"file\"": "constants.JSONFieldFile",
+    "\"line\"": "constants.JSONFieldLine",
+    "\"column\"": "constants.JSONFieldColumn",
+    "\"message\"": "constants.JSONFieldMessage",
+    "\"category\"": "constants.JSONFieldCategory",
+    "\"rule\"": "constants.JSONFieldRule",
+    "\"severity\"": "constants.JSONFieldSeverity",
+    "\"confidence\"": "constants.JSONFieldConfidence",
+    "\"function\"": "constants.JSONFieldFunction",
+    "\"complexity\"": "constants.JSONFieldComplexity",
+    "\"total_tests\"": "constants.JSONFieldTotalTests",
+    "\"passed_tests\"": "constants.JSONFieldPassedTests",
+    "\"failed_tests\"": "constants.JSONFieldFailedTests",
+    "\"duration\"": "constants.JSONFieldDuration",
+    "\"error\"": "constants.QAStatusError",
+    "\"pass\"": "constants.QAStatusPass",
+    "\"fail\"": "constants.QAStatusFail",
+    "\"json\"": "constants.OutputFormatJSON",
+    "\"QA-AGENT\"": "constants.QAAgentName",
+    "\"go\"": "constants.GoTool",
+    "\"test\"": "constants.TestTool",
+    "\"vet\"": "constants.VetTool"
+  }
+}

@@ -260,3 +260,9 @@ const (
 	JSONFieldMessage             = "message"
 	JSONFieldSuggestions         = "suggestions"
 )
+
+// Additional constants for Sprint 5 Integration
+const (
+	MaxRecommendations = 10
+	MaxTopIssues       = 5
+)

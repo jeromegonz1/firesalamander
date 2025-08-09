@@ -1,0 +1,140 @@
+{
+  "total_violations": 20,
+  "categories": {
+    "meta_names": 8,
+    "test_urls": 6,
+    "http_status_codes": 3,
+    "seo_categories": 2,
+    "seo_recommendations": 1
+  },
+  "violations": [
+    {
+      "line": 21,
+      "category": "meta_names",
+      "value": "description",
+      "context": "<meta name=\"description\" content=\"D\u00e9couvrez notre guide complet pour am\u00e9liorer votre r\u00e9f\u00e9rencement naturel avec des tech..."
+    },
+    {
+      "line": 22,
+      "category": "meta_names",
+      "value": "viewport",
+      "context": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+    },
+    {
+      "line": 23,
+      "category": "meta_names",
+      "value": "canonical",
+      "context": "<link rel=\"canonical\" href=\"https://example.com/guide-seo\">"
+    },
+    {
+      "line": 23,
+      "category": "test_urls",
+      "value": "\"https://example.com/guide-seo\"",
+      "context": "<link rel=\"canonical\" href=\"https://example.com/guide-seo\">"
+    },
+    {
+      "line": 24,
+      "category": "meta_names",
+      "value": "og:title",
+      "context": "<meta property=\"og:title\" content=\"Guide SEO Complet\">"
+    },
+    {
+      "line": 25,
+      "category": "meta_names",
+      "value": "og:description",
+      "context": "<meta property=\"og:description\" content=\"Le meilleur guide SEO pour optimiser votre site web\">"
+    },
+    {
+      "line": 35,
+      "category": "test_urls",
+      "value": "\"https://external.com\"",
+      "context": "<a href=\"https://external.com\">Lien externe</a>"
+    },
+    {
+      "line": 167,
+      "category": "meta_names",
+      "value": "viewport",
+      "context": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
+    },
+    {
+      "line": 168,
+      "category": "meta_names",
+      "value": "robots",
+      "context": "<meta name=\"robots\" content=\"index, follow\">"
+    },
+    {
+      "line": 169,
+      "category": "meta_names",
+      "value": "canonical",
+      "context": "<link rel=\"canonical\" href=\"https://example.com/test\">"
+    },
+    {
+      "line": 169,
+      "category": "test_urls",
+      "value": "\"https://example.com/test\"",
+      "context": "<link rel=\"canonical\" href=\"https://example.com/test\">"
+    },
+    {
+      "line": 185,
+      "category": "test_urls",
+      "value": "\"https://example.com/test\"",
+      "context": "result, err := auditor.Audit(ctx, \"https://example.com/test\", doc, htmlContent)"
+    },
+    {
+      "line": 228,
+      "category": "test_urls",
+      "value": "\"https://example.com/test\"",
+      "context": "URL:          \"https://example.com/test\","
+    },
+    {
+      "line": 231,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "StatusCode:   200,"
+    },
+    {
+      "line": 235,
+      "category": "seo_categories",
+      "value": "performance",
+      "context": "\"performance\": 0.6, // 60% - correct"
+    },
+    {
+      "line": 236,
+      "category": "seo_categories",
+      "value": "technical",
+      "context": "\"technical\":   0.4, // 40% - faible"
+    },
+    {
+      "line": 271,
+      "category": "http_status_codes",
+      "value": "500",
+      "context": "Value: 4500, // Probl\u00e8me"
+    },
+    {
+      "line": 275,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "Value: 200, // Probl\u00e8me"
+    },
+    {
+      "line": 276,
+      "category": "seo_recommendations",
+      "value": "\"needs-improvement\"",
+      "context": "Score: \"needs-improvement\","
+    },
+    {
+      "line": 310,
+      "category": "test_urls",
+      "value": "\"http://broken.com\"",
+      "context": "BrokenLinks:   []string{\"http://broken.com\"},"
+    }
+  ],
+  "constants_mapping": {
+    "\"description\"": "constants.SEOMetaNameDescription",
+    "\"viewport\"": "constants.SEOMetaNameViewport",
+    "\"canonical\"": "constants.SEOMetaNameCanonical",
+    "\"og:title\"": "constants.SEOMetaNameOGTitle",
+    "\"og:description\"": "constants.SEOMetaNameOGDescription",
+    "\"robots\"": "constants.SEOMetaNameRobots"
+  }
+}

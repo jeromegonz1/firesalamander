@@ -13,6 +13,8 @@ import (
 
 	"firesalamander/internal/api"
 	"firesalamander/internal/config"
+	"firesalamander/internal/logging"
+	"firesalamander/internal/monitoring"
 )
 
 // HomeData - Structure pour la page d'accueil
@@ -84,6 +86,7 @@ var (
 	homeTemplate      *template.Template
 	analyzingTemplate *template.Template
 	resultsTemplate   *template.Template
+	appLogger         logging.Logger
 )
 
 // loadTemplates - Charger les 3 templates
@@ -173,23 +176,33 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Récupérer l'analyse depuis l'API
-	analysis, exists := api.Store.Get(analysisID)
-	if !exists {
-		http.Error(w, "Analyse non trouvée", http.StatusNotFound)
+	// Récupérer l'analyse depuis le RealOrchestrator (SPRINT 5)
+	status, err := api.GetRealOrchestrator().GetStatus(analysisID)
+	if err != nil {
+		http.Error(w, constants.AnalysisNotFound, http.StatusNotFound)
 		return
 	}
 
-	// Construire les données pour le template
+	// Calculer le pourcentage de progression
+	progress := 0
+	if status.PagesFound > 0 {
+		progress = (status.PagesAnalyzed * 100) / status.PagesFound
+	}
+	
+	// Calculer le temps écoulé
+	elapsed := time.Since(status.StartTime)
+	elapsedStr := fmt.Sprintf("%.0fs", elapsed.Seconds())
+	
+	// Construire les données pour le template depuis RealOrchestrator
 	data := AnalyzingData{
 		Title:    "Analyse",
-		URL:      analysis.URL,
-		Progress: analysis.Progress,
+		URL:      status.URL,
+		Progress: progress,
 		Analysis: AnalysisProgress{
-			PagesFound:    analysis.PagesFound,
-			PagesAnalyzed: analysis.PagesAnalyzed,
-			IssuesFound:   analysis.IssuesFound,
-			EstimatedTime: analysis.EstimatedTime,
+			PagesFound:    status.PagesFound,
+			PagesAnalyzed: status.PagesAnalyzed,
+			IssuesFound:   len(status.TopIssues), // Utiliser le nombre d'issues trouvées
+			EstimatedTime: elapsedStr,
 		},
 	}
 
@@ -287,8 +300,8 @@ func extractDomain(rawURL string) string {
 	return parsedURL.Host
 }
 
-// setupServer - Configuration du serveur HTTP
-func setupServer() *http.ServeMux {
+// setupServer - Configuration du serveur HTTP avec logging
+func setupServer() http.Handler {
 	mux := http.NewServeMux()
 
 	// Routes principales (pages web)
@@ -299,38 +312,104 @@ func setupServer() *http.ServeMux {
 		}
 		homeHandler(w, r)
 	})
-	mux.HandleFunc(constants.APIEndpointAnalyze, analyzeHandler)
-	mux.HandleFunc(constants.APIEndpointResults, resultsHandler)
+	
+	// Route pour la page d'analyse
+	mux.HandleFunc("/analyze", analyzeHandler)
+	
+	// Route pour la page de résultats
+	mux.HandleFunc("/results", resultsHandler)
+	
+	// 🔥🦎 SPRINT 5: REAL Fire Salamander API Routes (ZERO HARDCODING)
+	mux.HandleFunc(constants.APIEndpointAnalyze, api.RealAnalyzeHandler)
+	mux.HandleFunc(constants.APIEndpointStatus + "/", api.RealStatusHandler) 
+	mux.HandleFunc(constants.APIEndpointResults + "/", api.RealResultsHandler)
+	
+	// 🔥🦎 MONITORING V2.0: Endpoints de surveillance anti-boucle infinie
+	mux.HandleFunc("/debug/metrics", monitoring.MetricsHandler)
+	mux.HandleFunc("/health", monitoring.HealthHandler)
+	mux.HandleFunc("/api/health", monitoring.HealthHandler)
 
-	// Routes API
-	mux.HandleFunc(constants.APIEndpointAnalyze, api.AnalyzeHandler)
-	mux.HandleFunc(constants.APIEndpointStatus + "/", api.StatusHandler)
-	mux.HandleFunc(constants.APIEndpointResults + "/", api.ResultsHandler)
+	// Legacy routes avec données fake (pour debug/comparaison)
+	mux.HandleFunc("/api/fake/analyze", analyzeHandler)
+	mux.HandleFunc("/api/fake/results", resultsHandler)
+	mux.HandleFunc("/api/legacy/analyze", api.AnalyzeHandler)
+	mux.HandleFunc("/api/legacy/status/", api.StatusHandler)
+	mux.HandleFunc("/api/legacy/results/", api.ResultsHandler)
 
-	return mux
+	// Appliquer les middlewares de logging
+	var handler http.Handler = mux
+	
+	// Middleware de logging HTTP (pour toutes les requêtes)
+	handler = logging.HTTPLoggingMiddleware(appLogger)(handler)
+	
+	// Middleware de logging API (pour les requêtes /api/*)  
+	handler = logging.APILoggingMiddleware(appLogger)(handler)
+	
+	// Middleware de métriques de performance
+	handler = logging.MetricsMiddleware(appLogger)(handler)
+	
+	// Middleware de recovery pour capturer les panics
+	handler = logging.RecoveryMiddleware(appLogger)(handler)
+
+	return handler
 }
 
 func main() {
+	// Initialiser le système de logging en premier
+	logConfig := logging.LoadConfigFromEnv()
+	var err error
+	appLogger, err = logging.NewLogger(logConfig)
+	if err != nil {
+		log.Fatalf("🔥 Erreur initialisation logging: %v", err)
+	}
+	defer appLogger.Close()
+	
+	appLogger.Info(constants.LogCategorySystem, constants.LogMsgServerStarting, map[string]interface{}{
+		"version": "1.0.0",
+		"pid":     os.Getpid(),
+	})
+
 	// Charger la configuration
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatalf("Erreur chargement config: %v", err)
+		appLogger.Fatal(constants.LogCategorySystem, "Erreur chargement config", err)
 	}
+
+	// Initialiser le RealOrchestrator pour les API réelles
+	appLogger.Info(constants.LogCategorySystem, "Initializing RealOrchestrator")
+	api.InitRealOrchestrator()
 
 	// Charger les templates
+	appLogger.Info(constants.LogCategorySystem, "Loading templates")
 	if err := loadTemplates(); err != nil {
-		log.Fatalf("Erreur chargement templates: %v", err)
+		appLogger.Fatal(constants.LogCategorySystem, "Erreur chargement templates", err)
 	}
 
-	// Configuration du serveur
+	// Configuration du serveur avec middlewares de logging
+	appLogger.Info(constants.LogCategorySystem, "Setting up HTTP server with logging middlewares")
 	server := setupServer()
 
 	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
-	log.Printf(constants.ServerStartedFormat, addr)
-	log.Printf("📊 Interface SEO disponible à l'adresse ci-dessus")
+	
+	appLogger.Info(constants.LogCategorySystem, constants.LogMsgServerStarted, map[string]interface{}{
+		"address": addr,
+		"host":    cfg.Server.Host,
+		"port":    cfg.Server.Port,
+	})
 
-	// Démarrage du serveur
+	// Log des URLs disponibles
+	appLogger.Info(constants.LogCategorySystem, "Fire Salamander interfaces available", map[string]interface{}{
+		"web_interface": fmt.Sprintf("http://%s", addr),
+		"api_endpoint":  fmt.Sprintf("http://%s/api", addr),
+		"health_check":  fmt.Sprintf("http://%s/api/health", addr),
+	})
+
+	// Démarrage du serveur avec gestion d'erreur via logging
+	appLogger.Info(constants.LogCategorySystem, "Starting HTTP server", map[string]interface{}{
+		"address": addr,
+	})
+	
 	if err := http.ListenAndServe(addr, server); err != nil {
-		log.Fatalf("Erreur serveur: %v", err)
+		appLogger.Fatal(constants.LogCategorySystem, "Erreur serveur HTTP", err)
 	}
 }

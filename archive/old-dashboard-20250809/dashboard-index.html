@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Salamander - Dashboard SEO</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+    <!-- CRITICAL: Chart.js replacement loaded FIRST to prevent infinite loops -->
+    <script src="/static/chart-js-replacement.js"></script>
+    <script src="/static/error-logger.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🔥</span>
+                <span class="brand-text">Fire Salamander</span>
+                <span class="brand-subtitle">SEO Analyzer</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#analyzer" class="nav-link" data-page="analyzer">
+                    <span class="nav-icon">🔍</span>
+                    Analyser
+                </a>
+                <a href="#history" class="nav-link" data-page="history">
+                    <span class="nav-icon">📈</span>
+                    Historique
+                </a>
+                <a href="#reports" class="nav-link" data-page="reports">
+                    <span class="nav-icon">📋</span>
+                    Rapports
+                </a>
+                <a href="#monitoring" class="nav-link" data-page="monitoring">
+                    <span class="nav-icon">⚡</span>
+                    Monitoring
+                </a>
+            </div>
+            <div class="nav-status">
+                <div class="status-indicator" id="systemStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">En ligne</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page active">
+            <div class="page-header">
+                <h1>Dashboard Principal</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="refreshDashboard()">
+                        <span class="btn-icon">🔄</span>
+                        Actualiser
+                    </button>
+                    <button class="btn btn-secondary" onclick="openQuickAnalysis()">
+                        <span class="btn-icon">⚡</span>
+                        Analyse Rapide
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalAnalyses">0</div>
+                        <div class="stat-label">Analyses Totales</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="successfulAnalyses">0</div>
+                        <div class="stat-label">Succès</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="averageTime">0s</div>
+                        <div class="stat-label">Temps Moyen</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="averageScore">0</div>
+                        <div class="stat-label">Score Moyen</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Évolution des Scores</h3>
+                        <div class="chart-controls">
+                            <select id="scoreChartPeriod">
+                                <option value="7d">7 jours</option>
+                                <option value="30d" selected>30 jours</option>
+                                <option value="90d">90 jours</option>
+                            </select>
+                        </div>
+                    </div>
+                    <canvas id="scoresChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Performance par Catégorie</h3>
+                    </div>
+                    <canvas id="categoriesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Analyses -->
+            <div class="section">
+                <div class="section-header">
+                    <h3>Analyses Récentes</h3>
+                    <button class="btn btn-outline" onclick="loadMoreAnalyses()">Voir Plus</button>
+                </div>
+                <div class="analyses-list" id="recentAnalyses">
+                    <div class="loading-placeholder">Chargement des analyses...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analyzer Page -->
+        <div id="analyzer-page" class="page">
+            <div class="page-header">
+                <h1>Analyser une URL</h1>
+                <div class="header-subtitle">
+                    Effectuez une analyse SEO complète de n'importe quelle page web
+                </div>
+            </div>
+
+            <div class="analyzer-form">
+                <form id="analysisForm" class="form-container">
+                    <div class="form-group">
+                        <label for="analysisUrl">URL à analyser</label>
+                        <input type="url" id="analysisUrl" name="url" required 
+                               placeholder="https://example.com" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="analysisType">Type d'analyse</label>
+                        <select id="analysisType" name="type" class="form-select">
+                            <option value="quick">Analyse Rapide (SEO + Base)</option>
+                            <option value="seo">Analyse SEO Complète</option>
+                            <option value="semantic">Analyse Sémantique</option>
+                            <option value="full">Analyse Complète (Tout)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Options d'analyse</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeCrawling" name="includeCrawling">
+                                <span class="checkbox-custom"></span>
+                                Inclure le crawling
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="analyzePerformance" name="analyzePerformance" checked>
+                                <span class="checkbox-custom"></span>
+                                Analyser les performances
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="useAIEnrichment" name="useAIEnrichment">
+                                <span class="checkbox-custom"></span>
+                                Enrichissement IA
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <span class="btn-icon">🔍</span>
+                            Lancer l'Analyse
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="clearForm()">
+                            Effacer
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Analysis Progress -->
+            <div id="analysisProgress" class="progress-container hidden">
+                <div class="progress-header">
+                    <h3>Analyse en cours...</h3>
+                    <div class="progress-status">
+                        <span id="progressStatus">Initialisation</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active" id="step1">Extraction</div>
+                    <div class="step" id="step2">Analyse</div>
+                    <div class="step" id="step3">Scoring</div>
+                    <div class="step" id="step4">Rapport</div>
+                </div>
+            </div>
+
+            <!-- Analysis Results -->
+            <div id="analysisResults" class="results-container hidden">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- History Page -->
+        <div id="history-page" class="page">
+            <div class="page-header">
+                <h1>Historique des Analyses</h1>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <input type="text" id="historySearch" placeholder="Rechercher par URL ou domaine..." class="search-input">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    <select id="historyFilter" class="form-select">
+                        <option value="all">Toutes les analyses</option>
+                        <option value="success">Succès uniquement</option>
+                        <option value="failed">Échecs uniquement</option>
+                        <option value="recent">Dernières 24h</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="history-content">
+                <div class="history-table" id="historyTable">
+                    <div class="loading-placeholder">Chargement de l'historique...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Page -->
+        <div id="reports-page" class="page">
+            <div class="page-header">
+                <h1>Rapports</h1>
+                <div class="header-subtitle">
+                    Générez et exportez des rapports détaillés
+                </div>
+            </div>
+
+            <div class="reports-content">
+                <div class="report-generator">
+                    <h3>Générer un Rapport</h3>
+                    <form id="reportForm" class="form-container">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reportUrl">URL ou Domaine</label>
+                                <input type="text" id="reportUrl" placeholder="example.com" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="reportType">Type de Rapport</label>
+                                <select id="reportType" class="form-select">
+                                    <option value="executive">Rapport Exécutif</option>
+                                    <option value="technical">Rapport Technique</option>
+                                    <option value="complete">Rapport Complet</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="reportFormat">Format</label>
+                                <select id="reportFormat" class="form-select">
+                                    <option value="html">HTML</option>
+                                    <option value="pdf">PDF</option>
+                                    <option value="json">JSON</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reportPeriod">Période</label>
+                                <select id="reportPeriod" class="form-select">
+                                    <option value="latest">Dernière Analyse</option>
+                                    <option value="7d">7 derniers jours</option>
+                                    <option value="30d">30 derniers jours</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="btn-icon">📊</span>
+                                Générer le Rapport
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="saved-reports">
+                    <h3>Rapports Sauvegardés</h3>
+                    <div id="savedReportsList" class="reports-list">
+                        <div class="empty-state">
+                            <div class="empty-icon">📋</div>
+                            <div class="empty-text">Aucun rapport sauvegardé</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitoring Page -->
+        <div id="monitoring-page" class="page">
+            <div class="page-header">
+                <h1>Monitoring Système</h1>
+                <div class="header-actions">
+                    <div class="auto-refresh">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoRefresh" checked>
+                            <span class="checkbox-custom"></span>
+                            Actualisation automatique
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-content">
+                <!-- System Health -->
+                <div class="health-section">
+                    <h3>État du Système</h3>
+                    <div class="health-grid">
+                        <div class="health-card">
+                            <div class="health-status" id="apiStatus">
+                                <div class="status-indicator">
+                                    <span class="status-dot status-healthy"></span>
+                                    <span class="status-label">API</span>
+                                </div>
+                                <div class="status-value">Opérationnel</div>
+                            </div>
+                        </div>
+                        <div class="health-card">
+                            <div class="health-status" id="orchestratorStatus">
+                                <div class="status-indicator">
+                                    <span class="status-dot status-healthy"></span>
+                                    <span class="status-label">Orchestrateur</span>
+                                </div>
+                                <div class="status-value">Actif</div>
+                            </div>
+                        </div>
+                        <div class="health-card">
+                            <div class="health-status" id="dbStatus">
+                                <div class="status-indicator">
+                                    <span class="status-dot status-healthy"></span>
+                                    <span class="status-label">Base de Données</span>
+                                </div>
+                                <div class="status-value">Connectée</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="metrics-section">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Métriques en Temps Réel</h3>
+                        </div>
+                        <canvas id="metricsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Active Tasks -->
+                <div class="tasks-section">
+                    <h3>Tâches Actives</h3>
+                    <div id="activeTasks" class="tasks-list">
+                        <div class="empty-state">
+                            <div class="empty-icon">⚡</div>
+                            <div class="empty-text">Aucune tâche active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Quick Analysis Modal -->
+    <div id="quickAnalysisModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Analyse Rapide</h3>
+                <button class="modal-close" onclick="closeModal('quickAnalysisModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="quickAnalysisForm">
+                    <div class="form-group">
+                        <label for="quickUrl">URL à analyser</label>
+                        <input type="url" id="quickUrl" required class="form-input" placeholder="https://example.com">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-icon">⚡</span>
+                            Analyser
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="closeModal('quickAnalysisModal')">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <div class="loading-text">Chargement...</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span class="footer-brand">🔥 Fire Salamander</span>
+                <span class="footer-version" id="appVersion">v1.0.0</span>
+            </div>
+            <div class="footer-right">
+                <span class="footer-powered">Powered by SEPTEO</span>
+                <span class="footer-status" id="footerStatus">●</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/static/app.js?v=1547301"></script>
+</body>
+</html>

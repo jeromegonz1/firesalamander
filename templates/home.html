@@ -138,29 +138,56 @@
                 url: '{{.URL}}',
                 error: null,
                 loading: false,
+                debugMode: true, // 🔥 MODE DEBUG ACTIVÉ
+                
+                log(message) {
+                    if (this.debugMode) {
+                        const timestamp = new Date().toLocaleTimeString();
+                        console.log(`🔥 [${timestamp}] ${message}`);
+                    }
+                },
                 
                 startAnalysis() {
+                    this.log('🚀 Starting analysis...');
+                    this.log(`URL: ${this.url}`);
+                    
                     if (!this.url.startsWith('https://')) {
                         this.error = "L'URL doit commencer par https://";
+                        this.log('❌ URL validation failed - missing https://');
                         return;
                     }
                     
                     this.error = null;
                     this.loading = true;
                     
-                    // Appel API pour démarrer l'analyse
+                    // Appel API pour démarrer l'analyse (avec trimming URL)
+                    const cleanUrl = this.url.trim();
+                    this.log(`Clean URL: ${cleanUrl}`);
+                    this.log('📡 Sending POST request to /api/analyze...');
+                    
+                    const startTime = Date.now();
                     fetch('/api/analyze', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({url: this.url})
+                        body: JSON.stringify({url: cleanUrl})
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        const responseTime = Date.now() - startTime;
+                        this.log(`✅ Response received in ${responseTime}ms - Status: ${response.status}`);
+                        return response.json();
+                    })
                     .then(data => {
+                        this.log(`📊 Response data: ${JSON.stringify(data)}`);
                         if (data.error) {
                             this.error = data.error;
                             this.loading = false;
+                            this.log(`❌ API Error: ${data.error}`);
                         } else {
+                            this.log(`🎯 Analysis started successfully! ID: ${data.id}`);
+                            this.log(`Status: ${data.status}`);
+                            this.log(`Message: ${data.message}`);
                             // Rediriger vers la page d'analyse avec l'ID
+                            this.log(`🔄 Redirecting to /analyze?id=${data.id}...`);
                             window.location.href = '/analyze?id=' + data.id;
                         }
                     })

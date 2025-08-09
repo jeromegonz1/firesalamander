@@ -403,7 +403,7 @@ func (re *RecommendationEngine) createRecommendation(templateID string, params m
 func (re *RecommendationEngine) interpolateTemplate(template string, params map[string]interface{}) string {
 	result := template
 	for key, value := range params {
-		placeholder := fmt.Sprintf("constants.RecommendationPlaceholderPattern", key)
+		placeholder := fmt.Sprintf(constants.RecommendationPlaceholderPattern, key)
 		result = strings.ReplaceAll(result, placeholder, fmt.Sprintf("%v", value))
 	}
 	return result

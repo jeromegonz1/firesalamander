@@ -3,6 +3,8 @@ package config
 import (
 	"os"
 	"testing"
+	
+	"firesalamander/internal/constants"
 )
 
 // TestLoadConfig_Success tests successful configuration loading from environment
@@ -12,7 +14,7 @@ func TestLoadConfig_Success(t *testing.T) {
 	defer restoreEnvironment(originalEnv)
 	
 	os.Setenv("PORT", "3000")
-	os.Setenv("HOST", "127.0.0.1")
+	os.Setenv("HOST", constants.TestIP)
 	os.Setenv("ENV", "test")
 	os.Setenv("LOG_LEVEL", "info")
 	os.Setenv("MAX_PAGES_CRAWL", "50")
@@ -30,8 +32,8 @@ func TestLoadConfig_Success(t *testing.T) {
 		t.Errorf("Expected port 3000, got %d", cfg.Server.Port)
 	}
 	
-	if cfg.Server.Host != "127.0.0.1" {
-		t.Errorf("Expected host '127.0.0.1', got '%s'", cfg.Server.Host)
+	if cfg.Server.Host != constants.TestIP {
+		t.Errorf("Expected host '%s', got '%s'", constants.TestIP, cfg.Server.Host)
 	}
 	
 	if cfg.Env != "test" {
@@ -71,8 +73,8 @@ func TestLoadConfig_Defaults(t *testing.T) {
 		t.Errorf("Expected default port 8080, got %d", cfg.Server.Port)
 	}
 	
-	if cfg.Server.Host != "localhost" {
-		t.Errorf("Expected default host 'localhost', got '%s'", cfg.Server.Host)
+	if cfg.Server.Host != constants.TestDomainLocalhost {
+		t.Errorf("Expected default host '%s', got '%s'", constants.TestDomainLocalhost, cfg.Server.Host)
 	}
 	
 	if cfg.Env != "development" {
@@ -142,7 +144,7 @@ func TestConfig_Validate(t *testing.T) {
 			config: Config{
 				Server: ServerConfig{
 					Port: 8080,
-					Host: "localhost",
+					Host: constants.TestDomainLocalhost,
 				},
 				App: AppConfig{
 					Name: "Test App",

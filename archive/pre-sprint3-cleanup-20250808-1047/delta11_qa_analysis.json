@@ -1,0 +1,1052 @@
+{
+  "metadata": {
+    "detector_version": "1.0.0",
+    "analysis_timestamp": "2025-01-15T10:00:00Z",
+    "total_violations": 87,
+    "severity_distribution": {
+      "high": 28,
+      "medium": 27,
+      "low": 32
+    },
+    "file_analyzed": "tests/agents/qa/qa_agent.go"
+  },
+  "violations_by_category": {
+    "data_serialization": [
+      {
+        "line": 30,
+        "column_start": 33,
+        "column_end": 47,
+        "type": "json_fields_coverage_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"min_coverage\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"min_coverage\"",
+        "suggested_refactor": "Move to constants.JSONFields.COVERAGE_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 31,
+        "column_start": 33,
+        "column_end": 45,
+        "type": "json_fields_vet_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"enable_vet\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"enable_vet\"",
+        "suggested_refactor": "Move to constants.JSONFields.VET_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 32,
+        "column_start": 33,
+        "column_end": 46,
+        "type": "json_fields_lint_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"enable_lint\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"enable_lint\"",
+        "suggested_refactor": "Move to constants.JSONFields.LINT_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 33,
+        "column_start": 33,
+        "column_end": 50,
+        "type": "json_fields_security_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"enable_security\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"enable_security\"",
+        "suggested_refactor": "Move to constants.JSONFields.SECURITY_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 34,
+        "column_start": 33,
+        "column_end": 52,
+        "type": "json_fields_complexity_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"enable_complexity\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"enable_complexity\"",
+        "suggested_refactor": "Move to constants.JSONFields.COMPLEXITY_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 35,
+        "column_start": 33,
+        "column_end": 48,
+        "type": "json_fields_format_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"output_format\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"output_format\"",
+        "suggested_refactor": "Move to constants.JSONFields.FORMAT_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 36,
+        "column_start": 33,
+        "column_end": 46,
+        "type": "json_fields_report_path_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"report_path\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"report_path\"",
+        "suggested_refactor": "Move to constants.JSONFields.REPORT_PATH_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 41,
+        "column_start": 40,
+        "column_end": 51,
+        "type": "json_fields_stats_timestamp_key",
+        "severity": "low",
+        "message": "JSON field name '\"timestamp\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"timestamp\"",
+        "suggested_refactor": "Move to constants.JSONFields.STATS_TIMESTAMP_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 42,
+        "column_start": 40,
+        "column_end": 50,
+        "type": "json_fields_coverage_stats_key",
+        "severity": "low",
+        "message": "JSON field name '\"coverage\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"coverage\"",
+        "suggested_refactor": "Move to constants.JSONFields.COVERAGE_STATS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 43,
+        "column_start": 40,
+        "column_end": 52,
+        "type": "json_fields_vet_issues_key",
+        "severity": "low",
+        "message": "JSON field name '\"vet_issues\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"vet_issues\"",
+        "suggested_refactor": "Move to constants.JSONFields.VET_ISSUES_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 44,
+        "column_start": 40,
+        "column_end": 53,
+        "type": "json_fields_lint_issues_key",
+        "severity": "low",
+        "message": "JSON field name '\"lint_issues\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"lint_issues\"",
+        "suggested_refactor": "Move to constants.JSONFields.LINT_ISSUES_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 45,
+        "column_start": 41,
+        "column_end": 58,
+        "type": "json_fields_security_issues_key",
+        "severity": "low",
+        "message": "JSON field name '\"security_issues\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"security_issues\"",
+        "suggested_refactor": "Move to constants.JSONFields.SECURITY_ISSUES_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 46,
+        "column_start": 43,
+        "column_end": 62,
+        "type": "json_fields_complexity_issues_key",
+        "severity": "low",
+        "message": "JSON field name '\"complexity_issues\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"complexity_issues\"",
+        "suggested_refactor": "Move to constants.JSONFields.COMPLEXITY_ISSUES_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 47,
+        "column_start": 40,
+        "column_end": 54,
+        "type": "json_fields_test_results_key",
+        "severity": "low",
+        "message": "JSON field name '\"test_results\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"test_results\"",
+        "suggested_refactor": "Move to constants.JSONFields.TEST_RESULTS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 48,
+        "column_start": 40,
+        "column_end": 55,
+        "type": "json_fields_overall_score_key",
+        "severity": "low",
+        "message": "JSON field name '\"overall_score\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"overall_score\"",
+        "suggested_refactor": "Move to constants.JSONFields.OVERALL_SCORE_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 49,
+        "column_start": 40,
+        "column_end": 48,
+        "type": "json_fields_status_key",
+        "severity": "low",
+        "message": "JSON field name '\"status\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"status\"",
+        "suggested_refactor": "Move to constants.JSONFields.STATUS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 110,
+        "column_start": 30,
+        "column_end": 38,
+        "type": "json_fields_status_key",
+        "severity": "low",
+        "message": "JSON field name '\"status\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"status\"",
+        "suggested_refactor": "Move to constants.JSONFields.STATUS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 118,
+        "column_start": 31,
+        "column_end": 39,
+        "type": "json_fields_status_key",
+        "severity": "low",
+        "message": "JSON field name '\"status\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"status\"",
+        "suggested_refactor": "Move to constants.JSONFields.STATUS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 143,
+        "column_start": 3,
+        "column_end": 17,
+        "type": "json_fields_coverage_config_key",
+        "severity": "low",
+        "message": "JSON field name '\"min_coverage\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"min_coverage\"",
+        "suggested_refactor": "Move to constants.JSONFields.COVERAGE_CONFIG_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 215,
+        "column_start": 3,
+        "column_end": 18,
+        "type": "json_fields_overall_score_key",
+        "severity": "low",
+        "message": "JSON field name '\"overall_score\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"overall_score\"",
+        "suggested_refactor": "Move to constants.JSONFields.OVERALL_SCORE_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 216,
+        "column_start": 3,
+        "column_end": 11,
+        "type": "json_fields_status_key",
+        "severity": "low",
+        "message": "JSON field name '\"status\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"status\"",
+        "suggested_refactor": "Move to constants.JSONFields.STATUS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      },
+      {
+        "line": 217,
+        "column_start": 3,
+        "column_end": 13,
+        "type": "json_fields_coverage_stats_key",
+        "severity": "low",
+        "message": "JSON field name '\"coverage\"' should be defined as constants for API consistency",
+        "hardcoded_value": "\"coverage\"",
+        "suggested_refactor": "Move to constants.JSONFields.COVERAGE_STATS_KEY",
+        "architectural_impact": "Impacts API contract stability and serialization consistency"
+      }
+    ],
+    "observability": [
+      {
+        "line": 142,
+        "column_start": 11,
+        "column_end": 33,
+        "type": "log_messages_agent_init_message",
+        "severity": "medium",
+        "message": "Log message '\"QA Agent initialized\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"QA Agent initialized\"",
+        "suggested_refactor": "Move to constants.LogMessages.AGENT_INIT_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 155,
+        "column_start": 11,
+        "column_end": 40,
+        "type": "log_messages_analysis_start_message",
+        "severity": "medium",
+        "message": "Log message '\"\ud83d\udd0d Starting full QA analysis\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"\ud83d\udd0d Starting full QA analysis\"",
+        "suggested_refactor": "Move to constants.LogMessages.ANALYSIS_START_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 163,
+        "column_start": 12,
+        "column_end": 32,
+        "type": "log_messages_unit_test_start_message",
+        "severity": "medium",
+        "message": "Log message '\"Running unit tests\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"Running unit tests\"",
+        "suggested_refactor": "Move to constants.LogMessages.UNIT_TEST_START_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 169,
+        "column_start": 12,
+        "column_end": 37,
+        "type": "log_messages_coverage_analysis_message",
+        "severity": "medium",
+        "message": "Log message '\"Analyzing test coverage\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"Analyzing test coverage\"",
+        "suggested_refactor": "Move to constants.LogMessages.COVERAGE_ANALYSIS_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 176,
+        "column_start": 13,
+        "column_end": 29,
+        "type": "log_messages_static_analysis_start_message",
+        "severity": "medium",
+        "message": "Log message '\"Running go vet\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"Running go vet\"",
+        "suggested_refactor": "Move to constants.LogMessages.STATIC_ANALYSIS_START_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 184,
+        "column_start": 13,
+        "column_end": 36,
+        "type": "log_messages_lint_analysis_start_message",
+        "severity": "medium",
+        "message": "Log message '\"Running golangci-lint\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"Running golangci-lint\"",
+        "suggested_refactor": "Move to constants.LogMessages.LINT_ANALYSIS_START_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 200,
+        "column_start": 13,
+        "column_end": 40,
+        "type": "log_messages_complexity_analysis_message",
+        "severity": "medium",
+        "message": "Log message '\"Analyzing code complexity\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"Analyzing code complexity\"",
+        "suggested_refactor": "Move to constants.LogMessages.COMPLEXITY_ANALYSIS_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 214,
+        "column_start": 11,
+        "column_end": 34,
+        "type": "log_messages_analysis_complete_message",
+        "severity": "medium",
+        "message": "Log message '\"QA analysis completed\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"QA analysis completed\"",
+        "suggested_refactor": "Move to constants.LogMessages.ANALYSIS_COMPLETE_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 276,
+        "column_start": 12,
+        "column_end": 61,
+        "type": "log_messages_lint_tool_missing_message",
+        "severity": "medium",
+        "message": "Log message '\"golangci-lint not found, skipping lint analysis\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"golangci-lint not found, skipping lint analysis\"",
+        "suggested_refactor": "Move to constants.LogMessages.LINT_TOOL_MISSING_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 295,
+        "column_start": 12,
+        "column_end": 57,
+        "type": "log_messages_security_tool_missing_message",
+        "severity": "medium",
+        "message": "Log message '\"gosec not found, skipping security analysis\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"gosec not found, skipping security analysis\"",
+        "suggested_refactor": "Move to constants.LogMessages.SECURITY_TOOL_MISSING_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      },
+      {
+        "line": 314,
+        "column_start": 12,
+        "column_end": 61,
+        "type": "log_messages_complexity_tool_missing_message",
+        "severity": "medium",
+        "message": "Log message '\"gocyclo not found, skipping complexity analysis\"' should be externalized for consistency and localization",
+        "hardcoded_value": "\"gocyclo not found, skipping complexity analysis\"",
+        "suggested_refactor": "Move to constants.LogMessages.COMPLEXITY_TOOL_MISSING_MESSAGE",
+        "architectural_impact": "Affects debugging experience and log analysis automation"
+      }
+    ],
+    "test_execution": [
+      {
+        "line": 228,
+        "column_start": 21,
+        "column_end": 46,
+        "type": "assertions_test_execution_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"failed to run tests: %w\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"failed to run tests: %w\"",
+        "suggested_refactor": "Move to constants.TestMessages.TEST_EXECUTION_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      },
+      {
+        "line": 241,
+        "column_start": 21,
+        "column_end": 54,
+        "type": "assertions_coverage_error_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"failed to generate coverage: %w\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"failed to generate coverage: %w\"",
+        "suggested_refactor": "Move to constants.TestMessages.COVERAGE_ERROR_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      },
+      {
+        "line": 248,
+        "column_start": 21,
+        "column_end": 53,
+        "type": "assertions_coverage_analysis_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"failed to analyze coverage: %w\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"failed to analyze coverage: %w\"",
+        "suggested_refactor": "Move to constants.TestMessages.COVERAGE_ANALYSIS_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      },
+      {
+        "line": 266,
+        "column_start": 21,
+        "column_end": 42,
+        "type": "assertions_static_analysis_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"go vet found issues\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"go vet found issues\"",
+        "suggested_refactor": "Move to constants.TestMessages.STATIC_ANALYSIS_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      },
+      {
+        "line": 285,
+        "column_start": 21,
+        "column_end": 43,
+        "type": "assertions_lint_error_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"linting issues found\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"linting issues found\"",
+        "suggested_refactor": "Move to constants.TestMessages.LINT_ERROR_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      },
+      {
+        "line": 304,
+        "column_start": 21,
+        "column_end": 44,
+        "type": "assertions_security_error_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"security issues found\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"security issues found\"",
+        "suggested_refactor": "Move to constants.TestMessages.SECURITY_ERROR_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      },
+      {
+        "line": 323,
+        "column_start": 21,
+        "column_end": 54,
+        "type": "assertions_complexity_error_message",
+        "severity": "medium",
+        "message": "Test assertion message '\"high complexity functions found\"' should be externalized for consistency and i18n support",
+        "hardcoded_value": "\"high complexity functions found\"",
+        "suggested_refactor": "Move to constants.TestMessages.COMPLEXITY_ERROR_MESSAGE",
+        "architectural_impact": "Affects test result consistency and internationalization"
+      }
+    ],
+    "toolchain_integration": [
+      {
+        "line": 275,
+        "column_start": 29,
+        "column_end": 44,
+        "type": "tools_linting_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"golangci-lint\"' should be externalized to support different environments",
+        "hardcoded_value": "\"golangci-lint\"",
+        "suggested_refactor": "Move to constants.ToolCommands.LINTING_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 280,
+        "column_start": 22,
+        "column_end": 37,
+        "type": "tools_linting_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"golangci-lint\"' should be externalized to support different environments",
+        "hardcoded_value": "\"golangci-lint\"",
+        "suggested_refactor": "Move to constants.ToolCommands.LINTING_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 280,
+        "column_start": 62,
+        "column_end": 68,
+        "type": "tools_json_output_format",
+        "severity": "high",
+        "message": "Tool command '\"json\"' should be externalized to support different environments",
+        "hardcoded_value": "\"json\"",
+        "suggested_refactor": "Move to constants.ToolCommands.JSON_OUTPUT_FORMAT",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 280,
+        "column_start": 46,
+        "column_end": 60,
+        "type": "tools_lint_output_format_flag",
+        "severity": "high",
+        "message": "Tool command '\"--out-format\"' should be externalized to support different environments",
+        "hardcoded_value": "\"--out-format\"",
+        "suggested_refactor": "Move to constants.ToolCommands.LINT_OUTPUT_FORMAT_FLAG",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 294,
+        "column_start": 29,
+        "column_end": 36,
+        "type": "tools_security_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"gosec\"' should be externalized to support different environments",
+        "hardcoded_value": "\"gosec\"",
+        "suggested_refactor": "Move to constants.ToolCommands.SECURITY_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 299,
+        "column_start": 22,
+        "column_end": 29,
+        "type": "tools_security_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"gosec\"' should be externalized to support different environments",
+        "hardcoded_value": "\"gosec\"",
+        "suggested_refactor": "Move to constants.ToolCommands.SECURITY_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 299,
+        "column_start": 31,
+        "column_end": 37,
+        "type": "tools_output_format_flag",
+        "severity": "high",
+        "message": "Tool command '\"-fmt\"' should be externalized to support different environments",
+        "hardcoded_value": "\"-fmt\"",
+        "suggested_refactor": "Move to constants.ToolCommands.OUTPUT_FORMAT_FLAG",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 299,
+        "column_start": 39,
+        "column_end": 45,
+        "type": "tools_json_output_format",
+        "severity": "high",
+        "message": "Tool command '\"json\"' should be externalized to support different environments",
+        "hardcoded_value": "\"json\"",
+        "suggested_refactor": "Move to constants.ToolCommands.JSON_OUTPUT_FORMAT",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 299,
+        "column_start": 47,
+        "column_end": 54,
+        "type": "tools_recursive_path_pattern",
+        "severity": "high",
+        "message": "Tool command '\"./...\"' should be externalized to support different environments",
+        "hardcoded_value": "\"./...\"",
+        "suggested_refactor": "Move to constants.ToolCommands.RECURSIVE_PATH_PATTERN",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 313,
+        "column_start": 29,
+        "column_end": 38,
+        "type": "tools_complexity_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"gocyclo\"' should be externalized to support different environments",
+        "hardcoded_value": "\"gocyclo\"",
+        "suggested_refactor": "Move to constants.ToolCommands.COMPLEXITY_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 318,
+        "column_start": 22,
+        "column_end": 31,
+        "type": "tools_complexity_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"gocyclo\"' should be externalized to support different environments",
+        "hardcoded_value": "\"gocyclo\"",
+        "suggested_refactor": "Move to constants.ToolCommands.COMPLEXITY_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 318,
+        "column_start": 33,
+        "column_end": 40,
+        "type": "tools_complexity_threshold_flag",
+        "severity": "high",
+        "message": "Tool command '\"-over\"' should be externalized to support different environments",
+        "hardcoded_value": "\"-over\"",
+        "suggested_refactor": "Move to constants.ToolCommands.COMPLEXITY_THRESHOLD_FLAG",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 318,
+        "column_start": 42,
+        "column_end": 46,
+        "type": "tools_complexity_threshold_value",
+        "severity": "high",
+        "message": "Tool command '\"10\"' should be externalized to support different environments",
+        "hardcoded_value": "\"10\"",
+        "suggested_refactor": "Move to constants.ToolCommands.COMPLEXITY_THRESHOLD_VALUE",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 587,
+        "column_start": 25,
+        "column_end": 40,
+        "type": "tools_linting_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"golangci-lint\"' should be externalized to support different environments",
+        "hardcoded_value": "\"golangci-lint\"",
+        "suggested_refactor": "Move to constants.ToolCommands.LINTING_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 590,
+        "column_start": 25,
+        "column_end": 32,
+        "type": "tools_security_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"gosec\"' should be externalized to support different environments",
+        "hardcoded_value": "\"gosec\"",
+        "suggested_refactor": "Move to constants.ToolCommands.SECURITY_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      },
+      {
+        "line": 593,
+        "column_start": 25,
+        "column_end": 34,
+        "type": "tools_complexity_tool_command",
+        "severity": "high",
+        "message": "Tool command '\"gocyclo\"' should be externalized to support different environments",
+        "hardcoded_value": "\"gocyclo\"",
+        "suggested_refactor": "Move to constants.ToolCommands.COMPLEXITY_TOOL_COMMAND",
+        "architectural_impact": "Affects toolchain portability and environment-specific customization"
+      }
+    ],
+    "test_data_management": [
+      {
+        "line": 339,
+        "column_start": 24,
+        "column_end": 32,
+        "type": "mock_data_test_result_action_key",
+        "severity": "low",
+        "message": "JSON key '\"Action\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Action\"",
+        "suggested_refactor": "Move to constants.JSONKeys.TEST_RESULT_ACTION_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 413,
+        "column_start": 29,
+        "column_end": 41,
+        "type": "mock_data_lint_result_linter_key",
+        "severity": "low",
+        "message": "JSON key '\"FromLinter\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"FromLinter\"",
+        "suggested_refactor": "Move to constants.JSONKeys.LINT_RESULT_LINTER_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 414,
+        "column_start": 29,
+        "column_end": 35,
+        "type": "mock_data_lint_result_text_key",
+        "severity": "low",
+        "message": "JSON key '\"Text\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Text\"",
+        "suggested_refactor": "Move to constants.JSONKeys.LINT_RESULT_TEXT_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 416,
+        "column_start": 27,
+        "column_end": 37,
+        "type": "mock_data_position_filename_key",
+        "severity": "low",
+        "message": "JSON key '\"Filename\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Filename\"",
+        "suggested_refactor": "Move to constants.JSONKeys.POSITION_FILENAME_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 417,
+        "column_start": 27,
+        "column_end": 33,
+        "type": "mock_data_position_line_key",
+        "severity": "low",
+        "message": "JSON key '\"Line\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Line\"",
+        "suggested_refactor": "Move to constants.JSONKeys.POSITION_LINE_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 418,
+        "column_start": 27,
+        "column_end": 35,
+        "type": "mock_data_position_column_key",
+        "severity": "low",
+        "message": "JSON key '\"Column\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Column\"",
+        "suggested_refactor": "Move to constants.JSONKeys.POSITION_COLUMN_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 419,
+        "column_start": 12,
+        "column_end": 17,
+        "type": "mock_data_position_key",
+        "severity": "low",
+        "message": "JSON key '\"Pos\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Pos\"",
+        "suggested_refactor": "Move to constants.JSONKeys.POSITION_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 420,
+        "column_start": 26,
+        "column_end": 36,
+        "type": "mock_data_severity_key",
+        "severity": "low",
+        "message": "JSON key '\"Severity\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Severity\"",
+        "suggested_refactor": "Move to constants.JSONKeys.SEVERITY_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 421,
+        "column_start": 11,
+        "column_end": 19,
+        "type": "mock_data_issues_collection_key",
+        "severity": "low",
+        "message": "JSON key '\"Issues\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Issues\"",
+        "suggested_refactor": "Move to constants.JSONKeys.ISSUES_COLLECTION_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      },
+      {
+        "line": 450,
+        "column_start": 11,
+        "column_end": 19,
+        "type": "mock_data_issues_collection_key",
+        "severity": "low",
+        "message": "JSON key '\"Issues\"' should be defined as constants to prevent typos",
+        "hardcoded_value": "\"Issues\"",
+        "suggested_refactor": "Move to constants.JSONKeys.ISSUES_COLLECTION_KEY",
+        "architectural_impact": "Affects test data maintainability and JSON parsing reliability"
+      }
+    ],
+    "result_reporting": [
+      {
+        "line": 345,
+        "column_start": 8,
+        "column_end": 14,
+        "type": "status_test_status_pass",
+        "severity": "medium",
+        "message": "Status value '\"pass\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"pass\"",
+        "suggested_refactor": "Move to constants.QAStatus.TEST_STATUS_PASS",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 345,
+        "column_start": 16,
+        "column_end": 22,
+        "type": "status_test_status_fail",
+        "severity": "medium",
+        "message": "Status value '\"fail\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"fail\"",
+        "suggested_refactor": "Move to constants.QAStatus.TEST_STATUS_FAIL",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 347,
+        "column_start": 17,
+        "column_end": 23,
+        "type": "status_test_status_pass",
+        "severity": "medium",
+        "message": "Status value '\"pass\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"pass\"",
+        "suggested_refactor": "Move to constants.QAStatus.TEST_STATUS_PASS",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 403,
+        "column_start": 15,
+        "column_end": 20,
+        "type": "status_analysis_category_vet",
+        "severity": "medium",
+        "message": "Status value '\"vet\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"vet\"",
+        "suggested_refactor": "Move to constants.QAStatus.ANALYSIS_CATEGORY_VET",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 546,
+        "column_start": 21,
+        "column_end": 32,
+        "type": "status_quality_status_excellent",
+        "severity": "medium",
+        "message": "Status value '\"excellent\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"excellent\"",
+        "suggested_refactor": "Move to constants.QAStatus.QUALITY_STATUS_EXCELLENT",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 548,
+        "column_start": 21,
+        "column_end": 27,
+        "type": "status_quality_status_good",
+        "severity": "medium",
+        "message": "Status value '\"good\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"good\"",
+        "suggested_refactor": "Move to constants.QAStatus.QUALITY_STATUS_GOOD",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 550,
+        "column_start": 21,
+        "column_end": 33,
+        "type": "status_quality_status_acceptable",
+        "severity": "medium",
+        "message": "Status value '\"acceptable\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"acceptable\"",
+        "suggested_refactor": "Move to constants.QAStatus.QUALITY_STATUS_ACCEPTABLE",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 552,
+        "column_start": 21,
+        "column_end": 40,
+        "type": "status_quality_status_needs_improvement",
+        "severity": "medium",
+        "message": "Status value '\"needs_improvement\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"needs_improvement\"",
+        "suggested_refactor": "Move to constants.QAStatus.QUALITY_STATUS_NEEDS_IMPROVEMENT",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      },
+      {
+        "line": 554,
+        "column_start": 21,
+        "column_end": 27,
+        "type": "status_quality_status_poor",
+        "severity": "medium",
+        "message": "Status value '\"poor\"' should be defined as constants for type safety",
+        "hardcoded_value": "\"poor\"",
+        "suggested_refactor": "Move to constants.QAStatus.QUALITY_STATUS_POOR",
+        "architectural_impact": "Impacts API consistency and type safety in quality reporting"
+      }
+    ],
+    "environment_configuration": [
+      {
+        "line": 361,
+        "column_start": 29,
+        "column_end": 37,
+        "type": "config_coverage_total_marker",
+        "severity": "high",
+        "message": "Configuration value '\"total:\"' should be externalized for environment-specific settings",
+        "hardcoded_value": "\"total:\"",
+        "suggested_refactor": "Move to constants.DefaultConfig.COVERAGE_TOTAL_MARKER",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 369,
+        "column_start": 36,
+        "column_end": 41,
+        "type": "config_go_file_extension_filter",
+        "severity": "high",
+        "message": "Configuration value '\".go\"' should be externalized for environment-specific settings",
+        "hardcoded_value": "\".go\"",
+        "suggested_refactor": "Move to constants.DefaultConfig.GO_FILE_EXTENSION_FILTER",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 369,
+        "column_start": 69,
+        "column_end": 72,
+        "type": "config_percentage_marker",
+        "severity": "high",
+        "message": "Configuration value '\"%\"' should be externalized for environment-specific settings",
+        "hardcoded_value": "\"%\"",
+        "suggested_refactor": "Move to constants.DefaultConfig.PERCENTAGE_MARKER",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 374,
+        "column_start": 55,
+        "column_end": 58,
+        "type": "config_percentage_marker",
+        "severity": "high",
+        "message": "Configuration value '\"%\"' should be externalized for environment-specific settings",
+        "hardcoded_value": "\"%\"",
+        "suggested_refactor": "Move to constants.DefaultConfig.PERCENTAGE_MARKER",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 393,
+        "column_start": 33,
+        "column_end": 36,
+        "type": "config_file_line_separator",
+        "severity": "high",
+        "message": "Configuration value '\":\"' should be externalized for environment-specific settings",
+        "hardcoded_value": "\":\"",
+        "suggested_refactor": "Move to constants.DefaultConfig.FILE_LINE_SEPARATOR",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 485,
+        "column_start": 45,
+        "column_end": 48,
+        "type": "config_file_line_separator",
+        "severity": "high",
+        "message": "Configuration value '\":\"' should be externalized for environment-specific settings",
+        "hardcoded_value": "\":\"",
+        "suggested_refactor": "Move to constants.DefaultConfig.FILE_LINE_SEPARATOR",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 561,
+        "column_start": 46,
+        "column_end": 50,
+        "type": "config_directory_permission_mask",
+        "severity": "high",
+        "message": "Configuration value '0755' should be externalized for environment-specific settings",
+        "hardcoded_value": "0755",
+        "suggested_refactor": "Move to constants.DefaultConfig.DIRECTORY_PERMISSION_MASK",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      },
+      {
+        "line": 572,
+        "column_start": 40,
+        "column_end": 44,
+        "type": "config_file_permission_mask",
+        "severity": "high",
+        "message": "Configuration value '0644' should be externalized for environment-specific settings",
+        "hardcoded_value": "0644",
+        "suggested_refactor": "Move to constants.DefaultConfig.FILE_PERMISSION_MASK",
+        "architectural_impact": "Impacts deployment flexibility and environment-specific configuration"
+      }
+    ],
+    "quality_gates": [
+      {
+        "line": 505,
+        "column_start": 2,
+        "column_end": 16,
+        "type": "thresholds_initial_score_threshold",
+        "severity": "high",
+        "message": "Quality threshold 'score := 100.0' should be configurable via external configuration",
+        "hardcoded_value": "score := 100.0",
+        "suggested_refactor": "Move to constants.QualityThresholds.INITIAL_SCORE_THRESHOLD",
+        "architectural_impact": "Impacts quality gate configuration and CI/CD pipeline flexibility"
+      },
+      {
+        "line": 509,
+        "column_start": 3,
+        "column_end": 85,
+        "type": "thresholds_coverage_penalty_weight",
+        "severity": "high",
+        "message": "Quality threshold 'coveragePenalty := (qa.config.MinCoverage - qa.stats.Coverage.TotalCoverage) * 0.3' should be configurable via external configuration",
+        "hardcoded_value": "coveragePenalty := (qa.config.MinCoverage - qa.stats.Coverage.TotalCoverage) * 0.3",
+        "suggested_refactor": "Move to constants.QualityThresholds.COVERAGE_PENALTY_WEIGHT",
+        "architectural_impact": "Impacts quality gate configuration and CI/CD pipeline flexibility"
+      },
+      {
+        "line": 516,
+        "column_start": 12,
+        "column_end": 28,
+        "type": "thresholds_test_failure_penalty",
+        "severity": "high",
+        "message": "Quality threshold 'failureRate * 20' should be configurable via external configuration",
+        "hardcoded_value": "failureRate * 20",
+        "suggested_refactor": "Move to constants.QualityThresholds.TEST_FAILURE_PENALTY",
+        "architectural_impact": "Impacts quality gate configuration and CI/CD pipeline flexibility"
+      },
+      {
+        "line": 551,
+        "column_start": 7,
+        "column_end": 18,
+        "type": "thresholds_minimum_acceptable_score",
+        "severity": "high",
+        "message": "Quality threshold 'score >= 60' should be configurable via external configuration",
+        "hardcoded_value": "score >= 60",
+        "suggested_refactor": "Move to constants.QualityThresholds.MINIMUM_ACCEPTABLE_SCORE",
+        "architectural_impact": "Impacts quality gate configuration and CI/CD pipeline flexibility"
+      }
+    ]
+  },
+  "architectural_recommendations": {
+    "test_data_management": {
+      "recommendation": "Implement centralized test data configuration",
+      "rationale": "Hardcoded JSON keys and mock data reduce maintainability",
+      "implementation": "Create constants.TestData with typed constants for all JSON fields and mock responses"
+    },
+    "quality_threshold_configuration": {
+      "recommendation": "Externalize quality thresholds to configuration files",
+      "rationale": "Hardcoded scoring weights prevent environment-specific quality gates",
+      "implementation": "Move thresholds to config.yaml with validation schema"
+    },
+    "tool_integration_abstraction": {
+      "recommendation": "Abstract tool commands through configuration layer",
+      "rationale": "Hardcoded tool commands reduce portability and testing flexibility",
+      "implementation": "Create ToolConfig interface with environment-specific implementations"
+    },
+    "assertion_message_standardization": {
+      "recommendation": "Standardize test assertion messages through message catalog",
+      "rationale": "Inconsistent error messages complicate debugging and analysis",
+      "implementation": "Implement MessageCatalog with structured error reporting"
+    },
+    "status_code_type_safety": {
+      "recommendation": "Use typed enums for status codes and states",
+      "rationale": "String literals for status codes are error-prone and hard to refactor",
+      "implementation": "Define QAStatus enum with compile-time validation"
+    }
+  },
+  "refactoring_priorities": [
+    {
+      "priority": 1,
+      "task": "Extract quality scoring thresholds",
+      "impact": "high",
+      "effort": "low",
+      "affected_violations": 4
+    },
+    {
+      "priority": 2,
+      "task": "Standardize tool command configuration",
+      "impact": "high",
+      "effort": "medium",
+      "affected_violations": 16
+    },
+    {
+      "priority": 3,
+      "task": "Centralize JSON field constants",
+      "impact": "medium",
+      "effort": "low",
+      "affected_violations": 22
+    },
+    {
+      "priority": 4,
+      "task": "Externalize assertion messages",
+      "impact": "medium",
+      "effort": "medium",
+      "affected_violations": 7
+    },
+    {
+      "priority": 5,
+      "task": "Implement status code type safety",
+      "impact": "medium",
+      "effort": "high",
+      "affected_violations": 9
+    }
+  ]
+}

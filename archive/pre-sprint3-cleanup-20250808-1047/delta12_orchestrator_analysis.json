@@ -1,0 +1,410 @@
+{
+  "analysis_metadata": {
+    "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/integration/orchestrator.go",
+    "analysis_date": "2025-01-27",
+    "analyzer_version": "delta-12",
+    "focus": "Orchestration Hardcoding Patterns",
+    "expected_violations": 76,
+    "detected_violations": 85,
+    "accuracy_percentage": 89.4
+  },
+  "executive_summary": {
+    "total_violations": 85,
+    "critical_issues": 10,
+    "high_priority_fixes": 21,
+    "architectural_debt": "HIGH",
+    "maintainability_score": 35,
+    "scalability_impact": "SEVERE",
+    "cloud_readiness": "LOW"
+  },
+  "violation_categories": {
+    "service_discovery": {
+      "count": 3,
+      "severity": "HIGH",
+      "primary_issues": [
+        "Hardcoded database path: 'fire_salamander.db'",
+        "Fixed channel buffer sizes: 100",
+        "Static storage manager initialization"
+      ],
+      "business_impact": "Prevents horizontal scaling and multi-environment deployment",
+      "technical_debt": "HIGH"
+    },
+    "timing_configuration": {
+      "count": 1,
+      "severity": "HIGH", 
+      "primary_issues": [
+        "Hardcoded retry attempts: 3",
+        "No adaptive timeout management"
+      ],
+      "business_impact": "Poor fault tolerance and performance under varying network conditions",
+      "technical_debt": "MEDIUM"
+    },
+    "retry_configuration": {
+      "count": 1,
+      "severity": "MEDIUM",
+      "primary_issues": [
+        "Fixed retry policy with no backoff strategy",
+        "No circuit breaker pattern implementation"
+      ],
+      "business_impact": "Reduced system resilience to transient failures",
+      "technical_debt": "MEDIUM"
+    },
+    "state_management": {
+      "count": 23,
+      "severity": "MEDIUM",
+      "primary_issues": [
+        "Hardcoded task status strings",
+        "Analysis status constants not externalized", 
+        "State transitions not configurable"
+      ],
+      "business_impact": "Inflexible workflow management and difficult state customization",
+      "technical_debt": "HIGH"
+    },
+    "event_management": {
+      "count": 24,
+      "severity": "LOW",
+      "primary_issues": [
+        "Hardcoded log messages in French",
+        "No structured logging framework",
+        "Missing event correlation IDs"
+      ],
+      "business_impact": "Poor observability and difficult internationalization",
+      "technical_debt": "MEDIUM"
+    },
+    "integration_points": {
+      "count": 11,
+      "severity": "MEDIUM",
+      "primary_issues": [
+        "Direct method calls instead of interfaces",
+        "Tight coupling between orchestrator and services",
+        "No dependency injection pattern"
+      ],
+      "business_impact": "Difficult testing and service substitution",
+      "technical_debt": "HIGH"
+    },
+    "error_handling": {
+      "count": 10,
+      "severity": "MEDIUM",
+      "primary_issues": [
+        "Hardcoded error messages in French",
+        "No structured error classification",
+        "Missing error recovery strategies"
+      ],
+      "business_impact": "Poor error diagnostics and user experience",
+      "technical_debt": "MEDIUM"
+    },
+    "concurrency_configuration": {
+      "count": 4,
+      "severity": "HIGH",
+      "primary_issues": [
+        "Fixed channel buffer sizes",
+        "No adaptive worker pool sizing",
+        "Hardcoded synchronization patterns"
+      ],
+      "business_impact": "Poor resource utilization and scalability limitations",
+      "technical_debt": "HIGH"
+    },
+    "workflow_management": {
+      "count": 6,
+      "severity": "LOW",
+      "primary_issues": [
+        "Goroutines without configurable limits",
+        "No workflow step customization",
+        "Missing pipeline pattern implementation"
+      ],
+      "business_impact": "Limited workflow flexibility and orchestration customization",
+      "technical_debt": "MEDIUM"
+    },
+    "database_configuration": {
+      "count": 2,
+      "severity": "HIGH",
+      "primary_issues": [
+        "Hardcoded SQLite database file path",
+        "No database abstraction layer"
+      ],
+      "business_impact": "Prevents database technology changes and cloud deployment",
+      "technical_debt": "HIGH"
+    }
+  },
+  "architectural_recommendations": {
+    "immediate_actions": [
+      {
+        "priority": "CRITICAL",
+        "action": "Implement Configuration Management",
+        "description": "Externalize all hardcoded values to configuration files with environment overrides",
+        "files_affected": ["orchestrator.go", "storage.go", "config.go"],
+        "effort_estimate": "2-3 days",
+        "business_value": "Enables multi-environment deployments and cloud readiness"
+      },
+      {
+        "priority": "CRITICAL", 
+        "action": "Implement Service Discovery Pattern",
+        "description": "Replace hardcoded service endpoints with service registry",
+        "files_affected": ["orchestrator.go"],
+        "effort_estimate": "3-4 days",
+        "business_value": "Enables microservice architecture and horizontal scaling"
+      },
+      {
+        "priority": "HIGH",
+        "action": "Add Dependency Injection",
+        "description": "Implement interfaces and DI container for service dependencies",
+        "files_affected": ["orchestrator.go"],
+        "effort_estimate": "2-3 days", 
+        "business_value": "Improves testability and service substitution flexibility"
+      }
+    ],
+    "medium_term_improvements": [
+      {
+        "priority": "MEDIUM",
+        "action": "Implement Adaptive Concurrency",
+        "description": "Dynamic worker pool sizing based on system load and configuration",
+        "files_affected": ["orchestrator.go"],
+        "effort_estimate": "3-4 days",
+        "business_value": "Better resource utilization and performance optimization"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Add Structured Logging",
+        "description": "Replace hardcoded log messages with structured, internationalized logging",
+        "files_affected": ["orchestrator.go"],
+        "effort_estimate": "1-2 days",
+        "business_value": "Improved observability and internationalization support"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Implement Circuit Breaker Pattern",
+        "description": "Add configurable retry policies with exponential backoff and circuit breakers",
+        "files_affected": ["orchestrator.go"],
+        "effort_estimate": "2-3 days",
+        "business_value": "Enhanced system resilience and fault tolerance"
+      }
+    ],
+    "long_term_vision": [
+      {
+        "priority": "LOW",
+        "action": "Event-Driven Architecture",
+        "description": "Implement event bus for loose coupling between orchestration components",
+        "files_affected": ["orchestrator.go", "new event system"],
+        "effort_estimate": "1-2 weeks",
+        "business_value": "True microservice decoupling and event-driven workflows"
+      },
+      {
+        "priority": "LOW",
+        "action": "Workflow Engine Integration", 
+        "description": "Replace hardcoded workflow steps with configurable workflow engine",
+        "files_affected": ["orchestrator.go", "new workflow engine"],
+        "effort_estimate": "2-3 weeks",
+        "business_value": "Dynamic workflow customization and business process flexibility"
+      }
+    ]
+  },
+  "microservice_orchestration_patterns": {
+    "current_antipatterns": [
+      {
+        "pattern": "Monolithic Orchestrator",
+        "description": "Single orchestrator handling all service coordination",
+        "impact": "Single point of failure and scaling bottleneck",
+        "recommendation": "Implement distributed orchestration with service mesh"
+      },
+      {
+        "pattern": "Direct Service Coupling",
+        "description": "Direct method calls between services without abstraction",
+        "impact": "Tight coupling prevents independent service evolution",
+        "recommendation": "Use async messaging and event-driven communication"
+      },
+      {
+        "pattern": "Static Resource Allocation",
+        "description": "Fixed buffer sizes and worker pools",
+        "impact": "Poor resource utilization and inability to handle load spikes",
+        "recommendation": "Implement auto-scaling and adaptive resource management"
+      }
+    ],
+    "recommended_patterns": [
+      {
+        "pattern": "Saga Pattern",
+        "description": "Distributed transaction management for long-running processes",
+        "implementation": "Replace current task processing with saga-based workflow",
+        "benefits": ["Fault tolerance", "Rollback capability", "Service independence"]
+      },
+      {
+        "pattern": "Event Sourcing",
+        "description": "Store all state changes as events for audit and replay",
+        "implementation": "Add event store for all orchestration state changes",
+        "benefits": ["Complete audit trail", "System recovery", "Temporal queries"]
+      },
+      {
+        "pattern": "CQRS with Orchestration",
+        "description": "Separate command and query models for orchestrator operations",
+        "implementation": "Split read and write operations with dedicated models",
+        "benefits": ["Performance optimization", "Scalability", "Clear separation of concerns"]
+      }
+    ]
+  },
+  "configuration_externalization": {
+    "service_endpoints": {
+      "current_violations": [
+        "'fire_salamander.db' database path",
+        "Channel buffer sizes (100)",
+        "Storage manager direct instantiation"
+      ],
+      "recommended_config": {
+        "database": {
+          "type": "${DATABASE_TYPE:sqlite}",
+          "connection_string": "${DATABASE_URL:./fire_salamander.db}",
+          "pool_size": "${DATABASE_POOL_SIZE:10}"
+        },
+        "channels": {
+          "task_queue_size": "${TASK_QUEUE_SIZE:100}",
+          "result_queue_size": "${RESULT_QUEUE_SIZE:100}",
+          "buffer_size": "${CHANNEL_BUFFER_SIZE:50}"
+        },
+        "services": {
+          "discovery_endpoint": "${SERVICE_DISCOVERY_URL:consul://localhost:8500}",
+          "health_check_interval": "${HEALTH_CHECK_INTERVAL:30s}"
+        }
+      }
+    },
+    "timeout_strategies": {
+      "current_violations": [
+        "Fixed retry attempts (3)",
+        "No timeout configuration",
+        "Static delay values"
+      ],
+      "recommended_config": {
+        "timeouts": {
+          "service_call_timeout": "${SERVICE_TIMEOUT:30s}",
+          "total_request_timeout": "${TOTAL_TIMEOUT:300s}",
+          "health_check_timeout": "${HEALTH_TIMEOUT:10s}"
+        },
+        "retry_policies": {
+          "max_attempts": "${MAX_RETRY_ATTEMPTS:3}",
+          "initial_delay": "${RETRY_INITIAL_DELAY:1s}",
+          "max_delay": "${RETRY_MAX_DELAY:60s}",
+          "backoff_multiplier": "${BACKOFF_MULTIPLIER:2.0}"
+        }
+      }
+    },
+    "error_recovery": {
+      "current_violations": [
+        "Hardcoded French error messages",
+        "No error classification system",
+        "Missing recovery strategies"
+      ],
+      "recommended_config": {
+        "error_handling": {
+          "language": "${ERROR_LANGUAGE:en}",
+          "log_level": "${ERROR_LOG_LEVEL:error}",
+          "retry_on_errors": ["network_timeout", "service_unavailable"],
+          "fail_fast_errors": ["authentication_error", "invalid_input"]
+        }
+      }
+    }
+  },
+  "state_machine_patterns": {
+    "current_state_management": {
+      "issues": [
+        "Hardcoded state strings in code",
+        "No state transition validation",
+        "Missing state history tracking"
+      ],
+      "states_identified": [
+        "TaskStatusPending", "TaskStatusRunning", "TaskStatusCompleted",
+        "TaskStatusFailed", "TaskStatusCancelled",
+        "AnalysisStatusSuccess", "AnalysisStatusPartial", "AnalysisStatusFailed"
+      ]
+    },
+    "recommended_improvements": {
+      "state_configuration": {
+        "external_state_definition": "Define states in YAML/JSON configuration",
+        "state_machine_engine": "Implement finite state machine with validation",
+        "state_persistence": "Store state transitions in event store"
+      },
+      "workflow_patterns": {
+        "orchestration_vs_choreography": "Mix both patterns for optimal flexibility",
+        "compensation_actions": "Define rollback actions for each state",
+        "state_monitoring": "Add state transition metrics and alerting"
+      }
+    }
+  },
+  "performance_considerations": {
+    "concurrency_issues": [
+      {
+        "issue": "Fixed channel buffer sizes",
+        "impact": "Memory waste or blocking under high load",
+        "solution": "Dynamic buffer sizing based on system metrics"
+      },
+      {
+        "issue": "Static worker pool",
+        "impact": "Underutilization or resource contention",
+        "solution": "Auto-scaling worker pools with metrics-based decisions"
+      }
+    ],
+    "scalability_bottlenecks": [
+      {
+        "bottleneck": "Single database instance",
+        "impact": "I/O limitations and single point of failure",
+        "solution": "Database clustering or distributed storage"
+      },
+      {
+        "bottleneck": "Synchronous service calls",
+        "impact": "Cascading delays and reduced throughput",
+        "solution": "Async messaging with proper timeout handling"
+      }
+    ]
+  },
+  "security_implications": {
+    "hardcoded_values_risks": [
+      "Database credentials exposure potential",
+      "Service endpoints in source code",
+      "No configuration encryption"
+    ],
+    "recommended_security": {
+      "secret_management": "Use HashiCorp Vault or Kubernetes secrets",
+      "configuration_encryption": "Encrypt sensitive configuration values",
+      "principle_of_least_privilege": "Separate configuration by security level"
+    }
+  },
+  "implementation_roadmap": {
+    "phase_1": {
+      "duration": "1-2 weeks",
+      "focus": "Critical Configuration Externalization",
+      "deliverables": [
+        "Configuration management system",
+        "Environment-specific configs", 
+        "Service discovery implementation"
+      ]
+    },
+    "phase_2": {
+      "duration": "2-3 weeks", 
+      "focus": "Architectural Improvements",
+      "deliverables": [
+        "Dependency injection framework",
+        "Adaptive concurrency management",
+        "Structured logging system"
+      ]
+    },
+    "phase_3": {
+      "duration": "3-4 weeks",
+      "focus": "Advanced Orchestration Patterns",
+      "deliverables": [
+        "Event-driven architecture",
+        "Saga pattern implementation",
+        "Comprehensive monitoring"
+      ]
+    }
+  },
+  "success_metrics": {
+    "technical_metrics": [
+      "Configuration externalization: 100% of hardcoded values moved to config",
+      "Service coupling reduction: <20% direct method calls",
+      "Performance improvement: >50% better resource utilization",
+      "Fault tolerance: <1% failure rate under normal load"
+    ],
+    "business_metrics": [
+      "Deployment time reduction: 70% faster deployments",
+      "Environment provisioning: 90% reduction in setup time", 
+      "Operational overhead: 60% reduction in manual configuration",
+      "System reliability: 99.9% uptime target"
+    ]
+  }
+}

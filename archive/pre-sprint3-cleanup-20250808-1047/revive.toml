@@ -1,0 +1,147 @@
+# revive.toml - CONFIGURATION ULTRA STRICTE
+ignoreGeneratedHeader = false
+severity = "error"
+confidence = 0.8
+errorCode = 1
+warningCode = 1
+
+[rule.add-constant]
+  severity = "error"
+  arguments = [{maxLitCount = "2", allowStrs = '""', allowInts = "0,1,2"}]
+
+[rule.argument-limit]
+  arguments = [5]
+
+[rule.atomic]
+
+[rule.banned-characters]
+  arguments = ["Ω", "Σ", "σ"]
+
+[rule.bare-return]
+
+[rule.blank-imports]
+
+[rule.bool-literal-in-expr]
+
+[rule.call-to-gc]
+
+[rule.cognitive-complexity]
+  arguments = [15]
+
+[rule.confusing-naming]
+
+[rule.confusing-results]
+
+[rule.constant-logical-expr]
+
+[rule.context-as-argument]
+
+[rule.context-keys-type]
+
+[rule.cyclomatic]
+  arguments = [10]
+
+[rule.deep-exit]
+
+[rule.defer]
+  arguments = [["call-chain", "loop", "method-call", "recover", "return"]]
+
+[rule.dot-imports]
+
+[rule.duplicated-imports]
+
+[rule.early-return]
+
+[rule.empty-block]
+
+[rule.empty-lines]
+
+[rule.error-naming]
+
+[rule.error-return]
+
+[rule.error-strings]
+
+[rule.errorf]
+
+[rule.exported]
+
+[rule.file-header]
+
+[rule.flag-parameter]
+
+[rule.function-result-limit]
+  arguments = [3]
+
+[rule.get-return]
+
+[rule.identical-branches]
+
+[rule.if-return]
+
+[rule.import-shadowing]
+
+[rule.increment-decrement]
+
+[rule.indent-error-flow]
+
+[rule.line-length-limit]
+  arguments = [120]
+
+[rule.max-public-structs]
+  arguments = [5]
+
+[rule.modifies-parameter]
+
+[rule.modifies-value-receiver]
+
+[rule.nested-structs]
+
+[rule.optimize-operands-order]
+
+[rule.package-comments]
+
+[rule.range]
+
+[rule.range-val-in-closure]
+
+[rule.range-val-address]
+
+[rule.receiver-naming]
+
+[rule.redefines-builtin-id]
+
+[rule.string-of-int]
+
+[rule.struct-tag]
+
+[rule.superfluous-else]
+
+[rule.time-equal]
+
+[rule.time-naming]
+
+[rule.unexported-naming]
+
+[rule.unexported-return]
+
+[rule.unhandled-error]
+  arguments = ["fmt.Printf", "fmt.Print", "fmt.Println"]
+
+[rule.unnecessary-stmt]
+
+[rule.unreachable-code]
+
+[rule.unused-parameter]
+
+[rule.unused-receiver]
+
+[rule.use-any]
+
+[rule.useless-break]
+
+[rule.var-declaration]
+
+[rule.var-naming]
+
+[rule.waitgroup-by-value]

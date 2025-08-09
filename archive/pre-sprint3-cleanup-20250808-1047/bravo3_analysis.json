@@ -1,0 +1,1509 @@
+{
+  "total_violations": 235,
+  "categories": {
+    "agent_name": 1,
+    "json_field_names": 55,
+    "regex_patterns": 58,
+    "log_messages": 18,
+    "directory_patterns": 4,
+    "error_messages": 7,
+    "success_messages": 6,
+    "security_tools": 5,
+    "security_commands": 2,
+    "file_patterns": 4,
+    "package_examples": 2,
+    "version_examples": 4,
+    "cve_patterns": 2,
+    "severity_levels": 15,
+    "risk_levels": 15,
+    "vulnerability_types": 5,
+    "file_extensions": 4,
+    "test_types": 11,
+    "owasp_categories": 1,
+    "numeric_scores": 15,
+    "security_categories": 1
+  },
+  "violations": [
+    {
+      "line": 16,
+      "category": "agent_name",
+      "value": "SECURITY-AGENT",
+      "context": "var log = logger.New(\"SECURITY-AGENT\")"
+    },
+    {
+      "line": 26,
+      "category": "json_field_names",
+      "value": "owasp_top10",
+      "context": "OWASPTop10    bool   `json:\"owasp_top10\"`"
+    },
+    {
+      "line": 26,
+      "category": "regex_patterns",
+      "value": "`json:\"owasp_top10\"`",
+      "context": "OWASPTop10    bool   `json:\"owasp_top10\"`"
+    },
+    {
+      "line": 27,
+      "category": "json_field_names",
+      "value": "dependency_check",
+      "context": "DependencyCheck bool   `json:\"dependency_check\"`"
+    },
+    {
+      "line": 27,
+      "category": "regex_patterns",
+      "value": "`json:\"dependency_check\"`",
+      "context": "DependencyCheck bool   `json:\"dependency_check\"`"
+    },
+    {
+      "line": 28,
+      "category": "json_field_names",
+      "value": "secret_scanning",
+      "context": "SecretScanning bool   `json:\"secret_scanning\"`"
+    },
+    {
+      "line": 28,
+      "category": "regex_patterns",
+      "value": "`json:\"secret_scanning\"`",
+      "context": "SecretScanning bool   `json:\"secret_scanning\"`"
+    },
+    {
+      "line": 28,
+      "category": "log_messages",
+      "value": "secret_scanning",
+      "context": "SecretScanning bool   `json:\"secret_scanning\"`"
+    },
+    {
+      "line": 29,
+      "category": "json_field_names",
+      "value": "sql_injection",
+      "context": "SQLInjection   bool   `json:\"sql_injection\"`"
+    },
+    {
+      "line": 29,
+      "category": "regex_patterns",
+      "value": "`json:\"sql_injection\"`",
+      "context": "SQLInjection   bool   `json:\"sql_injection\"`"
+    },
+    {
+      "line": 30,
+      "category": "json_field_names",
+      "value": "xss_check",
+      "context": "XSSCheck       bool   `json:\"xss_check\"`"
+    },
+    {
+      "line": 30,
+      "category": "regex_patterns",
+      "value": "`json:\"xss_check\"`",
+      "context": "XSSCheck       bool   `json:\"xss_check\"`"
+    },
+    {
+      "line": 31,
+      "category": "json_field_names",
+      "value": "csrf_check",
+      "context": "CSRFCheck      bool   `json:\"csrf_check\"`"
+    },
+    {
+      "line": 31,
+      "category": "regex_patterns",
+      "value": "`json:\"csrf_check\"`",
+      "context": "CSRFCheck      bool   `json:\"csrf_check\"`"
+    },
+    {
+      "line": 32,
+      "category": "json_field_names",
+      "value": "report_path",
+      "context": "ReportPath     string `json:\"report_path\"`"
+    },
+    {
+      "line": 32,
+      "category": "regex_patterns",
+      "value": "`json:\"report_path\"`",
+      "context": "ReportPath     string `json:\"report_path\"`"
+    },
+    {
+      "line": 37,
+      "category": "json_field_names",
+      "value": "timestamp",
+      "context": "Timestamp         time.Time           `json:\"timestamp\"`"
+    },
+    {
+      "line": 37,
+      "category": "regex_patterns",
+      "value": "`json:\"timestamp\"`",
+      "context": "Timestamp         time.Time           `json:\"timestamp\"`"
+    },
+    {
+      "line": 38,
+      "category": "json_field_names",
+      "value": "owasp_score",
+      "context": "OWASPScore        float64             `json:\"owasp_score\"`"
+    },
+    {
+      "line": 38,
+      "category": "regex_patterns",
+      "value": "`json:\"owasp_score\"`",
+      "context": "OWASPScore        float64             `json:\"owasp_score\"`"
+    },
+    {
+      "line": 39,
+      "category": "json_field_names",
+      "value": "vulnerabilities",
+      "context": "Vulnerabilities   []Vulnerability     `json:\"vulnerabilities\"`"
+    },
+    {
+      "line": 39,
+      "category": "regex_patterns",
+      "value": "`json:\"vulnerabilities\"`",
+      "context": "Vulnerabilities   []Vulnerability     `json:\"vulnerabilities\"`"
+    },
+    {
+      "line": 40,
+      "category": "json_field_names",
+      "value": "dependency_issues",
+      "context": "DependencyIssues  []DependencyIssue   `json:\"dependency_issues\"`"
+    },
+    {
+      "line": 40,
+      "category": "regex_patterns",
+      "value": "`json:\"dependency_issues\"`",
+      "context": "DependencyIssues  []DependencyIssue   `json:\"dependency_issues\"`"
+    },
+    {
+      "line": 41,
+      "category": "json_field_names",
+      "value": "secret_findings",
+      "context": "SecretFindings    []SecretFinding     `json:\"secret_findings\"`"
+    },
+    {
+      "line": 41,
+      "category": "regex_patterns",
+      "value": "`json:\"secret_findings\"`",
+      "context": "SecretFindings    []SecretFinding     `json:\"secret_findings\"`"
+    },
+    {
+      "line": 42,
+      "category": "json_field_names",
+      "value": "security_headers",
+      "context": "SecurityHeaders   SecurityHeaders     `json:\"security_headers\"`"
+    },
+    {
+      "line": 42,
+      "category": "regex_patterns",
+      "value": "`json:\"security_headers\"`",
+      "context": "SecurityHeaders   SecurityHeaders     `json:\"security_headers\"`"
+    },
+    {
+      "line": 43,
+      "category": "json_field_names",
+      "value": "overall_risk",
+      "context": "OverallRisk       string              `json:\"overall_risk\"`"
+    },
+    {
+      "line": 43,
+      "category": "regex_patterns",
+      "value": "`json:\"overall_risk\"`",
+      "context": "OverallRisk       string              `json:\"overall_risk\"`"
+    },
+    {
+      "line": 44,
+      "category": "json_field_names",
+      "value": "passed",
+      "context": "Passed           bool                `json:\"passed\"`"
+    },
+    {
+      "line": 44,
+      "category": "regex_patterns",
+      "value": "`json:\"passed\"`",
+      "context": "Passed           bool                `json:\"passed\"`"
+    },
+    {
+      "line": 49,
+      "category": "json_field_names",
+      "value": "id",
+      "context": "ID          string `json:\"id\"`"
+    },
+    {
+      "line": 49,
+      "category": "regex_patterns",
+      "value": "`json:\"id\"`",
+      "context": "ID          string `json:\"id\"`"
+    },
+    {
+      "line": 50,
+      "category": "json_field_names",
+      "value": "title",
+      "context": "Title       string `json:\"title\"`"
+    },
+    {
+      "line": 50,
+      "category": "regex_patterns",
+      "value": "`json:\"title\"`",
+      "context": "Title       string `json:\"title\"`"
+    },
+    {
+      "line": 51,
+      "category": "json_field_names",
+      "value": "severity",
+      "context": "Severity    string `json:\"severity\"`    // CRITICAL, HIGH, MEDIUM, LOW"
+    },
+    {
+      "line": 51,
+      "category": "regex_patterns",
+      "value": "`json:\"severity\"`",
+      "context": "Severity    string `json:\"severity\"`    // CRITICAL, HIGH, MEDIUM, LOW"
+    },
+    {
+      "line": 52,
+      "category": "json_field_names",
+      "value": "category",
+      "context": "Category    string `json:\"category\"`    // OWASP category"
+    },
+    {
+      "line": 52,
+      "category": "regex_patterns",
+      "value": "`json:\"category\"`",
+      "context": "Category    string `json:\"category\"`    // OWASP category"
+    },
+    {
+      "line": 53,
+      "category": "json_field_names",
+      "value": "description",
+      "context": "Description string `json:\"description\"`"
+    },
+    {
+      "line": 53,
+      "category": "regex_patterns",
+      "value": "`json:\"description\"`",
+      "context": "Description string `json:\"description\"`"
+    },
+    {
+      "line": 54,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 54,
+      "category": "regex_patterns",
+      "value": "`json:\"file\"`",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 55,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line        int    `json:\"line\"`"
+    },
+    {
+      "line": 55,
+      "category": "regex_patterns",
+      "value": "`json:\"line\"`",
+      "context": "Line        int    `json:\"line\"`"
+    },
+    {
+      "line": 56,
+      "category": "json_field_names",
+      "value": "cwe",
+      "context": "CWE         string `json:\"cwe\"`         // Common Weakness Enumeration"
+    },
+    {
+      "line": 56,
+      "category": "regex_patterns",
+      "value": "`json:\"cwe\"`",
+      "context": "CWE         string `json:\"cwe\"`         // Common Weakness Enumeration"
+    },
+    {
+      "line": 57,
+      "category": "json_field_names",
+      "value": "cvss",
+      "context": "CVSS        float64 `json:\"cvss\"`       // Common Vulnerability Scoring System"
+    },
+    {
+      "line": 57,
+      "category": "regex_patterns",
+      "value": "`json:\"cvss\"`",
+      "context": "CVSS        float64 `json:\"cvss\"`       // Common Vulnerability Scoring System"
+    },
+    {
+      "line": 62,
+      "category": "json_field_names",
+      "value": "package",
+      "context": "Package     string   `json:\"package\"`"
+    },
+    {
+      "line": 62,
+      "category": "regex_patterns",
+      "value": "`json:\"package\"`",
+      "context": "Package     string   `json:\"package\"`"
+    },
+    {
+      "line": 63,
+      "category": "json_field_names",
+      "value": "version",
+      "context": "Version     string   `json:\"version\"`"
+    },
+    {
+      "line": 63,
+      "category": "regex_patterns",
+      "value": "`json:\"version\"`",
+      "context": "Version     string   `json:\"version\"`"
+    },
+    {
+      "line": 64,
+      "category": "json_field_names",
+      "value": "cve",
+      "context": "CVE         []string `json:\"cve\"`"
+    },
+    {
+      "line": 64,
+      "category": "regex_patterns",
+      "value": "`json:\"cve\"`",
+      "context": "CVE         []string `json:\"cve\"`"
+    },
+    {
+      "line": 65,
+      "category": "json_field_names",
+      "value": "severity",
+      "context": "Severity    string   `json:\"severity\"`"
+    },
+    {
+      "line": 65,
+      "category": "regex_patterns",
+      "value": "`json:\"severity\"`",
+      "context": "Severity    string   `json:\"severity\"`"
+    },
+    {
+      "line": 66,
+      "category": "json_field_names",
+      "value": "description",
+      "context": "Description string   `json:\"description\"`"
+    },
+    {
+      "line": 66,
+      "category": "regex_patterns",
+      "value": "`json:\"description\"`",
+      "context": "Description string   `json:\"description\"`"
+    },
+    {
+      "line": 67,
+      "category": "json_field_names",
+      "value": "fix_version",
+      "context": "FixVersion  string   `json:\"fix_version\"`"
+    },
+    {
+      "line": 67,
+      "category": "regex_patterns",
+      "value": "`json:\"fix_version\"`",
+      "context": "FixVersion  string   `json:\"fix_version\"`"
+    },
+    {
+      "line": 72,
+      "category": "json_field_names",
+      "value": "type",
+      "context": "Type        string `json:\"type\"`        // API_KEY, PASSWORD, TOKEN, etc."
+    },
+    {
+      "line": 72,
+      "category": "regex_patterns",
+      "value": "`json:\"type\"`",
+      "context": "Type        string `json:\"type\"`        // API_KEY, PASSWORD, TOKEN, etc."
+    },
+    {
+      "line": 73,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 73,
+      "category": "regex_patterns",
+      "value": "`json:\"file\"`",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 74,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line        int    `json:\"line\"`"
+    },
+    {
+      "line": 74,
+      "category": "regex_patterns",
+      "value": "`json:\"line\"`",
+      "context": "Line        int    `json:\"line\"`"
+    },
+    {
+      "line": 75,
+      "category": "json_field_names",
+      "value": "pattern",
+      "context": "Pattern     string `json:\"pattern\"`"
+    },
+    {
+      "line": 75,
+      "category": "regex_patterns",
+      "value": "`json:\"pattern\"`",
+      "context": "Pattern     string `json:\"pattern\"`"
+    },
+    {
+      "line": 76,
+      "category": "json_field_names",
+      "value": "confidence",
+      "context": "Confidence  string `json:\"confidence\"`  // HIGH, MEDIUM, LOW"
+    },
+    {
+      "line": 76,
+      "category": "regex_patterns",
+      "value": "`json:\"confidence\"`",
+      "context": "Confidence  string `json:\"confidence\"`  // HIGH, MEDIUM, LOW"
+    },
+    {
+      "line": 77,
+      "category": "json_field_names",
+      "value": "entropy",
+      "context": "Entropy     float64 `json:\"entropy\"`"
+    },
+    {
+      "line": 77,
+      "category": "regex_patterns",
+      "value": "`json:\"entropy\"`",
+      "context": "Entropy     float64 `json:\"entropy\"`"
+    },
+    {
+      "line": 82,
+      "category": "json_field_names",
+      "value": "hsts",
+      "context": "HSTS                bool `json:\"hsts\"`"
+    },
+    {
+      "line": 82,
+      "category": "regex_patterns",
+      "value": "`json:\"hsts\"`",
+      "context": "HSTS                bool `json:\"hsts\"`"
+    },
+    {
+      "line": 83,
+      "category": "json_field_names",
+      "value": "csp",
+      "context": "CSP                 bool `json:\"csp\"`"
+    },
+    {
+      "line": 83,
+      "category": "regex_patterns",
+      "value": "`json:\"csp\"`",
+      "context": "CSP                 bool `json:\"csp\"`"
+    },
+    {
+      "line": 84,
+      "category": "json_field_names",
+      "value": "x_frame_options",
+      "context": "XFrameOptions       bool `json:\"x_frame_options\"`"
+    },
+    {
+      "line": 84,
+      "category": "regex_patterns",
+      "value": "`json:\"x_frame_options\"`",
+      "context": "XFrameOptions       bool `json:\"x_frame_options\"`"
+    },
+    {
+      "line": 85,
+      "category": "json_field_names",
+      "value": "x_content_type_options",
+      "context": "XContentTypeOptions bool `json:\"x_content_type_options\"`"
+    },
+    {
+      "line": 85,
+      "category": "regex_patterns",
+      "value": "`json:\"x_content_type_options\"`",
+      "context": "XContentTypeOptions bool `json:\"x_content_type_options\"`"
+    },
+    {
+      "line": 86,
+      "category": "json_field_names",
+      "value": "xss_protection",
+      "context": "XSSProtection       bool `json:\"xss_protection\"`"
+    },
+    {
+      "line": 86,
+      "category": "regex_patterns",
+      "value": "`json:\"xss_protection\"`",
+      "context": "XSSProtection       bool `json:\"xss_protection\"`"
+    },
+    {
+      "line": 87,
+      "category": "json_field_names",
+      "value": "referrer_policy",
+      "context": "ReferrerPolicy      bool `json:\"referrer_policy\"`"
+    },
+    {
+      "line": 87,
+      "category": "regex_patterns",
+      "value": "`json:\"referrer_policy\"`",
+      "context": "ReferrerPolicy      bool `json:\"referrer_policy\"`"
+    },
+    {
+      "line": 88,
+      "category": "json_field_names",
+      "value": "score",
+      "context": "Score               float64 `json:\"score\"`"
+    },
+    {
+      "line": 88,
+      "category": "regex_patterns",
+      "value": "`json:\"score\"`",
+      "context": "Score               float64 `json:\"score\"`"
+    },
+    {
+      "line": 100,
+      "category": "directory_patterns",
+      "value": "tests/reports/security",
+      "context": "ReportPath:      \"tests/reports/security\","
+    },
+    {
+      "line": 100,
+      "category": "log_messages",
+      "value": "tests/reports/security",
+      "context": "ReportPath:      \"tests/reports/security\","
+    },
+    {
+      "line": 111,
+      "category": "log_messages",
+      "value": "\ud83d\udd12 Starting OWASP security scan",
+      "context": "log.Info(\"\ud83d\udd12 Starting OWASP security scan\")"
+    },
+    {
+      "line": 115,
+      "category": "log_messages",
+      "value": "Static analysis failed",
+      "context": "log.Error(\"Static analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 115,
+      "category": "error_messages",
+      "value": "Static analysis failed",
+      "context": "log.Error(\"Static analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 121,
+      "category": "error_messages",
+      "value": "Dependency check failed",
+      "context": "log.Error(\"Dependency check failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 128,
+      "category": "log_messages",
+      "value": "Secret scanning failed",
+      "context": "log.Error(\"Secret scanning failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 128,
+      "category": "error_messages",
+      "value": "Secret scanning failed",
+      "context": "log.Error(\"Secret scanning failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 135,
+      "category": "log_messages",
+      "value": "Dynamic analysis failed",
+      "context": "log.Error(\"Dynamic analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 135,
+      "category": "error_messages",
+      "value": "Dynamic analysis failed",
+      "context": "log.Error(\"Dynamic analysis failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 142,
+      "category": "error_messages",
+      "value": "Security headers check failed",
+      "context": "log.Error(\"Security headers check failed\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 151,
+      "category": "log_messages",
+      "value": "Failed to generate security report",
+      "context": "log.Error(\"Failed to generate security report\", map[string]interface{}{\"error\": err.Error()})"
+    },
+    {
+      "line": 154,
+      "category": "log_messages",
+      "value": "Security scan completed",
+      "context": "log.Info(\"Security scan completed\", map[string]interface{}{"
+    },
+    {
+      "line": 154,
+      "category": "success_messages",
+      "value": "Security scan completed",
+      "context": "log.Info(\"Security scan completed\", map[string]interface{}{"
+    },
+    {
+      "line": 155,
+      "category": "json_field_names",
+      "value": "owasp_score",
+      "context": "\"owasp_score\":      sa.results.OWASPScore,"
+    },
+    {
+      "line": 156,
+      "category": "json_field_names",
+      "value": "overall_risk",
+      "context": "\"overall_risk\":     sa.results.OverallRisk,"
+    },
+    {
+      "line": 157,
+      "category": "json_field_names",
+      "value": "vulnerabilities",
+      "context": "\"vulnerabilities\":  len(sa.results.Vulnerabilities),"
+    },
+    {
+      "line": 158,
+      "category": "json_field_names",
+      "value": "dependency_issues",
+      "context": "\"dependency_issues\": len(sa.results.DependencyIssues),"
+    },
+    {
+      "line": 159,
+      "category": "json_field_names",
+      "value": "secret_findings",
+      "context": "\"secret_findings\":  len(sa.results.SecretFindings),"
+    },
+    {
+      "line": 160,
+      "category": "json_field_names",
+      "value": "passed",
+      "context": "\"passed\":          sa.results.Passed,"
+    },
+    {
+      "line": 168,
+      "category": "log_messages",
+      "value": "Running static code analysis with gosec",
+      "context": "log.Debug(\"Running static code analysis with gosec\")"
+    },
+    {
+      "line": 171,
+      "category": "security_tools",
+      "value": "gosec",
+      "context": "if _, err := exec.LookPath(\"gosec\"); err != nil {"
+    },
+    {
+      "line": 172,
+      "category": "error_messages",
+      "value": "gosec not found, installing...",
+      "context": "log.Warn(\"gosec not found, installing...\")"
+    },
+    {
+      "line": 172,
+      "category": "success_messages",
+      "value": "gosec not found, installing...",
+      "context": "log.Warn(\"gosec not found, installing...\")"
+    },
+    {
+      "line": 173,
+      "category": "security_commands",
+      "value": "github.com/securecodewarrior/gosec/v2/cmd/gosec@latest",
+      "context": "cmd := exec.Command(\"go\", \"install\", \"github.com/securecodewarrior/gosec/v2/cmd/gosec@latest\")"
+    },
+    {
+      "line": 180,
+      "category": "security_tools",
+      "value": "gosec",
+      "context": "cmd := exec.Command(\"gosec\", \"-fmt\", \"json\", \"-out\", \"gosec-report.json\", \"./...\")"
+    },
+    {
+      "line": 180,
+      "category": "file_patterns",
+      "value": "gosec-report.json",
+      "context": "cmd := exec.Command(\"gosec\", \"-fmt\", \"json\", \"-out\", \"gosec-report.json\", \"./...\")"
+    },
+    {
+      "line": 185,
+      "category": "log_messages",
+      "value": "gosec found security issues",
+      "context": "log.Debug(\"gosec found security issues\", map[string]interface{}{\"output\": string(output)})"
+    },
+    {
+      "line": 185,
+      "category": "success_messages",
+      "value": "gosec found security issues",
+      "context": "log.Debug(\"gosec found security issues\", map[string]interface{}{\"output\": string(output)})"
+    },
+    {
+      "line": 189,
+      "category": "file_patterns",
+      "value": "gosec-report.json",
+      "context": "if err := sa.parseGosecResults(\"gosec-report.json\"); err != nil {"
+    },
+    {
+      "line": 194,
+      "category": "file_patterns",
+      "value": "gosec-report.json",
+      "context": "os.Remove(\"gosec-report.json\")"
+    },
+    {
+      "line": 204,
+      "category": "security_tools",
+      "value": "nancy",
+      "context": "if _, err := exec.LookPath(\"nancy\"); err != nil {"
+    },
+    {
+      "line": 205,
+      "category": "error_messages",
+      "value": "nancy not found, using govulncheck instead",
+      "context": "log.Warn(\"nancy not found, using govulncheck instead\")"
+    },
+    {
+      "line": 205,
+      "category": "success_messages",
+      "value": "nancy not found, using govulncheck instead",
+      "context": "log.Warn(\"nancy not found, using govulncheck instead\")"
+    },
+    {
+      "line": 209,
+      "category": "security_tools",
+      "value": "nancy",
+      "context": "cmd := exec.Command(\"nancy\", \"sleuth\", \"--format\", \"json\")"
+    },
+    {
+      "line": 213,
+      "category": "success_messages",
+      "value": "nancy found vulnerable dependencies",
+      "context": "log.Debug(\"nancy found vulnerable dependencies\", map[string]interface{}{\"output\": string(output)})"
+    },
+    {
+      "line": 232,
+      "category": "security_tools",
+      "value": "govulncheck",
+      "context": "cmd = exec.Command(\"govulncheck\", \"-json\", \"./...\")"
+    },
+    {
+      "line": 236,
+      "category": "success_messages",
+      "value": "govulncheck found vulnerabilities",
+      "context": "log.Debug(\"govulncheck found vulnerabilities\", map[string]interface{}{\"output\": string(output)})"
+    },
+    {
+      "line": 243,
+      "category": "package_examples",
+      "value": "example/vulnerable-package",
+      "context": "Package:     \"example/vulnerable-package\","
+    },
+    {
+      "line": 244,
+      "category": "version_examples",
+      "value": "v1.0.0",
+      "context": "Version:     \"v1.0.0\","
+    },
+    {
+      "line": 245,
+      "category": "cve_patterns",
+      "value": "CVE-2023-12345",
+      "context": "CVE:         []string{\"CVE-2023-12345\"},"
+    },
+    {
+      "line": 246,
+      "category": "severity_levels",
+      "value": "MEDIUM",
+      "context": "Severity:    \"MEDIUM\","
+    },
+    {
+      "line": 246,
+      "category": "risk_levels",
+      "value": "MEDIUM",
+      "context": "Severity:    \"MEDIUM\","
+    },
+    {
+      "line": 247,
+      "category": "log_messages",
+      "value": "Example vulnerability for testing",
+      "context": "Description: \"Example vulnerability for testing\","
+    },
+    {
+      "line": 248,
+      "category": "version_examples",
+      "value": "v1.0.1",
+      "context": "FixVersion:  \"v1.0.1\","
+    },
+    {
+      "line": 263,
+      "category": "vulnerability_types",
+      "value": "API_KEY",
+      "context": "\"API_KEY\":     `(?i)(api[_-]?key|apikey)\\s*[:=]\\s*['\"\"]?([a-zA-Z0-9]{20,})['\"\"]?`,"
+    },
+    {
+      "line": 263,
+      "category": "regex_patterns",
+      "value": "`(?i)(api[_-]?key|apikey)\\s*[:=]\\s*['\"\"]?([a-zA-Z0-9]{20,})['\"\"]?`",
+      "context": "\"API_KEY\":     `(?i)(api[_-]?key|apikey)\\s*[:=]\\s*['\"\"]?([a-zA-Z0-9]{20,})['\"\"]?`,"
+    },
+    {
+      "line": 264,
+      "category": "vulnerability_types",
+      "value": "PASSWORD",
+      "context": "\"PASSWORD\":    `(?i)(password|passwd|pwd)\\s*[:=]\\s*['\"\"]?([^'\"\\s]{8,})['\"\"]?`,"
+    },
+    {
+      "line": 264,
+      "category": "regex_patterns",
+      "value": "`(?i)(password|passwd|pwd)\\s*[:=]\\s*['\"\"]?([^'\"\\s]{8,})['\"\"]?`",
+      "context": "\"PASSWORD\":    `(?i)(password|passwd|pwd)\\s*[:=]\\s*['\"\"]?([^'\"\\s]{8,})['\"\"]?`,"
+    },
+    {
+      "line": 265,
+      "category": "vulnerability_types",
+      "value": "JWT_TOKEN",
+      "context": "\"JWT_TOKEN\":   `eyJ[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*`,"
+    },
+    {
+      "line": 265,
+      "category": "regex_patterns",
+      "value": "`eyJ[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*`",
+      "context": "\"JWT_TOKEN\":   `eyJ[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*`,"
+    },
+    {
+      "line": 266,
+      "category": "vulnerability_types",
+      "value": "AWS_KEY",
+      "context": "\"AWS_KEY\":     `AKIA[0-9A-Z]{16}`,"
+    },
+    {
+      "line": 266,
+      "category": "regex_patterns",
+      "value": "`AKIA[0-9A-Z]{16}`",
+      "context": "\"AWS_KEY\":     `AKIA[0-9A-Z]{16}`,"
+    },
+    {
+      "line": 267,
+      "category": "vulnerability_types",
+      "value": "PRIVATE_KEY",
+      "context": "\"PRIVATE_KEY\": `-----BEGIN [A-Z ]+PRIVATE KEY-----`,"
+    },
+    {
+      "line": 267,
+      "category": "regex_patterns",
+      "value": "`-----BEGIN [A-Z ]+PRIVATE KEY-----`",
+      "context": "\"PRIVATE_KEY\": `-----BEGIN [A-Z ]+PRIVATE KEY-----`,"
+    },
+    {
+      "line": 276,
+      "category": "directory_patterns",
+      "value": "vendor/",
+      "context": "if strings.Contains(path, \"vendor/\") ||"
+    },
+    {
+      "line": 277,
+      "category": "directory_patterns",
+      "value": ".git/",
+      "context": "strings.Contains(path, \".git/\") ||"
+    },
+    {
+      "line": 278,
+      "category": "directory_patterns",
+      "value": "node_modules/",
+      "context": "strings.Contains(path, \"node_modules/\") {"
+    },
+    {
+      "line": 283,
+      "category": "file_extensions",
+      "value": "go",
+      "context": "if !strings.HasSuffix(path, \".go\") &&"
+    },
+    {
+      "line": 284,
+      "category": "file_extensions",
+      "value": "yaml",
+      "context": "!strings.HasSuffix(path, \".yaml\") &&"
+    },
+    {
+      "line": 285,
+      "category": "file_extensions",
+      "value": "yml",
+      "context": "!strings.HasSuffix(path, \".yml\") &&"
+    },
+    {
+      "line": 286,
+      "category": "file_extensions",
+      "value": "env",
+      "context": "!strings.HasSuffix(path, \".env\") {"
+    },
+    {
+      "line": 301,
+      "category": "log_messages",
+      "value": "Running dynamic security analysis",
+      "context": "log.Debug(\"Running dynamic security analysis\", map[string]interface{}{\"target\": baseURL})"
+    },
+    {
+      "line": 305,
+      "category": "test_types",
+      "value": "injection",
+      "context": "\"injection\","
+    },
+    {
+      "line": 306,
+      "category": "test_types",
+      "value": "broken_authentication",
+      "context": "\"broken_authentication\","
+    },
+    {
+      "line": 307,
+      "category": "test_types",
+      "value": "sensitive_data_exposure",
+      "context": "\"sensitive_data_exposure\","
+    },
+    {
+      "line": 308,
+      "category": "test_types",
+      "value": "xml_external_entities",
+      "context": "\"xml_external_entities\","
+    },
+    {
+      "line": 309,
+      "category": "test_types",
+      "value": "broken_access_control",
+      "context": "\"broken_access_control\","
+    },
+    {
+      "line": 310,
+      "category": "test_types",
+      "value": "security_misconfiguration",
+      "context": "\"security_misconfiguration\","
+    },
+    {
+      "line": 311,
+      "category": "test_types",
+      "value": "cross_site_scripting",
+      "context": "\"cross_site_scripting\","
+    },
+    {
+      "line": 312,
+      "category": "test_types",
+      "value": "insecure_deserialization",
+      "context": "\"insecure_deserialization\","
+    },
+    {
+      "line": 313,
+      "category": "test_types",
+      "value": "vulnerable_components",
+      "context": "\"vulnerable_components\","
+    },
+    {
+      "line": 314,
+      "category": "test_types",
+      "value": "insufficient_logging",
+      "context": "\"insufficient_logging\","
+    },
+    {
+      "line": 322,
+      "category": "test_types",
+      "value": "security_misconfiguration",
+      "context": "if test == \"security_misconfiguration\" {"
+    },
+    {
+      "line": 325,
+      "category": "log_messages",
+      "value": "Missing Security Headers",
+      "context": "Title:       \"Missing Security Headers\","
+    },
+    {
+      "line": 326,
+      "category": "severity_levels",
+      "value": "LOW",
+      "context": "Severity:    \"LOW\","
+    },
+    {
+      "line": 326,
+      "category": "risk_levels",
+      "value": "LOW",
+      "context": "Severity:    \"LOW\","
+    },
+    {
+      "line": 327,
+      "category": "owasp_categories",
+      "value": "A06:2021 - Security Misconfiguration",
+      "context": "Category:    \"A06:2021 - Security Misconfiguration\","
+    },
+    {
+      "line": 327,
+      "category": "log_messages",
+      "value": "A06:2021 - Security Misconfiguration",
+      "context": "Category:    \"A06:2021 - Security Misconfiguration\","
+    },
+    {
+      "line": 328,
+      "category": "log_messages",
+      "value": "Application is missing recommended security headers",
+      "context": "Description: \"Application is missing recommended security headers\","
+    },
+    {
+      "line": 330,
+      "category": "numeric_scores",
+      "value": "3.1",
+      "context": "CVSS:        3.1,"
+    },
+    {
+      "line": 341,
+      "category": "log_messages",
+      "value": "Checking HTTP security headers",
+      "context": "log.Debug(\"Checking HTTP security headers\")"
+    },
+    {
+      "line": 351,
+      "category": "numeric_scores",
+      "value": "70",
+      "context": "Score:               70.0, // 4/6 headers present"
+    },
+    {
+      "line": 366,
+      "category": "regex_patterns",
+      "value": "`json:\"rule\"`",
+      "context": "Rule        string `json:\"rule\"`"
+    },
+    {
+      "line": 367,
+      "category": "regex_patterns",
+      "value": "`json:\"details\"`",
+      "context": "Details     string `json:\"details\"`"
+    },
+    {
+      "line": 368,
+      "category": "json_field_names",
+      "value": "file",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 368,
+      "category": "regex_patterns",
+      "value": "`json:\"file\"`",
+      "context": "File        string `json:\"file\"`"
+    },
+    {
+      "line": 369,
+      "category": "json_field_names",
+      "value": "line",
+      "context": "Line        string `json:\"line\"`"
+    },
+    {
+      "line": 369,
+      "category": "regex_patterns",
+      "value": "`json:\"line\"`",
+      "context": "Line        string `json:\"line\"`"
+    },
+    {
+      "line": 370,
+      "category": "json_field_names",
+      "value": "confidence",
+      "context": "Confidence  string `json:\"confidence\"`"
+    },
+    {
+      "line": 370,
+      "category": "regex_patterns",
+      "value": "`json:\"confidence\"`",
+      "context": "Confidence  string `json:\"confidence\"`"
+    },
+    {
+      "line": 371,
+      "category": "json_field_names",
+      "value": "severity",
+      "context": "Severity    string `json:\"severity\"`"
+    },
+    {
+      "line": 371,
+      "category": "regex_patterns",
+      "value": "`json:\"severity\"`",
+      "context": "Severity    string `json:\"severity\"`"
+    },
+    {
+      "line": 373,
+      "category": "json_field_names",
+      "value": "id",
+      "context": "ID  string `json:\"id\"`"
+    },
+    {
+      "line": 373,
+      "category": "regex_patterns",
+      "value": "`json:\"id\"`",
+      "context": "ID  string `json:\"id\"`"
+    },
+    {
+      "line": 374,
+      "category": "regex_patterns",
+      "value": "`json:\"url\"`",
+      "context": "URL string `json:\"url\"`"
+    },
+    {
+      "line": 375,
+      "category": "json_field_names",
+      "value": "cwe",
+      "context": "} `json:\"cwe\"`"
+    },
+    {
+      "line": 375,
+      "category": "regex_patterns",
+      "value": "`json:\"cwe\"`",
+      "context": "} `json:\"cwe\"`"
+    },
+    {
+      "line": 376,
+      "category": "regex_patterns",
+      "value": "`json:\"issues\"`",
+      "context": "} `json:\"issues\"`"
+    },
+    {
+      "line": 388,
+      "category": "security_categories",
+      "value": "Static Analysis",
+      "context": "Category:    \"Static Analysis\","
+    },
+    {
+      "line": 388,
+      "category": "log_messages",
+      "value": "Static Analysis",
+      "context": "Category:    \"Static Analysis\","
+    },
+    {
+      "line": 405,
+      "category": "security_commands",
+      "value": "github.com/example/vulnerable",
+      "context": "Package:     \"github.com/example/vulnerable\","
+    },
+    {
+      "line": 405,
+      "category": "package_examples",
+      "value": "github.com/example/vulnerable",
+      "context": "Package:     \"github.com/example/vulnerable\","
+    },
+    {
+      "line": 406,
+      "category": "version_examples",
+      "value": "v1.0.0",
+      "context": "Version:     \"v1.0.0\","
+    },
+    {
+      "line": 407,
+      "category": "cve_patterns",
+      "value": "CVE-2023-99999",
+      "context": "CVE:         []string{\"CVE-2023-99999\"},"
+    },
+    {
+      "line": 408,
+      "category": "severity_levels",
+      "value": "MEDIUM",
+      "context": "Severity:    \"MEDIUM\","
+    },
+    {
+      "line": 408,
+      "category": "risk_levels",
+      "value": "MEDIUM",
+      "context": "Severity:    \"MEDIUM\","
+    },
+    {
+      "line": 409,
+      "category": "log_messages",
+      "value": "Example vulnerability in dependency",
+      "context": "Description: \"Example vulnerability in dependency\","
+    },
+    {
+      "line": 410,
+      "category": "version_examples",
+      "value": "v1.0.1",
+      "context": "FixVersion:  \"v1.0.1\","
+    },
+    {
+      "line": 418,
+      "category": "numeric_scores",
+      "value": "100.0",
+      "context": "score := 100.0"
+    },
+    {
+      "line": 423,
+      "category": "severity_levels",
+      "value": "CRITICAL",
+      "context": "case \"CRITICAL\":"
+    },
+    {
+      "line": 423,
+      "category": "risk_levels",
+      "value": "CRITICAL",
+      "context": "case \"CRITICAL\":"
+    },
+    {
+      "line": 424,
+      "category": "numeric_scores",
+      "value": "25.0",
+      "context": "score -= 25.0"
+    },
+    {
+      "line": 425,
+      "category": "severity_levels",
+      "value": "HIGH",
+      "context": "case \"HIGH\":"
+    },
+    {
+      "line": 425,
+      "category": "risk_levels",
+      "value": "HIGH",
+      "context": "case \"HIGH\":"
+    },
+    {
+      "line": 426,
+      "category": "numeric_scores",
+      "value": "15.0",
+      "context": "score -= 15.0"
+    },
+    {
+      "line": 427,
+      "category": "severity_levels",
+      "value": "MEDIUM",
+      "context": "case \"MEDIUM\":"
+    },
+    {
+      "line": 427,
+      "category": "risk_levels",
+      "value": "MEDIUM",
+      "context": "case \"MEDIUM\":"
+    },
+    {
+      "line": 428,
+      "category": "numeric_scores",
+      "value": "8.0",
+      "context": "score -= 8.0"
+    },
+    {
+      "line": 429,
+      "category": "severity_levels",
+      "value": "LOW",
+      "context": "case \"LOW\":"
+    },
+    {
+      "line": 429,
+      "category": "risk_levels",
+      "value": "LOW",
+      "context": "case \"LOW\":"
+    },
+    {
+      "line": 430,
+      "category": "numeric_scores",
+      "value": "3.0",
+      "context": "score -= 3.0"
+    },
+    {
+      "line": 437,
+      "category": "severity_levels",
+      "value": "CRITICAL",
+      "context": "case \"CRITICAL\":"
+    },
+    {
+      "line": 437,
+      "category": "risk_levels",
+      "value": "CRITICAL",
+      "context": "case \"CRITICAL\":"
+    },
+    {
+      "line": 438,
+      "category": "numeric_scores",
+      "value": "20.0",
+      "context": "score -= 20.0"
+    },
+    {
+      "line": 439,
+      "category": "severity_levels",
+      "value": "HIGH",
+      "context": "case \"HIGH\":"
+    },
+    {
+      "line": 439,
+      "category": "risk_levels",
+      "value": "HIGH",
+      "context": "case \"HIGH\":"
+    },
+    {
+      "line": 440,
+      "category": "numeric_scores",
+      "value": "10.0",
+      "context": "score -= 10.0"
+    },
+    {
+      "line": 441,
+      "category": "severity_levels",
+      "value": "MEDIUM",
+      "context": "case \"MEDIUM\":"
+    },
+    {
+      "line": 441,
+      "category": "risk_levels",
+      "value": "MEDIUM",
+      "context": "case \"MEDIUM\":"
+    },
+    {
+      "line": 442,
+      "category": "numeric_scores",
+      "value": "5.0",
+      "context": "score -= 5.0"
+    },
+    {
+      "line": 443,
+      "category": "severity_levels",
+      "value": "LOW",
+      "context": "case \"LOW\":"
+    },
+    {
+      "line": 443,
+      "category": "risk_levels",
+      "value": "LOW",
+      "context": "case \"LOW\":"
+    },
+    {
+      "line": 444,
+      "category": "numeric_scores",
+      "value": "2.0",
+      "context": "score -= 2.0"
+    },
+    {
+      "line": 449,
+      "category": "numeric_scores",
+      "value": "10.0",
+      "context": "score -= float64(len(sa.results.SecretFindings)) * 10.0"
+    },
+    {
+      "line": 462,
+      "category": "numeric_scores",
+      "value": "90",
+      "context": "case score >= 90:"
+    },
+    {
+      "line": 463,
+      "category": "severity_levels",
+      "value": "LOW",
+      "context": "sa.results.OverallRisk = \"LOW\""
+    },
+    {
+      "line": 463,
+      "category": "risk_levels",
+      "value": "LOW",
+      "context": "sa.results.OverallRisk = \"LOW\""
+    },
+    {
+      "line": 465,
+      "category": "numeric_scores",
+      "value": "70",
+      "context": "case score >= 70:"
+    },
+    {
+      "line": 466,
+      "category": "severity_levels",
+      "value": "MEDIUM",
+      "context": "sa.results.OverallRisk = \"MEDIUM\""
+    },
+    {
+      "line": 466,
+      "category": "risk_levels",
+      "value": "MEDIUM",
+      "context": "sa.results.OverallRisk = \"MEDIUM\""
+    },
+    {
+      "line": 468,
+      "category": "numeric_scores",
+      "value": "50",
+      "context": "case score >= 50:"
+    },
+    {
+      "line": 469,
+      "category": "severity_levels",
+      "value": "HIGH",
+      "context": "sa.results.OverallRisk = \"HIGH\""
+    },
+    {
+      "line": 469,
+      "category": "risk_levels",
+      "value": "HIGH",
+      "context": "sa.results.OverallRisk = \"HIGH\""
+    },
+    {
+      "line": 472,
+      "category": "severity_levels",
+      "value": "CRITICAL",
+      "context": "sa.results.OverallRisk = \"CRITICAL\""
+    },
+    {
+      "line": 472,
+      "category": "risk_levels",
+      "value": "CRITICAL",
+      "context": "sa.results.OverallRisk = \"CRITICAL\""
+    },
+    {
+      "line": 483,
+      "category": "file_patterns",
+      "value": "security_report.json",
+      "context": "reportFile := filepath.Join(sa.config.ReportPath, \"security_report.json\")"
+    }
+  ],
+  "constants_mapping": {
+    "\"SECURITY-AGENT\"": "constants.SecurityAgentName",
+    "\"owasp_top10\"": "constants.SecurityJSONFieldOWASPTop10",
+    "\"dependency_check\"": "constants.SecurityJSONFieldDependencyCheck",
+    "\"secret_scanning\"": "constants.SecurityJSONFieldSecretScanning",
+    "\"sql_injection\"": "constants.SecurityJSONFieldSQLInjection",
+    "\"xss_check\"": "constants.SecurityJSONFieldXSSCheck",
+    "\"csrf_check\"": "constants.SecurityJSONFieldCSRFCheck",
+    "\"report_path\"": "constants.SecurityJSONFieldReportPath",
+    "\"timestamp\"": "constants.SecurityJSONFieldTimestamp",
+    "\"owasp_score\"": "constants.SecurityJSONFieldOWASPScore",
+    "\"vulnerabilities\"": "constants.SecurityJSONFieldVulnerabilities",
+    "\"dependency_issues\"": "constants.SecurityJSONFieldDependencyIssues",
+    "\"secret_findings\"": "constants.SecurityJSONFieldSecretFindings",
+    "\"security_headers\"": "constants.SecurityJSONFieldSecurityHeaders",
+    "\"overall_risk\"": "constants.SecurityJSONFieldOverallRisk",
+    "\"passed\"": "constants.SecurityJSONFieldPassed",
+    "\"id\"": "constants.SecurityJSONFieldID",
+    "\"title\"": "constants.SecurityJSONFieldTitle",
+    "\"severity\"": "constants.SecurityJSONFieldSeverity",
+    "\"category\"": "constants.SecurityJSONFieldCategory",
+    "\"description\"": "constants.SecurityJSONFieldDescription",
+    "\"file\"": "constants.SecurityJSONFieldFile",
+    "\"line\"": "constants.SecurityJSONFieldLine",
+    "\"cwe\"": "constants.SecurityJSONFieldCWE",
+    "\"cvss\"": "constants.SecurityJSONFieldCVSS",
+    "\"package\"": "constants.SecurityJSONFieldPackage",
+    "\"version\"": "constants.SecurityJSONFieldVersion",
+    "\"cve\"": "constants.SecurityJSONFieldCVE",
+    "\"fix_version\"": "constants.SecurityJSONFieldFixVersion",
+    "\"type\"": "constants.SecurityJSONFieldType",
+    "\"pattern\"": "constants.SecurityJSONFieldPattern",
+    "\"confidence\"": "constants.SecurityJSONFieldConfidence",
+    "\"entropy\"": "constants.SecurityJSONFieldEntropy",
+    "\"hsts\"": "constants.SecurityJSONFieldHSTS",
+    "\"csp\"": "constants.SecurityJSONFieldCSP",
+    "\"x_frame_options\"": "constants.SecurityJSONFieldXFrameOptions",
+    "\"x_content_type_options\"": "constants.SecurityJSONFieldXContentTypeOptions",
+    "\"xss_protection\"": "constants.SecurityJSONFieldXSSProtection",
+    "\"referrer_policy\"": "constants.SecurityJSONFieldReferrerPolicy",
+    "\"score\"": "constants.SecurityJSONFieldScore",
+    "\"MEDIUM\"": "constants.SecurityRiskMedium",
+    "\"LOW\"": "constants.SecurityRiskLow",
+    "\"CRITICAL\"": "constants.SecurityRiskCritical",
+    "\"HIGH\"": "constants.SecurityRiskHigh",
+    "\"Static Analysis\"": "constants.SecurityCategoryStaticAnalysis",
+    "\"API_KEY\"": "constants.SecuritySecretTypeAPIKey",
+    "\"PASSWORD\"": "constants.SecuritySecretTypePassword",
+    "\"JWT_TOKEN\"": "constants.SecuritySecretTypeJWTToken",
+    "\"AWS_KEY\"": "constants.SecuritySecretTypeAWSKey",
+    "\"PRIVATE_KEY\"": "constants.SecuritySecretTypePrivateKey",
+    "\"gosec\"": "constants.SecurityToolGosec",
+    "\"nancy\"": "constants.SecurityToolNancy",
+    "\"govulncheck\"": "constants.SecurityToolGovulncheck",
+    "\"injection\"": "constants.SecurityTestInjection",
+    "\"broken_authentication\"": "constants.SecurityTestBrokenAuth",
+    "\"sensitive_data_exposure\"": "constants.SecurityTestDataExposure",
+    "\"xml_external_entities\"": "constants.SecurityTestXXE",
+    "\"broken_access_control\"": "constants.SecurityTestAccessControl",
+    "\"security_misconfiguration\"": "constants.SecurityTestMisconfiguration",
+    "\"cross_site_scripting\"": "constants.SecurityTestXSS",
+    "\"insecure_deserialization\"": "constants.SecurityTestDeserialization",
+    "\"vulnerable_components\"": "constants.SecurityTestVulnComponents",
+    "\"insufficient_logging\"": "constants.SecurityTestLogging",
+    "\"gosec-report.json\"": "constants.SecurityFileGosecReport",
+    "\"security_report.json\"": "constants.SecurityFileSecurityReport",
+    "\"tests/reports/security\"": "constants.SecurityDefaultReportPath",
+    "\"vendor/\"": "constants.SecurityDirVendor",
+    "\".git/\"": "constants.SecurityDirGit",
+    "\"node_modules/\"": "constants.SecurityDirNodeModules"
+  }
+}

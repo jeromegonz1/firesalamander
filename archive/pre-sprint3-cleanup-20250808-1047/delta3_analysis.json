@@ -1,0 +1,53 @@
+{
+  "total_violations": 6,
+  "categories": {
+    "nlp_constants": 1,
+    "analysis_types": 4,
+    "data_types": 1
+  },
+  "violations": [
+    {
+      "line": 9,
+      "category": "nlp_constants",
+      "value": "unicode",
+      "context": "\"unicode\""
+    },
+    {
+      "line": 355,
+      "category": "analysis_types",
+      "value": "unigram",
+      "context": "return \"unigram\""
+    },
+    {
+      "line": 357,
+      "category": "analysis_types",
+      "value": "bigram",
+      "context": "return \"bigram\""
+    },
+    {
+      "line": 359,
+      "category": "analysis_types",
+      "value": "trigram",
+      "context": "return \"trigram\""
+    },
+    {
+      "line": 361,
+      "category": "analysis_types",
+      "value": "n-gram",
+      "context": "return \"n-gram\""
+    },
+    {
+      "line": 417,
+      "category": "data_types",
+      "value": "online",
+      "context": "\"page\", \"site\", \"web\", \"internet\", \"online\", \"click\", \"here\", \"more\", \"info\","
+    }
+  ],
+  "constants_mapping": {
+    "\"unigram\"": "constants.SemanticAnalysisUnigram",
+    "\"bigram\"": "constants.SemanticAnalysisBigram",
+    "\"trigram\"": "constants.SemanticAnalysisTrigram",
+    "\"n-gram\"": "constants.SemanticAnalysisNGram",
+    "\"unicode\"": "constants.SemanticNLPUnicode"
+  }
+}

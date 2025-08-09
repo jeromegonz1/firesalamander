@@ -54,18 +54,18 @@ const (
 // ========================================
 
 const (
-	LogAPIAvailableFormat     = "📡 API disponible sur: http://localhost:%d/api/v1"
+	LogAPIAvailableFormat     = "📡 API disponible sur: http://localhost:%d/api"
 	LogInterfaceAvailableFormat = "🔥 Interface Fire Salamander: http://localhost:%d"
-	LogAPIIntegratedFormat    = "📡 API REST intégrée: http://localhost:%d/api/v1"
+	LogAPIIntegratedFormat    = "📡 API REST intégrée: http://localhost:%d/api"
 	WebInterfaceAvailableFormat = "📡 Interface web disponible sur: http://localhost:%d"
-	APIRestAvailableFormat    = "🔌 API REST disponible sur: http://localhost:%d/api/v1"
+	APIRestAvailableFormat    = "🔌 API REST disponible sur: http://localhost:%d/api"
 	
 	// Display Format Strings
 	InterfaceWebFormat    = "🌐 Interface Web: http://localhost:%d\n"
-	APIRESTFormat         = "📡 API REST: http://localhost:%d/api/v1\n"
+	APIRESTFormat         = "📡 API REST: http://localhost:%d/api\n"
 	DocInterfaceFormat    = "   - Interface: http://localhost:%d\n"
-	DocAPIFormat          = "   - API: http://localhost:%d/api/v1/info\n"
-	DocHealthFormat       = "   - Santé: http://localhost:%d/api/v1/health\n"
+	DocAPIFormat          = "   - API: http://localhost:%d/api/info\n"
+	DocHealthFormat       = "   - Santé: http://localhost:%d/api/health\n"
 	
 	// Server Status Formats
 	ServerStartedFormat   = "🔥 Fire Salamander démarré sur http://%s"
@@ -125,10 +125,10 @@ const (
 // ========================================
 
 const (
-	CurlExampleFormat     = "curl -X POST http://localhost:%d/api/v1/analyze/quick \\\n"
+	CurlExampleFormat     = "curl -X POST http://localhost:%d/api/analyze/quick \\\n"
 	CurlHeaders           = "     -H \"Content-Type: application/json\" \\"
 	CurlExampleData       = "     -d '{\"url\": \"https://example.com\"}'"
-	APIExampleFormat      = "curl -X POST http://localhost:%d/api/v1/analyze/quick \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"url\": \"https://example.com\"}'"
+	APIExampleFormat      = "curl -X POST http://localhost:%d/api/analyze/quick \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"url\": \"https://example.com\"}'"
 )
 
 // ========================================

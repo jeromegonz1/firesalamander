@@ -459,7 +459,7 @@ func (ta *TechnicalAuditor) urlExists(ctx context.Context, targetURL string) boo
 	}
 	defer resp.Body.Close()
 
-	return resp.StatusCode < 400
+	return resp.StatusCode < constants.HTTPStatusBadRequest
 }
 
 func (ta *TechnicalAuditor) fetchTextContent(ctx context.Context, targetURL string) string {
@@ -474,7 +474,7 @@ func (ta *TechnicalAuditor) fetchTextContent(ctx context.Context, targetURL stri
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != constants.HTTPStatusOK {
 		return ""
 	}
 

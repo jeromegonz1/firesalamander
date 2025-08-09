@@ -116,7 +116,7 @@ func (f *Fetcher) Fetch(ctx context.Context, targetURL string) (*CrawlResult, er
 		lastErr = err
 		
 		// Ne pas retry si c'est une erreur client (4xx)
-		if result != nil && result.StatusCode >= 400 && result.StatusCode < 500 {
+		if result != nil && result.StatusCode >= constants.HTTPStatusBadRequest && result.StatusCode < constants.HTTPStatusInternalServerError {
 			fetcherLog.Debug("Client error, not retrying", map[string]interface{}{
 				"url":         targetURL,
 				"status_code": result.StatusCode,
@@ -206,7 +206,7 @@ func (f *Fetcher) doFetch(ctx context.Context, targetURL string) (*CrawlResult, 
 	}
 
 	// Vérifier le status code
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode >= constants.HTTPStatusBadRequest {
 		return result, fmt.Errorf("HTTP error: %d", resp.StatusCode)
 	}
 
@@ -279,7 +279,7 @@ func (f *Fetcher) FetchWithMethod(ctx context.Context, method, targetURL string,
 		CrawledAt:   time.Now(),
 	}
 
-	if resp.StatusCode < 400 {
+	if resp.StatusCode < constants.HTTPStatusBadRequest {
 		bodyBytes, err := f.readBody(resp)
 		if err == nil {
 			result.Body = string(bodyBytes)

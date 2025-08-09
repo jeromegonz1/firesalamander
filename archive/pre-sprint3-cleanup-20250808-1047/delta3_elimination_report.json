@@ -1,0 +1,44 @@
+{
+  "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/semantic/ngram_analyzer.go",
+  "total_detected": 6,
+  "eliminated_count": 6,
+  "backup_path": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/semantic/ngram_analyzer.go.delta3_backup",
+  "changes": [
+    {
+      "line": 9,
+      "old": "\"unicode\"",
+      "new": "constants.SemanticNLPUnicode",
+      "context": "\"unicode\""
+    },
+    {
+      "line": 356,
+      "old": "\"unigram\"",
+      "new": "constants.SemanticAnalysisUnigram",
+      "context": "return \"unigram\""
+    },
+    {
+      "line": 358,
+      "old": "\"bigram\"",
+      "new": "constants.SemanticAnalysisBigram",
+      "context": "return \"bigram\""
+    },
+    {
+      "line": 360,
+      "old": "\"trigram\"",
+      "new": "constants.SemanticAnalysisTrigram",
+      "context": "return \"trigram\""
+    },
+    {
+      "line": 362,
+      "old": "\"n-gram\"",
+      "new": "constants.SemanticAnalysisNGram",
+      "context": "return \"n-gram\""
+    },
+    {
+      "line": 418,
+      "old": "\"online\"",
+      "new": "constants.SemanticDataTypeOnline",
+      "context": "\"page\", \"site\", \"web\", \"internet\", \"online\", \"click\", \"here\", \"more\", \"info\","
+    }
+  ]
+}

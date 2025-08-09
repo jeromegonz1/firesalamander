@@ -1,0 +1,320 @@
+{
+  "total_violations": 49,
+  "categories": {
+    "content_types": 4,
+    "mime_types": 4,
+    "response_headers": 3,
+    "error_messages": 5,
+    "http_status_codes": 7,
+    "encoding_types": 2,
+    "test_urls": 8,
+    "css_selectors": 8,
+    "xpath_expressions": 8
+  },
+  "violations": [
+    {
+      "line": 43,
+      "category": "content_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 43,
+      "category": "mime_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 43,
+      "category": "response_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 56,
+      "category": "error_messages",
+      "value": "\"Fetch failed: %v\"",
+      "context": "t.Fatalf(\"Fetch failed: %v\", err)"
+    },
+    {
+      "line": 59,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "if result.StatusCode != 200 {"
+    },
+    {
+      "line": 60,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "t.Errorf(\"Expected status 200, got %d\", result.StatusCode)"
+    },
+    {
+      "line": 67,
+      "category": "content_types",
+      "value": "text/html",
+      "context": "if result.ContentType != \"text/html\" {"
+    },
+    {
+      "line": 67,
+      "category": "mime_types",
+      "value": "text/html",
+      "context": "if result.ContentType != \"text/html\" {"
+    },
+    {
+      "line": 95,
+      "category": "error_messages",
+      "value": "\"Fetch failed after retries: %v\"",
+      "context": "t.Fatalf(\"Fetch failed after retries: %v\", err)"
+    },
+    {
+      "line": 102,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "if result.StatusCode != 200 {"
+    },
+    {
+      "line": 103,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "t.Errorf(\"Expected final status 200, got %d\", result.StatusCode)"
+    },
+    {
+      "line": 163,
+      "category": "encoding_types",
+      "value": "UTF-8",
+      "context": "sitemapContent := `<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    },
+    {
+      "line": 164,
+      "category": "test_urls",
+      "value": "\"http://www.sitemaps.org/schemas/sitemap/0.9\"",
+      "context": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
+    },
+    {
+      "line": 164,
+      "category": "css_selectors",
+      "value": "http://www.sitemaps.org/schemas/sitemap/0.9",
+      "context": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
+    },
+    {
+      "line": 164,
+      "category": "xpath_expressions",
+      "value": "//www.sitemaps.org/schemas/sitemap/0.9\"",
+      "context": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
+    },
+    {
+      "line": 167,
+      "category": "http_status_codes",
+      "value": "202",
+      "context": "<lastmod>2024-01-01</lastmod>"
+    },
+    {
+      "line": 173,
+      "category": "http_status_codes",
+      "value": "202",
+      "context": "<lastmod>2024-01-02</lastmod>"
+    },
+    {
+      "line": 192,
+      "category": "test_urls",
+      "value": "\"https://example.com/page1.html\"",
+      "context": "if url1.Loc != \"https://example.com/page1.html\" {"
+    },
+    {
+      "line": 192,
+      "category": "css_selectors",
+      "value": "https://example.com/page1.html",
+      "context": "if url1.Loc != \"https://example.com/page1.html\" {"
+    },
+    {
+      "line": 192,
+      "category": "xpath_expressions",
+      "value": "//example.com/page1.html\"",
+      "context": "if url1.Loc != \"https://example.com/page1.html\" {"
+    },
+    {
+      "line": 209,
+      "category": "test_urls",
+      "value": "\"https://example.com/test\"",
+      "context": "URL:        \"https://example.com/test\","
+    },
+    {
+      "line": 209,
+      "category": "css_selectors",
+      "value": "https://example.com/test",
+      "context": "URL:        \"https://example.com/test\","
+    },
+    {
+      "line": 209,
+      "category": "xpath_expressions",
+      "value": "//example.com/test\"",
+      "context": "URL:        \"https://example.com/test\","
+    },
+    {
+      "line": 210,
+      "category": "http_status_codes",
+      "value": "200",
+      "context": "StatusCode: 200,"
+    },
+    {
+      "line": 261,
+      "category": "error_messages",
+      "value": "\"Rate limiter wait failed: %v\"",
+      "context": "t.Errorf(\"Rate limiter wait failed: %v\", err)"
+    },
+    {
+      "line": 277,
+      "category": "test_urls",
+      "value": "\"https://example.com/page1\"",
+      "context": "added := queue.Add(\"https://example.com/page1\", 0)"
+    },
+    {
+      "line": 277,
+      "category": "css_selectors",
+      "value": "https://example.com/page1",
+      "context": "added := queue.Add(\"https://example.com/page1\", 0)"
+    },
+    {
+      "line": 277,
+      "category": "xpath_expressions",
+      "value": "//example.com/page1\"",
+      "context": "added := queue.Add(\"https://example.com/page1\", 0)"
+    },
+    {
+      "line": 283,
+      "category": "test_urls",
+      "value": "\"https://example.com/page1\"",
+      "context": "added = queue.Add(\"https://example.com/page1\", 0)"
+    },
+    {
+      "line": 283,
+      "category": "css_selectors",
+      "value": "https://example.com/page1",
+      "context": "added = queue.Add(\"https://example.com/page1\", 0)"
+    },
+    {
+      "line": 283,
+      "category": "xpath_expressions",
+      "value": "//example.com/page1\"",
+      "context": "added = queue.Add(\"https://example.com/page1\", 0)"
+    },
+    {
+      "line": 293,
+      "category": "test_urls",
+      "value": "\"https://example.com/page1\"",
+      "context": "if item.URL != \"https://example.com/page1\" {"
+    },
+    {
+      "line": 293,
+      "category": "css_selectors",
+      "value": "https://example.com/page1",
+      "context": "if item.URL != \"https://example.com/page1\" {"
+    },
+    {
+      "line": 293,
+      "category": "xpath_expressions",
+      "value": "//example.com/page1\"",
+      "context": "if item.URL != \"https://example.com/page1\" {"
+    },
+    {
+      "line": 304,
+      "category": "test_urls",
+      "value": "\"https://example.com/page1\"",
+      "context": "if !queue.HasSeen(\"https://example.com/page1\") {"
+    },
+    {
+      "line": 304,
+      "category": "css_selectors",
+      "value": "https://example.com/page1",
+      "context": "if !queue.HasSeen(\"https://example.com/page1\") {"
+    },
+    {
+      "line": 304,
+      "category": "xpath_expressions",
+      "value": "//example.com/page1\"",
+      "context": "if !queue.HasSeen(\"https://example.com/page1\") {"
+    },
+    {
+      "line": 316,
+      "category": "content_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 316,
+      "category": "mime_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 316,
+      "category": "response_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 335,
+      "category": "content_types",
+      "value": "application/xml",
+      "context": "w.Header().Set(\"Content-Type\", \"application/xml\")"
+    },
+    {
+      "line": 335,
+      "category": "mime_types",
+      "value": "application/xml",
+      "context": "w.Header().Set(\"Content-Type\", \"application/xml\")"
+    },
+    {
+      "line": 335,
+      "category": "response_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/xml\")"
+    },
+    {
+      "line": 336,
+      "category": "encoding_types",
+      "value": "UTF-8",
+      "context": "fmt.Fprintf(w, `<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    },
+    {
+      "line": 337,
+      "category": "test_urls",
+      "value": "\"http://www.sitemaps.org/schemas/sitemap/0.9\"",
+      "context": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
+    },
+    {
+      "line": 337,
+      "category": "css_selectors",
+      "value": "http://www.sitemaps.org/schemas/sitemap/0.9",
+      "context": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
+    },
+    {
+      "line": 337,
+      "category": "xpath_expressions",
+      "value": "//www.sitemaps.org/schemas/sitemap/0.9\"",
+      "context": "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">"
+    },
+    {
+      "line": 367,
+      "category": "error_messages",
+      "value": "\"Crawl failed: %v\"",
+      "context": "t.Fatalf(\"Crawl failed: %v\", err)"
+    },
+    {
+      "line": 388,
+      "category": "error_messages",
+      "value": "\"Crawled %d pages, %d successful, %d failed\"",
+      "context": "t.Logf(\"Crawled %d pages, %d successful, %d failed\","
+    }
+  ],
+  "constants_mapping": {
+    "\"http://www.sitemaps.org/schemas/sitemap/0.9\"": "constants.CrawlerTestURLWwwsitemapsorg",
+    "\"https://example.com/page1.html\"": "constants.CrawlerTestURLExample",
+    "\"https://example.com/test\"": "constants.CrawlerTestURLExample",
+    "\"https://example.com/page1\"": "constants.CrawlerTestURLExample",
+    "\"200\"": "constants.CrawlerHTTPStatusOK",
+    "\"202\"": "constants.CrawlerHTTPStatusAccepted",
+    "\"text/html\"": "constants.CrawlerContentTypeHTML",
+    "\"application/xml\"": "constants.CrawlerContentTypeXML"
+  }
+}

@@ -1,0 +1,63 @@
+name: No Hardcoding Policy Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  check-hardcoding:
+    name: 🚨 Enforce No Hardcoding Policy
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run Anti-Hardcoding Test
+      run: |
+        echo "🔍 Checking for hardcoded values..."
+        if ! go test ./internal/qa -run TestNoHardcoding -v; then
+          echo "❌ HARDCODING VIOLATIONS DETECTED!"
+          echo "📋 Please read TEAM_HARDCODING_REMINDER.md"
+          echo "🛠️ Fix all violations before merging"
+          exit 1
+        fi
+        echo "✅ No hardcoding violations found!"
+
+    - name: Comment PR on failure
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## ❌ PR Blocked - Hardcoding Violations Detected
+            
+            This PR contains hardcoded values that violate our NO HARDCODING policy.
+            
+            ### Required Actions:
+            1. Run \`go test ./internal/qa -run TestNoHardcoding\` locally
+            2. Fix all violations listed in the test output
+            3. Read \`TEAM_HARDCODING_REMINDER.md\` for guidelines
+            4. Push your fixes
+            
+            ### Why this matters:
+            - 🔧 Hardcoding makes maintenance difficult
+            - 🌍 Values can't adapt to different environments
+            - 🔐 Security risks with hardcoded secrets
+            - 🚫 No flexibility for configuration
+            
+            **This check must pass before merging.**`
+          })

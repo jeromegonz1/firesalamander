@@ -3,6 +3,8 @@ package semantic
 import (
 	"context"
 	"testing"
+	
+	"firesalamander/internal/constants"
 )
 
 // Test basique de l'extracteur de contenu
@@ -95,7 +97,7 @@ func TestCompleteSemanticAnalysis(t *testing.T) {
 	`
 
 	ctx := context.Background()
-	result, err := analyzer.AnalyzePage(ctx, "https://example.com/guide-seo", html)
+	result, err := analyzer.AnalyzePage(ctx, constants.TestURLExampleGuide, html)
 
 	if err != nil {
 		t.Fatalf("Erreur analyse: %v", err)

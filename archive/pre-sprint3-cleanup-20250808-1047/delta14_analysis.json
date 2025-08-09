@@ -1,0 +1,639 @@
+{
+  "analysis_metadata": {
+    "analyzer": "DELTA-14 Performance Analyzer Detector",
+    "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/seo/performance_analyzer.go",
+    "analysis_timestamp": "2025-08-07T00:00:00Z",
+    "analyzer_type": "PerformanceAnalyzer"
+  },
+  "performance_architecture": {
+    "analyzer_type": "PerformanceAnalyzer",
+    "primary_struct": "PerformanceAnalyzer",
+    "result_struct": "PerformanceMetricsResult",
+    "metric_structs": [
+      "EstimatedMetric",
+      "CachingAnalysis",
+      "ResourceCounts",
+      "CompressionAnalysis",
+      "SecurityHeaders",
+      "HTTPHeaderAnalysis",
+      "CoreWebVitals",
+      "PerformanceHeaders"
+    ],
+    "analysis_methods": [
+      "analyzePageLoad",
+      "analyzeHTTPHeaders",
+      "analyzeHTMLResources",
+      "estimateCoreWebVitals",
+      "scoreLCP",
+      "scoreFID",
+      "scoreCLS",
+      "scoreFCP",
+      "scoreSpeedIndex"
+    ],
+    "initialization_pattern": "NewPerformanceAnalyzer",
+    "client_integration": {
+      "http_client": true,
+      "regex_engine": true
+    },
+    "struct_composition": [
+      [
+        "client",
+        "http.Client"
+      ],
+      [
+        "compressionRegex",
+        "regexp.Regexp"
+      ],
+      [
+        "cacheRegex",
+        "regexp.Regexp"
+      ],
+      [
+        "imageRegex",
+        "regexp.Regexp"
+      ]
+    ],
+    "result_fields": [
+      [
+        "LoadTime",
+        "load_time"
+      ],
+      [
+        "PageSize",
+        "page_size"
+      ],
+      [
+        "CompressedSize",
+        "compressed_size,omitempty"
+      ],
+      [
+        "CompressionRatio",
+        "compression_ratio,omitempty"
+      ],
+      [
+        "Optimisations",
+        "has_compression"
+      ],
+      [
+        "HasCaching",
+        "has_caching"
+      ],
+      [
+        "OptimizedImages",
+        "optimized_images"
+      ],
+      [
+        "MinifiedResources",
+        "minified_resources"
+      ],
+      [
+        "Ressources",
+        "resource_counts"
+      ],
+      [
+        "LargestResources",
+        "largest_resources"
+      ],
+      [
+        "Core",
+        "core_web_vitals"
+      ],
+      [
+        "Headers",
+        "http_headers"
+      ],
+      [
+        "Issues",
+        "issues"
+      ],
+      [
+        "Recommendations",
+        "recommendations"
+      ]
+    ]
+  },
+  "metric_collection_analysis": {
+    "collection_strategies": [
+      {
+        "pattern": "LoadTime\\s*=\\s*time\\.Since\\(",
+        "occurrences": 1
+      },
+      {
+        "pattern": "PageSize\\s*=\\s*int64\\(",
+        "occurrences": 1
+      },
+      {
+        "pattern": "ResourceCounts\\.\\w+\\s*=",
+        "occurrences": 4
+      },
+      {
+        "pattern": "CoreWebVitals\\.\\w+\\s*=",
+        "occurrences": 6
+      }
+    ],
+    "metric_types": [
+      {
+        "name": "LoadTime",
+        "json_key": "load_time"
+      },
+      {
+        "name": "LoadTime",
+        "json_key": "load_time"
+      },
+      {
+        "name": "TTFB",
+        "json_key": "ttfb"
+      },
+      {
+        "name": "MaxAge",
+        "json_key": "max_age"
+      }
+    ],
+    "measurement_methods": [
+      {
+        "method": "time.Now()",
+        "usage_count": 1
+      },
+      {
+        "method": "time.Since(",
+        "usage_count": 1
+      },
+      {
+        "method": "resp.Header.Get(",
+        "usage_count": 11
+      },
+      {
+        "method": "strings.Count(",
+        "usage_count": 7
+      },
+      {
+        "method": "regexp.MustCompile(",
+        "usage_count": 3
+      }
+    ],
+    "aggregation_patterns": [],
+    "temporal_patterns": []
+  },
+  "threshold_analysis": {
+    "threshold_definitions": [],
+    "scoring_systems": [
+      "scoreLCP",
+      "scoreFID",
+      "scoreCLS",
+      "scoreFCP",
+      "scoreSpeedIndex",
+      [
+        "2500",
+        "good"
+      ],
+      [
+        "100",
+        "good"
+      ],
+      [
+        "1800",
+        "good"
+      ],
+      [
+        "3400",
+        "good"
+      ]
+    ],
+    "performance_boundaries": [
+      "4",
+      "2",
+      "2500",
+      "4000",
+      "100",
+      "300",
+      "0",
+      "0",
+      "1800",
+      "3400",
+      "5800"
+    ],
+    "threshold_constants": [
+      "ClientTimeout",
+      "AcceptableLoadTime"
+    ],
+    "core_web_vitals_thresholds": [
+      [
+        "LCP",
+        "2.5"
+      ],
+      [
+        "CLS",
+        "0.1"
+      ],
+      [
+        "FCP",
+        "1.8"
+      ],
+      [
+        "SI",
+        "3.4"
+      ]
+    ]
+  },
+  "optimization_analysis": {
+    "optimization_checks": [
+      "HasCompression",
+      "HasCaching",
+      "OptimizedImages",
+      "MinifiedResources",
+      "HasHTTP2",
+      "HasPreload"
+    ],
+    "recommendation_patterns": [
+      "Optimiser le temps de réponse du serveur",
+      "Réduire la taille de la page",
+      "Activer la compression GZIP/Brotli",
+      "Configurer les headers de cache",
+      "Utiliser des formats d'images modernes (WebP, AVIF)",
+      "Minifier les ressources CSS et JavaScript",
+      "Optimiser le Largest Contentful Paint",
+      "Réduire le JavaScript et optimiser l'interactivité",
+      "Stabiliser la mise en page et les décalages",
+      "Ajouter le header HSTS pour la sécurité",
+      "Migrer vers HTTP/2 pour de meilleures performances"
+    ],
+    "performance_flags": [
+      "true",
+      "true",
+      "true",
+      "true",
+      "true",
+      "true",
+      "true",
+      "true",
+      ".OptimizedImages = optimizedRatio"
+    ],
+    "resource_optimization": [
+      "webp|avif",
+      "gzip|deflate|br",
+      "keep-alive",
+      "max-age"
+    ]
+  },
+  "monitoring_analysis": {
+    "instrumentation_points": [
+      {
+        "pattern": "start\\s*:=\\s*time\\.Now\\(\\)",
+        "count": 1
+      },
+      {
+        "pattern": "result\\.\\w+\\s*=\\s*[^;]+",
+        "count": 5
+      },
+      {
+        "pattern": "resp\\.Header\\.Get\\(",
+        "count": 11
+      }
+    ],
+    "timing_mechanisms": [
+      {
+        "mechanism": "time.Now()",
+        "usage_count": 1
+      },
+      {
+        "mechanism": "time.Since(",
+        "usage_count": 1
+      },
+      {
+        "mechanism": "time.Duration",
+        "usage_count": 5
+      },
+      {
+        "mechanism": "Timeout:",
+        "usage_count": 1
+      }
+    ],
+    "data_collection": [
+      "buf\\s*:=\\s*make\\(\\[\\]byte",
+      "resp\\.Body\\.Read\\(",
+      "strings\\.Count\\(",
+      "regexp\\.\\w+\\("
+    ],
+    "reporting_patterns": []
+  },
+  "caching_analysis": {
+    "cache_headers": [
+      "Cache-Control",
+      "ETag",
+      "Last-Modified",
+      "max-age"
+    ],
+    "cache_strategies": [
+      "HasCacheControl",
+      "HasETag",
+      "HasLastModified",
+      "MaxAge\\s*time\\.Duration",
+      "cacheRegex"
+    ],
+    "cache_validation": [
+      "resp\\.Header\\.Get\\(\"Cache-Control\"\\)",
+      "resp\\.Header\\.Get\\(\"ETag\"\\)",
+      "resp\\.Header\\.Get\\(\"Last-Modified\"\\)"
+    ],
+    "cache_patterns": []
+  },
+  "communication_analysis": {
+    "http_patterns": [
+      {
+        "pattern": "http\\.NewRequestWithContext\\(",
+        "count": 1
+      },
+      {
+        "pattern": "http\\.Client\\{",
+        "count": 1
+      },
+      {
+        "pattern": "req\\.Header\\.Set\\(",
+        "count": 3
+      },
+      {
+        "pattern": "resp\\.Header\\.Get\\(",
+        "count": 11
+      },
+      {
+        "pattern": "resp\\.Body\\.Close\\(\\)",
+        "count": 1
+      }
+    ],
+    "request_optimization": [
+      "Accept-Encoding",
+      "User-Agent",
+      "Accept",
+      "Timeout:"
+    ],
+    "response_handling": [],
+    "protocol_features": [
+      "resp\\.ProtoMajor\\s*==\\s*2",
+      "Connection.*keep-alive",
+      "gzip.*deflate.*br"
+    ]
+  },
+  "core_web_vitals_analysis": {
+    "vitals_metrics": [
+      "LCP",
+      "FID",
+      "CLS",
+      "TTFB",
+      "FCP",
+      "SpeedIndex"
+    ],
+    "scoring_functions": [
+      "scoreLCP",
+      "scoreFID",
+      "scoreCLS",
+      "scoreFCP",
+      "scoreSpeedIndex"
+    ],
+    "estimation_algorithms": [
+      "lcpValue\\s*\\*=\\s*[\\d.]+",
+      "fidValue\\s*:=\\s*float64\\([^)]+\\)",
+      "clsValue\\s*\\+=\\s*[\\d.]+",
+      "fcpValue\\s*:=\\s*[^;]+"
+    ],
+    "threshold_definitions": [
+      [
+        "LCP",
+        "2.5",
+        "good"
+      ],
+      [
+        "CLS",
+        "0.1",
+        "good"
+      ],
+      [
+        "FCP",
+        "1.8",
+        "good"
+      ],
+      [
+        "SI",
+        "3.4",
+        "good"
+      ]
+    ]
+  },
+  "http_analysis": {
+    "header_analysis": [
+      "Content-Encoding",
+      "Content-Encoding",
+      "Cache-Control",
+      "ETag",
+      "Last-Modified",
+      "Strict-Transport-Security",
+      "Content-Security-Policy",
+      "X-Frame-Options",
+      "X-Content-Type-Options",
+      "Connection",
+      "Link",
+      "User-Agent",
+      "Accept",
+      "Accept-Encoding",
+      [
+        "Compression",
+        "Enabled"
+      ],
+      [
+        "Compression",
+        "Algorithm"
+      ],
+      [
+        "Caching",
+        "HasCacheControl"
+      ],
+      [
+        "Caching",
+        "CacheControl"
+      ],
+      [
+        "Caching",
+        "MaxAge"
+      ],
+      [
+        "Caching",
+        "HasETag"
+      ],
+      [
+        "Caching",
+        "ETag"
+      ],
+      [
+        "Caching",
+        "HasLastModified"
+      ],
+      [
+        "Caching",
+        "LastModified"
+      ],
+      [
+        "Security",
+        "HasHSTS"
+      ],
+      [
+        "Security",
+        "HasCSP"
+      ],
+      [
+        "Security",
+        "HasXFrame"
+      ],
+      [
+        "Security",
+        "HasXContentType"
+      ],
+      [
+        "Performance",
+        "HasKeepAlive"
+      ],
+      [
+        "Performance",
+        "HasHTTP2"
+      ],
+      [
+        "Performance",
+        "HasPreload"
+      ]
+    ],
+    "security_headers": [
+      "Strict-Transport-Security",
+      "Content-Security-Policy",
+      "X-Frame-Options",
+      "X-Content-Type-Options"
+    ],
+    "performance_headers": [
+      "keep-alive",
+      "preload",
+      "prefetch",
+      "Content-Encoding"
+    ],
+    "compression_analysis": [
+      "compressionRegex",
+      "gzip|deflate|br",
+      "Content-Encoding",
+      "CompressionRatio"
+    ]
+  },
+  "violations_found": [
+    {
+      "type": "BLOCKING_OPERATION",
+      "severity": "MEDIUM",
+      "description": "Potentially blocking operation without proper timeout handling",
+      "pattern": ".Do(req)",
+      "recommendation": "Ensure proper context timeout and error handling"
+    },
+    {
+      "type": "BLOCKING_OPERATION",
+      "severity": "MEDIUM",
+      "description": "Potentially blocking operation without proper timeout handling",
+      "pattern": ".Read(",
+      "recommendation": "Ensure proper context timeout and error handling"
+    },
+    {
+      "type": "HARDCODED_VALUES",
+      "severity": "LOW",
+      "description": "Hardcoded performance values should be configurable",
+      "value": "4*1024*1024",
+      "recommendation": "Use configuration constants"
+    },
+    {
+      "type": "HARDCODED_VALUES",
+      "severity": "LOW",
+      "description": "Hardcoded performance values should be configurable",
+      "value": "2*1024*1024",
+      "recommendation": "Use configuration constants"
+    },
+    {
+      "type": "HARDCODED_VALUES",
+      "severity": "LOW",
+      "description": "Hardcoded performance values should be configurable",
+      "value": "4*1024*1024",
+      "recommendation": "Use configuration constants"
+    },
+    {
+      "type": "HARDCODED_VALUES",
+      "severity": "LOW",
+      "description": "Hardcoded performance values should be configurable",
+      "value": "make([]byte, 4",
+      "recommendation": "Use configuration constants"
+    }
+  ],
+  "reusability_analysis": {
+    "utility_functions": [],
+    "metric_calculators": [],
+    "analyzer_interfaces": [],
+    "common_patterns": []
+  },
+  "performance_metrics_analysis": {
+    "timing_metrics": [
+      {
+        "metric": "LoadTime",
+        "occurrences": 7
+      },
+      {
+        "metric": "TTFB",
+        "occurrences": 3
+      },
+      {
+        "metric": "time\\.Duration",
+        "occurrences": 5
+      }
+    ],
+    "size_metrics": [
+      {
+        "metric": "PageSize",
+        "occurrences": 4
+      },
+      {
+        "metric": "CompressedSize",
+        "occurrences": 1
+      },
+      {
+        "metric": "CompressionRatio",
+        "occurrences": 1
+      },
+      {
+        "metric": "int64",
+        "occurrences": 4
+      }
+    ],
+    "quality_metrics": [
+      "OptimizedImages",
+      "MinifiedResources",
+      "HasCompression",
+      "HasCaching"
+    ],
+    "optimization_metrics": []
+  },
+  "architectural_insights": {
+    "performance_agent_pattern": "HTTP-based performance analyzer with metric aggregation",
+    "metric_collection_strategy": "Multi-faceted metrics with Core Web Vitals estimation",
+    "threshold_management": "Score-based evaluation with configurable thresholds",
+    "optimization_detection": "Boolean flags with recommendation generation",
+    "communication_protocol": "HTTP client with header analysis and timeout handling"
+  },
+  "recommendations": {
+    "architectural_improvements": [
+      "Extract common performance interface for multiple analyzers",
+      "Implement configurable metric collection strategies",
+      "Create reusable threshold management system",
+      "Standardize optimization recommendation patterns"
+    ],
+    "performance_improvements": [
+      "Implement connection pooling for HTTP clients",
+      "Add request/response caching mechanisms",
+      "Optimize regex compilation and reuse",
+      "Implement parallel resource analysis"
+    ],
+    "monitoring_improvements": [
+      "Add distributed tracing integration",
+      "Implement real-time metric streaming",
+      "Create performance baseline tracking",
+      "Add anomaly detection for performance regressions"
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 
 class FireSalamanderApp {
     constructor() {
-        this.apiBaseUrl = 'http://localhost:8080/api/v1';
+        this.apiBaseUrl = 'http://localhost:8080/api';
         this.currentPage = 'dashboard';
         this.charts = {};
         this.autoRefreshInterval = null;
@@ -340,7 +340,8 @@ class FireSalamanderApp {
             this.isAnalyzing = true;
             this.showAnalysisProgress();
             
-            const result = await this.performAnalysis(analysisData);
+            // 🔥🦎 SPRINT 5: Use REAL Fire Salamander API
+            const result = await this.performRealAnalysis(analysisData);
             
             this.hideAnalysisProgress();
             this.showAnalysisResults(result);
@@ -354,25 +355,95 @@ class FireSalamanderApp {
         }
     }
 
-    async performAnalysis(data) {
-        // Simulate analysis progress
-        this.updateAnalysisProgress(0, 'Initialisation...');
-        await this.sleep(1000);
+    async performRealAnalysis(data) {
+        console.log('🔥🦎 Starting REAL Fire Salamander analysis...');
         
-        this.updateAnalysisProgress(25, 'Extraction du contenu...');
-        await this.sleep(2000);
+        // Step 1: Start the real analysis
+        this.updateAnalysisProgress(0, '🔥🦎 Démarrage de l\'analyse Fire Salamander...');
+        const startResponse = await this.apiCall('/analyze', 'POST', data);
+        console.log('🔥🦎 Analysis started:', startResponse);
         
-        this.updateAnalysisProgress(50, 'Analyse en cours...');
-        await this.sleep(3000);
+        const analysisId = startResponse.id;
+        if (!analysisId) {
+            throw new Error('No analysis ID received');
+        }
         
-        this.updateAnalysisProgress(75, 'Calcul des scores...');
-        await this.sleep(1500);
-        
-        this.updateAnalysisProgress(100, 'Génération du rapport...');
-        await this.sleep(1000);
+        // Step 2: Poll for status updates with REAL progress
+        this.updateAnalysisProgress(5, '🕷️ Crawling en cours...');
+        return await this.pollRealAnalysisStatus(analysisId);
+    }
 
-        // Make actual API call
-        return await this.apiCall('/analyze', 'POST', data);
+    // 🔥🦎 SPRINT 5: New Real-Time Polling Method
+    async pollRealAnalysisStatus(analysisId) {
+        const maxPollingTime = 120000; // 2 minutes max
+        const pollingInterval = 2000; // Poll every 2 seconds
+        const startTime = Date.now();
+        
+        while (Date.now() - startTime < maxPollingTime) {
+            try {
+                const status = await this.apiCall(`/status/${analysisId}`);
+                console.log('🔥🦎 Status update:', status);
+                
+                // Update progress with REAL data
+                const progressPercent = this.calculateProgress(status);
+                this.updateAnalysisProgress(progressPercent, this.getStatusMessage(status));
+                
+                // Check if complete
+                if (status.status === 'complete') {
+                    console.log('🔥🦎 Analysis complete! Fetching results...');
+                    const results = await this.apiCall(`/results/${analysisId}`);
+                    console.log('🔥🦎 Final results:', results);
+                    return results;
+                }
+                
+                // Check for errors
+                if (status.status === 'error') {
+                    throw new Error('Analysis failed: ' + (status.error || 'Unknown error'));
+                }
+                
+                // Wait before next poll
+                await this.sleep(pollingInterval);
+                
+            } catch (error) {
+                console.error('🔥🦎 Polling error:', error);
+                // Continue polling on temporary errors
+                await this.sleep(pollingInterval);
+            }
+        }
+        
+        throw new Error('Analysis timeout - taking longer than expected');
+    }
+    
+    calculateProgress(status) {
+        switch (status.status) {
+            case 'starting': return 5;
+            case 'crawling': {
+                const pages = status.pages_found || 0;
+                const workers = status.current_workers || 0;
+                return Math.min(10 + (pages * 2) + (workers * 3), 40);
+            }
+            case 'analyzing': {
+                const found = status.pages_found || 1;
+                const analyzed = status.pages_analyzed || 0;
+                return Math.min(40 + ((analyzed / found) * 40), 80);
+            }
+            case 'aggregating': return 85;
+            case 'complete': return 100;
+            case 'error': return 0;
+            default: return 10;
+        }
+    }
+
+    getStatusMessage(status) {
+        switch (status.status) {
+            case 'starting': return '🔥🦎 Initialisation Fire Salamander...';
+            case 'crawling': return `🕷️ Crawling: ${status.pages_found || 0} pages trouvées (${status.current_workers || 0} workers actifs)`;
+            case 'analyzing': return `🧠 Analyse SEO: ${status.pages_analyzed || 0}/${status.pages_found || 0} pages analysées`;
+            case 'aggregating': return '📊 Agrégation des résultats...';
+            case 'complete': return '✅ Analyse terminée!';
+            case 'error': return `❌ Erreur: ${status.error || 'Erreur inconnue'}`;
+            default: return `🔄 Status: ${status.status}`;
+        }
     }
 
     showAnalysisProgress() {
@@ -405,21 +476,25 @@ class FireSalamanderApp {
         const container = document.getElementById('analysisResults');
         container.classList.remove('hidden');
         
-        console.log('🔥 Fire Salamander - Displaying FULL analysis results:', result);
+        console.log('🔥🦎 Fire Salamander - Displaying REAL analysis results:', result);
         
-        // Calculer des scores réalistes à partir des données Fire Salamander
-        const globalScore = Math.round(result.overall_score || result.score || 13.2);
-        const seoScore = Math.round(result.seo_result?.overall_score || 42.6); 
-        const semanticScore = Math.round(result.semantic_result?.overall_score || 42.6);
+        // 🔥🦎 SPRINT 5: Handle real API response format from RealOrchestrator
+        const globalScore = result.global_score || 0;
+        const grade = result.global_grade || this.calculateGrade(globalScore);
+        const pagesAnalyzed = result.pages ? result.pages.length : 1;
+        const issues = result.top_issues || [];
+        const warnings = []; // Real orchestrator doesn't have warnings yet
+        const recommendations = result.recommendations || [];
         
         container.innerHTML = `
             <div class="results-header">
                 <h3>🔥 Fire Salamander - Analyse Complète SEO</h3>
                 <div class="results-meta">
                     <span class="analyzed-url">${result.url || 'URL analysée'}</span>
-                    <span class="analysis-date">${this.formatDate(new Date())}</span>
-                    <span class="analysis-duration">⏱️ Durée: ${this.formatDuration(result.duration || '6.2s')}</span>
-                    <span class="analysis-type">📊 Type: Analyse Complète (Tout)</span>
+                    <span class="analysis-date">${this.formatDate(result.end_time || new Date())}</span>
+                    <span class="analysis-duration">⏱️ Durée: ${result.duration || 'N/A'}</span>
+                    <span class="analysis-type">📊 Type: Analyse Complète Fire Salamander</span>
+                    <span class="analysis-pages">📄 Pages: ${pagesAnalyzed} analysées</span>
                 </div>
             </div>
             
@@ -430,37 +505,37 @@ class FireSalamanderApp {
                     </div>
                     <div class="score-label">Score Global</div>
                     <div class="score-trend">
-                        ${globalScore >= 70 ? '📈 Excellent' : globalScore >= 50 ? '⚠️ Moyen' : '📉 À améliorer'}
+                        Grade: ${grade} ${globalScore >= 70 ? '📈 Excellent' : globalScore >= 50 ? '⚠️ Moyen' : '📉 À améliorer'}
                     </div>
                 </div>
                 
                 <div class="category-scores">
                     <div class="category-score">
-                        <div class="category-icon">🔧</div>
+                        <div class="category-icon">📊</div>
                         <div class="category-info">
-                            <div class="category-label">SEO Technique</div>
-                            <div class="category-value ${this.getScoreClass(seoScore)}">${seoScore}/100</div>
+                            <div class="category-label">Issues Critiques</div>
+                            <div class="category-value ${issues.length > 5 ? 'score-poor' : issues.length > 2 ? 'score-warning' : 'score-good'}">${issues.length}</div>
                         </div>
                     </div>
                     <div class="category-score">
-                        <div class="category-icon">🧠</div>
+                        <div class="category-icon">⚠️</div>
                         <div class="category-info">
-                            <div class="category-label">Analyse Sémantique</div>
-                            <div class="category-value ${this.getScoreClass(semanticScore)}">${semanticScore}/100</div>
+                            <div class="category-label">Avertissements</div>
+                            <div class="category-value ${warnings.length > 5 ? 'score-poor' : warnings.length > 2 ? 'score-warning' : 'score-good'}">${warnings.length}</div>
                         </div>
                     </div>
                     <div class="category-score">
-                        <div class="category-icon">🚀</div>
+                        <div class="category-icon">💡</div>
                         <div class="category-info">
-                            <div class="category-label">Performance</div>
-                            <div class="category-value ${this.getScoreClass(75)}">75/100</div>
+                            <div class="category-label">Recommandations</div>
+                            <div class="category-value score-good">${recommendations.length}</div>
                         </div>
                     </div>
                     <div class="category-score">
-                        <div class="category-icon">📱</div>
+                        <div class="category-icon">📄</div>
                         <div class="category-info">
-                            <div class="category-label">Mobile</div>
-                            <div class="category-value ${this.getScoreClass(75)}">75/100</div>
+                            <div class="category-label">Pages Analysées</div>
+                            <div class="category-value score-good">${pagesAnalyzed}</div>
                         </div>
                     </div>
                 </div>
@@ -497,8 +572,18 @@ class FireSalamanderApp {
             </div>
             
             <div class="seo-recommendations">
-                <h4>🚀 Recommandations SEO Fire Salamander</h4>
-                ${this.renderSEORecommendations(result)}
+                <h4>🚀 Recommandations SEO Fire Salamander (${recommendations.length})</h4>
+                ${this.renderRealRecommendations(recommendations)}
+            </div>
+            
+            <div class="issues-section">
+                <h4>🚨 Issues Critiques (${issues.length})</h4>
+                ${this.renderRealIssues(issues)}
+            </div>
+            
+            <div class="warnings-section">
+                <h4>⚠️ Avertissements (${warnings.length})</h4>
+                ${this.renderRealWarnings(warnings)}
             </div>
             
             <div class="technical-details">
@@ -607,12 +692,12 @@ class FireSalamanderApp {
         try {
             this.showLoading();
             
-            const result = await this.apiCall('/analyze/quick', 'POST', {
-                url: url,
-                options: {
-                    timeout: 15000
-                }
-            });
+            // 🔥🦎 SPRINT 5: Use REAL Fire Salamander API for quick analysis too
+            const startResponse = await this.apiCall('/analyze', 'POST', { url: url });
+            console.log('🔥🦎 Quick analysis started:', startResponse);
+            
+            // Poll for completion (simplified for quick analysis)
+            const result = await this.pollRealAnalysisStatus(startResponse.id);
             
             this.hideLoading();
             this.closeModal('quickAnalysisModal');
@@ -966,6 +1051,15 @@ class FireSalamanderApp {
         return 'score-poor';
     }
 
+    calculateGrade(score) {
+        if (score >= 90) return 'A';
+        if (score >= 80) return 'B';
+        if (score >= 70) return 'C';
+        if (score >= 60) return 'D';
+        if (score >= 50) return 'E';
+        return 'F';
+    }
+
     getStatusText(status) {
         const statusMap = {
             'success': 'Réussi',
@@ -1226,6 +1320,80 @@ class FireSalamanderApp {
                 </div>
             </div>
         `).join('');
+    }
+    
+    // 🔥🦎 SPRINT 5: New methods for real API data
+    renderRealRecommendations(recommendations) {
+        if (!recommendations.length) {
+            return '<div class="empty-state">✨ Aucune recommandation disponible</div>';
+        }
+        
+        return `
+            <div class="recommendations-list">
+                ${recommendations.slice(0, 10).map(rec => `
+                    <div class="recommendation-item priority-${rec.priority}">
+                        <div class="recommendation-header">
+                            <span class="recommendation-title">${rec.issue || 'Recommandation SEO'}</span>
+                            <span class="recommendation-priority ${rec.priority}">${rec.priority}</span>
+                        </div>
+                        <div class="recommendation-description">${rec.action || 'Action recommandée'}</div>
+                        <div class="recommendation-meta">
+                            <span class="rec-impact">Impact: ${rec.impact}</span>
+                            <span class="rec-effort">Effort: ${rec.effort}</span>
+                            <span class="rec-time">Temps: ${rec.estimated_time}</span>
+                        </div>
+                        ${rec.guide ? `<div class="rec-guide">${rec.guide}</div>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    renderRealIssues(issues) {
+        if (!issues.length) {
+            return '<div class="empty-state">✅ Aucun problème critique détecté</div>';
+        }
+        
+        return `
+            <div class="issues-list">
+                ${issues.map(issue => `
+                    <div class="issue-item priority-${issue.priority}">
+                        <div class="issue-header">
+                            <span class="issue-title">${issue.title}</span>
+                            <span class="issue-count">${issue.count} pages affectées</span>
+                        </div>
+                        <div class="issue-description">${issue.description}</div>
+                        <div class="issue-solution">${issue.solution}</div>
+                        ${issue.pages && issue.pages.length ? `
+                            <div class="issue-pages">
+                                <strong>Pages:</strong> ${issue.pages.slice(0, 3).join(', ')}
+                                ${issue.pages.length > 3 ? ` et ${issue.pages.length - 3} autres...` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    renderRealWarnings(warnings) {
+        if (!warnings.length) {
+            return '<div class="empty-state">✅ Aucun avertissement</div>';
+        }
+        
+        return `
+            <div class="warnings-list">
+                ${warnings.map(warning => `
+                    <div class="warning-item severity-${warning.severity}">
+                        <div class="warning-header">
+                            <span class="warning-title">${warning.title}</span>
+                            <span class="warning-count">${warning.count}</span>
+                        </div>
+                        <div class="warning-description">${warning.description}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
     }
     
     renderFireSalamanderInsights(result) {

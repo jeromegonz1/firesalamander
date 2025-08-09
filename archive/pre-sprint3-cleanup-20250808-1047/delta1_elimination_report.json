@@ -1,0 +1,170 @@
+{
+  "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/web/server.go",
+  "total_detected": 29,
+  "eliminated_count": 27,
+  "backup_path": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/web/server.go.delta1_backup",
+  "changes": [
+    {
+      "line": 74,
+      "old": "\"/api/\"",
+      "new": "constants.ServerEndpointAPI",
+      "context": "ws.mux.HandleFunc(\"/api/\", ws.handleAPI)"
+    },
+    {
+      "line": 182,
+      "old": "\"application/json\"",
+      "new": "constants.ServerContentTypeJSON",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 182,
+      "old": "\"Content-Type\"",
+      "new": "constants.ServerHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 185,
+      "old": "\"status\"",
+      "new": "constants.ServerJSONFieldStatus",
+      "context": "\"status\":     \"healthy\","
+    },
+    {
+      "line": 188,
+      "old": "\"timestamp\"",
+      "new": "constants.ServerJSONFieldTimestamp",
+      "context": "\"timestamp\":  time.Now().Format(time.RFC3339),"
+    },
+    {
+      "line": 206,
+      "old": "\"status\"",
+      "new": "constants.ServerJSONFieldStatus",
+      "context": "health[\"status\"] = \"degraded\""
+    },
+    {
+      "line": 211,
+      "old": "\"status\"",
+      "new": "constants.ServerJSONFieldStatus",
+      "context": "\"status\": \"%s\","
+    },
+    {
+      "line": 214,
+      "old": "\"timestamp\"",
+      "new": "constants.ServerJSONFieldTimestamp",
+      "context": "\"timestamp\": \"%s\","
+    },
+    {
+      "line": 217,
+      "old": "\"status\"",
+      "new": "constants.ServerJSONFieldStatus",
+      "context": "health[\"status\"],"
+    },
+    {
+      "line": 220,
+      "old": "\"timestamp\"",
+      "new": "constants.ServerJSONFieldTimestamp",
+      "context": "health[\"timestamp\"],"
+    },
+    {
+      "line": 251,
+      "old": "\".html\"",
+      "new": "constants.ServerExtensionHTML",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 252,
+      "old": "\"text/html\"",
+      "new": "constants.ServerContentTypeHTML",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 252,
+      "old": "\"Content-Type\"",
+      "new": "constants.ServerHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 254,
+      "old": "\"Content-Type\"",
+      "new": "constants.ServerHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"application/pdf\")"
+    },
+    {
+      "line": 255,
+      "old": "\".json\"",
+      "new": "constants.ServerExtensionJSON",
+      "context": "case \".json\":"
+    },
+    {
+      "line": 256,
+      "old": "\"application/json\"",
+      "new": "constants.ServerContentTypeJSON",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 256,
+      "old": "\"Content-Type\"",
+      "new": "constants.ServerHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 258,
+      "old": "\"Content-Type\"",
+      "new": "constants.ServerHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"text/csv\")"
+    },
+    {
+      "line": 260,
+      "old": "\"Content-Type\"",
+      "new": "constants.ServerHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"application/octet-stream\")"
+    },
+    {
+      "line": 272,
+      "old": "\".html\"",
+      "new": "constants.ServerExtensionHTML",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 274,
+      "old": "\".json\"",
+      "new": "constants.ServerExtensionJSON",
+      "context": "case \".json\":"
+    },
+    {
+      "line": 349,
+      "old": "\"url\"",
+      "new": "constants.ServerJSONFieldURL",
+      "context": "\"url\": \"` + constants.TestExampleURL + `\","
+    },
+    {
+      "line": 358,
+      "old": "\"id\"",
+      "new": "constants.ServerJSONFieldID",
+      "context": "\"id\": \"optimize_images\","
+    },
+    {
+      "line": 366,
+      "old": "\"id\"",
+      "new": "constants.ServerJSONFieldID",
+      "context": "\"id\": \"meta_descriptions\","
+    },
+    {
+      "line": 376,
+      "old": "\"type\"",
+      "new": "constants.ServerJSONFieldType",
+      "context": "\"type\": \"content_seo_alignment\","
+    },
+    {
+      "line": 439,
+      "old": "\"status\"",
+      "new": "constants.ServerJSONFieldStatus",
+      "context": "\"status\":     \"running\","
+    },
+    {
+      "line": 440,
+      "old": "\"port\"",
+      "new": "constants.ServerConfigPort",
+      "context": "\"port\":       ws.config.Port,"
+    }
+  ]
+}

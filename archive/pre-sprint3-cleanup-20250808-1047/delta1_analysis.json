@@ -1,0 +1,195 @@
+{
+  "total_violations": 29,
+  "categories": {
+    "http_endpoints": 1,
+    "content_types": 3,
+    "http_headers": 6,
+    "json_field_names": 12,
+    "mime_extensions": 4,
+    "template_names": 2,
+    "server_config": 1
+  },
+  "violations": [
+    {
+      "line": 74,
+      "category": "http_endpoints",
+      "value": "api/",
+      "context": "ws.mux.HandleFunc(\"/api/\", ws.handleAPI)"
+    },
+    {
+      "line": 182,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 182,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 185,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "\"status\":     \"healthy\","
+    },
+    {
+      "line": 188,
+      "category": "json_field_names",
+      "value": "timestamp",
+      "context": "\"timestamp\":  time.Now().Format(time.RFC3339),"
+    },
+    {
+      "line": 206,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "health[\"status\"] = \"degraded\""
+    },
+    {
+      "line": 211,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "\"status\": \"%s\","
+    },
+    {
+      "line": 214,
+      "category": "json_field_names",
+      "value": "timestamp",
+      "context": "\"timestamp\": \"%s\","
+    },
+    {
+      "line": 217,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "health[\"status\"],"
+    },
+    {
+      "line": 220,
+      "category": "json_field_names",
+      "value": "timestamp",
+      "context": "health[\"timestamp\"],"
+    },
+    {
+      "line": 251,
+      "category": "mime_extensions",
+      "value": "html",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 251,
+      "category": "template_names",
+      "value": "\".html\"",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 252,
+      "category": "content_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 252,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 254,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/pdf\")"
+    },
+    {
+      "line": 255,
+      "category": "mime_extensions",
+      "value": "json",
+      "context": "case \".json\":"
+    },
+    {
+      "line": 256,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 256,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 258,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/csv\")"
+    },
+    {
+      "line": 260,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/octet-stream\")"
+    },
+    {
+      "line": 272,
+      "category": "mime_extensions",
+      "value": "html",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 272,
+      "category": "template_names",
+      "value": "\".html\"",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 274,
+      "category": "mime_extensions",
+      "value": "json",
+      "context": "case \".json\":"
+    },
+    {
+      "line": 349,
+      "category": "json_field_names",
+      "value": "url",
+      "context": "\"url\": \"` + constants.TestExampleURL + `\","
+    },
+    {
+      "line": 358,
+      "category": "json_field_names",
+      "value": "id",
+      "context": "\"id\": \"optimize_images\","
+    },
+    {
+      "line": 366,
+      "category": "json_field_names",
+      "value": "id",
+      "context": "\"id\": \"meta_descriptions\","
+    },
+    {
+      "line": 376,
+      "category": "json_field_names",
+      "value": "type",
+      "context": "\"type\": \"content_seo_alignment\","
+    },
+    {
+      "line": 439,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "\"status\":     \"running\","
+    },
+    {
+      "line": 440,
+      "category": "server_config",
+      "value": "port",
+      "context": "\"port\":       ws.config.Port,"
+    }
+  ],
+  "constants_mapping": {
+    "\"api/\"": "constants.ServerEndpointApi",
+    "\"application/json\"": "constants.ServerContentTypeJSON",
+    "\"text/html\"": "constants.ServerContentTypeHTML",
+    "\"Content-Type\"": "constants.ServerHeaderContentType",
+    "\"port\"": "constants.ServerConfigPort"
+  }
+}

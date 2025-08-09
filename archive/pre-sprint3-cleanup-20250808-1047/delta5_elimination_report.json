@@ -1,0 +1,26 @@
+{
+  "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/tests/agents/security/security_agent.go",
+  "total_detected": 36,
+  "eliminated_count": 3,
+  "backup_path": "/Users/jeromegonzalez/claude-code/fire-salamander/tests/agents/security/security_agent.go.delta5_backup",
+  "changes": [
+    {
+      "line": 265,
+      "old": "\"PASSWORD\"",
+      "new": "constants.SecurityConfigPassword",
+      "context": "\"PASSWORD\":    `(?i)(password|passwd|pwd)\\s*[:=]\\s*['\"\"]?([^'\"\\s]{8,})['\"\"]?`,"
+    },
+    {
+      "line": 308,
+      "old": "\"sensitive_data_exposure\"",
+      "new": "constants.SecurityVulnerabilitySensitiveDataExposure",
+      "context": "\"sensitive_data_exposure\","
+    },
+    {
+      "line": 323,
+      "old": "\"security_misconfiguration\"",
+      "new": "constants.SecurityVulnerabilitySecurityMisconfiguration",
+      "context": "if test == \"security_misconfiguration\" {"
+    }
+  ]
+}

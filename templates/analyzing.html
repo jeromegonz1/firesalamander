@@ -140,6 +140,38 @@
                     </a>
                 </div>
             </div>
+            
+            <!-- 🔥 DEBUG PANEL -->
+            <div x-show="debugMode" class="mt-6 bg-black text-green-400 rounded-xl shadow-lg p-4 font-mono text-xs">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-yellow-400 font-bold text-sm">🔥 FIRE SALAMANDER DEBUG CONSOLE</h3>
+                    <button @click="debugLogs = []" class="text-red-400 hover:text-red-300">Clear</button>
+                </div>
+                
+                <!-- Status Data -->
+                <div class="mb-4 p-2 bg-gray-900 rounded">
+                    <div class="text-cyan-400 mb-1">Current Status Data:</div>
+                    <pre x-text="JSON.stringify(statusData, null, 2)" class="text-xs"></pre>
+                </div>
+                
+                <!-- Debug Logs -->
+                <div class="h-64 overflow-y-auto bg-gray-900 rounded p-2">
+                    <template x-for="(log, index) in debugLogs" :key="index">
+                        <div x-text="log" class="py-0.5"></div>
+                    </template>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="mt-2 flex gap-2">
+                    <button @click="pollStatus()" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
+                        Force Poll
+                    </button>
+                    <button @click="console.log(statusData)" class="px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700">
+                        Log to Console
+                    </button>
+                    <span class="text-gray-400 text-xs ml-auto">Analysis ID: <span x-text="analysisId"></span></span>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -157,26 +189,60 @@
                 progress: {{.Progress}},
                 url: '{{.URL}}',
                 analysisId: new URLSearchParams(window.location.search).get('id'),
+                debugMode: true, // 🔥 MODE DEBUG ACTIVÉ
+                debugLogs: [],
+                statusData: {},
                 
                 init() {
+                    this.log('🔥 Fire Salamander Debug Mode ACTIVATED');
+                    this.log(`Analysis ID: ${this.analysisId}`);
+                    this.log(`URL: ${this.url}`);
                     if (this.analysisId) {
                         this.pollStatus();
                     }
                 },
                 
+                log(message) {
+                    const timestamp = new Date().toLocaleTimeString();
+                    const logEntry = `[${timestamp}] ${message}`;
+                    console.log('🔥 DEBUG:', logEntry);
+                    this.debugLogs.push(logEntry);
+                    // Garder seulement les 50 derniers logs
+                    if (this.debugLogs.length > 50) {
+                        this.debugLogs.shift();
+                    }
+                },
+                
                 pollStatus() {
                     const interval = setInterval(() => {
+                        this.log(`📡 Polling status for ${this.analysisId}...`);
+                        const startTime = Date.now();
+                        
                         fetch(`/api/status/${this.analysisId}`)
-                        .then(response => response.json())
+                        .then(response => {
+                            const responseTime = Date.now() - startTime;
+                            this.log(`✅ Response received in ${responseTime}ms - Status: ${response.status}`);
+                            return response.json();
+                        })
                         .then(data => {
-                            this.progress = data.progress;
+                            this.log(`📊 Data received: ${JSON.stringify(data)}`);
+                            this.statusData = data;
+                            this.progress = data.progress || 0;
+                            
+                            // Logs détaillés pour chaque champ
+                            this.log(`Progress: ${data.progress}%`);
+                            this.log(`Status: ${data.status}`);
+                            this.log(`Pages found: ${data.pages_found}`);
+                            this.log(`Pages analyzed: ${data.pages_analyzed}`);
+                            this.log(`Current workers: ${data.current_workers}`);
+                            this.log(`Pages/second: ${data.pages_per_second}`);
                             
                             // Mettre à jour les stats
-                            if (data.pages_found) {
+                            if (data.pages_found !== undefined) {
                                 document.querySelector('.pages-found').textContent = data.pages_found;
                             }
                             if (data.pages_analyzed !== undefined) {
-                                document.querySelector('.pages-analyzed').textContent = `${data.pages_analyzed}/${data.pages_found}`;
+                                document.querySelector('.pages-analyzed').textContent = `${data.pages_analyzed}/${data.pages_found || 0}`;
                             }
                             if (data.issues_found !== undefined) {
                                 document.querySelector('.issues-found').textContent = data.issues_found;
@@ -189,13 +255,19 @@
                             
                             // Si terminé, rediriger vers les résultats
                             if (data.status === 'complete') {
+                                this.log('🎉 Analysis COMPLETE! Redirecting...');
                                 clearInterval(interval);
                                 setTimeout(() => {
                                     window.location.href = `/results?id=${this.analysisId}`;
                                 }, 1500); // Petit délai pour voir 100%
+                            } else if (data.status === 'error') {
+                                this.log('❌ Analysis ERROR! Stopping polling.');
+                                clearInterval(interval);
+                                alert('Erreur pendant l\'analyse. Veuillez réessayer.');
                             }
                         })
                         .catch(error => {
+                            this.log(`❌ Polling error: ${error.message}`);
                             console.error('Erreur polling:', error);
                             // Continuer le polling même en cas d'erreur temporaire
                         });

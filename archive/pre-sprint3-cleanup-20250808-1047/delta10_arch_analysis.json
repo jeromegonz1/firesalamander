@@ -1,0 +1,799 @@
+{
+  "summary": {
+    "total_violations": 76,
+    "file_analyzed": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/messages/messages.go",
+    "user_facing_messages": 44,
+    "internal_messages": 32
+  },
+  "category_breakdown": {
+    "error": {
+      "count": 16,
+      "percentage": 21.052631578947366
+    },
+    "info": {
+      "count": 2,
+      "percentage": 2.631578947368421
+    },
+    "warning": {
+      "count": 0,
+      "percentage": 0.0
+    },
+    "success": {
+      "count": 4,
+      "percentage": 5.263157894736842
+    },
+    "ui": {
+      "count": 8,
+      "percentage": 10.526315789473683
+    },
+    "log": {
+      "count": 4,
+      "percentage": 5.263157894736842
+    },
+    "help": {
+      "count": 6,
+      "percentage": 7.894736842105263
+    },
+    "time": {
+      "count": 12,
+      "percentage": 15.789473684210526
+    },
+    "phase": {
+      "count": 5,
+      "percentage": 6.578947368421052
+    },
+    "mode": {
+      "count": 5,
+      "percentage": 6.578947368421052
+    },
+    "seo": {
+      "count": 10,
+      "percentage": 13.157894736842104
+    },
+    "ai": {
+      "count": 4,
+      "percentage": 5.263157894736842
+    }
+  },
+  "i18n_potential": {
+    "high": 13,
+    "medium": 56,
+    "low": 7
+  },
+  "violations": [
+    {
+      "constant_name": "ErrMethodNotAllowed",
+      "message_text": "Method not allowed",
+      "line_number": 6,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ErrInvalidJSON",
+      "message_text": "Invalid JSON",
+      "line_number": 7,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "ErrURLRequired",
+      "message_text": "URL is required",
+      "line_number": 8,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ErrInvalidURL",
+      "message_text": "Invalid URL format",
+      "line_number": 9,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ErrAnalysisNotFound",
+      "message_text": "Analysis not found",
+      "line_number": 10,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "ErrAnalysisIncomplete",
+      "message_text": "Analysis not complete",
+      "line_number": 11,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "ErrInvalidAnalysisID",
+      "message_text": "Invalid analysis ID",
+      "line_number": 12,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "ErrConnectionFailed",
+      "message_text": "Connection failed",
+      "line_number": 13,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "ErrTimeout",
+      "message_text": "Request timeout",
+      "line_number": 14,
+      "category": "error",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "ServerStarting",
+      "message_text": "Fire Salamander starting",
+      "line_number": 17,
+      "category": "success",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ServerStarted",
+      "message_text": "Fire Salamander started on",
+      "line_number": 18,
+      "category": "success",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ServerStopping",
+      "message_text": "Fire Salamander shutting down",
+      "line_number": 19,
+      "category": "info",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ServerStopped",
+      "message_text": "Fire Salamander stopped",
+      "line_number": 20,
+      "category": "info",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "APIAvailable",
+      "message_text": "API available on",
+      "line_number": 21,
+      "category": "mode",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "WebInterfaceAvailable",
+      "message_text": "Web interface available on",
+      "line_number": 22,
+      "category": "mode",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "AnalysisStarted",
+      "message_text": "Analysis started",
+      "line_number": 25,
+      "category": "success",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "AnalysisComplete",
+      "message_text": "Analysis complete",
+      "line_number": 26,
+      "category": "success",
+      "i18n_potential": "high",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "AnalysisProgress",
+      "message_text": "Analysis in progress",
+      "line_number": 27,
+      "category": "phase",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "AnalysisError",
+      "message_text": "Analysis error",
+      "line_number": 28,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "PhaseDiscoveryMsg",
+      "message_text": "Discovering pages...",
+      "line_number": 31,
+      "category": "phase",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "PhaseSEOAnalysisMsg",
+      "message_text": "SEO analysis in progress...",
+      "line_number": 32,
+      "category": "phase",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "PhaseAIAnalysisMsg",
+      "message_text": "AI analysis...",
+      "line_number": 33,
+      "category": "phase",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "PhaseReportGenMsg",
+      "message_text": "Generating report...",
+      "line_number": 34,
+      "category": "phase",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate30s",
+      "message_text": "30 seconds",
+      "line_number": 37,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate1m",
+      "message_text": "1 minute",
+      "line_number": 38,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate2m",
+      "message_text": "2 minutes",
+      "line_number": 39,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate5m",
+      "message_text": "5 minutes",
+      "line_number": 40,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimateComplete",
+      "message_text": "Complete",
+      "line_number": 41,
+      "category": "time",
+      "i18n_potential": "high",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimateCalculating",
+      "message_text": "Calculating...",
+      "line_number": 42,
+      "category": "time",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate2to3min",
+      "message_text": "2-3 minutes",
+      "line_number": 43,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate1to2min",
+      "message_text": "1-2 minutes",
+      "line_number": 44,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate45to60s",
+      "message_text": "45-60 seconds",
+      "line_number": 45,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate30to45s",
+      "message_text": "30-45 seconds",
+      "line_number": 46,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimate15to30s",
+      "message_text": "15-30 seconds",
+      "line_number": 47,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "TimeEstimateFewSeconds",
+      "message_text": "Few seconds...",
+      "line_number": 48,
+      "category": "time",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "UINewAnalysis",
+      "message_text": "New Analysis",
+      "line_number": 51,
+      "category": "ui",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "UIExportPDF",
+      "message_text": "Export PDF",
+      "line_number": 52,
+      "category": "ui",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "UICancel",
+      "message_text": "Cancel",
+      "line_number": 53,
+      "category": "ui",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "UIAnalyzeButton",
+      "message_text": "ANALYZE MY SITE",
+      "line_number": 54,
+      "category": "ui",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "UIAnalyzing",
+      "message_text": "ANALYZING...",
+      "line_number": 55,
+      "category": "ui",
+      "i18n_potential": "high",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "UIPlaceholderURL",
+      "message_text": "https://your-site.com",
+      "line_number": 56,
+      "category": "ui",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "UIURLRequiredHTTPS",
+      "message_text": "URL must start with https://",
+      "line_number": 57,
+      "category": "ui",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "UIConnectionError",
+      "message_text": "Connection error. Please try again.",
+      "line_number": 58,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "UIPDFGenerated",
+      "message_text": "PDF report has been generated and downloaded.",
+      "line_number": 59,
+      "category": "ui",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "LogConfigLoaded",
+      "message_text": "Configuration loaded",
+      "line_number": 62,
+      "category": "log",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "LogConfigError",
+      "message_text": "Configuration error",
+      "line_number": 63,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "LogServerStarted",
+      "message_text": "HTTP server started",
+      "line_number": 64,
+      "category": "log",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "LogServerError",
+      "message_text": "HTTP server error",
+      "line_number": 65,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "LogAnalysisStarted",
+      "message_text": "Analysis started for",
+      "line_number": 66,
+      "category": "log",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "LogAnalysisComplete",
+      "message_text": "Analysis completed for",
+      "line_number": 67,
+      "category": "log",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "LogAnalysisError",
+      "message_text": "Analysis error for",
+      "line_number": 68,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "LogTemplateError",
+      "message_text": "Template error",
+      "line_number": 69,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "LogDatabaseError",
+      "message_text": "Database error",
+      "line_number": 70,
+      "category": "error",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "technical"
+    },
+    {
+      "constant_name": "HelpUsage",
+      "message_text": "Usage:",
+      "line_number": 73,
+      "category": "help",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "HelpWebInterface",
+      "message_text": "Web Interface:",
+      "line_number": 74,
+      "category": "help",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "HelpAPIREST",
+      "message_text": "API REST:",
+      "line_number": 75,
+      "category": "help",
+      "i18n_potential": "low",
+      "user_facing": true,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "HelpHealthCheck",
+      "message_text": "Health Check:",
+      "line_number": 76,
+      "category": "help",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "HelpExampleCURL",
+      "message_text": "Example cURL:",
+      "line_number": 77,
+      "category": "help",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "HelpPressCtrlC",
+      "message_text": "Press Ctrl+C to stop Fire Salamander",
+      "line_number": 78,
+      "category": "help",
+      "i18n_potential": "medium",
+      "user_facing": true,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ModeWebOnly",
+      "message_text": "Web Interface Only",
+      "line_number": 81,
+      "category": "mode",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "ModeAPIOnly",
+      "message_text": "REST API Only",
+      "line_number": 82,
+      "category": "mode",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "ModeComplete",
+      "message_text": "Complete (Web + API + Orchestrator)",
+      "line_number": 83,
+      "category": "mode",
+      "i18n_potential": "high",
+      "user_facing": false,
+      "technical_level": "semi-technical"
+    },
+    {
+      "constant_name": "SEOTitleMissing",
+      "message_text": "Missing title tags",
+      "line_number": 86,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEOTitleEmpty",
+      "message_text": "Empty title tags",
+      "line_number": 87,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEOTitleTooShort",
+      "message_text": "Title tags too short",
+      "line_number": 88,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEOTitleTooLong",
+      "message_text": "Title tags too long",
+      "line_number": 89,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEODescMissing",
+      "message_text": "Missing meta descriptions",
+      "line_number": 90,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEODescTooShort",
+      "message_text": "Meta descriptions too short",
+      "line_number": 91,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEOImageAltMissing",
+      "message_text": "Images without alt attributes",
+      "line_number": 92,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEOH1Missing",
+      "message_text": "Missing H1 tags",
+      "line_number": 93,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEOH1Multiple",
+      "message_text": "Multiple H1 tags",
+      "line_number": 94,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "SEODuplicateContent",
+      "message_text": "Duplicate content detected",
+      "line_number": 95,
+      "category": "seo",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "AIKeywordOptimization",
+      "message_text": "Keyword optimization",
+      "line_number": 98,
+      "category": "ai",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "AIContentStructure",
+      "message_text": "Content structure improvement",
+      "line_number": 99,
+      "category": "ai",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "AITechnicalSEO",
+      "message_text": "Technical SEO recommendations",
+      "line_number": 100,
+      "category": "ai",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    },
+    {
+      "constant_name": "AIUserExperience",
+      "message_text": "User experience optimization",
+      "line_number": 101,
+      "category": "ai",
+      "i18n_potential": "medium",
+      "user_facing": false,
+      "technical_level": "user-friendly"
+    }
+  ],
+  "architectural_recommendations": {
+    "immediate_actions": [
+      "Implement a centralized message management system",
+      "Create message constants with semantic naming conventions",
+      "Separate user-facing messages from technical/log messages",
+      "Implement message templates for dynamic content"
+    ],
+    "architectural_patterns": {
+      "message_manager": {
+        "description": "Centralized message management with category-based organization",
+        "benefits": [
+          "Single source of truth",
+          "Easy maintenance",
+          "Consistent formatting"
+        ],
+        "implementation": "Create MessageManager interface with category-specific implementations"
+      },
+      "i18n_ready_structure": {
+        "description": "Prepare architecture for internationalization",
+        "benefits": [
+          "Future-proof for multiple languages",
+          "Consistent message keys",
+          "Easy localization"
+        ],
+        "implementation": "Use message keys instead of hardcoded strings, implement locale-based message resolution"
+      },
+      "message_templates": {
+        "description": "Template-based messages for dynamic content",
+        "benefits": [
+          "Reusable message patterns",
+          "Consistent formatting",
+          "Easy parameterization"
+        ],
+        "implementation": "Implement template engine for messages with placeholder support"
+      }
+    },
+    "refactoring_strategy": {
+      "phase_1": "Extract all hardcoded messages to constants (current state - partially done)",
+      "phase_2": "Categorize messages by type and audience",
+      "phase_3": "Implement message manager with category-based organization",
+      "phase_4": "Add template support for dynamic messages",
+      "phase_5": "Prepare i18n structure with message keys"
+    },
+    "code_quality_improvements": [
+      "Use consistent naming conventions for message constants",
+      "Group related messages together",
+      "Add documentation for message categories",
+      "Implement message validation for required parameters"
+    ]
+  }
+}

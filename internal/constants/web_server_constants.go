@@ -51,16 +51,16 @@ const (
 
 // API Routes (v1)
 const (
-	APIRouteAnalyze         = "/api/v1/analyze"
-	APIRouteAnalyzeSemantic = "/api/v1/analyze/semantic"
-	APIRouteAnalyzeSEO      = "/api/v1/analyze/seo"
-	APIRouteAnalyzeQuick    = "/api/v1/analyze/quick"
-	APIRouteHealth          = "/api/v1/health"
-	APIRouteStats           = "/api/v1/stats"
-	APIRouteAnalyses        = "/api/v1/analyses"
-	APIRouteAnalysisDetails = "/api/v1/analysis/"
-	APIRouteInfo            = "/api/v1/info"
-	APIRouteVersion         = "/api/v1/version"
+	APIRouteAnalyze         = "/api/analyze"
+	APIRouteAnalyzeSemantic = "/api/analyze/semantic"
+	APIRouteAnalyzeSEO      = "/api/analyze/seo"
+	APIRouteAnalyzeQuick    = "/api/analyze/quick"
+	APIRouteHealth          = "/api/health"
+	APIRouteStats           = "/api/stats"
+	APIRouteAnalyses        = "/api/analyses"
+	APIRouteAnalysisDetails = "/api/analysis/"
+	APIRouteInfo            = "/api/info"
+	APIRouteVersion         = "/api/version"
 )
 
 // Web Routes

@@ -1,0 +1,504 @@
+{
+  "analysis_metadata": {
+    "analyzer": "DELTA-13 Data Integrity Agent Detector",
+    "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/tests/agents/data/data_integrity_agent.go",
+    "analysis_timestamp": "2025-08-07T00:00:00Z",
+    "agent_type": "DataIntegrityAgent"
+  },
+  "architectural_analysis": {
+    "agent_type": "DataIntegrityAgent",
+    "primary_struct": "DataIntegrityAgent",
+    "config_struct": "DataIntegrityConfig",
+    "stats_struct": "DataIntegrityStats",
+    "main_interface_methods": [
+      "RunFullDataIntegrityAudit"
+    ],
+    "initialization_pattern": "NewDataIntegrityAgent",
+    "lifecycle_methods": [],
+    "struct_composition": [
+      [
+        "Config",
+        "DataIntegrityConfig"
+      ],
+      [
+        "Stats",
+        "DataIntegrityStats"
+      ],
+      [
+        "DB",
+        "sql"
+      ]
+    ],
+    "config_fields": [
+      [
+        "DatabasePath",
+        "string"
+      ],
+      [
+        "ReportPath",
+        "string"
+      ],
+      [
+        "Timeout",
+        "int"
+      ]
+    ]
+  },
+  "data_integrity_patterns": {
+    "validation_categories": [
+      "ReferentialIntegrity",
+      "PerformanceChecks",
+      "DataConsistency",
+      "DataQuality",
+      "SchemaValidation"
+    ],
+    "validation_methods": [
+      "checkDatabaseExists",
+      "validateSchema",
+      "validateConstraints",
+      "testDataConsistency",
+      "testNullValues",
+      "testUniqueConstraints",
+      "testTimestampConsistency",
+      "testNumericConsistency",
+      "testReferentialIntegrity",
+      "testForeignKey",
+      "testDataQuality",
+      "testURLQuality",
+      "testStatusCodeQuality",
+      "testSEOScoreQuality",
+      "testPerformance",
+      "testQueryPerformance",
+      "testDatabaseSize"
+    ],
+    "constraint_checks": [
+      "CHECK(status IN ('pending', 'running', 'completed', 'failed')",
+      "CHECK(score >= 0 AND score <= 100)",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "NOT NULL",
+      "UNIQUE(url, started_at)",
+      "UNIQUE(session_id, url)",
+      "UNIQUE(page_id, metric_name)",
+      "FOREIGN KEY",
+      "FOREIGN KEY",
+      "Foreign Key",
+      "foreign key"
+    ],
+    "integrity_tests": 35,
+    "data_quality_checks": [
+      "testURLQuality",
+      "testStatusCodeQuality",
+      "testSEOScoreQuality",
+      "testNullValues",
+      "testUniqueConstraints"
+    ],
+    "validation_architecture": {}
+  },
+  "performance_analysis": {
+    "performance_tests": [
+      "testPerformance",
+      "testQueryPerformance"
+    ],
+    "threshold_definitions": [
+      "SlowResponseTime",
+      "DefaultTimeout"
+    ],
+    "timing_mechanisms": [
+      {
+        "pattern": "time\\.Now\\(\\)",
+        "count": 2
+      },
+      {
+        "pattern": "time\\.Since\\(",
+        "count": 1
+      },
+      {
+        "pattern": "duration\\s*:=",
+        "count": 1
+      }
+    ],
+    "performance_metrics": [
+      "ResponseTime"
+    ],
+    "database_optimization": []
+  },
+  "error_handling_analysis": {
+    "error_types": [
+      "Warning",
+      "Failed",
+      "Error"
+    ],
+    "error_handling_methods": [
+      {
+        "pattern": "if\\s+err\\s*!=\\s*nil\\s*{([^}]+)}",
+        "count": 15
+      },
+      {
+        "pattern": "return\\s+[^,]*,\\s*err",
+        "count": 6
+      },
+      {
+        "pattern": "log\\.Printf\\([^)]*err[^)]*\\)",
+        "count": 2
+      }
+    ],
+    "error_propagation": [],
+    "error_logging": [
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print",
+      "Print"
+    ],
+    "recovery_mechanisms": []
+  },
+  "configuration_analysis": {
+    "config_structures": [
+      "DataIntegrityConfig"
+    ],
+    "default_configs": [
+      "defaultConfig"
+    ],
+    "config_validation": [],
+    "environment_handling": [],
+    "config_sources": [],
+    "config_fields_with_json": [
+      [
+        "DatabasePath",
+        "database_path"
+      ],
+      [
+        "ReportPath",
+        "report_path"
+      ],
+      [
+        "Timeout",
+        "timeout"
+      ],
+      [
+        "Timestamp",
+        "timestamp"
+      ],
+      [
+        "Database",
+        "database"
+      ],
+      [
+        "OverallScore",
+        "overall_score"
+      ],
+      [
+        "Status",
+        "status"
+      ],
+      [
+        "Test",
+        "test"
+      ],
+      [
+        "Status",
+        "status"
+      ],
+      [
+        "Description",
+        "description"
+      ],
+      [
+        "Value",
+        "value,omitempty"
+      ],
+      [
+        "Expected",
+        "expected,omitempty"
+      ],
+      [
+        "Severity",
+        "severity,omitempty"
+      ],
+      [
+        "Type",
+        "type"
+      ],
+      [
+        "Table",
+        "table,omitempty"
+      ],
+      [
+        "Column",
+        "column,omitempty"
+      ],
+      [
+        "Issue",
+        "issue"
+      ],
+      [
+        "Impact",
+        "impact"
+      ],
+      [
+        "Severity",
+        "severity"
+      ],
+      [
+        "Count",
+        "count,omitempty"
+      ]
+    ],
+    "constants_used": [
+      "SQLKeywordCHECK",
+      "StatusUnknown",
+      "HighQualityScore",
+      "MsgDuplicatePageRecords",
+      "StatusWarning",
+      "TestConstraintsCheck",
+      "HTMLClassStatusAcceptable",
+      "HTMLClassSeverityHigh",
+      "TestDataConstraints",
+      "HTMLClassFail",
+      "MsgAllTimestampsConsistent",
+      "HTMLClassSection",
+      "MsgMissingRequiredTable",
+      "StatusFailed",
+      "MsgAllURLsWellFormed",
+      "TestCategoryReferentialIntegrity",
+      "MsgAllSEOScoresValid",
+      "QueryNameSimpleCount",
+      "TablePages",
+      "StatusExcellent",
+      "QueryTableExists",
+      "HTMLClassHeader",
+      "MsgApplicationImpaired",
+      "TestHTTPStatusCodes",
+      "HTMLClassStatusGood",
+      "TestCategoryPerformanceChecks",
+      "TestExampleURL",
+      "TestTimestampConsistency",
+      "DefaultReportPath",
+      "DefaultDatabasePath",
+      "MsgInconsistentCrawlResults",
+      "MsgAllStatusCodesValid",
+      "HTMLClassTestResult",
+      "SeverityMedium",
+      "TestCategoryDataConsistency",
+      "HTMLClassWarning",
+      "MsgNoOrphanedRecords",
+      "StatusPassed",
+      "SeverityHigh",
+      "MsgNullOrEmptyURL",
+      "DefaultTimeout",
+      "HTMLClassError",
+      "TableCrawlSessions",
+      "QueryNameComplexJoin",
+      "HTMLClassStatusPoor",
+      "SQLite3Driver",
+      "SlowResponseTime",
+      "HTMLClassStatusExcellent",
+      "HTMLClassScore",
+      "TestURLQuality",
+      "SeverityLow",
+      "StatusAcceptable",
+      "HTMLClassStatusNeedsImprovement",
+      "TableSEOMetrics",
+      "MsgCrawlSessionsNoURL",
+      "TestCategoryDataQuality",
+      "MsgDataInconsistencyAndPotentialErrors",
+      "HTMLClassPass",
+      "StatusError",
+      "TestCategorySchemaValidation",
+      "MsgPageCountConsistent",
+      "MsgNoDuplicateRecords",
+      "HTMLClassSeverityMedium",
+      "TestDatabaseSize",
+      "TestSEOScoreValidity",
+      "MsgIncorrectSessionDurationCalculations",
+      "IssueTypeSchema",
+      "HTMLClassSeverityLow"
+    ]
+  },
+  "communication_analysis": {
+    "database_interfaces": [
+      {
+        "pattern": "sql\\.Open\\(",
+        "usage_count": 2
+      },
+      {
+        "pattern": "\\.Query\\(",
+        "usage_count": 3
+      },
+      {
+        "pattern": "\\.QueryRow\\(",
+        "usage_count": 8
+      },
+      {
+        "pattern": "\\.Exec\\(",
+        "usage_count": 1
+      }
+    ],
+    "external_apis": [],
+    "inter_agent_communication": [],
+    "data_exchange_formats": [],
+    "protocol_patterns": []
+  },
+  "violations_found": [
+    {
+      "type": "SQL_INJECTION_RISK",
+      "severity": "HIGH",
+      "description": "Direct SQL string construction detected",
+      "pattern": "fmt.Sprintf(`\n\tSELECT COUNT(*)",
+      "recommendation": "Use prepared statements or parameterized queries"
+    },
+    {
+      "type": "ERROR_HANDLING",
+      "severity": "MEDIUM",
+      "description": "Error potentially ignored",
+      "pattern": "_, err :=",
+      "recommendation": "Handle or log errors appropriately"
+    },
+    {
+      "type": "ERROR_HANDLING",
+      "severity": "MEDIUM",
+      "description": "Error potentially ignored",
+      "pattern": "_, err :=",
+      "recommendation": "Handle or log errors appropriately"
+    }
+  ],
+  "reusability_analysis": {
+    "utility_functions": [],
+    "common_patterns": [],
+    "shared_structures": [
+      "TestResult"
+    ],
+    "interface_candidates": []
+  },
+  "metrics_analysis": {
+    "measurement_types": [
+      {
+        "type": "COUNT\\(\\*\\)",
+        "count": 10
+      },
+      {
+        "type": "len\\([^)]+\\)",
+        "count": 6
+      }
+    ],
+    "scoring_systems": [
+      "totalScore -= 20",
+      "totalScore -= 10",
+      "totalScore -= 5",
+      "totalScore -= 5",
+      "totalScore -= 2"
+    ],
+    "threshold_definitions": [
+      [
+        "constraintCount",
+        "0"
+      ],
+      [
+        "nullCount",
+        "0"
+      ],
+      [
+        "duplicateCount",
+        "0"
+      ],
+      [
+        "inconsistentCount",
+        "0"
+      ],
+      [
+        "inconsistentCount",
+        "0"
+      ],
+      [
+        "orphanCount",
+        "0"
+      ],
+      [
+        "malformedCount",
+        "0"
+      ],
+      [
+        "invalidCodes",
+        "0"
+      ],
+      [
+        "score",
+        "0"
+      ],
+      [
+        "score",
+        "100"
+      ],
+      [
+        "invalidScores",
+        "0"
+      ],
+      [
+        "sizeMB",
+        "1000"
+      ],
+      [
+        "totalScore",
+        "0"
+      ],
+      [
+        "totalScore",
+        "0"
+      ],
+      [
+        "Count",
+        "0"
+      ],
+      [
+        "OverallScore",
+        "70"
+      ],
+      [
+        "exitCode",
+        "1"
+      ]
+    ],
+    "metric_aggregation": []
+  },
+  "architectural_insights": {
+    "agent_interface_pattern": "Struct-based agent with configuration and stats composition",
+    "data_validation_architecture": "Category-based validation with test results aggregation",
+    "error_handling_strategy": "Error propagation with logging and status tracking",
+    "performance_monitoring": "Time-based measurements with threshold comparisons",
+    "configuration_pattern": "JSON-tagged structs with default configuration factory"
+  },
+  "recommendations": {
+    "architectural_improvements": [
+      "Extract common agent interface for reusability",
+      "Implement dependency injection for database connections",
+      "Create shared validation framework",
+      "Standardize error handling patterns"
+    ],
+    "security_improvements": [
+      "Use prepared statements for all SQL queries",
+      "Implement input validation for all external data",
+      "Add authentication for database connections"
+    ],
+    "performance_improvements": [
+      "Implement connection pooling",
+      "Add query result caching",
+      "Optimize database queries with indexes"
+    ]
+  }
+}

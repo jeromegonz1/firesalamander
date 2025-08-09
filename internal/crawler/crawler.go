@@ -276,7 +276,7 @@ func (c *Crawler) CrawlPage(ctx context.Context, pageURL string) (*CrawlResult, 
 	// Fetch la page
 	result, err := c.fetcher.Fetch(ctx, pageURL)
 	if err != nil {
-		log.Error("Failed to fetch page", map[string]interface{}{
+		log.Error(constants.CrawlerFailed + " page", map[string]interface{}{
 			"url":   pageURL,
 			"error": err.Error(),
 		})
@@ -297,7 +297,7 @@ func (c *Crawler) CrawlPage(ctx context.Context, pageURL string) (*CrawlResult, 
 }
 
 // crawlWorker est un worker qui traite les URLs de la queue
-func (c *Crawler) crawlWorker(ctx context.Context, wg *sync.WaitGroup, queue *CrawlQueue, results chan<- *CrawlResult, baseURL *url.URL, robots *RobotsTxt) {
+func (c *Crawler) crawlWorker(ctx context.Context, wg *sync.WaitGroup, queue *CrawlQueue, results chan<- *CrawlResult, baseURL *url.URL, robots *LegacyRobotsTxt) {
 	defer wg.Done()
 
 	for {
@@ -350,7 +350,7 @@ func (c *Crawler) parseHTML(result *CrawlResult) {
 }
 
 // fetchRobotsTxt récupère et parse le fichier robots.txt
-func (c *Crawler) fetchRobotsTxt(ctx context.Context, baseURL *url.URL) (*RobotsTxt, error) {
+func (c *Crawler) fetchRobotsTxt(ctx context.Context, baseURL *url.URL) (*LegacyRobotsTxt, error) {
 	robotsURL := fmt.Sprintf("%s://%s/robots.txt", baseURL.Scheme, baseURL.Host)
 	
 	// Vérifier le cache
@@ -438,7 +438,7 @@ type CrawlReport struct {
 	EndTime   time.Time
 	Duration  time.Duration
 	Pages     map[string]*CrawlResult
-	RobotsTxt *RobotsTxt
+	RobotsTxt *LegacyRobotsTxt
 	Sitemaps  []*Sitemap
 	Stats     *CrawlStats
 }

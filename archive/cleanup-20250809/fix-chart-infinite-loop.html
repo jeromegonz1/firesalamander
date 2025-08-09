@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Salamander - Version avec Fix Chart.js</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        button {
+            background: #ff6136;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #e55a2e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Fire Salamander - Test Fix Chart.js</h1>
+        
+        <div id="status" class="status warning">
+            ⏳ Initialisation du test...
+        </div>
+        
+        <p><strong>Problème identifié:</strong> Les charts Chart.js avec <code>maintainAspectRatio: false</code> causent une boucle infinie de redimensionnement (height > 90M pixels).</p>
+        
+        <p><strong>Solution appliquée:</strong> Monkey-patch de Chart.js pour forcer <code>maintainAspectRatio: true</code> avec des ratios appropriés.</p>
+        
+        <button onclick="testWithFix()">🧪 Tester avec Fix</button>
+        <button onclick="testWithoutFix()">⚠️ Tester sans Fix (DANGER)</button>
+        <button onclick="measureHeight()">📏 Mesurer Hauteur</button>
+        
+        <iframe id="testFrame" src="about:blank"></iframe>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Fix Chart.js pour éviter la boucle infinie
+        const chartFix = `
+            console.log('🔧 Application du fix Chart.js...');
+            
+            if (window.Chart) {
+                const originalChart = window.Chart;
+                window.Chart = function(ctx, config) {
+                    if (config && config.options && config.options.maintainAspectRatio === false) {
+                        console.log('⚠️ CORRECTION: maintainAspectRatio forcé à true pour éviter boucle infinie');
+                        config.options.maintainAspectRatio = true;
+                        
+                        if (config.type === 'line' || config.type === 'bar') {
+                            config.options.aspectRatio = 2;
+                        } else if (config.type === 'doughnut' || config.type === 'pie') {
+                            config.options.aspectRatio = 1;
+                        }
+                    }
+                    return new originalChart(ctx, config);
+                };
+                
+                Object.setPrototypeOf(window.Chart, originalChart);
+                Object.keys(originalChart).forEach(key => {
+                    window.Chart[key] = originalChart[key];
+                });
+                
+                console.log('✅ Fix Chart.js appliqué avec succès');
+            }
+        `;
+
+        function updateStatus(message, type = 'warning') {
+            const status = document.getElementById('status');
+            status.innerHTML = message;
+            status.className = 'status ' + type;
+        }
+
+        function testWithFix() {
+            updateStatus('🔧 Chargement avec fix Chart.js appliqué...', 'warning');
+            
+            const iframe = document.getElementById('testFrame');
+            iframe.onload = function() {
+                try {
+                    // Injecter le fix dans l'iframe
+                    const script = iframe.contentDocument.createElement('script');
+                    script.textContent = chartFix;
+                    iframe.contentDocument.head.appendChild(script);
+                    
+                    updateStatus('✅ Fire Salamander chargé avec fix Chart.js - surveillez la hauteur!', 'success');
+                    
+                    // Surveiller la hauteur
+                    setTimeout(() => measureHeight(), 2000);
+                } catch (error) {
+                    updateStatus('❌ Erreur: ' + error.message, 'error');
+                }
+            };
+            
+            iframe.src = 'http://localhost:8080';
+        }
+
+        function testWithoutFix() {
+            if (!confirm('⚠️ ATTENTION: Tester sans fix peut causer une boucle infinie et bloquer le navigateur. Continuer?')) {
+                return;
+            }
+            
+            updateStatus('⚠️ Chargement SANS fix - ATTENTION À LA BOUCLE INFINIE!', 'error');
+            
+            const iframe = document.getElementById('testFrame');
+            iframe.onload = function() {
+                updateStatus('⚠️ Fire Salamander chargé SANS fix - surveillez les performances!', 'error');
+                setTimeout(() => measureHeight(), 2000);
+            };
+            
+            iframe.src = 'http://localhost:8080';
+        }
+
+        function measureHeight() {
+            try {
+                const iframe = document.getElementById('testFrame');
+                const body = iframe.contentDocument.body;
+                const height = Math.max(
+                    body.scrollHeight,
+                    body.offsetHeight,
+                    iframe.contentDocument.documentElement.clientHeight,
+                    iframe.contentDocument.documentElement.scrollHeight,
+                    iframe.contentDocument.documentElement.offsetHeight
+                );
+                
+                const results = document.getElementById('results');
+                
+                if (height > 10000) {
+                    results.innerHTML = '<div class="status error">❌ BOUCLE INFINIE DÉTECTÉE: Hauteur = ' + height.toLocaleString() + 'px</div>';
+                } else {
+                    results.innerHTML = '<div class="status success">✅ HAUTEUR NORMALE: ' + height.toLocaleString() + 'px</div>';
+                }
+                
+            } catch (error) {
+                document.getElementById('results').innerHTML = '<div class="status error">❌ Erreur mesure: ' + error.message + '</div>';
+            }
+        }
+
+        // Auto-start test avec fix
+        updateStatus('🚀 Lancement automatique du test avec fix...', 'warning');
+        setTimeout(() => testWithFix(), 1000);
+    </script>
+</body>
+</html>

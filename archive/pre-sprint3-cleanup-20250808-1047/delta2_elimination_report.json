@@ -1,0 +1,200 @@
+{
+  "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/integration/api.go",
+  "total_detected": 60,
+  "eliminated_count": 32,
+  "backup_path": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/integration/api.go.delta2_backup",
+  "changes": [
+    {
+      "line": 100,
+      "old": "\"Access-Control-Allow-Origin\"",
+      "new": "constants.APIHeaderAccessControlAllowOrigin",
+      "context": "w.Header().Set(\"Access-Control-Allow-Origin\", \"*\")"
+    },
+    {
+      "line": 101,
+      "old": "\"Access-Control-Allow-Methods\"",
+      "new": "constants.APIHeaderAccessControlAllowMethods",
+      "context": "w.Header().Set(\"Access-Control-Allow-Methods\", \"GET, POST, PUT, DELETE, OPTIONS\")"
+    },
+    {
+      "line": 102,
+      "old": "\"Access-Control-Allow-Headers\"",
+      "new": "constants.APIHeaderAccessControlAllowHeaders",
+      "context": "w.Header().Set(\"Access-Control-Allow-Headers\", \"Content-Type, Authorization, X-Requested-With\")"
+    },
+    {
+      "line": 105,
+      "old": "\"application/json\"",
+      "new": "constants.APIContentTypeJSON",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 105,
+      "old": "\"Content-Type\"",
+      "new": "constants.APIHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 115,
+      "old": "\"OPTIONS\"",
+      "new": "constants.APIMethodOptions",
+      "context": "if r.Method == \"OPTIONS\" {"
+    },
+    {
+      "line": 156,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 161,
+      "old": "\"text/html\"",
+      "new": "constants.APIContentTypeHTML",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 161,
+      "old": "\"Content-Type\"",
+      "new": "constants.APIHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 188,
+      "old": "\"type\"",
+      "new": "constants.APIJSONFieldType",
+      "context": "<pre>{\"url\": \"` + constants.TestExampleURL + `\", \"type\": \"full\", \"options\": {...}}</pre>"
+    },
+    {
+      "line": 188,
+      "old": "\"url\"",
+      "new": "constants.APIJSONFieldURL",
+      "context": "<pre>{\"url\": \"` + constants.TestExampleURL + `\", \"type\": \"full\", \"options\": {...}}</pre>"
+    },
+    {
+      "line": 236,
+      "old": "\"POST\"",
+      "new": "constants.APIMethodPost",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 243,
+      "old": "\"Requ\u00eate JSON invalide: \"",
+      "new": "constants.APIErrorInvalidJSON + \": \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 283,
+      "old": "\"POST\"",
+      "new": "constants.APIMethodPost",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 290,
+      "old": "\"Requ\u00eate JSON invalide: \"",
+      "new": "constants.APIErrorInvalidJSON + \": \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 315,
+      "old": "\"POST\"",
+      "new": "constants.APIMethodPost",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 322,
+      "old": "\"Requ\u00eate JSON invalide: \"",
+      "new": "constants.APIErrorInvalidJSON + \": \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 347,
+      "old": "\"POST\"",
+      "new": "constants.APIMethodPost",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 354,
+      "old": "\"Requ\u00eate JSON invalide: \"",
+      "new": "constants.APIErrorInvalidJSON + \": \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 379,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 387,
+      "old": "\"healthy\"",
+      "new": "constants.APIStatusHealthy",
+      "context": "Status:    \"healthy\","
+    },
+    {
+      "line": 398,
+      "old": "\"degraded\"",
+      "new": "constants.APIStatusDegraded",
+      "context": "health.Status = \"degraded\""
+    },
+    {
+      "line": 409,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 420,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 433,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 464,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 470,
+      "old": "\"name\"",
+      "new": "constants.APIJSONFieldName",
+      "context": "\"name\":        api.config.App.Name,"
+    },
+    {
+      "line": 472,
+      "old": "\"description\"",
+      "new": "constants.APIJSONFieldDescription",
+      "context": "\"description\": \"API d'analyse SEO et s\u00e9mantique avanc\u00e9e\","
+    },
+    {
+      "line": 475,
+      "old": "\"semantic\"",
+      "new": "constants.APIAgentSemantic",
+      "context": "\"semantic\":         \"/api/v1/analyze/semantic\","
+    },
+    {
+      "line": 476,
+      "old": "\"seo\"",
+      "new": "constants.APIAgentSEO",
+      "context": "\"seo\":              \"/api/v1/analyze/seo\","
+    },
+    {
+      "line": 502,
+      "old": "\"GET\"",
+      "new": "constants.APIMethodGet",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 509,
+      "old": "\"name\"",
+      "new": "constants.APIJSONFieldName",
+      "context": "\"name\":       api.config.App.Name,"
+    }
+  ]
+}

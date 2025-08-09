@@ -1,0 +1,140 @@
+# .golangci.yml - CONFIGURATION ULTRA STRICTE CODE QUALITY INSPECTOR
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: false
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: false
+
+linters:
+  enable-all: true
+  disable:
+    - exhaustruct      # Trop strict pour les structs
+    - depguard         # Gestion des dépendances
+    - gochecknoglobals # On autorise les globales pour config
+    - gochecknoinits   # On peut avoir des func init()
+    - nlreturn         # Retours à la ligne optionnels
+    - wsl              # Whitespace linter trop strict
+    - varnamelen       # Noms de variables courts OK
+
+linters-settings:
+  goconst:
+    min-len: 3           # Strings de 3+ caractères
+    min-occurrences: 2   # Répétées 2+ fois
+    ignore-tests: true
+    match-constant: true
+    numbers: true
+    min: 1
+    max: 5
+
+  gomnd:
+    # Magic numbers interdits - ZERO TOLERANCE
+    checks:
+      - argument
+      - case  
+      - condition
+      - operation
+      - return
+      - assign
+    ignored-numbers:
+      - "0"
+      - "1" 
+      - "2"
+      - "10"
+      - "100"
+    ignored-functions:
+      - 'http.StatusText'
+      - 'http.Status*'
+      - 'time.Second'
+      - 'time.Minute'
+      - 'time.Hour'
+
+  revive:
+    confidence: 0.8
+    rules:
+      - name: add-constant
+        severity: error
+        arguments:
+          - maxLitCount: "2"
+          - allowStrs: '""'
+          - allowInts: "0,1,2"
+          - allowFloats: "0.0,1.0"
+      
+      - name: cognitive-complexity
+        arguments: [15]
+        
+      - name: cyclomatic
+        arguments: [10]
+        
+      - name: max-public-structs
+        arguments: [3]
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+    disabled-checks:
+      - commentedOutCode
+      - whyNoLint
+
+  dupl:
+    threshold: 100
+
+  funlen:
+    lines: 60
+    statements: 40
+
+  gocyclo:
+    min-complexity: 10
+
+  godot:
+    scope: declarations
+    exclude:
+      - "^fixme:"
+      - "^todo:"
+
+  lll:
+    line-length: 120
+    tab-width: 4
+
+  misspell:
+    locale: US
+
+  nakedret:
+    max-func-lines: 30
+
+  nestif:
+    min-complexity: 4
+
+  whitespace:
+    multi-if: false
+    multi-func: false
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
+
+  # Exclude specific errors
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - goconst
+        - gomnd
+        - funlen
+        - dupl
+
+    - path: main\.go
+      linters:
+        - forbidigo
+
+    - text: "Use of `fmt.Print`"
+      linters:
+        - forbidigo

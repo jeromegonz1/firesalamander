@@ -1,0 +1,1068 @@
+package main
+
+/*
+Fire Salamander - Data Integrity Agent
+Agent de vérification de l'intégrité et de la cohérence des données
+*/
+
+import (
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
+
+	_ "github.com/mattn/go-sqlite3"
+)
+
+// DataIntegrityAgent structure principale de l'agent
+type DataIntegrityAgent struct {
+	Config *DataIntegrityConfig
+	Stats  *DataIntegrityStats
+	DB     *sql.DB
+}
+
+// DataIntegrityConfig configuration de l'agent
+type DataIntegrityConfig struct {
+	DatabasePath   string `json:"database_path"`
+	ReportPath     string `json:"report_path"`
+	Timeout        int    `json:"timeout"`
+	TestCategories []string `json:"test_categories"`
+}
+
+// DataIntegrityStats statistiques des tests
+type DataIntegrityStats struct {
+	Timestamp    string                 `json:"timestamp"`
+	Database     string                 `json:"database"`
+	TestResults  map[string][]TestResult `json:"test_results"`
+	Issues       []DataIssue             `json:"issues"`
+	OverallScore int                     `json:"overall_score"`
+	Status       string                  `json:"status"`
+}
+
+// TestResult résultat d'un test individuel
+type TestResult struct {
+	Test        string `json:"test"`
+	Status      string `json:"status"`
+	Description string `json:"description"`
+	Value       string `json:"value,omitempty"`
+	Expected    string `json:"expected,omitempty"`
+	Severity    string `json:"severity,omitempty"`
+}
+
+// DataIssue problème détecté dans les données
+type DataIssue struct {
+	Type        string `json:"type"`
+	Table       string `json:"table,omitempty"`
+	Column      string `json:"column,omitempty"`
+	Issue       string `json:"issue"`
+	Impact      string `json:"impact"`
+	Severity    string `json:"severity"`
+	Count       int    `json:"count,omitempty"`
+}
+
+// NewDataIntegrityAgent crée un nouvel agent d'intégrité des données
+func NewDataIntegrityAgent(config *DataIntegrityConfig) *DataIntegrityAgent {
+	if config == nil {
+		config = defaultConfig()
+	}
+
+	return &DataIntegrityAgent{
+		Config: config,
+		Stats: &DataIntegrityStats{
+			Timestamp:   time.Now().Format(time.RFC3339),
+			Database:    config.DatabasePath,
+			TestResults: make(map[string][]TestResult),
+			Issues:      []DataIssue{},
+			Status:      "unknown",
+		},
+	}
+}
+
+// defaultConfig configuration par défaut
+func defaultConfig() *DataIntegrityConfig {
+	return &DataIntegrityConfig{
+		DatabasePath: "fire_salamander_dev.db",
+		ReportPath:   "tests/reports/data",
+		Timeout:      30,
+		TestCategories: []string{
+			"schema_validation",
+			"data_consistency",
+			"referential_integrity",
+			"data_quality",
+			"performance_checks",
+		},
+	}
+}
+
+// RunFullDataIntegrityAudit lance un audit complet de l'intégrité des données
+func (d *DataIntegrityAgent) RunFullDataIntegrityAudit() error {
+	log.Println("🔍 Starting data integrity audit")
+
+	// 1. Vérifier l'existence de la base de données
+	if err := d.checkDatabaseExists(); err != nil {
+		return fmt.Errorf("database check failed: %w", err)
+	}
+
+	// 2. Se connecter à la base de données
+	if err := d.connectToDatabase(); err != nil {
+		return fmt.Errorf("database connection failed: %w", err)
+	}
+	defer d.DB.Close()
+
+	// 3. Validation du schéma
+	d.validateSchema()
+
+	// 4. Tests de cohérence des données
+	d.testDataConsistency()
+
+	// 5. Tests d'intégrité référentielle
+	d.testReferentialIntegrity()
+
+	// 6. Tests de qualité des données
+	d.testDataQuality()
+
+	// 7. Tests de performance
+	d.testPerformance()
+
+	// 8. Calculer le score global
+	d.calculateOverallScore()
+
+	// 9. Générer le rapport
+	if err := d.generateReport(); err != nil {
+		log.Printf("⚠️ Failed to generate report: %v", err)
+	}
+
+	log.Printf("✅ Data integrity audit completed - Score: %d/100", d.Stats.OverallScore)
+	return nil
+}
+
+// checkDatabaseExists vérifie que la base de données existe
+func (d *DataIntegrityAgent) checkDatabaseExists() error {
+	if _, err := os.Stat(d.Config.DatabasePath); os.IsNotExist(err) {
+		// Si la DB n'existe pas, créer une base vide pour les tests
+		log.Println("📁 Database not found, creating test database")
+		return d.createTestDatabase()
+	}
+	return nil
+}
+
+// createTestDatabase crée une base de données de test basique
+func (d *DataIntegrityAgent) createTestDatabase() error {
+	db, err := sql.Open("sqlite3", d.Config.DatabasePath)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Créer quelques tables de test basiques
+	schema := `
+	CREATE TABLE IF NOT EXISTS crawl_sessions (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		url TEXT NOT NULL,
+		started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		finished_at DATETIME,
+		status TEXT CHECK(status IN ('pending', 'running', 'completed', 'failed')),
+		pages_found INTEGER DEFAULT 0,
+		pages_crawled INTEGER DEFAULT 0,
+		UNIQUE(url, started_at)
+	);
+
+	CREATE TABLE IF NOT EXISTS pages (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		session_id INTEGER NOT NULL,
+		url TEXT NOT NULL,
+		title TEXT,
+		meta_description TEXT,
+		h1 TEXT,
+		word_count INTEGER DEFAULT 0,
+		crawled_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		status_code INTEGER,
+		FOREIGN KEY (session_id) REFERENCES crawl_sessions(id),
+		UNIQUE(session_id, url)
+	);
+
+	CREATE TABLE IF NOT EXISTS seo_metrics (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		page_id INTEGER NOT NULL,
+		metric_name TEXT NOT NULL,
+		metric_value TEXT,
+		score INTEGER CHECK(score >= 0 AND score <= 100),
+		calculated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (page_id) REFERENCES pages(id),
+		UNIQUE(page_id, metric_name)
+	);
+
+	-- Insérer quelques données de test
+	INSERT OR IGNORE INTO crawl_sessions (url, status, pages_found, pages_crawled) 
+	VALUES ('https://example.com', 'completed', 10, 8);
+
+	INSERT OR IGNORE INTO pages (session_id, url, title, status_code, word_count)
+	VALUES (1, 'https://example.com/', 'Example Homepage', 200, 250);
+
+	INSERT OR IGNORE INTO seo_metrics (page_id, metric_name, metric_value, score)
+	VALUES (1, 'title_length', '15', 75);
+	`
+
+	_, err = db.Exec(schema)
+	return err
+}
+
+// connectToDatabase se connecte à la base de données
+func (d *DataIntegrityAgent) connectToDatabase() error {
+	var err error
+	d.DB, err = sql.Open("sqlite3", d.Config.DatabasePath)
+	if err != nil {
+		return err
+	}
+
+	// Tester la connexion
+	if err = d.DB.Ping(); err != nil {
+		return err
+	}
+
+	log.Println("✅ Connected to database")
+	return nil
+}
+
+// validateSchema valide la structure du schéma de base de données
+func (d *DataIntegrityAgent) validateSchema() {
+	log.Println("🏗️ Validating database schema")
+	
+	var results []TestResult
+
+	// Test 1: Vérifier les tables principales
+	expectedTables := []string{"crawl_sessions", "pages", "seo_metrics"}
+	
+	for _, tableName := range expectedTables {
+		var count int
+		query := "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?"
+		err := d.DB.QueryRow(query, tableName).Scan(&count)
+		
+		if err != nil {
+			results = append(results, TestResult{
+				Test:        fmt.Sprintf("Table Exists: %s", tableName),
+				Status:      "error",
+				Description: fmt.Sprintf("Error checking table: %v", err),
+				Severity:    "high",
+			})
+		} else if count == 0 {
+			results = append(results, TestResult{
+				Test:        fmt.Sprintf("Table Exists: %s", tableName),
+				Status:      "fail",
+				Description: fmt.Sprintf("Required table '%s' is missing", tableName),
+				Severity:    "high",
+			})
+			
+			d.Stats.Issues = append(d.Stats.Issues, DataIssue{
+				Type:     "schema",
+				Table:    tableName,
+				Issue:    "Missing required table",
+				Impact:   "Application functionality may be impaired",
+				Severity: "high",
+			})
+		} else {
+			results = append(results, TestResult{
+				Test:        fmt.Sprintf("Table Exists: %s", tableName),
+				Status:      "pass",
+				Description: fmt.Sprintf("Table '%s' exists", tableName),
+			})
+		}
+	}
+
+	// Test 2: Vérifier les contraintes et index
+	d.validateConstraints(&results)
+
+	d.Stats.TestResults["schema_validation"] = results
+}
+
+// validateConstraints vérifie les contraintes de base de données
+func (d *DataIntegrityAgent) validateConstraints(results *[]TestResult) {
+	// Vérifier les contraintes CHECK
+	query := `
+	SELECT sql FROM sqlite_master 
+	WHERE type='table' AND sql LIKE '%CHECK%'
+	`
+	
+	rows, err := d.DB.Query(query)
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "Constraints Check",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking constraints: %v", err),
+		})
+		return
+	}
+	defer rows.Close()
+
+	constraintCount := 0
+	for rows.Next() {
+		var sql string
+		rows.Scan(&sql)
+		if strings.Contains(sql, "CHECK") {
+			constraintCount++
+		}
+	}
+
+	if constraintCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        "Data Constraints",
+			Status:      "pass",
+			Description: fmt.Sprintf("Found %d tables with CHECK constraints", constraintCount),
+			Value:       fmt.Sprintf("%d", constraintCount),
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "Data Constraints",
+			Status:      "warning",
+			Description: "No CHECK constraints found - consider adding data validation",
+			Severity:    "medium",
+		})
+	}
+}
+
+// testDataConsistency teste la cohérence des données
+func (d *DataIntegrityAgent) testDataConsistency() {
+	log.Println("🔍 Testing data consistency")
+	
+	var results []TestResult
+
+	// Test 1: Vérifier les valeurs NULL dans les colonnes NOT NULL
+	d.testNullValues(&results)
+
+	// Test 2: Vérifier les doublons sur les contraintes UNIQUE
+	d.testUniqueConstraints(&results)
+
+	// Test 3: Vérifier la cohérence des timestamps
+	d.testTimestampConsistency(&results)
+
+	// Test 4: Vérifier les valeurs numériques
+	d.testNumericConsistency(&results)
+
+	d.Stats.TestResults["data_consistency"] = results
+}
+
+// testNullValues teste les valeurs NULL dans les colonnes critiques
+func (d *DataIntegrityAgent) testNullValues(results *[]TestResult) {
+	// Test pour crawl_sessions
+	var nullCount int
+	query := "SELECT COUNT(*) FROM crawl_sessions WHERE url IS NULL OR url = ''"
+	err := d.DB.QueryRow(query).Scan(&nullCount)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "NULL Values - crawl_sessions.url",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking NULL values: %v", err),
+		})
+	} else if nullCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        "NULL Values - crawl_sessions.url",
+			Status:      "fail",
+			Description: fmt.Sprintf("Found %d records with NULL/empty URL", nullCount),
+			Value:       fmt.Sprintf("%d", nullCount),
+			Severity:    "high",
+		})
+		
+		d.Stats.Issues = append(d.Stats.Issues, DataIssue{
+			Type:     "data_quality",
+			Table:    "crawl_sessions",
+			Column:   "url",
+			Issue:    "NULL or empty URL values found",
+			Impact:   "Crawl sessions cannot function without valid URLs",
+			Severity: "high",
+			Count:    nullCount,
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "NULL Values - crawl_sessions.url",
+			Status:      "pass",
+			Description: "No NULL/empty URL values found",
+		})
+	}
+}
+
+// testUniqueConstraints teste les contraintes d'unicité
+func (d *DataIntegrityAgent) testUniqueConstraints(results *[]TestResult) {
+	// Test pour les doublons dans pages (session_id, url)
+	query := `
+	SELECT session_id, url, COUNT(*) as duplicate_count
+	FROM pages 
+	GROUP BY session_id, url 
+	HAVING COUNT(*) > 1
+	`
+	
+	rows, err := d.DB.Query(query)
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "Unique Constraints - pages",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking duplicates: %v", err),
+		})
+		return
+	}
+	defer rows.Close()
+
+	duplicateCount := 0
+	for rows.Next() {
+		var sessionID int
+		var url string
+		var count int
+		rows.Scan(&sessionID, &url, &count)
+		duplicateCount++
+	}
+
+	if duplicateCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        "Unique Constraints - pages",
+			Status:      "fail",
+			Description: fmt.Sprintf("Found %d duplicate page records", duplicateCount),
+			Value:       fmt.Sprintf("%d", duplicateCount),
+			Severity:    "medium",
+		})
+		
+		d.Stats.Issues = append(d.Stats.Issues, DataIssue{
+			Type:     "data_consistency",
+			Table:    "pages",
+			Issue:    "Duplicate page records found",
+			Impact:   "May cause inconsistent crawl results",
+			Severity: "medium",
+			Count:    duplicateCount,
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "Unique Constraints - pages",
+			Status:      "pass",
+			Description: "No duplicate page records found",
+		})
+	}
+}
+
+// testTimestampConsistency teste la cohérence des timestamps
+func (d *DataIntegrityAgent) testTimestampConsistency(results *[]TestResult) {
+	// Vérifier que finished_at >= started_at dans crawl_sessions
+	query := `
+	SELECT COUNT(*) FROM crawl_sessions 
+	WHERE finished_at IS NOT NULL 
+	AND finished_at < started_at
+	`
+	
+	var inconsistentCount int
+	err := d.DB.QueryRow(query).Scan(&inconsistentCount)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "Timestamp Consistency",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking timestamps: %v", err),
+		})
+	} else if inconsistentCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        "Timestamp Consistency",
+			Status:      "fail",
+			Description: fmt.Sprintf("Found %d sessions with finish time before start time", inconsistentCount),
+			Value:       fmt.Sprintf("%d", inconsistentCount),
+			Severity:    "medium",
+		})
+		
+		d.Stats.Issues = append(d.Stats.Issues, DataIssue{
+			Type:     "data_consistency",
+			Table:    "crawl_sessions",
+			Issue:    "Inconsistent timestamps (finished_at < started_at)",
+			Impact:   "Incorrect session duration calculations",
+			Severity: "medium",
+			Count:    inconsistentCount,
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "Timestamp Consistency",
+			Status:      "pass",
+			Description: "All timestamps are consistent",
+		})
+	}
+}
+
+// testNumericConsistency teste la cohérence des valeurs numériques
+func (d *DataIntegrityAgent) testNumericConsistency(results *[]TestResult) {
+	// Vérifier que pages_crawled <= pages_found
+	query := `
+	SELECT COUNT(*) FROM crawl_sessions 
+	WHERE pages_crawled > pages_found
+	`
+	
+	var inconsistentCount int
+	err := d.DB.QueryRow(query).Scan(&inconsistentCount)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "Numeric Consistency - Page Counts",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking page counts: %v", err),
+		})
+	} else if inconsistentCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        "Numeric Consistency - Page Counts",
+			Status:      "fail",
+			Description: fmt.Sprintf("Found %d sessions where crawled > found", inconsistentCount),
+			Value:       fmt.Sprintf("%d", inconsistentCount),
+			Severity:    "medium",
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "Numeric Consistency - Page Counts",
+			Status:      "pass",
+			Description: "Page count relationships are consistent",
+		})
+	}
+}
+
+// testReferentialIntegrity teste l'intégrité référentielle
+func (d *DataIntegrityAgent) testReferentialIntegrity() {
+	log.Println("🔗 Testing referential integrity")
+	
+	var results []TestResult
+
+	// Test 1: pages.session_id -> crawl_sessions.id
+	d.testForeignKey(&results, "pages", "session_id", "crawl_sessions", "id")
+
+	// Test 2: seo_metrics.page_id -> pages.id
+	d.testForeignKey(&results, "seo_metrics", "page_id", "pages", "id")
+
+	d.Stats.TestResults["referential_integrity"] = results
+}
+
+// testForeignKey teste une relation de clé étrangère
+func (d *DataIntegrityAgent) testForeignKey(results *[]TestResult, childTable, childCol, parentTable, parentCol string) {
+	query := fmt.Sprintf(`
+	SELECT COUNT(*) FROM %s c
+	LEFT JOIN %s p ON c.%s = p.%s
+	WHERE p.%s IS NULL AND c.%s IS NOT NULL
+	`, childTable, parentTable, childCol, parentCol, parentCol, childCol)
+	
+	var orphanCount int
+	err := d.DB.QueryRow(query).Scan(&orphanCount)
+	
+	testName := fmt.Sprintf("Foreign Key - %s.%s", childTable, childCol)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        testName,
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking foreign key: %v", err),
+		})
+	} else if orphanCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        testName,
+			Status:      "fail",
+			Description: fmt.Sprintf("Found %d orphaned records", orphanCount),
+			Value:       fmt.Sprintf("%d", orphanCount),
+			Severity:    "high",
+		})
+		
+		d.Stats.Issues = append(d.Stats.Issues, DataIssue{
+			Type:     "referential_integrity",
+			Table:    childTable,
+			Column:   childCol,
+			Issue:    fmt.Sprintf("Orphaned records referencing non-existent %s", parentTable),
+			Impact:   "Data inconsistency and potential application errors",
+			Severity: "high",
+			Count:    orphanCount,
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        testName,
+			Status:      "pass",
+			Description: "No orphaned records found",
+		})
+	}
+}
+
+// testDataQuality teste la qualité des données
+func (d *DataIntegrityAgent) testDataQuality() {
+	log.Println("📊 Testing data quality")
+	
+	var results []TestResult
+
+	// Test 1: URLs malformées
+	d.testURLQuality(&results)
+
+	// Test 2: Cohérence des codes de statut HTTP
+	d.testStatusCodeQuality(&results)
+
+	// Test 3: Scores SEO dans les limites attendues
+	d.testSEOScoreQuality(&results)
+
+	d.Stats.TestResults["data_quality"] = results
+}
+
+// testURLQuality teste la qualité des URLs
+func (d *DataIntegrityAgent) testURLQuality(results *[]TestResult) {
+	// Chercher des URLs qui ne commencent pas par http/https
+	query := `
+	SELECT COUNT(*) FROM pages 
+	WHERE url NOT LIKE 'http%' AND url NOT LIKE 'https%'
+	`
+	
+	var malformedCount int
+	err := d.DB.QueryRow(query).Scan(&malformedCount)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "URL Quality",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking URL quality: %v", err),
+		})
+	} else if malformedCount > 0 {
+		*results = append(*results, TestResult{
+			Test:        "URL Quality",
+			Status:      "warning",
+			Description: fmt.Sprintf("Found %d potentially malformed URLs", malformedCount),
+			Value:       fmt.Sprintf("%d", malformedCount),
+			Severity:    "medium",
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "URL Quality",
+			Status:      "pass",
+			Description: "All URLs appear to be well-formed",
+		})
+	}
+}
+
+// testStatusCodeQuality teste la cohérence des codes de statut
+func (d *DataIntegrityAgent) testStatusCodeQuality(results *[]TestResult) {
+	// Chercher des codes de statut inhabituels
+	query := `
+	SELECT COUNT(*) FROM pages 
+	WHERE status_code IS NOT NULL 
+	AND status_code NOT BETWEEN 200 AND 599
+	`
+	
+	var invalidCodes int
+	err := d.DB.QueryRow(query).Scan(&invalidCodes)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "HTTP Status Codes",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking status codes: %v", err),
+		})
+	} else if invalidCodes > 0 {
+		*results = append(*results, TestResult{
+			Test:        "HTTP Status Codes",
+			Status:      "warning",
+			Description: fmt.Sprintf("Found %d records with invalid status codes", invalidCodes),
+			Value:       fmt.Sprintf("%d", invalidCodes),
+			Severity:    "medium",
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "HTTP Status Codes",
+			Status:      "pass",
+			Description: "All status codes are in valid range",
+		})
+	}
+}
+
+// testSEOScoreQuality teste la qualité des scores SEO
+func (d *DataIntegrityAgent) testSEOScoreQuality(results *[]TestResult) {
+	// Vérifier que les scores sont entre 0 et 100
+	query := `
+	SELECT COUNT(*) FROM seo_metrics 
+	WHERE score IS NOT NULL 
+	AND (score < 0 OR score > 100)
+	`
+	
+	var invalidScores int
+	err := d.DB.QueryRow(query).Scan(&invalidScores)
+	
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "SEO Score Validity",
+			Status:      "error",
+			Description: fmt.Sprintf("Error checking SEO scores: %v", err),
+		})
+	} else if invalidScores > 0 {
+		*results = append(*results, TestResult{
+			Test:        "SEO Score Validity",
+			Status:      "fail",
+			Description: fmt.Sprintf("Found %d scores outside valid range (0-100)", invalidScores),
+			Value:       fmt.Sprintf("%d", invalidScores),
+			Severity:    "medium",
+		})
+	} else {
+		*results = append(*results, TestResult{
+			Test:        "SEO Score Validity",
+			Status:      "pass",
+			Description: "All SEO scores are within valid range",
+		})
+	}
+}
+
+// testPerformance teste les performances de la base de données
+func (d *DataIntegrityAgent) testPerformance() {
+	log.Println("⚡ Testing database performance")
+	
+	var results []TestResult
+
+	// Test 1: Temps de réponse des requêtes courantes
+	d.testQueryPerformance(&results)
+
+	// Test 2: Taille de la base de données
+	d.testDatabaseSize(&results)
+
+	d.Stats.TestResults["performance_checks"] = results
+}
+
+// testQueryPerformance teste les performances des requêtes
+func (d *DataIntegrityAgent) testQueryPerformance(results *[]TestResult) {
+	queries := map[string]string{
+		"Simple Count": "SELECT COUNT(*) FROM pages",
+		"Complex Join": `
+			SELECT s.url, COUNT(p.id) as page_count 
+			FROM crawl_sessions s 
+			LEFT JOIN pages p ON s.id = p.session_id 
+			GROUP BY s.id
+		`,
+	}
+
+	for testName, query := range queries {
+		start := time.Now()
+		_, err := d.DB.Query(query)
+		duration := time.Since(start)
+
+		if err != nil {
+			*results = append(*results, TestResult{
+				Test:        fmt.Sprintf("Query Performance - %s", testName),
+				Status:      "error",
+				Description: fmt.Sprintf("Query failed: %v", err),
+			})
+		} else if duration > 1*time.Second {
+			*results = append(*results, TestResult{
+				Test:        fmt.Sprintf("Query Performance - %s", testName),
+				Status:      "warning",
+				Description: fmt.Sprintf("Slow query: %v", duration),
+				Value:       duration.String(),
+				Severity:    "medium",
+			})
+		} else {
+			*results = append(*results, TestResult{
+				Test:        fmt.Sprintf("Query Performance - %s", testName),
+				Status:      "pass",
+				Description: fmt.Sprintf("Good performance: %v", duration),
+				Value:       duration.String(),
+			})
+		}
+	}
+}
+
+// testDatabaseSize teste la taille de la base de données
+func (d *DataIntegrityAgent) testDatabaseSize(results *[]TestResult) {
+	fileInfo, err := os.Stat(d.Config.DatabasePath)
+	if err != nil {
+		*results = append(*results, TestResult{
+			Test:        "Database Size",
+			Status:      "error",
+			Description: fmt.Sprintf("Cannot check database size: %v", err),
+		})
+		return
+	}
+
+	size := fileInfo.Size()
+	sizeMB := float64(size) / (1024 * 1024)
+
+	status := "pass"
+	description := fmt.Sprintf("Database size: %.2f MB", sizeMB)
+	
+	if sizeMB > 1000 { // Plus de 1GB
+		status = "warning"
+		description += " (large database - consider archiving old data)"
+	}
+
+	*results = append(*results, TestResult{
+		Test:        "Database Size",
+		Status:      status,
+		Description: description,
+		Value:       fmt.Sprintf("%.2f MB", sizeMB),
+	})
+}
+
+// calculateOverallScore calcule le score global d'intégrité
+func (d *DataIntegrityAgent) calculateOverallScore() {
+	totalScore := 100
+	
+	// Décompter les problèmes par sévérité
+	for _, issue := range d.Stats.Issues {
+		switch issue.Severity {
+		case "high":
+			totalScore -= 20
+		case "medium":
+			totalScore -= 10
+		case "low":
+			totalScore -= 5
+		}
+	}
+
+	// Décompter les tests échoués
+	for _, results := range d.Stats.TestResults {
+		for _, result := range results {
+			if result.Status == "fail" {
+				totalScore -= 5
+			} else if result.Status == "warning" {
+				totalScore -= 2
+			}
+		}
+	}
+
+	// Score minimum de 0
+	if totalScore < 0 {
+		totalScore = 0
+	}
+
+	d.Stats.OverallScore = totalScore
+
+	// Déterminer le statut
+	switch {
+	case totalScore >= 90:
+		d.Stats.Status = "excellent"
+	case totalScore >= 80:
+		d.Stats.Status = "good"
+	case totalScore >= 70:
+		d.Stats.Status = "acceptable"
+	case totalScore >= 60:
+		d.Stats.Status = "needs_improvement"
+	default:
+		d.Stats.Status = "poor"
+	}
+}
+
+// generateReport génère le rapport d'intégrité des données
+func (d *DataIntegrityAgent) generateReport() error {
+	// Créer le répertoire de rapport
+	if err := os.MkdirAll(d.Config.ReportPath, 0755); err != nil {
+		return err
+	}
+
+	// Rapport JSON
+	jsonData, err := json.MarshalIndent(d.Stats, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	jsonPath := filepath.Join(d.Config.ReportPath, "data_integrity_report.json")
+	if err := ioutil.WriteFile(jsonPath, jsonData, 0644); err != nil {
+		return err
+	}
+
+	// Rapport HTML
+	htmlReport := d.generateHTMLReport()
+	htmlPath := filepath.Join(d.Config.ReportPath, "data_integrity_report.html")
+	if err := ioutil.WriteFile(htmlPath, []byte(htmlReport), 0644); err != nil {
+		return err
+	}
+
+	log.Printf("📊 Data integrity report generated: %s", jsonPath)
+	return nil
+}
+
+// generateHTMLReport génère un rapport HTML
+func (d *DataIntegrityAgent) generateHTMLReport() string {
+	// Compter les résultats
+	totalTests := 0
+	passedTests := 0
+	failedTests := 0
+	warningTests := 0
+
+	for _, results := range d.Stats.TestResults {
+		for _, result := range results {
+			totalTests++
+			switch result.Status {
+			case "pass":
+				passedTests++
+			case "fail":
+				failedTests++
+			case "warning":
+				warningTests++
+			}
+		}
+	}
+
+	html := fmt.Sprintf(`
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fire Salamander - Data Integrity Report</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .header { background: #ff6136; color: white; padding: 20px; border-radius: 8px; }
+        .score { font-size: 2em; font-weight: bold; }
+        .status-excellent { color: #28a745; }
+        .status-good { color: #17a2b8; }
+        .status-acceptable { color: #ffc107; }
+        .status-needs_improvement { color: #fd7e14; }
+        .status-poor { color: #dc3545; }
+        .section { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .test-result { margin: 10px 0; padding: 10px; border-left: 4px solid #ddd; }
+        .pass { border-left-color: #28a745; }
+        .fail { border-left-color: #dc3545; }
+        .warning { border-left-color: #ffc107; }
+        .error { border-left-color: #6c757d; }
+        .severity-high { background-color: #f8d7da; }
+        .severity-medium { background-color: #fff3cd; }
+        .severity-low { background-color: #d4edda; }
+        table { width: 100%%; border-collapse: collapse; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Fire Salamander - Data Integrity Report</h1>
+        <div class="score status-%s">
+            Score: %d/100 (%s)
+        </div>
+        <p>Database: %s</p>
+        <p>Generated: %s</p>
+    </div>
+    
+    <div class="section">
+        <h2>📈 Summary</h2>
+        <table>
+            <tr><th>Status</th><th>Count</th></tr>
+            <tr><td>✅ Passed</td><td>%d</td></tr>
+            <tr><td>❌ Failed</td><td>%d</td></tr>
+            <tr><td>⚠️ Warning</td><td>%d</td></tr>
+            <tr><td>🔍 Total Tests</td><td>%d</td></tr>
+            <tr><td>🚨 Issues Found</td><td>%d</td></tr>
+        </table>
+    </div>
+`, d.Stats.Status, d.Stats.OverallScore, d.Stats.Status, d.Stats.Database, d.Stats.Timestamp,
+		passedTests, failedTests, warningTests, totalTests, len(d.Stats.Issues))
+
+	// Ajouter les problèmes détectés
+	if len(d.Stats.Issues) > 0 {
+		html += `<div class="section"><h2>🚨 Issues Detected</h2>`
+		for _, issue := range d.Stats.Issues {
+			severityClass := fmt.Sprintf("severity-%s", issue.Severity)
+			html += fmt.Sprintf(`
+            <div class="test-result fail %s">
+                <strong>[%s] %s</strong><br>
+                <strong>Table:</strong> %s | <strong>Column:</strong> %s<br>
+                <strong>Issue:</strong> %s<br>
+                <strong>Impact:</strong> %s
+                %s
+            </div>
+            `, severityClass, strings.ToUpper(issue.Severity), issue.Type, issue.Table, issue.Column, issue.Issue, issue.Impact,
+				func() string {
+					if issue.Count > 0 {
+						return fmt.Sprintf("<br><strong>Count:</strong> %d", issue.Count)
+					}
+					return ""
+				}())
+		}
+		html += `</div>`
+	}
+
+	// Ajouter les résultats détaillés par catégorie
+	for category, results := range d.Stats.TestResults {
+		categoryTitle := strings.ReplaceAll(strings.Title(strings.ReplaceAll(category, "_", " ")), " ", " ")
+		html += fmt.Sprintf(`<div class="section"><h2>%s</h2>`, categoryTitle)
+		
+		for _, result := range results {
+			statusClass := result.Status
+			severityClass := ""
+			if result.Severity != "" {
+				severityClass = fmt.Sprintf("severity-%s", result.Severity)
+			}
+			
+			html += fmt.Sprintf(`
+            <div class="test-result %s %s">
+                <strong>%s</strong><br>
+                %s
+                %s
+                %s
+            </div>
+            `, statusClass, severityClass, result.Test, result.Description,
+				func() string {
+					if result.Value != "" {
+						return fmt.Sprintf("<br><strong>Value:</strong> %s", result.Value)
+					}
+					return ""
+				}(),
+				func() string {
+					if result.Expected != "" {
+						return fmt.Sprintf("<br><strong>Expected:</strong> %s", result.Expected)
+					}
+					return ""
+				}())
+		}
+		
+		html += `</div>`
+	}
+
+	html += `
+</body>
+</html>`
+
+	return html
+}
+
+func main() {
+	log.Println("🔥 Fire Salamander - Data Integrity Agent")
+
+	// Parse command line arguments
+	dbPath := "fire_salamander_dev.db"
+	outputPath := "tests/reports/data"
+	
+	if len(os.Args) > 1 {
+		for i, arg := range os.Args[1:] {
+			switch arg {
+			case "--database":
+				if i+2 < len(os.Args) {
+					dbPath = os.Args[i+2]
+				}
+			case "--output":
+				if i+2 < len(os.Args) {
+					outputPath = os.Args[i+2]
+				}
+			}
+		}
+	}
+
+	config := &DataIntegrityConfig{
+		DatabasePath: dbPath,
+		ReportPath:   outputPath,
+		Timeout:      30,
+		TestCategories: []string{
+			"schema_validation",
+			"data_consistency", 
+			"referential_integrity",
+			"data_quality",
+			"performance_checks",
+		},
+	}
+
+	agent := NewDataIntegrityAgent(config)
+	
+	if err := agent.RunFullDataIntegrityAudit(); err != nil {
+		log.Printf("❌ Data integrity audit failed: %v", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("\n📊 Data Integrity Audit Results:\n")
+	fmt.Printf("Score: %d/100 (%s)\n", agent.Stats.OverallScore, agent.Stats.Status)
+	fmt.Printf("Issues: %d\n", len(agent.Stats.Issues))
+	fmt.Printf("Report: %s/data_integrity_report.html\n", outputPath)
+
+	// Exit code basé sur le score
+	exitCode := 0
+	if agent.Stats.OverallScore < 70 {
+		exitCode = 1
+	}
+	os.Exit(exitCode)
+}

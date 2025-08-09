@@ -1,0 +1,50 @@
+{
+  "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/crawler/crawler_test.go",
+  "total_detected": 49,
+  "eliminated_count": 7,
+  "backup_path": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/crawler/crawler_test.go.delta6_backup",
+  "changes": [
+    {
+      "line": 44,
+      "old": "\"text/html\"",
+      "new": "constants.CrawlerContentTypeHTML",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 44,
+      "old": "\"Content-Type\"",
+      "new": "constants.CrawlerResponseHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 164,
+      "old": "\"UTF-8\"",
+      "new": "constants.CrawlerEncodingUTF8",
+      "context": "sitemapContent := `<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    },
+    {
+      "line": 317,
+      "old": "\"text/html\"",
+      "new": "constants.CrawlerContentTypeHTML",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 317,
+      "old": "\"Content-Type\"",
+      "new": "constants.CrawlerResponseHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 336,
+      "old": "\"application/xml\"",
+      "new": "constants.CrawlerContentTypeXMLApp",
+      "context": "w.Header().Set(\"Content-Type\", \"application/xml\")"
+    },
+    {
+      "line": 336,
+      "old": "\"Content-Type\"",
+      "new": "constants.CrawlerResponseHeaderContentType",
+      "context": "w.Header().Set(\"Content-Type\", \"application/xml\")"
+    }
+  ]
+}

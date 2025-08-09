@@ -1,0 +1,365 @@
+{
+  "total_violations": 55,
+  "categories": {
+    "sync_patterns": 4,
+    "http_methods": 1,
+    "json_field_names": 5,
+    "agent_names": 7,
+    "config_keys": 1,
+    "status_values": 9,
+    "numeric_thresholds": 9,
+    "channel_operations": 9,
+    "goroutine_patterns": 3,
+    "message_templates": 3,
+    "error_messages": 4
+  },
+  "violations": [
+    {
+      "line": 32,
+      "category": "sync_patterns",
+      "value": "WaitGroup",
+      "context": "workerPool      sync.WaitGroup"
+    },
+    {
+      "line": 36,
+      "category": "sync_patterns",
+      "value": "RWMutex",
+      "context": "statsMutex      sync.RWMutex"
+    },
+    {
+      "line": 41,
+      "category": "sync_patterns",
+      "value": "RWMutex",
+      "context": "mutex           sync.RWMutex"
+    },
+    {
+      "line": 49,
+      "category": "http_methods",
+      "value": "options",
+      "context": "Options     AnalysisOptions        `json:\"options\"`"
+    },
+    {
+      "line": 54,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "Status      TaskStatus             `json:\"status\"`"
+    },
+    {
+      "line": 85,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "Status              AnalysisStatus                  `json:\"status\"`"
+    },
+    {
+      "line": 96,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "AnalysisTypeSEO      AnalysisType = \"seo\"      // Analyse SEO uniquement"
+    },
+    {
+      "line": 108,
+      "category": "config_keys",
+      "value": "timeout",
+      "context": "Timeout             time.Duration `json:\"timeout\"`"
+    },
+    {
+      "line": 125,
+      "category": "status_values",
+      "value": "pending",
+      "context": "TaskStatusPending    TaskStatus = \"pending\""
+    },
+    {
+      "line": 126,
+      "category": "status_values",
+      "value": "running",
+      "context": "TaskStatusRunning    TaskStatus = \"running\""
+    },
+    {
+      "line": 127,
+      "category": "status_values",
+      "value": "completed",
+      "context": "TaskStatusCompleted  TaskStatus = \"completed\""
+    },
+    {
+      "line": 128,
+      "category": "status_values",
+      "value": "failed",
+      "context": "TaskStatusFailed     TaskStatus = \"failed\""
+    },
+    {
+      "line": 129,
+      "category": "status_values",
+      "value": "cancelled",
+      "context": "TaskStatusCancelled  TaskStatus = \"cancelled\""
+    },
+    {
+      "line": 136,
+      "category": "status_values",
+      "value": "success",
+      "context": "AnalysisStatusSuccess AnalysisStatus = \"success\""
+    },
+    {
+      "line": 138,
+      "category": "status_values",
+      "value": "failed",
+      "context": "AnalysisStatusFailed  AnalysisStatus = \"failed\""
+    },
+    {
+      "line": 179,
+      "category": "json_field_names",
+      "value": "message",
+      "context": "Message     string    `json:\"message\"`"
+    },
+    {
+      "line": 180,
+      "category": "json_field_names",
+      "value": "timestamp",
+      "context": "Timestamp   time.Time `json:\"timestamp\"`"
+    },
+    {
+      "line": 202,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "MaxPages:      100,"
+    },
+    {
+      "line": 231,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "taskQueue:        make(chan *AnalysisTask, 100),"
+    },
+    {
+      "line": 232,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "resultsChan:      make(chan *UnifiedAnalysisResult, 100),"
+    },
+    {
+      "line": 235,
+      "category": "channel_operations",
+      "value": "make(chan struct",
+      "context": "shutdownChan:     make(chan struct{}),"
+    },
+    {
+      "line": 304,
+      "category": "channel_operations",
+      "value": "taskQueue <-",
+      "context": "case o.taskQueue <- task:"
+    },
+    {
+      "line": 306,
+      "category": "channel_operations",
+      "value": "case <-",
+      "context": "case <-ctx.Done():"
+    },
+    {
+      "line": 312,
+      "category": "channel_operations",
+      "value": "<-task",
+      "context": "case result := <-task.ResultChan:"
+    },
+    {
+      "line": 314,
+      "category": "channel_operations",
+      "value": "case <-",
+      "context": "case <-ctx.Done():"
+    },
+    {
+      "line": 327,
+      "category": "channel_operations",
+      "value": "<-o",
+      "context": "case task, ok := <-o.taskQueue:"
+    },
+    {
+      "line": 338,
+      "category": "channel_operations",
+      "value": "ResultChan <-",
+      "context": "case task.ResultChan <- result:"
+    },
+    {
+      "line": 343,
+      "category": "channel_operations",
+      "value": "case <-",
+      "context": "case <-o.shutdownChan:"
+    },
+    {
+      "line": 347,
+      "category": "channel_operations",
+      "value": "case <-",
+      "context": "case <-ctx.Done():"
+    },
+    {
+      "line": 374,
+      "category": "sync_patterns",
+      "value": "WaitGroup",
+      "context": "var wg sync.WaitGroup"
+    },
+    {
+      "line": 382,
+      "category": "goroutine_patterns",
+      "value": "go func()",
+      "context": "go func() {"
+    },
+    {
+      "line": 386,
+      "category": "agent_names",
+      "value": "crawler",
+      "context": "Module:      \"crawler\","
+    },
+    {
+      "line": 387,
+      "category": "message_templates",
+      "value": "crawling_error",
+      "context": "Type:        \"crawling_error\","
+    },
+    {
+      "line": 387,
+      "category": "error_messages",
+      "value": "crawling_error",
+      "context": "Type:        \"crawling_error\","
+    },
+    {
+      "line": 401,
+      "category": "goroutine_patterns",
+      "value": "go func()",
+      "context": "go func() {"
+    },
+    {
+      "line": 406,
+      "category": "message_templates",
+      "value": "semantic_error",
+      "context": "Type:        \"semantic_error\","
+    },
+    {
+      "line": 406,
+      "category": "error_messages",
+      "value": "semantic_error",
+      "context": "Type:        \"semantic_error\","
+    },
+    {
+      "line": 420,
+      "category": "goroutine_patterns",
+      "value": "go func()",
+      "context": "go func() {"
+    },
+    {
+      "line": 424,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "Module:      \"seo\","
+    },
+    {
+      "line": 425,
+      "category": "message_templates",
+      "value": "seo_error",
+      "context": "Type:        \"seo_error\","
+    },
+    {
+      "line": 425,
+      "category": "error_messages",
+      "value": "seo_error",
+      "context": "Type:        \"seo_error\","
+    },
+    {
+      "line": 548,
+      "category": "error_messages",
+      "value": "URL invalide",
+      "context": "return \"\", fmt.Errorf(\"URL invalide\")"
+    },
+    {
+      "line": 598,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "metrics.TechnicalHealthScore = techScore * 100"
+    },
+    {
+      "line": 600,
+      "category": "agent_names",
+      "value": "performance",
+      "context": "if perfScore, exists := result.SEOAnalysis.CategoryScores[\"performance\"]; exists {"
+    },
+    {
+      "line": 601,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "metrics.PerformanceScore = perfScore * 100"
+    },
+    {
+      "line": 611,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "metrics.MobileFriendlinessScore = result.SEOAnalysis.TechnicalAudit.Mobile.MobileScore * 100"
+    },
+    {
+      "line": 625,
+      "category": "status_values",
+      "value": "info",
+      "context": "Severity:    \"info\","
+    },
+    {
+      "line": 629,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "Modules:     []string{\"semantic\", \"seo\"},"
+    },
+    {
+      "line": 643,
+      "category": "status_values",
+      "value": "warning",
+      "context": "Severity:    \"warning\","
+    },
+    {
+      "line": 647,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "Modules:     []string{\"semantic\", \"seo\"},"
+    },
+    {
+      "line": 662,
+      "category": "numeric_thresholds",
+      "value": "10",
+      "context": "if len(actions) >= 10 { // Limiter \u00e0 10 actions max"
+    },
+    {
+      "line": 662,
+      "category": "numeric_thresholds",
+      "value": "10",
+      "context": "if len(actions) >= 10 { // Limiter \u00e0 10 actions max"
+    },
+    {
+      "line": 683,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "Module:      \"seo\","
+    },
+    {
+      "line": 721,
+      "category": "numeric_thresholds",
+      "value": "100",
+      "context": "scores[category] = score * 100 // Convertir en pourcentage"
+    },
+    {
+      "line": 796,
+      "category": "json_field_names",
+      "value": "status",
+      "context": "\"status\":           analysis.Status,"
+    }
+  ],
+  "constants_mapping": {
+    "\"status\"": "constants.OrchestratorJSONFieldStatus",
+    "\"message\"": "constants.OrchestratorJSONFieldMessage",
+    "\"timestamp\"": "constants.OrchestratorJSONFieldTimestamp",
+    "\"seo\"": "constants.OrchestratorAgentNameSEO",
+    "\"crawler\"": "constants.OrchestratorAgentNameCrawler",
+    "\"performance\"": "constants.OrchestratorAgentNamePerformance",
+    "\"pending\"": "constants.OrchestratorStatusPending",
+    "\"running\"": "constants.OrchestratorStatusRunning",
+    "\"completed\"": "constants.OrchestratorStatusCompleted",
+    "\"failed\"": "constants.OrchestratorStatusFailed",
+    "\"cancelled\"": "constants.OrchestratorStatusCancelled",
+    "\"success\"": "constants.OrchestratorStatusSuccess",
+    "\"info\"": "constants.OrchestratorStatusInfo",
+    "\"warning\"": "constants.OrchestratorStatusWarning",
+    "\"timeout\"": "constants.OrchestratorConfigTimeout"
+  }
+}

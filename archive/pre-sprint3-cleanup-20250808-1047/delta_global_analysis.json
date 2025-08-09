@@ -1,0 +1,914 @@
+{
+  "total_violations": 4425,
+  "files_affected": 60,
+  "top_files": [
+    [
+      "internal/constants/debug_constants.go",
+      234
+    ],
+    [
+      "internal/web/server.go",
+      184
+    ],
+    [
+      "internal/constants/orchestrator_constants.go",
+      175
+    ],
+    [
+      "internal/constants/qa_agent_constants.go",
+      173
+    ],
+    [
+      "internal/integration/api.go",
+      150
+    ],
+    [
+      "internal/constants/data_integrity_constants.go",
+      149
+    ],
+    [
+      "internal/constants/security_agent_constants.go",
+      145
+    ],
+    [
+      "internal/constants/web_server_constants.go",
+      142
+    ],
+    [
+      "internal/constants/seo_constants.go",
+      125
+    ],
+    [
+      "internal/constants/tag_analyzer_constants.go",
+      125
+    ],
+    [
+      "tests/agents/security/security_agent.go",
+      112
+    ],
+    [
+      "internal/semantic/ngram_analyzer.go",
+      112
+    ],
+    [
+      "internal/constants/recommendation_engine_constants.go",
+      111
+    ],
+    [
+      "internal/integration/integration_test.go",
+      108
+    ],
+    [
+      "tests/agents/data/data_integrity_agent.go",
+      104
+    ],
+    [
+      "internal/crawler/crawler_test.go",
+      102
+    ],
+    [
+      "internal/web/web_test.go",
+      95
+    ],
+    [
+      "internal/integration/reports.go",
+      94
+    ],
+    [
+      "internal/seo/seo_test.go",
+      94
+    ],
+    [
+      "internal/seo/performance_analyzer.go",
+      88
+    ]
+  ],
+  "categories": {
+    "string_literals": 3747,
+    "log_messages": 18,
+    "mime_types": 36,
+    "regex_patterns": 106,
+    "error_messages": 93,
+    "file_paths": 152,
+    "status_values": 93,
+    "css_selectors": 51,
+    "file_extensions": 40,
+    "numeric_strings": 8,
+    "json_field_names": 13,
+    "http_methods": 36,
+    "html_tags": 3,
+    "config_keys": 20,
+    "time_formats": 2,
+    "database_operations": 2,
+    "url_schemes": 5
+  },
+  "delta_sprints": [
+    {
+      "sprint": "DELTA-1",
+      "target": "debug_constants.go",
+      "filepath": "internal/constants/debug_constants.go",
+      "violations": 234,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-2",
+      "target": "server.go",
+      "filepath": "internal/web/server.go",
+      "violations": 184,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-3",
+      "target": "orchestrator_constants.go",
+      "filepath": "internal/constants/orchestrator_constants.go",
+      "violations": 175,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-4",
+      "target": "qa_agent_constants.go",
+      "filepath": "internal/constants/qa_agent_constants.go",
+      "violations": 173,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-5",
+      "target": "api.go",
+      "filepath": "internal/integration/api.go",
+      "violations": 150,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-6",
+      "target": "data_integrity_constants.go",
+      "filepath": "internal/constants/data_integrity_constants.go",
+      "violations": 149,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-7",
+      "target": "security_agent_constants.go",
+      "filepath": "internal/constants/security_agent_constants.go",
+      "violations": 145,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-8",
+      "target": "web_server_constants.go",
+      "filepath": "internal/constants/web_server_constants.go",
+      "violations": 142,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-9",
+      "target": "seo_constants.go",
+      "filepath": "internal/constants/seo_constants.go",
+      "violations": 125,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-10",
+      "target": "tag_analyzer_constants.go",
+      "filepath": "internal/constants/tag_analyzer_constants.go",
+      "violations": 125,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-11",
+      "target": "security_agent.go",
+      "filepath": "tests/agents/security/security_agent.go",
+      "violations": 112,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-12",
+      "target": "ngram_analyzer.go",
+      "filepath": "internal/semantic/ngram_analyzer.go",
+      "violations": 112,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-13",
+      "target": "recommendation_engine_constants.go",
+      "filepath": "internal/constants/recommendation_engine_constants.go",
+      "violations": 111,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-14",
+      "target": "integration_test.go",
+      "filepath": "internal/integration/integration_test.go",
+      "violations": 108,
+      "effort": "2h"
+    },
+    {
+      "sprint": "DELTA-15",
+      "target": "data_integrity_agent.go",
+      "filepath": "tests/agents/data/data_integrity_agent.go",
+      "violations": 104,
+      "effort": "2h"
+    }
+  ],
+  "violations": [
+    {
+      "line": 10,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/config\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/main.go",
+      "context": "\"firesalamander/internal/config\""
+    },
+    {
+      "line": 17,
+      "category": "string_literals",
+      "value": "\"Failed to load configuration: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/main.go",
+      "context": "log.Fatalf(\"Failed to load configuration: %v\", err)"
+    },
+    {
+      "line": 20,
+      "category": "string_literals",
+      "value": "\"Fire Salamander MVP starting on port %d...\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/main.go",
+      "context": "log.Printf(\"Fire Salamander MVP starting on port %d...\", cfg.Port)"
+    },
+    {
+      "line": 20,
+      "category": "log_messages",
+      "value": "\"Fire Salamander MVP starting on port %d...\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/main.go",
+      "context": "log.Printf(\"Fire Salamander MVP starting on port %d...\", cfg.Port)"
+    },
+    {
+      "line": 4,
+      "category": "string_literals",
+      "value": "\"context\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"context\""
+    },
+    {
+      "line": 5,
+      "category": "string_literals",
+      "value": "\"flag\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"flag\""
+    },
+    {
+      "line": 9,
+      "category": "string_literals",
+      "value": "\"os/signal\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"os/signal\""
+    },
+    {
+      "line": 10,
+      "category": "string_literals",
+      "value": "\"syscall\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"syscall\""
+    },
+    {
+      "line": 11,
+      "category": "string_literals",
+      "value": "\"time\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"time\""
+    },
+    {
+      "line": 13,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/config\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"firesalamander/internal/config\""
+    },
+    {
+      "line": 14,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/constants\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"firesalamander/internal/constants\""
+    },
+    {
+      "line": 15,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/integration\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"firesalamander/internal/integration\""
+    },
+    {
+      "line": 16,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/web\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "\"firesalamander/internal/web\""
+    },
+    {
+      "line": 33,
+      "category": "string_literals",
+      "value": "\"config\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "configPath = flag.String(\"config\", constants.DefaultConfigPath, constants.ConfigPathDescription)"
+    },
+    {
+      "line": 34,
+      "category": "string_literals",
+      "value": "\"port\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "port       = flag.Int(\"port\", constants.DefaultPortInt, constants.PortDescription)"
+    },
+    {
+      "line": 35,
+      "category": "string_literals",
+      "value": "\"version\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "showVersion = flag.Bool(\"version\", false, constants.ShowVersionDescription)"
+    },
+    {
+      "line": 36,
+      "category": "string_literals",
+      "value": "\"web-only\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "webOnly    = flag.Bool(\"web-only\", false, constants.WebOnlyDescription)"
+    },
+    {
+      "line": 37,
+      "category": "string_literals",
+      "value": "\"api-only\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "apiOnly    = flag.Bool(\"api-only\", false, constants.APIOnlyDescription)"
+    },
+    {
+      "line": 38,
+      "category": "string_literals",
+      "value": "\"verbose\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "verbose    = flag.Bool(\"verbose\", false, constants.VerboseDescription)"
+    },
+    {
+      "line": 44,
+      "category": "string_literals",
+      "value": "\"Fire Salamander v%s\\n\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "fmt.Printf(\"Fire Salamander v%s\\n\", version)"
+    },
+    {
+      "line": 172,
+      "category": "string_literals",
+      "value": "\"erreur lecture configuration: %w\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "return nil, fmt.Errorf(\"erreur lecture configuration: %w\", err)"
+    },
+    {
+      "line": 243,
+      "category": "string_literals",
+      "value": "\"Appuyez sur Ctrl+C pour arrêter Fire Salamander\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/fire-salamander/main.go",
+      "context": "fmt.Println(\"Appuyez sur Ctrl+C pour arrêter Fire Salamander\")"
+    },
+    {
+      "line": 4,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/constants\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"firesalamander/internal/constants\""
+    },
+    {
+      "line": 6,
+      "category": "string_literals",
+      "value": "\"html/template\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"html/template\""
+    },
+    {
+      "line": 8,
+      "category": "string_literals",
+      "value": "\"net/http\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"net/http\""
+    },
+    {
+      "line": 9,
+      "category": "string_literals",
+      "value": "\"net/url\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"net/url\""
+    },
+    {
+      "line": 11,
+      "category": "string_literals",
+      "value": "\"path/filepath\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"path/filepath\""
+    },
+    {
+      "line": 12,
+      "category": "string_literals",
+      "value": "\"time\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"time\""
+    },
+    {
+      "line": 14,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/api\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"firesalamander/internal/api\""
+    },
+    {
+      "line": 15,
+      "category": "string_literals",
+      "value": "\"firesalamander/internal/config\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "\"firesalamander/internal/config\""
+    },
+    {
+      "line": 91,
+      "category": "string_literals",
+      "value": "\"templates\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "templateDir := filepath.Join(\".\", \"templates\")"
+    },
+    {
+      "line": 95,
+      "category": "string_literals",
+      "value": "\"templates directory not found: %w\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "return fmt.Errorf(\"templates directory not found: %w\", err)"
+    },
+    {
+      "line": 101,
+      "category": "string_literals",
+      "value": "\"home.html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "homeTemplate, err = template.ParseFiles(filepath.Join(templateDir, \"home.html\"))"
+    },
+    {
+      "line": 103,
+      "category": "string_literals",
+      "value": "\"failed to parse home template: %w\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "return fmt.Errorf(\"failed to parse home template: %w\", err)"
+    },
+    {
+      "line": 106,
+      "category": "string_literals",
+      "value": "\"analyzing.html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "analyzingTemplate, err = template.ParseFiles(filepath.Join(templateDir, \"analyzing.html\"))"
+    },
+    {
+      "line": 108,
+      "category": "string_literals",
+      "value": "\"failed to parse analyzing template: %w\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "return fmt.Errorf(\"failed to parse analyzing template: %w\", err)"
+    },
+    {
+      "line": 111,
+      "category": "string_literals",
+      "value": "\"results.html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "resultsTemplate, err = template.ParseFiles(filepath.Join(templateDir, \"results.html\"))"
+    },
+    {
+      "line": 113,
+      "category": "string_literals",
+      "value": "\"failed to parse results template: %w\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "return fmt.Errorf(\"failed to parse results template: %w\", err)"
+    },
+    {
+      "line": 122,
+      "category": "string_literals",
+      "value": "\"Accueil\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title: \"Accueil\","
+    },
+    {
+      "line": 128,
+      "category": "string_literals",
+      "value": "\"Content-Type\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 128,
+      "category": "string_literals",
+      "value": "\"text/html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 128,
+      "category": "mime_types",
+      "value": "\"text/html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 129,
+      "category": "regex_patterns",
+      "value": "`<!DOCTYPE html><html><head><title>Fire Salamander</title></head><body><h1>Analysez votre SEO</h1></body></html>`",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Fire Salamander</title></head><body><h1>Analysez v..."
+    },
+    {
+      "line": 133,
+      "category": "string_literals",
+      "value": "\"home.html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "err := homeTemplate.ExecuteTemplate(w, \"home.html\", data)"
+    },
+    {
+      "line": 135,
+      "category": "string_literals",
+      "value": "\"Erreur template: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, fmt.Sprintf(\"Erreur template: %v\", err), http.StatusInternalServerError)"
+    },
+    {
+      "line": 148,
+      "category": "string_literals",
+      "value": "\"ID d'analyse ou URL manquant\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, \"ID d'analyse ou URL manquant\", http.StatusBadRequest)"
+    },
+    {
+      "line": 155,
+      "category": "string_literals",
+      "value": "\"URL invalide\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, \"URL invalide\", http.StatusBadRequest)"
+    },
+    {
+      "line": 155,
+      "category": "error_messages",
+      "value": "\"URL invalide\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, \"URL invalide\", http.StatusBadRequest)"
+    },
+    {
+      "line": 161,
+      "category": "string_literals",
+      "value": "\"Analyse\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title:    \"Analyse\","
+    },
+    {
+      "line": 179,
+      "category": "string_literals",
+      "value": "\"Analyse non trouvée\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, \"Analyse non trouvée\", http.StatusNotFound)"
+    },
+    {
+      "line": 185,
+      "category": "string_literals",
+      "value": "\"Analyse\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title:    \"Analyse\","
+    },
+    {
+      "line": 203,
+      "category": "string_literals",
+      "value": "\"Content-Type\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 203,
+      "category": "string_literals",
+      "value": "\"text/html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 203,
+      "category": "mime_types",
+      "value": "\"text/html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 204,
+      "category": "regex_patterns",
+      "value": "`<!DOCTYPE html><html><head><title>Analyse en cours</title></head><body><h1>Analyse en cours</h1><p>%s (%d%%)</p></body></html>`",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Analyse en cours</title></head><body><h1>Analyse e..."
+    },
+    {
+      "line": 208,
+      "category": "string_literals",
+      "value": "\"analyzing.html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "err := analyzingTemplate.ExecuteTemplate(w, \"analyzing.html\", data)"
+    },
+    {
+      "line": 210,
+      "category": "string_literals",
+      "value": "\"Erreur template: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, fmt.Sprintf(\"Erreur template: %v\", err), http.StatusInternalServerError)"
+    },
+    {
+      "line": 220,
+      "category": "string_literals",
+      "value": "\"example.com\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "urlParam = \"example.com\""
+    },
+    {
+      "line": 225,
+      "category": "string_literals",
+      "value": "\"Résultats\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title: \"Résultats\","
+    },
+    {
+      "line": 236,
+      "category": "string_literals",
+      "value": "\"Balises title manquantes\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title:       \"Balises title manquantes\","
+    },
+    {
+      "line": 238,
+      "category": "string_literals",
+      "value": "\"Certaines pages n'ont pas de balise title ou celle-ci est vide.\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Description: \"Certaines pages n'ont pas de balise title ou celle-ci est vide.\","
+    },
+    {
+      "line": 239,
+      "category": "file_paths",
+      "value": "\"/contact\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Pages:       []string{\"/contact\", \"/about\", \"/services\"},"
+    },
+    {
+      "line": 239,
+      "category": "file_paths",
+      "value": "\"/about\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Pages:       []string{\"/contact\", \"/about\", \"/services\"},"
+    },
+    {
+      "line": 239,
+      "category": "file_paths",
+      "value": "\"/services\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Pages:       []string{\"/contact\", \"/about\", \"/services\"},"
+    },
+    {
+      "line": 240,
+      "category": "string_literals",
+      "value": "\"Ajoutez une balise title unique et descriptive pour chaque page.\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Solution:    \"Ajoutez une balise title unique et descriptive pour chaque page.\","
+    },
+    {
+      "line": 243,
+      "category": "string_literals",
+      "value": "\"Images sans attribut alt\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title:       \"Images sans attribut alt\","
+    },
+    {
+      "line": 245,
+      "category": "string_literals",
+      "value": "\"Des images n'ont pas d'attribut alt pour l'accessibilité.\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Description: \"Des images n'ont pas d'attribut alt pour l'accessibilité.\","
+    },
+    {
+      "line": 246,
+      "category": "file_paths",
+      "value": "\"/home\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Pages:       []string{\"/home\", \"/gallery\"},"
+    },
+    {
+      "line": 246,
+      "category": "file_paths",
+      "value": "\"/gallery\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Pages:       []string{\"/home\", \"/gallery\"},"
+    },
+    {
+      "line": 247,
+      "category": "string_literals",
+      "value": "\"Ajoutez des attributs alt descriptifs à toutes vos images.\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Solution:    \"Ajoutez des attributs alt descriptifs à toutes vos images.\","
+    },
+    {
+      "line": 252,
+      "category": "string_literals",
+      "value": "\"Meta descriptions trop courtes\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title:       \"Meta descriptions trop courtes\","
+    },
+    {
+      "line": 254,
+      "category": "string_literals",
+      "value": "\"Certaines meta descriptions font moins de 120 caractères.\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Description: \"Certaines meta descriptions font moins de 120 caractères.\","
+    },
+    {
+      "line": 259,
+      "category": "string_literals",
+      "value": "\"Optimisation des mots-clés\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Title:       \"Optimisation des mots-clés\","
+    },
+    {
+      "line": 260,
+      "category": "string_literals",
+      "value": "\"Concentrez-vous sur ces mots-clés pour améliorer votre référencement.\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Description: \"Concentrez-vous sur ces mots-clés pour améliorer votre référencement.\","
+    },
+    {
+      "line": 261,
+      "category": "string_literals",
+      "value": "\"analyse\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Keywords:    []string{\"SEO\", \"analyse\", \"optimisation\", \"référencement\"},"
+    },
+    {
+      "line": 261,
+      "category": "string_literals",
+      "value": "\"optimisation\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Keywords:    []string{\"SEO\", \"analyse\", \"optimisation\", \"référencement\"},"
+    },
+    {
+      "line": 261,
+      "category": "string_literals",
+      "value": "\"référencement\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "Keywords:    []string{\"SEO\", \"analyse\", \"optimisation\", \"référencement\"},"
+    },
+    {
+      "line": 269,
+      "category": "string_literals",
+      "value": "\"Content-Type\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 269,
+      "category": "string_literals",
+      "value": "\"text/html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 269,
+      "category": "mime_types",
+      "value": "\"text/html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 270,
+      "category": "regex_patterns",
+      "value": "`<!DOCTYPE html><html><head><title>Résultats SEO</title></head><body><h1>Score Global SEO</h1><p>%s</p></body></html>`",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Résultats SEO</title></head><body><h1>Score Global..."
+    },
+    {
+      "line": 274,
+      "category": "string_literals",
+      "value": "\"results.html\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "err := resultsTemplate.ExecuteTemplate(w, \"results.html\", data)"
+    },
+    {
+      "line": 276,
+      "category": "string_literals",
+      "value": "\"Erreur template: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "http.Error(w, fmt.Sprintf(\"Erreur template: %v\", err), http.StatusInternalServerError)"
+    },
+    {
+      "line": 302,
+      "category": "file_paths",
+      "value": "\"/analyze\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "mux.HandleFunc(\"/analyze\", analyzeHandler)"
+    },
+    {
+      "line": 303,
+      "category": "file_paths",
+      "value": "\"/results\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "mux.HandleFunc(\"/results\", resultsHandler)"
+    },
+    {
+      "line": 306,
+      "category": "file_paths",
+      "value": "\"/api/analyze\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "mux.HandleFunc(\"/api/analyze\", api.AnalyzeHandler)"
+    },
+    {
+      "line": 307,
+      "category": "file_paths",
+      "value": "\"/api/status/\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "mux.HandleFunc(\"/api/status/\", api.StatusHandler)"
+    },
+    {
+      "line": 308,
+      "category": "file_paths",
+      "value": "\"/api/results/\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "mux.HandleFunc(\"/api/results/\", api.ResultsHandler)"
+    },
+    {
+      "line": 317,
+      "category": "string_literals",
+      "value": "\"Erreur chargement config: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "log.Fatalf(\"Erreur chargement config: %v\", err)"
+    },
+    {
+      "line": 322,
+      "category": "string_literals",
+      "value": "\"Erreur chargement templates: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "log.Fatalf(\"Erreur chargement templates: %v\", err)"
+    },
+    {
+      "line": 334,
+      "category": "string_literals",
+      "value": "\"Erreur serveur: %v\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main.go",
+      "context": "log.Fatalf(\"Erreur serveur: %v\", err)"
+    },
+    {
+      "line": 4,
+      "category": "string_literals",
+      "value": "\"net/http\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "\"net/http\""
+    },
+    {
+      "line": 5,
+      "category": "string_literals",
+      "value": "\"net/http/httptest\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "\"net/http/httptest\""
+    },
+    {
+      "line": 6,
+      "category": "string_literals",
+      "value": "\"net/url\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "\"net/url\""
+    },
+    {
+      "line": 7,
+      "category": "string_literals",
+      "value": "\"strings\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "\"strings\""
+    },
+    {
+      "line": 8,
+      "category": "string_literals",
+      "value": "\"testing\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "\"testing\""
+    },
+    {
+      "line": 22,
+      "category": "string_literals",
+      "value": "\"Expected status %d, got %d\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "t.Errorf(\"Expected status %d, got %d\", http.StatusOK, w.Code)"
+    },
+    {
+      "line": 26,
+      "category": "string_literals",
+      "value": "\"Fire Salamander\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "if !strings.Contains(body, \"Fire Salamander\") {"
+    },
+    {
+      "line": 27,
+      "category": "string_literals",
+      "value": "\"Expected page to contain 'Fire Salamander'\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "t.Error(\"Expected page to contain 'Fire Salamander'\")"
+    },
+    {
+      "line": 30,
+      "category": "string_literals",
+      "value": "\"Analysez votre SEO\"",
+      "file": "/Users/jeromegonzalez/claude-code/fire-salamander/cmd/server/main_test.go",
+      "context": "if !strings.Contains(body, \"Analysez votre SEO\") {"
+    }
+  ]
+}

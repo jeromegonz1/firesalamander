@@ -1,0 +1,872 @@
+{
+  "total_violations": 137,
+  "categories": {
+    "static_routes": 2,
+    "web_routes": 2,
+    "log_messages": 4,
+    "error_messages": 5,
+    "http_headers": 15,
+    "http_methods": 3,
+    "api_routes": 10,
+    "content_types": 6,
+    "status_values": 12,
+    "json_keys": 33,
+    "service_names": 5,
+    "file_extensions": 7,
+    "html_templates": 4,
+    "css_styles": 15,
+    "hardcoded_values": 14
+  },
+  "violations": [
+    {
+      "line": 68,
+      "category": "static_routes",
+      "value": "\"/static/\"",
+      "context": "ws.mux.Handle(\"/static/\", http.StripPrefix(\"/static/\", fileServer))"
+    },
+    {
+      "line": 68,
+      "category": "static_routes",
+      "value": "\"/static/\"",
+      "context": "ws.mux.Handle(\"/static/\", http.StripPrefix(\"/static/\", fileServer))"
+    },
+    {
+      "line": 77,
+      "category": "web_routes",
+      "value": "\"/web/health\"",
+      "context": "ws.mux.HandleFunc(\"/web/health\", ws.handleWebHealth)"
+    },
+    {
+      "line": 80,
+      "category": "web_routes",
+      "value": "\"/web/download/\"",
+      "context": "ws.mux.HandleFunc(\"/web/download/\", ws.handleDownload)"
+    },
+    {
+      "line": 82,
+      "category": "log_messages",
+      "value": "Routes web enregistr\u00e9es:",
+      "context": "log.Printf(\"Routes web enregistr\u00e9es:\")"
+    },
+    {
+      "line": 112,
+      "category": "error_messages",
+      "value": "Interface web non disponible",
+      "context": "http.Error(w, \"Interface web non disponible\", http.StatusInternalServerError)"
+    },
+    {
+      "line": 118,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html; charset=utf-8\")"
+    },
+    {
+      "line": 119,
+      "category": "http_headers",
+      "value": "Cache-Control",
+      "context": "w.Header().Set(\"Cache-Control\", \"no-cache, no-store, must-revalidate\")"
+    },
+    {
+      "line": 120,
+      "category": "http_headers",
+      "value": "X-Frame-Options",
+      "context": "w.Header().Set(\"X-Frame-Options\", \"DENY\")"
+    },
+    {
+      "line": 121,
+      "category": "http_headers",
+      "value": "X-Content-Type-Options",
+      "context": "w.Header().Set(\"X-Content-Type-Options\", \"nosniff\")"
+    },
+    {
+      "line": 122,
+      "category": "http_headers",
+      "value": "Content-Length",
+      "context": "w.Header().Set(\"Content-Length\", fmt.Sprintf(\"%d\", len(indexContent)))"
+    },
+    {
+      "line": 128,
+      "category": "log_messages",
+      "value": "Interface web servie: %s %s",
+      "context": "log.Printf(\"Interface web servie: %s %s\", r.Method, r.URL.Path)"
+    },
+    {
+      "line": 134,
+      "category": "http_headers",
+      "value": "Access-Control-Allow-Origin",
+      "context": "w.Header().Set(\"Access-Control-Allow-Origin\", \"*\")"
+    },
+    {
+      "line": 135,
+      "category": "http_headers",
+      "value": "Access-Control-Allow-Methods",
+      "context": "w.Header().Set(\"Access-Control-Allow-Methods\", \"GET, POST, PUT, DELETE, OPTIONS\")"
+    },
+    {
+      "line": 136,
+      "category": "http_headers",
+      "value": "Access-Control-Allow-Headers",
+      "context": "w.Header().Set(\"Access-Control-Allow-Headers\", \"Content-Type, Authorization, X-Requested-With\")"
+    },
+    {
+      "line": 139,
+      "category": "http_methods",
+      "value": "OPTIONS",
+      "context": "if r.Method == \"OPTIONS\" {"
+    },
+    {
+      "line": 149,
+      "category": "api_routes",
+      "value": "\"/api/v1/analyze\"",
+      "context": "case r.URL.Path == \"/api/v1/analyze\":"
+    },
+    {
+      "line": 151,
+      "category": "api_routes",
+      "value": "\"/api/v1/analyze/semantic\"",
+      "context": "case r.URL.Path == \"/api/v1/analyze/semantic\":"
+    },
+    {
+      "line": 153,
+      "category": "api_routes",
+      "value": "\"/api/v1/analyze/seo\"",
+      "context": "case r.URL.Path == \"/api/v1/analyze/seo\":"
+    },
+    {
+      "line": 155,
+      "category": "api_routes",
+      "value": "\"/api/v1/analyze/quick\"",
+      "context": "case r.URL.Path == \"/api/v1/analyze/quick\":"
+    },
+    {
+      "line": 157,
+      "category": "api_routes",
+      "value": "\"/api/v1/health\"",
+      "context": "case r.URL.Path == \"/api/v1/health\":"
+    },
+    {
+      "line": 159,
+      "category": "api_routes",
+      "value": "\"/api/v1/stats\"",
+      "context": "case r.URL.Path == \"/api/v1/stats\":"
+    },
+    {
+      "line": 161,
+      "category": "api_routes",
+      "value": "\"/api/v1/analyses\"",
+      "context": "case r.URL.Path == \"/api/v1/analyses\":"
+    },
+    {
+      "line": 163,
+      "category": "api_routes",
+      "value": "\"/api/v1/analysis/\"",
+      "context": "case strings.HasPrefix(r.URL.Path, \"/api/v1/analysis/\"):"
+    },
+    {
+      "line": 165,
+      "category": "api_routes",
+      "value": "\"/api/v1/info\"",
+      "context": "case r.URL.Path == \"/api/v1/info\":"
+    },
+    {
+      "line": 167,
+      "category": "api_routes",
+      "value": "\"/api/v1/version\"",
+      "context": "case r.URL.Path == \"/api/v1/version\":"
+    },
+    {
+      "line": 171,
+      "category": "error_messages",
+      "value": "API endpoint not found",
+      "context": "http.Error(w, \"API endpoint not found\", http.StatusNotFound)"
+    },
+    {
+      "line": 177,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 178,
+      "category": "error_messages",
+      "value": "Method not allowed",
+      "context": "http.Error(w, \"Method not allowed\", http.StatusMethodNotAllowed)"
+    },
+    {
+      "line": 182,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 182,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 185,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "\"status\":     \"healthy\","
+    },
+    {
+      "line": 185,
+      "category": "json_keys",
+      "value": "status",
+      "context": "\"status\":     \"healthy\","
+    },
+    {
+      "line": 186,
+      "category": "service_names",
+      "value": "Fire Salamander Web Server",
+      "context": "\"service\":    \"Fire Salamander Web Server\","
+    },
+    {
+      "line": 186,
+      "category": "json_keys",
+      "value": "service",
+      "context": "\"service\":    \"Fire Salamander Web Server\","
+    },
+    {
+      "line": 187,
+      "category": "json_keys",
+      "value": "version",
+      "context": "\"version\":    ws.config.App.Version,"
+    },
+    {
+      "line": 188,
+      "category": "json_keys",
+      "value": "timestamp",
+      "context": "\"timestamp\":  time.Now().Format(time.RFC3339),"
+    },
+    {
+      "line": 190,
+      "category": "json_keys",
+      "value": "components",
+      "context": "\"components\": map[string]string{"
+    },
+    {
+      "line": 191,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "\"web_server\":    \"healthy\","
+    },
+    {
+      "line": 192,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "\"static_files\":  \"healthy\","
+    },
+    {
+      "line": 193,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "\"api_proxy\":     \"healthy\","
+    },
+    {
+      "line": 194,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "\"orchestrator\":  \"healthy\","
+    },
+    {
+      "line": 205,
+      "category": "status_values",
+      "value": "unavailable",
+      "context": "health[\"components\"].(map[string]string)[\"orchestrator\"] = \"unavailable\""
+    },
+    {
+      "line": 205,
+      "category": "json_keys",
+      "value": "components",
+      "context": "health[\"components\"].(map[string]string)[\"orchestrator\"] = \"unavailable\""
+    },
+    {
+      "line": 206,
+      "category": "status_values",
+      "value": "degraded",
+      "context": "health[\"status\"] = \"degraded\""
+    },
+    {
+      "line": 206,
+      "category": "json_keys",
+      "value": "status",
+      "context": "health[\"status\"] = \"degraded\""
+    },
+    {
+      "line": 211,
+      "category": "json_keys",
+      "value": "status",
+      "context": "\"status\": \"%s\","
+    },
+    {
+      "line": 212,
+      "category": "json_keys",
+      "value": "service",
+      "context": "\"service\": \"%s\","
+    },
+    {
+      "line": 213,
+      "category": "json_keys",
+      "value": "version",
+      "context": "\"version\": \"%s\","
+    },
+    {
+      "line": 214,
+      "category": "json_keys",
+      "value": "timestamp",
+      "context": "\"timestamp\": \"%s\","
+    },
+    {
+      "line": 215,
+      "category": "json_keys",
+      "value": "components",
+      "context": "\"components\": %v"
+    },
+    {
+      "line": 217,
+      "category": "json_keys",
+      "value": "status",
+      "context": "health[\"status\"],"
+    },
+    {
+      "line": 218,
+      "category": "json_keys",
+      "value": "service",
+      "context": "health[\"service\"],"
+    },
+    {
+      "line": 219,
+      "category": "json_keys",
+      "value": "version",
+      "context": "health[\"version\"],"
+    },
+    {
+      "line": 220,
+      "category": "json_keys",
+      "value": "timestamp",
+      "context": "health[\"timestamp\"],"
+    },
+    {
+      "line": 221,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "`{\"web_server\":\"healthy\",\"static_files\":\"healthy\",\"api_proxy\":\"healthy\",\"orchestrator\":\"healthy\"}`,"
+    },
+    {
+      "line": 221,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "`{\"web_server\":\"healthy\",\"static_files\":\"healthy\",\"api_proxy\":\"healthy\",\"orchestrator\":\"healthy\"}`,"
+    },
+    {
+      "line": 221,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "`{\"web_server\":\"healthy\",\"static_files\":\"healthy\",\"api_proxy\":\"healthy\",\"orchestrator\":\"healthy\"}`,"
+    },
+    {
+      "line": 221,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "`{\"web_server\":\"healthy\",\"static_files\":\"healthy\",\"api_proxy\":\"healthy\",\"orchestrator\":\"healthy\"}`,"
+    },
+    {
+      "line": 227,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 228,
+      "category": "error_messages",
+      "value": "Method not allowed",
+      "context": "http.Error(w, \"Method not allowed\", http.StatusMethodNotAllowed)"
+    },
+    {
+      "line": 235,
+      "category": "error_messages",
+      "value": "Nom de fichier requis",
+      "context": "http.Error(w, \"Nom de fichier requis\", http.StatusBadRequest)"
+    },
+    {
+      "line": 239,
+      "category": "log_messages",
+      "value": "T\u00e9l\u00e9chargement demand\u00e9: %s",
+      "context": "log.Printf(\"T\u00e9l\u00e9chargement demand\u00e9: %s\", filename)"
+    },
+    {
+      "line": 246,
+      "category": "http_headers",
+      "value": "Content-Disposition",
+      "context": "w.Header().Set(\"Content-Disposition\", fmt.Sprintf(\"attachment; filename=%s\", filename))"
+    },
+    {
+      "line": 251,
+      "category": "file_extensions",
+      "value": "html",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 252,
+      "category": "content_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 252,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 253,
+      "category": "file_extensions",
+      "value": "pdf",
+      "context": "case \".pdf\":"
+    },
+    {
+      "line": 254,
+      "category": "content_types",
+      "value": "application/pdf",
+      "context": "w.Header().Set(\"Content-Type\", \"application/pdf\")"
+    },
+    {
+      "line": 254,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/pdf\")"
+    },
+    {
+      "line": 255,
+      "category": "file_extensions",
+      "value": "json",
+      "context": "case \".json\":"
+    },
+    {
+      "line": 256,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 256,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 257,
+      "category": "file_extensions",
+      "value": "csv",
+      "context": "case \".csv\":"
+    },
+    {
+      "line": 258,
+      "category": "content_types",
+      "value": "text/csv",
+      "context": "w.Header().Set(\"Content-Type\", \"text/csv\")"
+    },
+    {
+      "line": 258,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/csv\")"
+    },
+    {
+      "line": 260,
+      "category": "content_types",
+      "value": "application/octet-stream",
+      "context": "w.Header().Set(\"Content-Type\", \"application/octet-stream\")"
+    },
+    {
+      "line": 260,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/octet-stream\")"
+    },
+    {
+      "line": 272,
+      "category": "file_extensions",
+      "value": "html",
+      "context": "case \".html\":"
+    },
+    {
+      "line": 274,
+      "category": "file_extensions",
+      "value": "json",
+      "context": "case \".json\":"
+    },
+    {
+      "line": 276,
+      "category": "file_extensions",
+      "value": "csv",
+      "context": "case \".csv\":"
+    },
+    {
+      "line": 279,
+      "category": "service_names",
+      "value": "Rapport Fire Salamander - ",
+      "context": "return \"Rapport Fire Salamander - \" + filename"
+    },
+    {
+      "line": 285,
+      "category": "html_templates",
+      "value": "<!DOCTYPE html>",
+      "context": "return `<!DOCTYPE html>"
+    },
+    {
+      "line": 286,
+      "category": "html_templates",
+      "value": "<html lang=\"fr\">",
+      "context": "<html lang=\"fr\">"
+    },
+    {
+      "line": 287,
+      "category": "html_templates",
+      "value": "<head>",
+      "context": "<head>"
+    },
+    {
+      "line": 292,
+      "category": "css_styles",
+      "value": "font-family:",
+      "context": "body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }"
+    },
+    {
+      "line": 292,
+      "category": "css_styles",
+      "value": "margin:",
+      "context": "body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }"
+    },
+    {
+      "line": 292,
+      "category": "css_styles",
+      "value": "padding:",
+      "context": "body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }"
+    },
+    {
+      "line": 294,
+      "category": "css_styles",
+      "value": "font-size:",
+      "context": ".logo { font-size: 2rem; margin-bottom: 10px; }"
+    },
+    {
+      "line": 295,
+      "category": "css_styles",
+      "value": "font-size:",
+      "context": ".score { font-size: 3rem; font-weight: bold; color: #ff6b35; text-align: center; margin: 20px 0; }"
+    },
+    {
+      "line": 295,
+      "category": "css_styles",
+      "value": "color:",
+      "context": ".score { font-size: 3rem; font-weight: bold; color: #ff6b35; text-align: center; margin: 20px 0; }"
+    },
+    {
+      "line": 295,
+      "category": "css_styles",
+      "value": "margin:",
+      "context": ".score { font-size: 3rem; font-weight: bold; color: #ff6b35; text-align: center; margin: 20px 0; }"
+    },
+    {
+      "line": 296,
+      "category": "css_styles",
+      "value": "margin:",
+      "context": ".section { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }"
+    },
+    {
+      "line": 296,
+      "category": "css_styles",
+      "value": "padding:",
+      "context": ".section { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }"
+    },
+    {
+      "line": 296,
+      "category": "css_styles",
+      "value": "background:",
+      "context": ".section { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }"
+    },
+    {
+      "line": 297,
+      "category": "css_styles",
+      "value": "margin:",
+      "context": ".metric { display: flex; justify-content: space-between; margin: 10px 0; }"
+    },
+    {
+      "line": 298,
+      "category": "css_styles",
+      "value": "background:",
+      "context": ".recommendation { background: white; padding: 15px; margin: 10px 0; border-left: 4px solid #ff6b35; }"
+    },
+    {
+      "line": 298,
+      "category": "css_styles",
+      "value": "padding:",
+      "context": ".recommendation { background: white; padding: 15px; margin: 10px 0; border-left: 4px solid #ff6b35; }"
+    },
+    {
+      "line": 298,
+      "category": "css_styles",
+      "value": "margin:",
+      "context": ".recommendation { background: white; padding: 15px; margin: 10px 0; border-left: 4px solid #ff6b35; }"
+    },
+    {
+      "line": 301,
+      "category": "html_templates",
+      "value": "<body>",
+      "context": "<body>"
+    },
+    {
+      "line": 310,
+      "category": "hardcoded_values",
+      "value": "87",
+      "context": "<div class=\"score\">87/100</div>"
+    },
+    {
+      "line": 316,
+      "category": "hardcoded_values",
+      "value": "85",
+      "context": "<div class=\"metric\"><span>SEO Technique:</span><span>85/100</span></div>"
+    },
+    {
+      "line": 317,
+      "category": "hardcoded_values",
+      "value": "72",
+      "context": "<div class=\"metric\"><span>Performance:</span><span>72/100</span></div>"
+    },
+    {
+      "line": 318,
+      "category": "hardcoded_values",
+      "value": "90",
+      "context": "<div class=\"metric\"><span>Contenu:</span><span>90/100</span></div>"
+    },
+    {
+      "line": 319,
+      "category": "hardcoded_values",
+      "value": "88",
+      "context": "<div class=\"metric\"><span>Mobile:</span><span>88/100</span></div>"
+    },
+    {
+      "line": 334,
+      "category": "css_styles",
+      "value": "color:",
+      "context": "<footer style=\"text-align: center; margin-top: 50px; color: #666;\">"
+    },
+    {
+      "line": 345,
+      "category": "service_names",
+      "value": "Rapport Fire Salamander",
+      "context": "\"title\": \"Rapport Fire Salamander\","
+    },
+    {
+      "line": 345,
+      "category": "json_keys",
+      "value": "title",
+      "context": "\"title\": \"Rapport Fire Salamander\","
+    },
+    {
+      "line": 347,
+      "category": "json_keys",
+      "value": "version",
+      "context": "\"version\": \"` + ws.config.App.Version + `\","
+    },
+    {
+      "line": 359,
+      "category": "json_keys",
+      "value": "title",
+      "context": "\"title\": \"Optimiser les images\","
+    },
+    {
+      "line": 360,
+      "category": "json_keys",
+      "value": "description",
+      "context": "\"description\": \"Compresser les images pour am\u00e9liorer les temps de chargement\","
+    },
+    {
+      "line": 361,
+      "category": "json_keys",
+      "value": "priority",
+      "context": "\"priority\": \"high\","
+    },
+    {
+      "line": 362,
+      "category": "json_keys",
+      "value": "impact",
+      "context": "\"impact\": \"high\","
+    },
+    {
+      "line": 363,
+      "category": "json_keys",
+      "value": "effort",
+      "context": "\"effort\": \"medium\""
+    },
+    {
+      "line": 367,
+      "category": "json_keys",
+      "value": "title",
+      "context": "\"title\": \"Am\u00e9liorer les m\u00e9ta-descriptions\","
+    },
+    {
+      "line": 368,
+      "category": "json_keys",
+      "value": "description",
+      "context": "\"description\": \"Ajouter des m\u00e9ta-descriptions optimis\u00e9es sur les pages manquantes\","
+    },
+    {
+      "line": 369,
+      "category": "json_keys",
+      "value": "priority",
+      "context": "\"priority\": \"medium\","
+    },
+    {
+      "line": 370,
+      "category": "json_keys",
+      "value": "impact",
+      "context": "\"impact\": \"medium\","
+    },
+    {
+      "line": 371,
+      "category": "json_keys",
+      "value": "effort",
+      "context": "\"effort\": \"low\""
+    },
+    {
+      "line": 378,
+      "category": "json_keys",
+      "value": "title",
+      "context": "\"title\": \"Alignement contenu-SEO d\u00e9tect\u00e9\","
+    },
+    {
+      "line": 379,
+      "category": "json_keys",
+      "value": "description",
+      "context": "\"description\": \"Le titre de la page est coh\u00e9rent avec les mots-cl\u00e9s identifi\u00e9s\""
+    },
+    {
+      "line": 383,
+      "category": "hardcoded_values",
+      "value": "15.2s",
+      "context": "\"analysis_duration\": \"15.2s\","
+    },
+    {
+      "line": 395,
+      "category": "hardcoded_values",
+      "value": "87",
+      "context": "` + constants.TestExampleURL + `,87,85,72,90,88,Succ\u00e8s,` + time.Now().Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 395,
+      "category": "hardcoded_values",
+      "value": "85",
+      "context": "` + constants.TestExampleURL + `,87,85,72,90,88,Succ\u00e8s,` + time.Now().Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 395,
+      "category": "hardcoded_values",
+      "value": "72",
+      "context": "` + constants.TestExampleURL + `,87,85,72,90,88,Succ\u00e8s,` + time.Now().Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 395,
+      "category": "hardcoded_values",
+      "value": "90",
+      "context": "` + constants.TestExampleURL + `,87,85,72,90,88,Succ\u00e8s,` + time.Now().Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 395,
+      "category": "hardcoded_values",
+      "value": "88",
+      "context": "` + constants.TestExampleURL + `,87,85,72,90,88,Succ\u00e8s,` + time.Now().Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 396,
+      "category": "hardcoded_values",
+      "value": "72",
+      "context": "` + constants.TestDemoURL + `,72,78,65,85,70,Succ\u00e8s,` + time.Now().AddDate(0, 0, -1).Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 396,
+      "category": "hardcoded_values",
+      "value": "85",
+      "context": "` + constants.TestDemoURL + `,72,78,65,85,70,Succ\u00e8s,` + time.Now().AddDate(0, 0, -1).Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 397,
+      "category": "hardcoded_values",
+      "value": "88",
+      "context": "` + constants.TestDemoFrURL + `,91,92,88,95,89,Succ\u00e8s,` + time.Now().AddDate(0, 0, -2).Format(\"02/01/2006\") + `"
+    },
+    {
+      "line": 424,
+      "category": "service_names",
+      "value": "\u2705 Serveur web Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s",
+      "context": "log.Printf(\"\u2705 Serveur web Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s\")"
+    },
+    {
+      "line": 424,
+      "category": "log_messages",
+      "value": "\u2705 Serveur web Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s",
+      "context": "log.Printf(\"\u2705 Serveur web Fire Salamander d\u00e9marr\u00e9 avec succ\u00e8s\")"
+    },
+    {
+      "line": 431,
+      "category": "service_names",
+      "value": "Arr\u00eat du serveur web Fire Salamander",
+      "context": "log.Printf(\"Arr\u00eat du serveur web Fire Salamander\")"
+    },
+    {
+      "line": 438,
+      "category": "json_keys",
+      "value": "service",
+      "context": "\"service\":    \"web_server\","
+    },
+    {
+      "line": 439,
+      "category": "status_values",
+      "value": "running",
+      "context": "\"status\":     \"running\","
+    },
+    {
+      "line": 439,
+      "category": "json_keys",
+      "value": "status",
+      "context": "\"status\":     \"running\","
+    },
+    {
+      "line": 441,
+      "category": "json_keys",
+      "value": "version",
+      "context": "\"version\":    ws.config.App.Version,"
+    }
+  ],
+  "constants_mapping": {
+    "\"Interface web non disponible\"": "constants.MsgWebInterfaceUnavailable",
+    "\"API endpoint not found\"": "constants.MsgAPIEndpointNotFound",
+    "\"Method not allowed\"": "constants.MsgMethodNotAllowed",
+    "\"Nom de fichier requis\"": "constants.MsgFilenameRequired",
+    "\"application/json\"": "constants.ContentTypeJSON",
+    "\"text/html\"": "constants.ContentTypeHTML",
+    "\"application/pdf\"": "constants.ContentTypePDF",
+    "\"text/csv\"": "constants.ContentTypeCSV",
+    "\"application/octet-stream\"": "constants.ContentTypeOctetStream",
+    "\"Content-Type\"": "constants.HeaderContentType",
+    "\"Cache-Control\"": "constants.HeaderCacheControl",
+    "\"X-Frame-Options\"": "constants.HeaderXFrameOptions",
+    "\"X-Content-Type-Options\"": "constants.HeaderXContentType",
+    "\"Content-Length\"": "constants.HeaderContentLength",
+    "\"Access-Control-Allow-Origin\"": "constants.HeaderCORSOrigin",
+    "\"Access-Control-Allow-Methods\"": "constants.HeaderCORSMethods",
+    "\"Access-Control-Allow-Headers\"": "constants.HeaderCORSHeaders",
+    "\"Content-Disposition\"": "constants.HeaderContentDisposition",
+    "\"healthy\"": "constants.HealthStatusHealthy",
+    "\"unavailable\"": "constants.HealthStatusUnavailable",
+    "\"degraded\"": "constants.HealthStatusDegraded",
+    "\"running\"": "constants.ServiceStatusRunning",
+    "\"OPTIONS\"": "constants.HTTPMethodOPTIONS",
+    "\"GET\"": "constants.HTTPMethodGET",
+    "\"/static/\"": "constants.StaticRoute",
+    "\"Fire Salamander Web Server\"": "constants.ServiceNameWebServer"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "target_file": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/integration/integration_test.go",
+  "total_detected": 32,
+  "eliminated_count": 10,
+  "backup_path": "/Users/jeromegonzalez/claude-code/fire-salamander/internal/integration/integration_test.go.delta4_backup",
+  "changes": [
+    {
+      "line": 7,
+      "old": "\"testing\"",
+      "new": "constants.IntegrationTestNameTesting",
+      "context": "\"testing\""
+    },
+    {
+      "line": 198,
+      "old": "\"test_task_123\"",
+      "new": "constants.IntegrationTestDataTask + \"_123\"",
+      "context": "TaskID:         \"test_task_123\","
+    },
+    {
+      "line": 206,
+      "old": "\"content\"",
+      "new": "constants.IntegrationAnalysisTypeContent",
+      "context": "\"content\":     80.0,"
+    },
+    {
+      "line": 207,
+      "old": "\"technical\"",
+      "new": "constants.IntegrationAnalysisTypeTechnical",
+      "context": "\"technical\":   70.0,"
+    },
+    {
+      "line": 208,
+      "old": "\"performance\"",
+      "new": "constants.IntegrationTestCategoryPerformance",
+      "context": "\"performance\": 75.0,"
+    },
+    {
+      "line": 221,
+      "old": "\"test_insight\"",
+      "new": "constants.IntegrationTestDataInsight",
+      "context": "Type:        \"test_insight\","
+    },
+    {
+      "line": 226,
+      "old": "\"seo\"",
+      "new": "constants.IntegrationAgentSEO",
+      "context": "Modules:     []string{\"seo\", \"semantic\"},"
+    },
+    {
+      "line": 226,
+      "old": "\"semantic\"",
+      "new": "constants.IntegrationAgentSemantic",
+      "context": "Modules:     []string{\"seo\", \"semantic\"},"
+    },
+    {
+      "line": 232,
+      "old": "\"test_action_1\"",
+      "new": "constants.IntegrationTestDataAction + \"_1\"",
+      "context": "ID:          \"test_action_1\","
+    },
+    {
+      "line": 238,
+      "old": "\"seo\"",
+      "new": "constants.IntegrationAgentSEO",
+      "context": "Module:      \"seo\","
+    }
+  ]
+}

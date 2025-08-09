@@ -6,6 +6,8 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	
+	"firesalamander/internal/constants"
 )
 
 // TestHomeHandler - Test du handler de la page d'accueil
@@ -42,7 +44,7 @@ func TestAnalyzeHandler(t *testing.T) {
 	}{
 		{
 			name:           "Valid URL",
-			url:            "https://example.com",
+			url:            constants.TestURLExample,
 			expectedStatus: http.StatusOK,
 			expectedBody:   "Analyse en cours",
 		},
@@ -90,7 +92,7 @@ func TestAnalyzeHandler(t *testing.T) {
 // TestResultsHandler - Test du handler des résultats
 func TestResultsHandler(t *testing.T) {
 	// GIVEN - Une requête GET vers les résultats
-	req := httptest.NewRequest(http.MethodGet, "/results?url=https://example.com", nil)
+	req := httptest.NewRequest(http.MethodGet, "/results" + constants.TestQueryURLParam, nil)
 	w := httptest.NewRecorder()
 
 	// WHEN - Appel du handler
@@ -124,8 +126,8 @@ func TestServer(t *testing.T) {
 		expectedStatus int
 	}{
 		{"/", http.StatusOK},
-		{"/analyze?url=https://example.com", http.StatusOK},
-		{"/results?url=https://example.com", http.StatusOK},
+		{constants.TestQueryAnalyzeParam, http.StatusOK},
+		{constants.TestQueryResultsParam, http.StatusOK},
 		{"/nonexistent", http.StatusNotFound},
 	}
 
@@ -162,7 +164,7 @@ func TestTemplateData(t *testing.T) {
 	// Test AnalyzingData
 	analyzingData := AnalyzingData{
 		Title:    "Analyse",
-		URL:      "https://example.com",
+		URL:      constants.TestURLExample,
 		Progress: 50,
 	}
 

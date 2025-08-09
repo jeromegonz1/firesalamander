@@ -376,3 +376,36 @@ const (
 const (
 	OrchestratorTimeVariable = "Variable"
 )
+
+// ========================================
+// SPRINT 5 - REAL ORCHESTRATOR CONSTANTS
+// ========================================
+
+// Real Orchestrator Status Values
+const (
+	OrchestratorStatusStarting    = "starting"
+	OrchestratorStatusCrawling    = "crawling" 
+	OrchestratorStatusAnalyzing   = "analyzing"
+	OrchestratorStatusAggregating = "aggregating"
+	OrchestratorStatusComplete    = "complete"
+)
+
+// Real Orchestrator Configuration
+const (
+	RealOrchestratorMaxPages        = 20
+	RealOrchestratorMaxWorkers      = 10
+	RealOrchestratorInitialWorkers  = 5
+	RealOrchestratorAnalysisTimeout = 120000000000 // 2 minutes in nanoseconds
+)
+
+// Test Constants
+const (
+	MaxAnalysisWaitTime        = 30000000000  // 30 seconds in nanoseconds
+	AnalysisPollingInterval    = 500000000    // 500ms in nanoseconds
+	TestServerDelay            = 100000000    // 100ms in nanoseconds
+	MaxUpdateChecks            = 20
+	UpdateCheckInterval        = 250000000    // 250ms in nanoseconds
+	ErrorAnalysisTimeout       = 10000000000  // 10 seconds in nanoseconds
+	ErrorCheckInterval         = 500000000    // 500ms in nanoseconds
+	MaxAcceptableAnalysisTime  = 120000000000 // 2 minutes in nanoseconds
+)

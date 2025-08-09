@@ -21,11 +21,33 @@ type AppConfig struct {
 	Description string `yaml:"description"`
 }
 
-// CrawlerConfig holds crawler configuration
+// CrawlerConfig holds crawler configuration for Sprint 3 Parallel Crawler
 type CrawlerConfig struct {
+	// Basic crawler config
 	UserAgent string `yaml:"user_agent"`
 	Workers   int    `yaml:"workers"`
 	RateLimit string `yaml:"rate_limit"` // Format: "10/s" or "60/m"
+	
+	// SPRINT 3: Parallel Crawler Configuration
+	// Worker Pool Configuration
+	MinWorkers     int `yaml:"min_workers"`
+	MaxWorkers     int `yaml:"max_workers"`
+	InitialWorkers int `yaml:"initial_workers"`
+	
+	// Performance Adaptation Thresholds
+	FastThresholdMs      int `yaml:"fast_threshold_ms"`       // < 500ms = fast site
+	SlowThresholdMs      int `yaml:"slow_threshold_ms"`       // > 2000ms = slow site
+	ErrorThresholdPercent int `yaml:"error_threshold_percent"` // > 10% errors = problematic
+	AdaptIntervalSeconds  int `yaml:"adapt_interval_seconds"`  // Check every 5s
+	
+	// Crawler Limits
+	MaxPages       int `yaml:"max_pages"`
+	MaxDepth       int `yaml:"max_depth"`
+	TimeoutSeconds int `yaml:"timeout_seconds"`
+	DelayMs        int `yaml:"delay_ms"`
+	
+	// Politeness
+	RespectRobotsTxt bool `yaml:"respect_robots_txt"`
 }
 
 // Config holds application configuration

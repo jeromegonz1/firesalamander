@@ -1,0 +1,410 @@
+{
+  "total_violations": 60,
+  "categories": {
+    "http_endpoints": 17,
+    "http_headers": 6,
+    "content_types": 2,
+    "mime_types": 2,
+    "http_methods": 12,
+    "api_success_messages": 1,
+    "log_messages": 1,
+    "json_field_names": 7,
+    "api_error_messages": 5,
+    "status_values": 2,
+    "agent_names": 2,
+    "analysis_types": 2,
+    "test_categories": 1
+  },
+  "violations": [
+    {
+      "line": 80,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze",
+      "context": "api.mux.HandleFunc(\"/api/v1/analyze\", api.withMiddleware(api.handleAnalyze))"
+    },
+    {
+      "line": 81,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze/semantic",
+      "context": "api.mux.HandleFunc(\"/api/v1/analyze/semantic\", api.withMiddleware(api.handleSemanticAnalysis))"
+    },
+    {
+      "line": 82,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze/seo",
+      "context": "api.mux.HandleFunc(\"/api/v1/analyze/seo\", api.withMiddleware(api.handleSEOAnalysis))"
+    },
+    {
+      "line": 83,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze/quick",
+      "context": "api.mux.HandleFunc(\"/api/v1/analyze/quick\", api.withMiddleware(api.handleQuickAnalysis))"
+    },
+    {
+      "line": 86,
+      "category": "http_endpoints",
+      "value": "api/v1/health",
+      "context": "api.mux.HandleFunc(\"/api/v1/health\", api.withMiddleware(api.handleHealth))"
+    },
+    {
+      "line": 87,
+      "category": "http_endpoints",
+      "value": "api/v1/stats",
+      "context": "api.mux.HandleFunc(\"/api/v1/stats\", api.withMiddleware(api.handleStats))"
+    },
+    {
+      "line": 88,
+      "category": "http_endpoints",
+      "value": "api/v1/analyses",
+      "context": "api.mux.HandleFunc(\"/api/v1/analyses\", api.withMiddleware(api.handleAnalyses))"
+    },
+    {
+      "line": 89,
+      "category": "http_endpoints",
+      "value": "api/v1/analysis/",
+      "context": "api.mux.HandleFunc(\"/api/v1/analysis/\", api.withMiddleware(api.handleAnalysisDetails))"
+    },
+    {
+      "line": 92,
+      "category": "http_endpoints",
+      "value": "api/v1/info",
+      "context": "api.mux.HandleFunc(\"/api/v1/info\", api.withMiddleware(api.handleInfo))"
+    },
+    {
+      "line": 93,
+      "category": "http_endpoints",
+      "value": "api/v1/version",
+      "context": "api.mux.HandleFunc(\"/api/v1/version\", api.withMiddleware(api.handleVersion))"
+    },
+    {
+      "line": 100,
+      "category": "http_headers",
+      "value": "Access-Control-Allow-Origin",
+      "context": "w.Header().Set(\"Access-Control-Allow-Origin\", \"*\")"
+    },
+    {
+      "line": 101,
+      "category": "http_headers",
+      "value": "Access-Control-Allow-Methods",
+      "context": "w.Header().Set(\"Access-Control-Allow-Methods\", \"GET, POST, PUT, DELETE, OPTIONS\")"
+    },
+    {
+      "line": 102,
+      "category": "http_headers",
+      "value": "Access-Control-Allow-Headers",
+      "context": "w.Header().Set(\"Access-Control-Allow-Headers\", \"Content-Type, Authorization, X-Requested-With\")"
+    },
+    {
+      "line": 105,
+      "category": "content_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 105,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 105,
+      "category": "mime_types",
+      "value": "application/json",
+      "context": "w.Header().Set(\"Content-Type\", \"application/json\")"
+    },
+    {
+      "line": 108,
+      "category": "http_headers",
+      "value": "X-Fire-Salamander-Version",
+      "context": "w.Header().Set(\"X-Fire-Salamander-Version\", config.Version())"
+    },
+    {
+      "line": 115,
+      "category": "http_methods",
+      "value": "OPTIONS",
+      "context": "if r.Method == \"OPTIONS\" {"
+    },
+    {
+      "line": 125,
+      "category": "api_success_messages",
+      "value": "\"API Response: %s %s completed in %v\"",
+      "context": "log.Printf(\"API Response: %s %s completed in %v\", r.Method, r.URL.Path, duration)"
+    },
+    {
+      "line": 125,
+      "category": "log_messages",
+      "value": "\"API Response: %s %s completed in %v\"",
+      "context": "log.Printf(\"API Response: %s %s completed in %v\", r.Method, r.URL.Path, duration)"
+    },
+    {
+      "line": 156,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 161,
+      "category": "content_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 161,
+      "category": "http_headers",
+      "value": "Content-Type",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 161,
+      "category": "mime_types",
+      "value": "text/html",
+      "context": "w.Header().Set(\"Content-Type\", \"text/html\")"
+    },
+    {
+      "line": 188,
+      "category": "json_field_names",
+      "value": "url",
+      "context": "<pre>{\"url\": \"` + constants.TestExampleURL + `\", \"type\": \"full\", \"options\": {...}}</pre>"
+    },
+    {
+      "line": 188,
+      "category": "json_field_names",
+      "value": "type",
+      "context": "<pre>{\"url\": \"` + constants.TestExampleURL + `\", \"type\": \"full\", \"options\": {...}}</pre>"
+    },
+    {
+      "line": 236,
+      "category": "http_methods",
+      "value": "POST",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 243,
+      "category": "api_error_messages",
+      "value": "\"Requ\u00eate JSON invalide: \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 283,
+      "category": "http_methods",
+      "value": "POST",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 290,
+      "category": "api_error_messages",
+      "value": "\"Requ\u00eate JSON invalide: \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 315,
+      "category": "http_methods",
+      "value": "POST",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 322,
+      "category": "api_error_messages",
+      "value": "\"Requ\u00eate JSON invalide: \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 347,
+      "category": "http_methods",
+      "value": "POST",
+      "context": "if r.Method != \"POST\" {"
+    },
+    {
+      "line": 354,
+      "category": "api_error_messages",
+      "value": "\"Requ\u00eate JSON invalide: \"",
+      "context": "api.sendError(w, \"Requ\u00eate JSON invalide: \"+err.Error(), http.StatusBadRequest)"
+    },
+    {
+      "line": 379,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 387,
+      "category": "status_values",
+      "value": "healthy",
+      "context": "Status:    \"healthy\","
+    },
+    {
+      "line": 398,
+      "category": "status_values",
+      "value": "degraded",
+      "context": "health.Status = \"degraded\""
+    },
+    {
+      "line": 409,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 420,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 433,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 439,
+      "category": "http_endpoints",
+      "value": "api/v1/analysis/",
+      "context": "path := strings.TrimPrefix(r.URL.Path, \"/api/v1/analysis/\")"
+    },
+    {
+      "line": 448,
+      "category": "api_error_messages",
+      "value": "\"ID d'analyse invalide\"",
+      "context": "api.sendError(w, \"ID d'analyse invalide\", http.StatusBadRequest)"
+    },
+    {
+      "line": 464,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 470,
+      "category": "json_field_names",
+      "value": "name",
+      "context": "\"name\":        api.config.App.Name,"
+    },
+    {
+      "line": 472,
+      "category": "json_field_names",
+      "value": "description",
+      "context": "\"description\": \"API d'analyse SEO et s\u00e9mantique avanc\u00e9e\","
+    },
+    {
+      "line": 474,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze",
+      "context": "\"analyze\":          \"/api/v1/analyze\","
+    },
+    {
+      "line": 475,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze/semantic",
+      "context": "\"semantic\":         \"/api/v1/analyze/semantic\","
+    },
+    {
+      "line": 475,
+      "category": "json_field_names",
+      "value": "semantic",
+      "context": "\"semantic\":         \"/api/v1/analyze/semantic\","
+    },
+    {
+      "line": 475,
+      "category": "agent_names",
+      "value": "semantic",
+      "context": "\"semantic\":         \"/api/v1/analyze/semantic\","
+    },
+    {
+      "line": 475,
+      "category": "analysis_types",
+      "value": "semantic",
+      "context": "\"semantic\":         \"/api/v1/analyze/semantic\","
+    },
+    {
+      "line": 476,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze/seo",
+      "context": "\"seo\":              \"/api/v1/analyze/seo\","
+    },
+    {
+      "line": 476,
+      "category": "json_field_names",
+      "value": "seo",
+      "context": "\"seo\":              \"/api/v1/analyze/seo\","
+    },
+    {
+      "line": 476,
+      "category": "agent_names",
+      "value": "seo",
+      "context": "\"seo\":              \"/api/v1/analyze/seo\","
+    },
+    {
+      "line": 476,
+      "category": "analysis_types",
+      "value": "seo",
+      "context": "\"seo\":              \"/api/v1/analyze/seo\","
+    },
+    {
+      "line": 476,
+      "category": "test_categories",
+      "value": "seo",
+      "context": "\"seo\":              \"/api/v1/analyze/seo\","
+    },
+    {
+      "line": 477,
+      "category": "http_endpoints",
+      "value": "api/v1/analyze/quick",
+      "context": "\"quick\":            \"/api/v1/analyze/quick\","
+    },
+    {
+      "line": 478,
+      "category": "http_endpoints",
+      "value": "api/v1/health",
+      "context": "\"health\":           \"/api/v1/health\","
+    },
+    {
+      "line": 479,
+      "category": "http_endpoints",
+      "value": "api/v1/stats",
+      "context": "\"stats\":            \"/api/v1/stats\","
+    },
+    {
+      "line": 502,
+      "category": "http_methods",
+      "value": "GET",
+      "context": "if r.Method != \"GET\" {"
+    },
+    {
+      "line": 509,
+      "category": "json_field_names",
+      "value": "name",
+      "context": "\"name\":       api.config.App.Name,"
+    }
+  ],
+  "constants_mapping": {
+    "\"api/v1/analyze\"": "constants.APIEndpointApiv1Analyze",
+    "\"api/v1/analyze/semantic\"": "constants.APIEndpointApiv1Analyzesemantic",
+    "\"api/v1/analyze/seo\"": "constants.APIEndpointApiv1Analyzeseo",
+    "\"api/v1/analyze/quick\"": "constants.APIEndpointApiv1Analyzequick",
+    "\"api/v1/health\"": "constants.APIEndpointApiv1Health",
+    "\"api/v1/stats\"": "constants.APIEndpointApiv1Stats",
+    "\"api/v1/analyses\"": "constants.APIEndpointApiv1Analyses",
+    "\"api/v1/analysis/\"": "constants.APIEndpointApiv1Analysis",
+    "\"api/v1/info\"": "constants.APIEndpointApiv1Info",
+    "\"api/v1/version\"": "constants.APIEndpointApiv1Version",
+    "\"OPTIONS\"": "constants.APIMethodOptions",
+    "\"GET\"": "constants.APIMethodGet",
+    "\"POST\"": "constants.APIMethodPost",
+    "\"application/json\"": "constants.APIContentTypeJSON",
+    "\"text/html\"": "constants.APIContentTypeHTML",
+    "\"Access-Control-Allow-Origin\"": "constants.APIHeaderAccessControlAlloworigin",
+    "\"Access-Control-Allow-Methods\"": "constants.APIHeaderAccessControlAllowmethods",
+    "\"Access-Control-Allow-Headers\"": "constants.APIHeaderAccessControlAllowheaders",
+    "\"Content-Type\"": "constants.APIHeaderContentType",
+    "\"X-Fire-Salamander-Version\"": "constants.APIHeaderXFiresalamanderversion",
+    "\"url\"": "constants.APIJSONFieldURL",
+    "\"type\"": "constants.APIJSONFieldType",
+    "\"name\"": "constants.APIJSONFieldName",
+    "\"description\"": "constants.APIJSONFieldDescription",
+    "\"healthy\"": "constants.APIStatusHealthy",
+    "\"degraded\"": "constants.APIStatusDegraded",
+    "\"semantic\"": "constants.APIAgentSemantic",
+    "\"seo\"": "constants.APIAgentSEO"
+  }
+}

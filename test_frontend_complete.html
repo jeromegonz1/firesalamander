@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Frontend Complet - Fire Salamander</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff6136;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .link-button:hover {
+            background: #e55030;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .success { color: #16a34a; }
+        .warning { color: #fbbf24; }
+        .error { color: #dc2626; }
+    </style>
+</head>
+<body>
+    <h1>🔥 Test Frontend Complet - Fire Salamander</h1>
+    
+    <div class="test-section">
+        <h2>📍 URLs de Test</h2>
+        <p>Serveur local : <code>http://localhost:8080</code></p>
+        <div>
+            <a href="http://localhost:8080/" target="_blank" class="link-button">Page d'accueil</a>
+            <a href="http://localhost:8080/results?url=https://example.com" target="_blank" class="link-button">Résultats directs</a>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Test 1: Vérification expandedIssues</h2>
+        <ol>
+            <li>Ouvrir <a href="http://localhost:8080/results?url=https://example.com" target="_blank">la page des résultats</a></li>
+            <li>Ouvrir la console (F12) et exécuter :
+                <pre><code>Alpine.$data(document.querySelector('[x-data]')).expandedIssues</code></pre>
+            </li>
+            <li>Vérifier que l'objet contient : <code>{"issue0": false, "issue1": false, "warning0": false}</code></li>
+            <li>Cliquer sur "Balises title manquantes (3)"</li>
+            <li>Vérifier que :
+                <ul>
+                    <li>La section s'ouvre avec animation</li>
+                    <li>La flèche tourne (↓ → ↑)</li>
+                    <li>Le contenu détaillé apparaît</li>
+                </ul>
+            </li>
+            <li>Recliquer pour vérifier que la section se ferme</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🚀 Test 2: Flow Complet avec API</h2>
+        <ol>
+            <li>Aller sur <a href="http://localhost:8080/" target="_blank">la page d'accueil</a></li>
+            <li>Entrer <code>https://example.com</code> dans le champ URL</li>
+            <li>Cliquer sur "ANALYSER MON SITE"</li>
+            <li>Vérifier sur la page d'analyse :
+                <ul>
+                    <li class="success">✓ La barre de progression avance (0% → 100%)</li>
+                    <li class="success">✓ Les statistiques se mettent à jour en temps réel</li>
+                    <li class="success">✓ Les phases s'activent progressivement</li>
+                </ul>
+            </li>
+            <li>À 100%, vérifier la redirection automatique vers les résultats</li>
+            <li>Sur la page des résultats, tester les expandedIssues</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Test 3: Vérifications Console</h2>
+        <p>Dans la console du navigateur, vérifier :</p>
+        <ul>
+            <li>Pas d'erreurs JavaScript en rouge</li>
+            <li>Alpine.js est bien initialisé : <code>window.Alpine !== undefined</code></li>
+            <li>Les appels API fonctionnent (onglet Network)</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 Test 4: Responsive</h2>
+        <p>Tester sur différentes tailles d'écran (F12 → Toggle device toolbar) :</p>
+        <ul>
+            <li>Mobile (iPhone SE) : 375px</li>
+            <li>Tablette (iPad) : 768px</li>
+            <li>Desktop : 1920px</li>
+        </ul>
+    </div>
+
+    <script>
+        // Vérifier si le serveur est accessible
+        fetch('http://localhost:8080/')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Serveur Fire Salamander accessible');
+                } else {
+                    console.error('❌ Erreur serveur:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('❌ Serveur non accessible:', error);
+                alert('⚠️ Le serveur Fire Salamander n\'est pas démarré sur http://localhost:8080');
+            });
+    </script>
+</body>
+</html>
