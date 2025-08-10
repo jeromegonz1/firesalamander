@@ -206,6 +206,344 @@ AVANT de merger :
 
 ---
 
+## 🧪 TDD OBLIGATOIRE (Test-Driven Development)
+
+### ❌ INTERDIT - Développer sans tests
+
+```go
+// ❌ NE JAMAIS écrire le code avant les tests
+func CrawlWebsite(url string) {
+    // Code écrit sans tests
+}
+```
+
+### ✅ OBLIGATOIRE - Process TDD
+
+```go
+// 1️⃣ RED - Écrire le test d'abord
+func TestCrawlWebsite(t *testing.T) {
+    result := CrawlWebsite("https://example.com")
+    assert.NotNil(t, result)
+    assert.Equal(t, 200, result.StatusCode)
+}
+// Le test DOIT échouer (RED)
+
+// 2️⃣ GREEN - Écrire le minimum de code pour passer
+func CrawlWebsite(url string) *Result {
+    return &Result{StatusCode: 200}
+}
+// Le test passe (GREEN)
+
+// 3️⃣ REFACTOR - Améliorer le code
+func CrawlWebsite(url string) *Result {
+    // Version améliorée avec vrai crawling
+}
+```
+
+### 📊 Coverage Minimum
+
+```bash
+# OBLIGATOIRE : Coverage > 80%
+go test ./... -cover
+
+# Si coverage < 80% → AJOUTER DES TESTS
+```
+
+### 🔍 Tests de Sécurité Obligatoires
+
+Pour TOUT code avec goroutines/boucles :
+
+```go
+// ✅ OBLIGATOIRE - Test avec timeout
+func TestCrawler_MustTerminate(t *testing.T) {
+    done := make(chan bool)
+    
+    go func() {
+        crawler.Crawl("https://example.com")
+        done <- true
+    }()
+    
+    select {
+    case <-done:
+        // OK
+    case <-time.After(5 * time.Second):
+        t.Fatal("❌ TIMEOUT - Possible boucle infinie!")
+    }
+}
+
+// ✅ OBLIGATOIRE - Test anti-boucle
+func TestCrawler_NoInfiniteLoop(t *testing.T) {
+    // Page qui se référence elle-même
+    result := crawler.Crawl("https://self-referencing.com")
+    assert.Less(t, len(result.Pages), 100, "Trop de pages = boucle")
+}
+```
+
+---
+
+## 🚫 NO HARDCODING POLICY
+
+### ❌ INTERDIT - Valeurs en dur
+
+```go
+// ❌ JAMAIS de valeurs hardcodées
+port := "8080"                    // ❌
+url := "http://localhost:8080"    // ❌
+timeout := 30                     // ❌
+message := "Error occurred"       // ❌
+```
+
+### ✅ OBLIGATOIRE - Tout dans config/constants
+
+```go
+// ✅ Configuration externalisée
+port := os.Getenv("PORT")
+url := config.BaseURL
+timeout := constants.DefaultTimeout
+message := constants.ErrGeneric
+
+// internal/constants/constants.go
+const (
+    DefaultPort = "8080"
+    DefaultTimeout = 30
+    ErrGeneric = "Error occurred"
+)
+```
+
+### 🔍 Vérification Automatique
+
+```bash
+# Avant CHAQUE commit
+./scripts/detect-hardcoding.sh
+
+# Si violations > 0 → CORRIGER
+grep -r '"[A-Za-z]\{5,\}"' --include="*.go" . --exclude-dir=archive
+```
+
+---
+
+## 🎭 UTILISATION DE L'ÉQUIPE MULTI-AGENTS
+
+Tu n'es PAS seul ! Tu es une ÉQUIPE complète :
+
+### 🏗️ ARCHITECTE - Avant de coder
+
+**En tant qu'ARCHITECTE, je dois :**
+- [ ] Définir l'architecture de la solution
+- [ ] Choisir les patterns appropriés (SOLID)
+- [ ] Valider que ça respecte les standards
+- [ ] Décider si on modifie ou remplace
+
+**Questions de l'Architecte :**
+- "Cette solution est-elle SOLID ?"
+- "Y a-t-il un pattern existant ?"
+- "Comment ça s'intègre ?"
+
+### 👨‍💻 DEVELOPER - Pendant le code
+
+**En tant que DEVELOPER, je dois :**
+- [ ] Écrire les tests d'abord (TDD)
+- [ ] Implémenter le minimum viable
+- [ ] Refactorer pour la qualité
+- [ ] Commenter le "pourquoi"
+
+**Process du Developer :**
+1. RED - Test écrit
+2. GREEN - Code minimal
+3. REFACTOR - Amélioration
+
+### 🧪 QA ENGINEER - Après le code
+
+**En tant que QA ENGINEER, je dois :**
+- [ ] Vérifier TOUS les tests passent
+- [ ] Tester les edge cases
+- [ ] Valider la performance
+- [ ] Prendre des screenshots (UI)
+
+**Tests du QA :**
+- Tests unitaires : `go test ./...`
+- Tests E2E : Playwright
+- Tests de charge : Bombardier
+- Screenshots : Pour prouver
+
+### 🔍 CODE QUALITY INSPECTOR - Validation
+
+**En tant qu'INSPECTOR, je dois :**
+- [ ] 0 hardcoding toléré
+- [ ] Coverage > 80% exigé
+- [ ] Pas de doublons acceptés
+- [ ] Complexité < 10
+
+**Commandes de l'Inspector :**
+- `golangci-lint run`
+- `go test -cover ./...`
+- `./scripts/check-no-duplicates.sh`
+- `gocyclo -over 10 .`
+
+### 📝 TECH WRITER - Documentation
+
+**En tant que WRITER, je dois :**
+- [ ] Mettre à jour PROJECT_STATUS.md
+- [ ] Documenter les décisions (ADR)
+- [ ] Écrire les commentaires de code
+- [ ] Tenir l'historique
+
+**Documentation du Writer :**
+- Après CHAQUE feature
+- Dans PROJECT_STATUS.md
+- Format chronologique
+- Avec métriques
+
+### 🎯 WORKFLOW D'ÉQUIPE
+
+Pour CHAQUE tâche :
+1. 🏗️ **ARCHITECTE** : "Voici l'approche..."
+2. 👨‍💻 **DEVELOPER** : "Tests rouges... code... tests verts!"
+3. 🧪 **QA ENGINEER** : "Tous les tests passent + screenshots"
+4. 🔍 **INSPECTOR** : "0 violations, coverage 85%"
+5. 📝 **WRITER** : "PROJECT_STATUS.md mis à jour"
+
+---
+
+## 🛡️ PATTERNS DE SÉCURITÉ OBLIGATOIRES
+
+### SafeCrawler Pattern (Anti-boucle)
+
+```go
+// ✅ OBLIGATOIRE pour tout crawler
+type SafeCrawler struct {
+    visitedURLs sync.Map  // Thread-safe
+    maxPages    int       // Limite absolue
+    timeout     time.Duration
+}
+
+func (c *SafeCrawler) Crawl(url string) {
+    // Circuit breaker
+    ctx, cancel := context.WithTimeout(context.Background(), c.timeout)
+    defer cancel()
+    
+    // Anti-boucle
+    if _, visited := c.visitedURLs.LoadOrStore(url, true); visited {
+        return // Déjà visité
+    }
+    
+    // Limite pages
+    if c.pagesCount >= c.maxPages {
+        return
+    }
+}
+```
+
+### Error Handling Pattern
+
+```go
+// ❌ JAMAIS
+if err != nil {
+    panic(err)  // ❌ INTERDIT en production
+}
+
+// ✅ TOUJOURS
+if err != nil {
+    return fmt.Errorf("operation failed: %w", err)
+}
+```
+
+---
+
+## 📋 CHECKLIST UNIVERSELLE
+
+### 🚀 Avant de commencer TOUTE tâche
+
+**PRÉ-DÉVELOPPEMENT :**
+- [ ] J'ai lu DEVELOPMENT_GUIDE.md
+- [ ] J'ai lu PROJECT_STATUS.md
+- [ ] J'ai vérifié si le code existe déjà
+- [ ] J'ai activé mon équipe multi-agents
+
+**TDD :**
+- [ ] Tests écrits AVANT le code
+- [ ] Tests sont ROUGES d'abord
+- [ ] Code minimal pour GREEN
+- [ ] Refactoring effectué
+
+**QUALITÉ :**
+- [ ] 0 hardcoding (vérifié)
+- [ ] Coverage > 80%
+- [ ] Pas de doublons
+- [ ] Pas de panic()
+
+**DOCUMENTATION :**
+- [ ] PROJECT_STATUS.md mis à jour
+- [ ] Commentaires "pourquoi" ajoutés
+- [ ] ADR si décision importante
+
+### 🎯 Commande de validation TOTALE
+
+```bash
+#!/bin/bash
+# scripts/validate-all.sh
+
+echo "🔍 Fire Salamander - Complete Validation"
+
+# 1. Pas de doublons
+./scripts/check-no-duplicates.sh || exit 1
+
+# 2. Pas de hardcoding
+./scripts/detect-hardcoding.sh || exit 1
+
+# 3. Tests passent
+go test ./... || exit 1
+
+# 4. Coverage suffisant
+coverage=$(go test ./... -cover | grep -o '[0-9]*\.[0-9]*%' | head -1 | sed 's/%//')
+if (( $(echo "$coverage < 80" | bc -l) )); then
+    echo "❌ Coverage insuffisant: $coverage%"
+    exit 1
+fi
+
+# 5. Build OK
+go build ./... || exit 1
+
+echo "✅ ALL VALIDATIONS PASSED!"
+```
+
+---
+
+## 🚨 CONSÉQUENCES DU NON-RESPECT
+
+Si ces règles ne sont PAS suivies :
+- Code rejeté en review
+- Sprint invalidé
+- Refactoring obligatoire
+- Post-mortem requis
+
+**Incidents passés dus au non-respect :**
+- 2025-08-09 : 6 doublons → 2h de nettoyage
+- 2025-08-09 : Boucle infinie → Système down
+- 2025-08-07 : 1,862 hardcodings → 10h de corrections
+
+---
+
+## 📚 RÈGLES D'OR - À MÉMORISER
+
+1. **TESTER** d'abord, **CODER** ensuite
+2. **MODIFIER** l'existant, ne pas **DUPLIQUER**
+3. **ZÉRO** hardcoding, **TOUT** en config
+4. **UTILISER** l'équipe, pas coder seul
+5. **DOCUMENTER** immédiatement
+
+---
+
+## 🔗 RÉFÉRENCES ESSENTIELLES
+
+- [TDD Guide](https://martinfowler.com/articles/practical-test-pyramid.html)
+- [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
+- [Go Best Practices](https://golang.org/doc/effective_go.html)
+- [Clean Code](https://blog.cleancoder.com/)
+- [PROJECT_STATUS.md](./PROJECT_STATUS.md) - État actuel du projet
+
+---
+
 ## 🔧 SCRIPTS DE VALIDATION
 
 ### check-no-duplicates.sh

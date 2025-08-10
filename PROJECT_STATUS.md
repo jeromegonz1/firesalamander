@@ -43,10 +43,17 @@
 
 ---
 
-## 📚 Guides Obligatoires
-- [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) - **À LIRE AVANT TOUT DEV**
-- Anti-doublons : `./scripts/check-no-duplicates.sh`
-- Formation : Post-mortem incident doublons (2025-08-09)
+## 📚 GUIDES OBLIGATOIRES
+
+### ⚠️ À LIRE AVANT TOUT DÉVELOPPEMENT
+- **[DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)** - Guide complet (TDD, No hardcoding, Anti-doublons)
+- Validation : `./scripts/validate-all.sh`
+- Équipe : 5 agents à utiliser
+
+### 🔍 Scripts de validation
+- `./scripts/check-no-duplicates.sh` - Détecte doublons
+- `./scripts/detect-hardcoding.sh` - Détecte hardcoding  
+- `./scripts/validate-all.sh` - Validation complète
 
 ---
 
