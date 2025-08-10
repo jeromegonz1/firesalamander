@@ -43,6 +43,13 @@
 
 ---
 
+## 📚 Guides Obligatoires
+- [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) - **À LIRE AVANT TOUT DEV**
+- Anti-doublons : `./scripts/check-no-duplicates.sh`
+- Formation : Post-mortem incident doublons (2025-08-09)
+
+---
+
 ## 🏗️ PRINCIPES D'ARCHITECTURE NON-NÉGOCIABLES
 
 ### 1. **TDD OBLIGATOIRE** ✅
@@ -139,6 +146,28 @@
 ---
 
 ## 📜 Historique Chronologique
+
+### 🔥 INCIDENT CRITIQUE RÉSOLU - Élimination Doublons - 2025-08-09
+
+#### 🚨 PROBLÈME MAJEUR DÉTECTÉ
+- **6 fichiers dupliqués critiques** : orchestrator, analyzer, handler
+- **Confusion totale** : "real_" vs versions originales  
+- **Tests échouent** : Conflits entre versions multiples
+- **Routes multiples** : `/api/fake/`, `/api/legacy/`, `/api/real/`
+
+#### ⚡ ACTIONS CORRECTIVES IMMÉDIATES
+1. ✅ **Suppression doublons** : orchestrator.go(25KB), analyzer.go(11KB), handlers.go(6KB)
+2. ✅ **Renommage unifié** : real_*.go → *.go (noms propres)
+3. ✅ **Routes nettoyées** : Une seule route par endpoint
+4. ✅ **Guide créé** : [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)
+5. ✅ **Script automatique** : `./scripts/check-no-duplicates.sh`
+
+#### 📊 RÉSULTATS OBTENUS
+- **Doublons** : 6 → 0 ✅ (100% éliminés)
+- **Architecture** : Confusion → Single Source of Truth ✅
+- **Tests MCP** : 8/8 PASS ✅  
+- **Tests SafeCrawler** : 7/7 PASS ✅
+- **Maintenance** : Effort divisé par 2 ✅
 
 ### ✅ Sprint 6 - Persistance MCP + Safety - 2025-08-09 (EN COURS)
 
