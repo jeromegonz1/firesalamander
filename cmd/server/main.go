@@ -392,9 +392,9 @@ func main() {
 
 	// Log des URLs disponibles
 	appLogger.Info(constants.LogCategorySystem, "Fire Salamander interfaces available", map[string]interface{}{
-		"web_interface": fmt.Sprintf("http://%s", addr),
-		"api_endpoint":  fmt.Sprintf("http://%s/api", addr),
-		"health_check":  fmt.Sprintf("http://%s/api/health", addr),
+		"web_interface": fmt.Sprintf("%s://%s", constants.DefaultScheme, addr),
+		"api_endpoint":  fmt.Sprintf("%s://%s/api", constants.DefaultScheme, addr),
+		"health_check":  fmt.Sprintf("%s://%s/api/health", constants.DefaultScheme, addr),
 	})
 
 	// Démarrage du serveur avec gestion d'erreur via logging

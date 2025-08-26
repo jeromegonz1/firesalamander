@@ -26,8 +26,8 @@ type SEORecommendation struct {
 	Priority     Priority               `json:"priority"`
 	Impact       Impact                 `json:"impact"`
 	Effort       Effort                 `json:"effort"`
-	Actions      []ActionItem           `json:"actions"`
-	Resources    []Resource             `json:"resources"`
+	Actions      []ActionItem                `json:"actions"`
+	Resources    []RecommendationResource    `json:"resources"`
 	Metrics      []string               `json:"metrics"`
 	Tags         []string               `json:"tags"`
 }
@@ -54,6 +54,12 @@ type ActionItem struct {
 	Description string `json:"description"`
 	Technical   bool   `json:"technical"`
 	Estimated   string `json:"estimated_time"`
+}
+
+// RecommendationResource represents a helpful resource for implementing recommendations
+type RecommendationResource struct {
+	URL  string `json:"url"`
+	Type string `json:"type"`
 }
 
 // Priority niveau de priorité
@@ -104,14 +110,15 @@ func NewRecommendationEngine() *RecommendationEngine {
 func (re *RecommendationEngine) GenerateRecommendations(analysis *RealPageAnalysis) []SEORecommendation {
 	var recommendations []SEORecommendation
 
-	// 1. Recommandations basées sur les balises
-	recommendations = append(recommendations, re.generateTagRecommendations(&analysis.TagAnalysis)...)
+	// TODO: Fix field mapping after duplicates elimination
+	// 1. Recommandations basées sur le titre
+	// recommendations = append(recommendations, re.generateTitleRecommendations(&analysis.Title)...)
 
-	// 2. Recommandations basées sur les performances
-	recommendations = append(recommendations, re.generatePerformanceRecommendations(&analysis.PerformanceMetrics)...)
+	// 2. Recommandations basées sur la performance  
+	// recommendations = append(recommendations, re.generatePerformanceRecommendations(&analysis.Performance)...)
 
-	// 3. Recommandations basées sur l'audit technique
-	recommendations = append(recommendations, re.generateTechnicalRecommendations(&analysis.TechnicalAudit)...)
+	// 3. Recommandations basées sur le contenu
+	// recommendations = append(recommendations, re.generateContentRecommendations(&analysis.Content)...)
 
 	// 4. Recommandations générales basées sur les scores
 	recommendations = append(recommendations, re.generateScoreBasedRecommendations(analysis)...)
@@ -324,23 +331,20 @@ func (re *RecommendationEngine) generateScoreBasedRecommendations(analysis *Real
 	var recs []SEORecommendation
 
 	// Score global faible
-	if analysis.OverallScore < constants.RecommendationScoreThresholdLow {
-		recs = append(recs, re.createRecommendation(constants.RecommendationTemplateIDOverallSEOAudit, map[string]interface{}{
-			"current_score": fmt.Sprintf("%.1f", analysis.OverallScore),
-			"target":        constants.RecommendationTargetScore,
+	if analysis.TotalScore < 50 {
+		recs = append(recs, re.createRecommendation("overall-seo-audit", map[string]interface{}{
+			"current_score": fmt.Sprintf("%d", analysis.TotalScore),
+			"target":        "70+",
 		}))
 	}
 
-	// Scores par catégorie
-	for category, score := range analysis.CategoryScores {
-		if score < constants.RecommendationCategoryThresholdLow { // Score < 50%
-			recs = append(recs, re.createRecommendation(fmt.Sprintf("improve-%s", category), map[string]interface{}{
-				"category":      category,
-				"current_score": fmt.Sprintf("%.1f%%", score*100),
-				"target":        constants.RecommendationTargetScore,
-			}))
-		}
-	}
+	// TODO: Re-enable CategoryScores after field mapping
+	// CategoryScores field doesn't exist in RealPageAnalysis yet
+	// for category, score := range analysis.CategoryScores {
+	//     if score < 0.5 {
+	//         recs = append(recs, re.createRecommendation(...))
+	//     }
+	// }
 
 	return recs
 }
@@ -389,9 +393,9 @@ func (re *RecommendationEngine) createRecommendation(templateID string, params m
 
 	// Créer les ressources
 	for _, resourceTemplate := range template.Resources {
-		resource := Resource{
+		resource := RecommendationResource{
 			URL:  resourceTemplate,
-			Type: constants.RecommendationResourceTypeDoc,
+			Type: "documentation",
 		}
 		rec.Resources = append(rec.Resources, resource)
 	}
@@ -490,102 +494,102 @@ func (re *RecommendationEngine) deduplicateRecommendations(recommendations []SEO
 
 // initPriorityRules initialise les règles de priorité
 func (re *RecommendationEngine) initPriorityRules() {
-	re.priorityRules[constants.RecommendationTemplateIDMissingTitle] = constants.RecommendationRuleMissingTitle
-	re.priorityRules[constants.RecommendationTemplateIDMissingMetaDesc] = constants.RecommendationRuleMissingMetaDesc
-	re.priorityRules[constants.RecommendationTemplateIDMigrateHTTPS] = constants.RecommendationRuleMigrateHTTPS
-	re.priorityRules[constants.RecommendationTemplateIDMissingViewport] = constants.RecommendationRuleMissingMetaDesc
-	re.priorityRules[constants.RecommendationTemplateIDImproveLCP] = constants.RecommendationRuleImproveLCP
-	re.priorityRules[constants.RecommendationTemplateIDMissingH1] = constants.RecommendationRuleMissingH1
-	// ... plus de règles
+	re.priorityRules["missing-title"] = 90
+	re.priorityRules["missing-meta-desc"] = 80
+	re.priorityRules["migrate-https"] = 85
+	re.priorityRules["missing-viewport"] = 70
+	re.priorityRules["improve-lcp"] = 75
+	re.priorityRules["missing-h1"] = 80
+	// More rules can be added here
 }
 
 // initRecommendationTemplates initialise les templates de recommandations
 func (re *RecommendationEngine) initRecommendationTemplates() {
 	// Template: Titre manquant
-	re.templates[constants.RecommendationTemplateIDMissingTitle] = RecommendationTemplate{
-		ID:          constants.RecommendationTemplateIDMissingTitle,
-		Title:       constants.RecommendationTitleAddPageTitle,
-		Description: constants.RecommendationDescMissingTitle,
-		Category:    constants.RecommendationCategoryTags,
+	re.templates["missing-title"] = RecommendationTemplate{
+		ID:          "missing-title",
+		Title:       "Add Page Title",
+		Description: "This page is missing a title tag. Add one to improve SEO.",
+		Category:    "Tags",
 		Priority:    PriorityCritical,
 		Impact:      ImpactHigh,
 		Effort:      EffortLow,
 		Actions: []string{
-			constants.RecommendationActionAddTitleTag,
-			constants.RecommendationActionIncludeKeywords,
-			constants.RecommendationActionRespectLength,
+			"Add a <title> tag to the HTML head",
+			"Include relevant keywords in the title",
+			"Keep title between 30-60 characters",
 		},
 		Resources: []string{
-			constants.GoogleTitleLinkDocs,
+			"https://developers.google.com/search/docs/beginner/seo-starter-guide#create-good-titles",
 		},
-		Metrics: []string{constants.RecommendationMetricCTR, constants.RecommendationMetricSERPPosition},
-		Tags:    []string{constants.RecommendationTagCritical, constants.RecommendationTagTags, constants.RecommendationTagOnPage},
+		Metrics: []string{"CTR", "SERP Position"},
+		Tags:    []string{"critical", "tags", "on-page"},
 	}
 
 	// Template: Meta description manquante
-	re.templates[constants.RecommendationTemplateIDMissingMetaDesc] = RecommendationTemplate{
-		ID:          constants.RecommendationTemplateIDMissingMetaDesc,
-		Title:       constants.RecommendationTitleAddMetaDesc,
-		Description: constants.RecommendationDescMissingMetaDesc,
-		Category:    constants.RecommendationCategoryTags,
+	re.templates["missing-meta-desc"] = RecommendationTemplate{
+		ID:          "missing-meta-desc",
+		Title:       "Add Meta Description",
+		Description: "This page is missing a meta description. Add one to improve click-through rates.",
+		Category:    "Tags",
 		Priority:    PriorityHigh,
 		Impact:      ImpactHigh,
 		Effort:      EffortLow,
 		Actions: []string{
-			constants.RecommendationActionAddMetaDesc,
-			constants.RecommendationActionIncludeCTA,
-			constants.RecommendationActionRespectLength,
+			"Add a meta description tag to HTML head",
+			"Include a compelling call-to-action",
+			"Keep description between 120-160 characters",
 		},
 		Resources: []string{
-			constants.GoogleSnippetDocs,
+			"https://developers.google.com/search/docs/advanced/appearance/snippet",
 		},
-		Metrics: []string{constants.RecommendationMetricCTR, constants.RecommendationMetricImpressions},
-		Tags:    []string{constants.RecommendationTagMeta, constants.RecommendationTagTags, constants.RecommendationTagCTR},
+		Metrics: []string{"CTR", "Impressions"},
+		Tags:    []string{"meta", "tags", "ctr"},
 	}
 
 	// Template: Migration HTTPS
-	re.templates[constants.RecommendationTemplateIDMigrateHTTPS] = RecommendationTemplate{
-		ID:          constants.RecommendationTemplateIDMigrateHTTPS,
-		Title:       constants.RecommendationTitleMigrateHTTPS,
-		Description: constants.RecommendationDescMigrateHTTPS,
-		Category:    constants.RecommendationCategorySecurity,
+	re.templates["migrate-https"] = RecommendationTemplate{
+		ID:          "migrate-https",
+		Title:       "Migrate to HTTPS",
+		Description: "This site is not using HTTPS. Migrate to HTTPS for better security and SEO.",
+		Category:    "Security",
 		Priority:    PriorityCritical,
 		Impact:      ImpactHigh,
 		Effort:      EffortHigh,
 		Actions: []string{
-			constants.RecommendationActionGetSSLCert,
-			constants.RecommendationActionConfigureHTTPS,
-			constants.RecommendationActionRedirectHTTPS,
-			constants.RecommendationActionUpdateLinks,
+			"Obtain SSL certificate from certificate authority",
+			"Configure HTTPS on web server",
+			"Set up HTTP to HTTPS redirects",
+			"Update all internal links to use HTTPS",
 		},
 		Resources: []string{
-			constants.GoogleHTTPSDocs,
+			"https://developers.google.com/web/fundamentals/security/encrypt-in-transit/why-https",
 		},
-		Metrics: []string{constants.RecommendationMetricTrustSignals, constants.RecommendationMetricRankingBoost},
-		Tags:    []string{constants.RecommendationTagCritical, constants.RecommendationTagSecurity, constants.RecommendationTagTechnical},
+		Metrics: []string{"Trust Signals", "Ranking Boost"},
+		Tags:    []string{"critical", "security", "technical"},
 	}
 
 	// Template: Core Web Vitals - LCP
-	re.templates[constants.RecommendationTemplateIDImproveLCP] = RecommendationTemplate{
-		ID:          constants.RecommendationTemplateIDImproveLCP,
-		Title:       constants.RecommendationTitleImproveLCP,
-		Description: constants.RecommendationDescImproveLCP,
-		Category:    constants.RecommendationCategoryPerformance,
+	re.templates["improve-lcp"] = RecommendationTemplate{
+		ID:          "improve-lcp",
+		Title:       "Improve Largest Contentful Paint",
+		Description: "The Largest Contentful Paint (LCP) is slower than recommended. Optimize for better Core Web Vitals.",
+		Category:    "Performance",
 		Priority:    PriorityHigh,
 		Impact:      ImpactHigh,
 		Effort:      EffortMedium,
 		Actions: []string{
-			constants.RecommendationActionOptimizeImages,
-			constants.RecommendationActionImproveServer,
-			constants.RecommendationActionPreloadResources,
-			constants.RecommendationActionUseCDN,
+			"Optimize and compress images",
+			"Improve server response times",
+			"Preload important resources",
+			"Use a content delivery network (CDN)",
 		},
 		Resources: []string{
-			constants.WebDevLCPDocs,
+			"https://web.dev/lcp/",
 		},
-		Metrics: []string{constants.RecommendationMetricLCP, constants.RecommendationMetricPageExperience, constants.RecommendationMetricCoreWebVitals},
-		Tags:    []string{constants.RecommendationCategoryPerformance, constants.RecommendationTagCoreWebVitals, constants.RecommendationTagLCP},
+		Metrics: []string{"LCP", "Page Experience", "Core Web Vitals"},
+		Tags:    []string{"performance", "core-web-vitals", "lcp"},
 	}
 
-	// ... Ajouter plus de templates selon les besoins
+	// More templates can be added here
 }

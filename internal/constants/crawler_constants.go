@@ -70,6 +70,41 @@ const (
 )
 
 // ========================================
+// HTTP CLIENT & NETWORK CONSTANTS
+// ========================================
+
+// HTTP Client Limits
+const (
+	DefaultMaxRedirects          = 10
+	DefaultMaxIdleConns         = 100
+	DefaultMaxIdleConnsPerHost  = 10
+	DefaultRequestRetries       = 3
+	DefaultBackoffMultiplier    = 2.0
+)
+
+// Body Size Limits
+const (
+	DefaultMaxBodySize1MB  = 1024 * 1024      // 1MB pour crawlPage
+	DefaultMaxBodySize10MB = 10 * 1024 * 1024 // 10MB pour fetcher
+	DefaultMaxBodySize50MB = 50 * 1024 * 1024 // 50MB limite absolue
+)
+
+// Monitoring & Adaptation Constants
+const (
+	DefaultMonitoringIntervalMs     = 100  // Fréquence monitoring
+	DefaultMetricsHistorySize      = 100   // Taille historique métriques
+	DefaultMinMetricsForAdaptation = 5     // Minimum data points pour adaptation
+	DefaultProgressReportingIntervalMs = 1000 // Rapport progrès toutes les 1s
+)
+
+// Sitemap Constants
+const (
+	DefaultSitemapMaxURLs     = 50000    // Limite Google standard
+	DefaultSitemapPriority    = 0.5      // Priorité par défaut
+	DefaultSitemapChangeFreq  = "weekly" // Fréquence par défaut
+)
+
+// ========================================
 // EXISTING CRAWLER CONSTANTS (PRESERVED)
 // ========================================
 

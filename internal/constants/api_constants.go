@@ -11,6 +11,7 @@ package constants
 
 // API V1 Endpoints
 const (
+	DefaultScheme = "http"  // Default HTTP scheme for local development
 	APIEndpointV1Analyze         = "/api/v1/analyze"
 	APIEndpointV1AnalyzeSemantic = "/api/v1/analyze/semantic"
 	APIEndpointV1AnalyzeSEO      = "/api/v1/analyze/seo"

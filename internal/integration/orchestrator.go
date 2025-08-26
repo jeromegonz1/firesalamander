@@ -47,6 +47,62 @@ type Orchestrator struct {
 	running    bool
 }
 
+// AnalysisType types d'analyse disponibles
+type AnalysisType string
+
+const (
+	AnalysisTypeQuick     AnalysisType = "quick"
+	AnalysisTypeStandard  AnalysisType = "standard" 
+	AnalysisTypeDeep      AnalysisType = "deep"
+	AnalysisTypeFull      AnalysisType = "full"
+	AnalysisTypeSemantic  AnalysisType = "semantic"
+	AnalysisTypeSEO       AnalysisType = "seo"
+)
+
+// AnalysisStatus status d'une analyse
+type AnalysisStatus string
+
+const (
+	AnalysisStatusStarting   AnalysisStatus = "starting"
+	AnalysisStatusRunning    AnalysisStatus = "running"
+	AnalysisStatusCompleted  AnalysisStatus = "completed"
+	AnalysisStatusError      AnalysisStatus = "error"
+	AnalysisStatusCancelled  AnalysisStatus = "cancelled"
+)
+
+// AnalysisOptions options pour l'analyse
+type AnalysisOptions struct {
+	Type                AnalysisType  `json:"type"`
+	IncludeSubdomains   bool          `json:"include_subdomains"`
+	MaxPages            int           `json:"max_pages"`
+	MaxDepth            int           `json:"max_depth"`
+	FollowExternalLinks bool          `json:"follow_external_links"`
+	UserAgent           string        `json:"user_agent"`
+	Timeout             time.Duration `json:"timeout"`
+}
+
+// AnalysisStats statistiques d'analyse
+type AnalysisStats struct {
+	PagesFound      int           `json:"pages_found"`
+	PagesAnalyzed   int           `json:"pages_analyzed"`
+	CurrentWorkers  int           `json:"current_workers"`
+	PagesPerSecond  float64       `json:"pages_per_second"`
+	EstimatedTime   time.Duration `json:"estimated_time"`
+}
+
+// UnifiedAnalysisResult résultat unifié d'analyse
+type UnifiedAnalysisResult struct {
+	URL             string                  `json:"url"`
+	Domain          string                  `json:"domain"`
+	AnalyzedAt      time.Time              `json:"analyzed_at"`
+	SEOAnalysis     *seo.RealPageAnalysis  `json:"seo_analysis"`
+	CrawlData       *crawler.CrawlResult   `json:"crawl_data"`
+	CrawlerResult   *crawler.CrawlResult   `json:"crawler_result"`  // Alias for compatibility
+	Stats           AnalysisStats          `json:"stats"`
+	OverallScore    int                     `json:"overall_score"`
+	ProcessingTime  time.Duration          `json:"processing_time"`
+}
+
 // OrchestratorConfig configuration pour le Orchestrator
 type OrchestratorConfig struct {
 	MaxPages        int
@@ -636,4 +692,97 @@ func (ro *Orchestrator) convertFromStorage(storageAnalysis *storage.AnalysisStat
 // TestCrawl teste directement le crawling (pour debug des tests)
 func (ro *Orchestrator) TestCrawl(ctx context.Context, url string) (*crawler.ParallelCrawlResult, error) {
 	return ro.parallelCrawler.CrawlWithContext(ctx, url)
+}
+
+// AnalyzeURL démarre une analyse avec options personnalisées
+func (ro *Orchestrator) AnalyzeURL(ctx context.Context, targetURL string, analysisType AnalysisType, options AnalysisOptions) (*UnifiedAnalysisResult, error) {
+	// Pour la compatibilité, utiliser StartAnalysis existant
+	analysisID, err := ro.StartAnalysis(targetURL)
+	if err != nil {
+		return nil, err
+	}
+	
+	// Créer un résultat unifié simple
+	state := ro.getState(analysisID)
+	if state == nil {
+		return nil, fmt.Errorf("analysis state not found")
+	}
+	
+	// Retourner un résultat simple (pour maintenant)
+	result := &UnifiedAnalysisResult{
+		URL:        targetURL,
+		Domain:     state.Domain,
+		AnalyzedAt: state.StartTime,
+		Stats: AnalysisStats{
+			PagesFound:     state.PagesFound,
+			PagesAnalyzed:  state.PagesAnalyzed,
+			CurrentWorkers: state.CurrentWorkers,
+			PagesPerSecond: state.PagesPerSecond,
+		},
+	}
+	
+	// Si on a des analyses de page, prendre la première
+	if len(state.Pages) > 0 {
+		result.SEOAnalysis = state.Pages[0]
+	}
+	
+	return result, nil
+}
+
+// GetStats retourne les statistiques globales
+func (ro *Orchestrator) GetStats() map[string]interface{} {
+	ro.mu.RLock()
+	defer ro.mu.RUnlock()
+	
+	stats := map[string]interface{}{
+		"total_analyses": len(ro.analyses),
+		"running_analyses": 0,
+		"completed_analyses": 0,
+		"error_analyses": 0,
+	}
+	
+	for _, analysis := range ro.analyses {
+		switch analysis.Status {
+		case constants.OrchestratorStatusStarting, constants.OrchestratorStatusCrawling, constants.OrchestratorStatusAnalyzing:
+			stats["running_analyses"] = stats["running_analyses"].(int) + 1
+		case constants.OrchestratorStatusComplete:
+			stats["completed_analyses"] = stats["completed_analyses"].(int) + 1
+		case constants.OrchestratorStatusError:
+			stats["error_analyses"] = stats["error_analyses"].(int) + 1
+		}
+	}
+	
+	return stats
+}
+
+// GetRecentAnalyses retourne les analyses récentes
+func (ro *Orchestrator) GetRecentAnalyses(limit int) []*AnalysisState {
+	ro.mu.RLock()
+	defer ro.mu.RUnlock()
+	
+	analyses := make([]*AnalysisState, 0, len(ro.analyses))
+	for _, analysis := range ro.analyses {
+		analyses = append(analyses, analysis)
+	}
+	
+	// Sort by start time (most recent first)
+	// Simple sort - could be optimized
+	for i := 0; i < len(analyses)-1; i++ {
+		for j := i + 1; j < len(analyses); j++ {
+			if analyses[j].StartTime.After(analyses[i].StartTime) {
+				analyses[i], analyses[j] = analyses[j], analyses[i]
+			}
+		}
+	}
+	
+	if limit > 0 && len(analyses) > limit {
+		analyses = analyses[:limit]
+	}
+	
+	return analyses
+}
+
+// GetAnalysisDetails retourne les détails complets d'une analyse
+func (ro *Orchestrator) GetAnalysisDetails(analysisID string) (*AnalysisState, error) {
+	return ro.GetStatus(analysisID)
 }

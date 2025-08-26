@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
 )
 
@@ -47,7 +48,7 @@ type SitemapParser struct {
 // NewSitemapParser crée un nouveau parser de sitemap
 func NewSitemapParser() *SitemapParser {
 	return &SitemapParser{
-		maxURLs: 50000, // Limite Google
+		maxURLs: constants.DefaultSitemapMaxURLs, // Limite Google depuis constants
 	}
 }
 
@@ -160,7 +161,7 @@ func (sp *SitemapParser) normalizeChangefreq(freq string) string {
 		return freq
 	}
 
-	return "weekly" // Valeur par défaut
+	return constants.DefaultSitemapChangeFreq // Valeur par défaut depuis constants
 }
 
 // GetPriority retourne la priorité d'une URL (avec valeur par défaut)
@@ -168,7 +169,7 @@ func (u *SitemapURL) GetPriority() float64 {
 	if u.Priority > 0 {
 		return u.Priority
 	}
-	return 0.5 // Valeur par défaut selon le standard
+	return constants.DefaultSitemapPriority // Valeur par défaut depuis constants
 }
 
 // GetLastModified retourne la date de dernière modification parsée
@@ -199,7 +200,7 @@ func (u *SitemapURL) GetChangeFrequency() string {
 	if u.Changefreq != "" {
 		return u.Changefreq
 	}
-	return "weekly"
+	return constants.DefaultSitemapChangeFreq
 }
 
 // FilterByPriority filtre les URLs par priorité minimale

@@ -57,8 +57,8 @@ func NewFetcher(config *Config) *Fetcher {
 			KeepAlive: constants.ClientKeepAlive,
 		}).DialContext,
 		ForceAttemptHTTP2:     true,
-		MaxIdleConns:          100,
-		MaxIdleConnsPerHost:   10,
+		MaxIdleConns:          constants.DefaultMaxIdleConns,
+		MaxIdleConnsPerHost:   constants.DefaultMaxIdleConnsPerHost,
 		IdleConnTimeout:       constants.ClientIdleTimeout,
 		TLSHandshakeTimeout:   constants.ClientTLSTimeout,
 		ExpectContinueTimeout: constants.ClientExpectTimeout,
@@ -69,7 +69,7 @@ func NewFetcher(config *Config) *Fetcher {
 		Transport: transport,
 		Timeout:   config.Timeout,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			if len(via) >= 10 {
+			if len(via) >= constants.DefaultMaxRedirects {
 				return fmt.Errorf("too many redirects")
 			}
 			// Conserver le User-Agent lors des redirections
@@ -219,7 +219,7 @@ func (f *Fetcher) doFetch(ctx context.Context, targetURL string) (*CrawlResult, 
 	result.Body = string(body)
 
 	// Limiter la taille du body stocké (max 10MB)
-	maxBodySize := 10 * 1024 * 1024
+	maxBodySize := constants.DefaultMaxBodySize10MB
 	if len(result.Body) > maxBodySize {
 		fetcherLog.Warn("Body truncated", map[string]interface{}{
 			"url":           targetURL,
@@ -246,8 +246,8 @@ func (f *Fetcher) readBody(resp *http.Response) ([]byte, error) {
 		reader = gzReader
 	}
 
-	// Limiter la lecture à 10MB pour éviter les abus
-	limitedReader := io.LimitReader(reader, 10*1024*1024)
+	// Limiter la lecture pour éviter les abus
+	limitedReader := io.LimitReader(reader, constants.DefaultMaxBodySize10MB)
 	
 	body, err := io.ReadAll(limitedReader)
 	if err != nil {

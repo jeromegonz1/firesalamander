@@ -28,6 +28,28 @@ func InitOrchestrator() {
 	log.Printf("✅ Real Orchestrator initialized successfully!")
 }
 
+// Helper functions
+func sendJSONError(w http.ResponseWriter, message string, statusCode int) {
+	w.Header().Set("Content-Type", "application/json")
+	errorJSON := fmt.Sprintf(`{"error":"%s"}`, message)
+	http.Error(w, errorJSON, statusCode)
+}
+
+func sendJSONResponse(w http.ResponseWriter, data interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		sendJSONError(w, "Failed to encode response", http.StatusInternalServerError)
+	}
+}
+
+func extractAnalysisID(path string) (string, error) {
+	parts := strings.Split(path, "/")
+	if len(parts) < 3 {
+		return "", fmt.Errorf("invalid path format")
+	}
+	return parts[len(parts)-1], nil
+}
+
 // GetOrchestrator retourne l'instance du Orchestrator
 func GetOrchestrator() *integration.Orchestrator {
 	return realOrchestrator
@@ -192,7 +214,11 @@ func StatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Extraire l'ID depuis l'URL
-	analysisID := extractAnalysisID(r.URL.Path)
+	analysisID, err := extractAnalysisID(r.URL.Path)
+	if err != nil {
+		sendJSONError(w, "Invalid analysis ID", http.StatusBadRequest)
+		return
+	}
 	if analysisID == "" {
 		sendJSONError(w, constants.ErrorInvalidAnalysisID, http.StatusBadRequest)
 		return
@@ -249,7 +275,11 @@ func ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Extraire l'ID depuis l'URL
-	analysisID := extractAnalysisID(r.URL.Path)
+	analysisID, err := extractAnalysisID(r.URL.Path)
+	if err != nil {
+		sendJSONError(w, "Invalid analysis ID", http.StatusBadRequest)
+		return
+	}
 	if analysisID == "" {
 		sendJSONError(w, constants.ErrorInvalidAnalysisID, http.StatusBadRequest)
 		return

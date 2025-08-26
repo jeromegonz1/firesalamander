@@ -158,7 +158,7 @@ func NewParallelCrawler(cfg *config.CrawlerConfig) *ParallelCrawler {
 		Timeout: time.Duration(cfg.TimeoutSeconds) * time.Second,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			// Limit redirects to prevent infinite loops
-			if len(via) >= 10 {
+			if len(via) >= constants.DefaultMaxRedirects {
 				return http.ErrUseLastResponse
 			}
 			return nil
@@ -180,7 +180,7 @@ func NewParallelCrawler(cfg *config.CrawlerConfig) *ParallelCrawler {
 			maxWorkers: cfg.MaxWorkers,
 			minWorkers: cfg.MinWorkers,
 			lastAdapt:  time.Now(),
-			responseTimes: make([]time.Duration, 0, 100),
+			responseTimes: make([]time.Duration, 0, constants.DefaultMetricsHistorySize),
 		},
 		ctx:         ctx,
 		cancel:      cancel,
@@ -241,7 +241,7 @@ func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string
 	
 	// 🔥 FIRE SALAMANDER - MONITEUR DE COMPLETION
 	go func() {
-		ticker := time.NewTicker(100 * time.Millisecond)
+		ticker := time.NewTicker(time.Duration(constants.DefaultMonitoringIntervalMs) * time.Millisecond)
 		defer ticker.Stop()
 		
 		for {
@@ -509,7 +509,7 @@ func (pc *ParallelCrawler) crawlPage(ctx context.Context, task CrawlTask) *PageR
 	
 	// Read body (limit size to prevent memory issues)
 	bodyBuilder := &strings.Builder{}
-	maxBodySize := int64(1024 * 1024) // 1MB limit
+	maxBodySize := int64(constants.DefaultMaxBodySize1MB) // 1MB limit from constants
 	_, err = io.Copy(bodyBuilder, &io.LimitedReader{
 		R: resp.Body,
 		N: maxBodySize,
@@ -617,7 +617,7 @@ func (pc *ParallelCrawler) performAdaptation(wg *sync.WaitGroup, baseURL *url.UR
 	pc.workerPool.mu.Lock()
 	defer pc.workerPool.mu.Unlock()
 	
-	if len(pc.workerPool.responseTimes) < 5 {
+	if len(pc.workerPool.responseTimes) < constants.DefaultMinMetricsForAdaptation {
 		return // Not enough data for adaptation
 	}
 	

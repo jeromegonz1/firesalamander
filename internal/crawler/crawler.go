@@ -4,11 +4,13 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strings"
 	"sync"
 	"time"
 
 	"firesalamander/internal/constants"
 	"firesalamander/internal/logger"
+	"golang.org/x/net/html"
 )
 
 var log = logger.New("CRAWLER")
@@ -43,18 +45,20 @@ type Config struct {
 
 // CrawlResult représente le résultat d'un crawl
 type CrawlResult struct {
-	URL          string
-	StatusCode   int
-	ContentType  string
-	Title        string
-	Description  string
-	Headers      map[string]string
-	Body         string
-	Links        []Link
-	Images       []Image
-	CrawledAt    time.Time
-	ResponseTime time.Duration
-	Error        error
+	URL             string
+	StatusCode      int
+	ContentType     string
+	Title           string
+	Description     string
+	MetaDescription string
+	Headers         map[string]string
+	Body            string
+	Links           []Link
+	Images          []Image
+	Headings        []string
+	CrawledAt       time.Time
+	ResponseTime    time.Duration
+	Error           error
 }
 
 // Link représente un lien trouvé
@@ -339,14 +343,212 @@ func (c *Crawler) crawlWorker(ctx context.Context, wg *sync.WaitGroup, queue *Cr
 	}
 }
 
-// parseHTML parse le contenu HTML d'une page
+// parseHTML parse le contenu HTML d'une page et extrait les données SEO et les liens
 func (c *Crawler) parseHTML(result *CrawlResult) {
-	// TODO: Implémenter le parsing HTML
-	// - Extraire le title
-	// - Extraire la meta description
-	// - Extraire les liens
-	// - Extraire les images
-	log.Debug("Parsing HTML", map[string]interface{}{"url": result.URL})
+	if result.Body == "" {
+		log.Debug("No content to parse", map[string]interface{}{"url": result.URL})
+		return
+	}
+
+	log.Debug("Parsing HTML", map[string]interface{}{"url": result.URL, "content_size": len(result.Body)})
+
+	// Parse HTML content
+	doc, err := html.Parse(strings.NewReader(result.Body))
+	if err != nil {
+		log.Error("Failed to parse HTML", map[string]interface{}{
+			"url": result.URL,
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// Initialize parsing results
+	var title string
+	var metaDescription string
+	var links []Link
+	var images []Image
+	var headings []string
+
+	// Recursive function to traverse DOM
+	var traverse func(*html.Node)
+	traverse = func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			switch n.Data {
+			case "title":
+				if title == "" && n.FirstChild != nil {
+					title = strings.TrimSpace(n.FirstChild.Data)
+				}
+			case "meta":
+				name := getAttr(n, "name")
+				property := getAttr(n, "property")
+				if (name == "description" || property == "og:description") && metaDescription == "" {
+					metaDescription = strings.TrimSpace(getAttr(n, "content"))
+				}
+			case "a":
+				if href := getAttr(n, "href"); href != "" {
+					if resolvedURL := c.resolveURL(result.URL, href); resolvedURL != "" {
+						linkText := strings.TrimSpace(extractText(n))
+						linkType := "internal"
+						if c.isExternalLink(result.URL, resolvedURL) {
+							linkType = "external"
+						}
+						links = append(links, Link{
+							URL:    resolvedURL,
+							Text:   linkText,
+							Type:   linkType,
+							Follow: !strings.Contains(getAttr(n, "rel"), "nofollow"),
+						})
+					}
+				}
+			case "img":
+				if src := getAttr(n, "src"); src != "" {
+					if resolvedURL := c.resolveURL(result.URL, src); resolvedURL != "" {
+						images = append(images, Image{
+							URL:   resolvedURL,
+							Alt:   getAttr(n, "alt"),
+							Title: getAttr(n, "title"),
+						})
+					}
+				}
+			case "h1", "h2", "h3", "h4", "h5", "h6":
+				if text := extractText(n); text != "" {
+					headings = append(headings, text)
+				}
+			}
+		}
+
+		// Traverse children
+		for child := n.FirstChild; child != nil; child = child.NextSibling {
+			traverse(child)
+		}
+	}
+
+	// Start traversal
+	traverse(doc)
+
+	// Update result with parsed data
+	result.Title = title
+	result.MetaDescription = metaDescription
+	result.Links = links
+	result.Images = images
+	result.Headings = headings
+
+	log.Info("HTML parsing completed", map[string]interface{}{
+		"url": result.URL,
+		"title_length": len(title),
+		"meta_length": len(metaDescription),
+		"links_found": len(links),
+		"images_found": len(images),
+		"headings_found": len(headings),
+	})
+
+	// Add discovered links to crawl queue for further crawling
+	c.addLinksToQueue(links, result.URL)
+}
+
+// getAttr gets attribute value from HTML node
+func getAttr(n *html.Node, key string) string {
+	for _, attr := range n.Attr {
+		if attr.Key == key {
+			return attr.Val
+		}
+	}
+	return ""
+}
+
+// extractText extracts text content from HTML node
+func extractText(n *html.Node) string {
+	if n.Type == html.TextNode {
+		return strings.TrimSpace(n.Data)
+	}
+	var text strings.Builder
+	for child := n.FirstChild; child != nil; child = child.NextSibling {
+		text.WriteString(extractText(child))
+	}
+	return strings.TrimSpace(text.String())
+}
+
+// resolveURL resolves relative URLs to absolute URLs
+func (c *Crawler) resolveURL(base, href string) string {
+	// Skip invalid URLs
+	if href == "" || strings.HasPrefix(href, "javascript:") || strings.HasPrefix(href, "mailto:") {
+		return ""
+	}
+
+	// Parse base URL
+	baseURL, err := url.Parse(base)
+	if err != nil {
+		return ""
+	}
+
+	// Parse href
+	hrefURL, err := url.Parse(href)
+	if err != nil {
+		return ""
+	}
+
+	// Resolve relative to base
+	resolved := baseURL.ResolveReference(hrefURL)
+	
+	// Only return HTTP/HTTPS URLs
+	if resolved.Scheme != "http" && resolved.Scheme != "https" {
+		return ""
+	}
+
+	return resolved.String()
+}
+
+// addLinksToQueue adds discovered links to the crawling queue
+func (c *Crawler) addLinksToQueue(links []Link, sourceURL string) {
+	for _, link := range links {
+		// Only add internal links that should be crawled
+		if link.Type == "internal" && c.shouldCrawlURL(link.URL) {
+			log.Debug("Adding link to queue", map[string]interface{}{
+				"source": sourceURL,
+				"target": link.URL,
+			})
+			// This method should be called by the parallel crawler to add URLs to its queue
+			// Implementation will depend on how the parallel crawler manages its queue
+		}
+	}
+}
+
+// shouldCrawlURL determines if a URL should be crawled
+func (c *Crawler) shouldCrawlURL(url string) bool {
+	// Basic validation
+	if url == "" {
+		return false
+	}
+
+	// Skip non-HTTP URLs
+	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+		return false
+	}
+
+	// Skip common non-crawlable file types
+	for _, ext := range []string{".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".zip", ".rar", ".tar", ".gz"} {
+		if strings.HasSuffix(strings.ToLower(url), ext) {
+			return false
+		}
+	}
+
+	// TODO: Add more sophisticated filtering based on robots.txt, patterns, etc.
+	return true
+}
+
+// isExternalLink determines if a link is external to the current domain
+func (c *Crawler) isExternalLink(baseURL, targetURL string) bool {
+	base, err := url.Parse(baseURL)
+	if err != nil {
+		return true
+	}
+
+	target, err := url.Parse(targetURL)
+	if err != nil {
+		return true
+	}
+
+	return base.Host != target.Host
 }
 
 // fetchRobotsTxt récupère et parse le fichier robots.txt

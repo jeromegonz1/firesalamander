@@ -52,7 +52,17 @@ func SimulateAnalysis(analysisID string) {
 				a.Status = constants.StatusComplete
 				a.EstimatedTime = messages.TimeEstimateComplete
 				// Générer les résultats finaux
-				a.Results = GenerateTestResults(a.URL)
+				// TODO: Implement test result generation
+				a.Results = &ResultsResponse{
+					Score: 75,
+					PagesCount: a.PagesFound,
+					Issues: []ResultIssue{},
+					Warnings: []ResultWarning{},
+					Analysis: AnalysisResult{
+						Score: 75,
+						PagesAnalyzed: a.PagesAnalyzed,
+					},
+				}
 			} else {
 				a.EstimatedTime = messages.TimeEstimateCalculating
 			}

@@ -1,0 +1,29 @@
+./scripts/detect-hardcoding.sh: line 31: revive: command not found
+./scripts/detect-hardcoding.sh: line 42: staticcheck: command not found
+./cmd/server/main.go:50:	Domain         string        `json:"domain"`
+./cmd/server/main.go:52:	Score          int           `json:"score"`
+./cmd/server/main.go:56:	Warnings       int           `json:"warnings"`
+./cmd/server/main.go:57:	Issues         []Issue       `json:"issues"`
+./cmd/server/main.go:64:	Title       string   `json:"title"`
+./cmd/server/main.go:65:	Count       int      `json:"count"`
+./cmd/server/main.go:66:	Description string   `json:"description"`
+./cmd/server/main.go:67:	Pages       []string `json:"pages"`
+./cmd/server/main.go:68:	Solution    string   `json:"solution"`
+./cmd/server/main.go:73:	Title       string `json:"title"`
+./cmd/server/main.go:395:		"web_interface": fmt.Sprintf("http://%s", addr),
+./cmd/server/main.go:396:		"api_endpoint":  fmt.Sprintf("http://%s/api", addr),
+./cmd/server/main.go:397:		"health_check":  fmt.Sprintf("http://%s/api/health", addr),
+./internal/patterns/safe_crawler.go:224:	if url == "https://slow.example.com" {
+./internal/patterns/safe_crawler.go:231:		if url == "https://error.example.com" {
+./internal/storage/mcp_storage.go:339:		URL:       "https://test.com",
+./archive/old-dashboard-20250809/dashboard-main.go:169:			cfg = &config.Config{Server: config.ServerConfig{Port: 8080, Host: constants.ServerDefaultHost}}
+./internal/patterns/safe_crawler.go:47:		timeout:    30 * time.Second, // Timeout global
+./internal/patterns/safe_crawler.go:59:	if timeout > 5*time.Minute {
+./internal/patterns/safe_crawler.go:61:		timeout = 5 * time.Minute
+./internal/patterns/safe_crawler.go:189:	ticker := time.NewTicker(1 * time.Second)
+./internal/patterns/safe_crawler.go:223:	processingTime := 50 * time.Millisecond
+./internal/patterns/safe_crawler.go:225:		processingTime = 2 * time.Second
+./internal/integration/orchestrator.go:263:	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second) // Timeout strict 90s
+./internal/crawler/parallel_crawler.go:244:		ticker := time.NewTicker(100 * time.Millisecond)
+./internal/monitoring/metrics.go:254:	if time.Since(lastActivity) > 5*time.Minute {
+./internal/seo/analyzer.go:181:		Timeout:             30 * time.Second,
