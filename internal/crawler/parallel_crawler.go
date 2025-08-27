@@ -488,6 +488,7 @@ func (pc *ParallelCrawler) workerWithCounter(ctx context.Context, wg *sync.WaitG
 			
 			// Ajouter nouvelles URLs découvertes
 			if result.Error == nil && result.Depth < pc.config.MaxDepth && crawled < int32(pc.config.MaxPages) {
+				stdlog.Printf("🔍 Found %d links on %s", len(result.Links), result.URL)
 				pc.addNewLinksWithCounter(result.Links, task.URL, task.Depth+1, baseURL)
 			}
 			
@@ -612,6 +613,7 @@ func (pc *ParallelCrawler) crawlPage(ctx context.Context, task CrawlTask) *PageR
 	// Parse HTML if content is HTML
 	if strings.Contains(result.ContentType, "text/html") {
 		pc.parseHTML(result)
+		stdlog.Printf("🔍 EXTRACTION: Found %d total links in %s", len(result.Links), result.URL)
 	}
 	
 	return result
@@ -836,10 +838,14 @@ func (pc *ParallelCrawler) GetMetrics() *CrawlerMetrics {
 
 // 🔥 FIRE SALAMANDER - AJOUTER LIENS AVEC COMPTEUR
 func (pc *ParallelCrawler) addNewLinksWithCounter(links []ParallelLink, referer string, depth int, baseURL *url.URL) {
+	stdlog.Printf("🔍 QUEUE: Processing %d links from %s (base: %s)", len(links), referer, baseURL.Host)
+	addedCount := 0
 	for _, link := range links {
+		stdlog.Printf("🔗 Checking link: %s", link.URL)
 		// Parse et valider l'URL
 		parsedLink, err := url.Parse(link.URL)
 		if err != nil {
+			stdlog.Printf("❌ Parse error: %s", err.Error())
 			continue
 		}
 		
@@ -850,6 +856,7 @@ func (pc *ParallelCrawler) addNewLinksWithCounter(links []ParallelLink, referer 
 		
 		// Vérifier que c'est sur le même domaine
 		if parsedLink.Host != baseURL.Host {
+			stdlog.Printf("❌ Different host: %s != %s", parsedLink.Host, baseURL.Host)
 			continue
 		}
 		
@@ -859,6 +866,7 @@ func (pc *ParallelCrawler) addNewLinksWithCounter(links []ParallelLink, referer 
 		pc.urlSeenMu.Lock()
 		if pc.urlsSeen[normalizedURL] {
 			pc.urlSeenMu.Unlock()
+			stdlog.Printf("❌ Already seen: %s", normalizedURL)
 			continue
 		}
 		pc.urlsSeen[normalizedURL] = true
@@ -876,6 +884,7 @@ func (pc *ParallelCrawler) addNewLinksWithCounter(links []ParallelLink, referer 
 		
 		select {
 		case pc.urlQueue <- task:
+			addedCount++
 			stdlog.Printf("➕ Added new URL to queue: %s (depth: %d)", normalizedURL, depth)
 		default:
 			// Queue pleine, annuler le job
@@ -883,6 +892,7 @@ func (pc *ParallelCrawler) addNewLinksWithCounter(links []ParallelLink, referer 
 			stdlog.Printf("⚠️ Queue full, skipping: %s", normalizedURL)
 		}
 	}
+	stdlog.Printf("🎯 QUEUE SUMMARY: Added %d/%d links to queue", addedCount, len(links))
 }
 
 // addLinksToQueue adds discovered links to the crawl queue (OLD VERSION)
