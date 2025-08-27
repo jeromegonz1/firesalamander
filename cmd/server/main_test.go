@@ -1,9 +1,11 @@
 package main
 
 import (
+	"html/template"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 	
@@ -292,4 +294,131 @@ func TestResultsHandler_InvalidAnalysisID(t *testing.T) {
 	
 	// Alternativement, pourrait rediriger vers la page d'accueil
 	// ou afficher une page d'erreur appropriée
+}
+
+// ========================================
+// 🧪 TDD TESTS CSS - MISSION PM 
+// Phase RED : Tests avant correction FileServer
+// ========================================
+
+// loadTemplatesForTests - Load templates with correct path for tests
+func loadTemplatesForTests() error {
+	templateDir := "../../templates" // From cmd/server to project root
+	
+	var err error
+	
+	// Charger chaque template individuellement avec le bon chemin
+	homeTemplate, err = template.ParseFiles(templateDir + "/home.html")
+	if err != nil {
+		return err
+	}
+
+	analyzingTemplate, err = template.ParseFiles(templateDir + "/analyzing.html")
+	if err != nil {
+		return err
+	}
+
+	resultsTemplate, err = template.ParseFiles(templateDir + "/results.html")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// setupServerForTests - Version simplifiée sans middlewares pour les tests
+func setupServerForTests() *http.ServeMux {
+	// Charger les templates pour les tests (nécessaire pour homeHandler)
+	if homeTemplate == nil {
+		// During tests, working dir is cmd/server, templates are at ../../templates
+		loadTemplatesForTests() // Ignore error in tests
+	}
+	
+	mux := http.NewServeMux()
+
+	// Routes principales (pages web)
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
+		homeHandler(w, r)
+	})
+	
+	// Route pour la page d'analyse
+	mux.HandleFunc("/analyze", analyzeHandler)
+	
+	// Route pour la page de résultats
+	mux.HandleFunc("/results", resultsHandler)
+	
+	// 🔥🦎 STATIC FILES: CSS/JS selon standards NO HARDCODING  
+	// Note: During tests, working dir is cmd/server, need to go up to project root
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("../../static/"))))
+
+	return mux
+}
+
+// TestStaticFilesAreServed - TDD: FileServer doit servir les fichiers statiques
+func TestStaticFilesAreServed(t *testing.T) {
+	// DEBUG: Check working directory and static file existence
+	workingDir, _ := os.Getwd()
+	t.Logf("Working directory: %s", workingDir)
+	
+	staticPath := "../../static/css/fire-salamander.css"
+	if _, err := os.Stat(staticPath); os.IsNotExist(err) {
+		t.Logf("❌ CSS file does not exist at: %s", staticPath)
+	} else {
+		t.Logf("✅ CSS file exists at: %s", staticPath)
+	}
+	
+	// GIVEN - Serveur avec route static configurée (version test sans middlewares)
+	mux := setupServerForTests()
+	
+	// WHEN - On demande le CSS Fire Salamander
+	req := httptest.NewRequest("GET", "/static/css/fire-salamander.css", nil)
+	w := httptest.NewRecorder()
+	mux.ServeHTTP(w, req)
+	
+	// THEN - Le CSS est retourné avec le bon content-type
+	if w.Code != http.StatusOK {
+		t.Errorf("❌ TDD CSS FAILURE: Expected 200 for CSS file, got %d. Response body: %s", w.Code, w.Body.String())
+	}
+	
+	contentType := w.Header().Get("Content-Type")
+	if !strings.Contains(contentType, "text/css") && !strings.Contains(contentType, "text/plain") {
+		t.Errorf("❌ TDD CSS FAILURE: Expected CSS content-type, got: %s", contentType)
+	}
+	
+	// THEN - Le contenu contient nos classes SEPTEO
+	body := w.Body.String()
+	if !strings.Contains(body, "septeo-orange") {
+		t.Error("❌ TDD CSS FAILURE: CSS must contain SEPTEO colors")
+	}
+	if !strings.Contains(body, "bg-septeo-gray-50") {
+		t.Error("❌ TDD CSS FAILURE: CSS must contain custom classes")
+	}
+}
+
+// TestHomePageReferencesLocalCSS - TDD: Page doit référencer CSS local
+func TestHomePageReferencesLocalCSS(t *testing.T) {
+	// GIVEN - Serveur configuré (version test)
+	mux := setupServerForTests()
+	
+	// WHEN - On charge la page d'accueil
+	req := httptest.NewRequest("GET", "/", nil)
+	w := httptest.NewRecorder()
+	mux.ServeHTTP(w, req)
+	
+	// THEN - La page contient le lien vers notre CSS
+	if w.Code != http.StatusOK {
+		t.Errorf("❌ TDD CSS FAILURE: Home page not accessible, got %d", w.Code)
+	}
+	
+	body := w.Body.String()
+	if !strings.Contains(body, `href="/static/css/fire-salamander.css"`) {
+		t.Error("❌ TDD CSS FAILURE: Page must reference local CSS")
+	}
+	if strings.Contains(body, "cdn.tailwindcss.com") {
+		t.Error("❌ TDD CSS FAILURE: Page must NOT use CDN Tailwind")
+	}
 }

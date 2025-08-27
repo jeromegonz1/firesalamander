@@ -1,0 +1,170 @@
+/* Fire Salamander - CSS Principal selon standards NO HARDCODING */
+/* Basé sur Tailwind CSS - Classes essentielles */
+
+/* Reset et Base */
+*, ::before, ::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+/* Couleurs SEPTEO */
+:root {
+  --septeo-orange: #ff6136;
+  --septeo-blue: #1e3a8a;
+  --septeo-gray-50: #f8fafc;
+  --septeo-gray-100: #f1f5f9;
+  --septeo-gray-800: #1e293b;
+  --septeo-red: #dc2626;
+  --septeo-green: #16a34a;
+  --septeo-yellow: #fbbf24;
+}
+
+/* Classes Tailwind essentielles */
+.bg-septeo-gray-50 { background-color: var(--septeo-gray-50); }
+.bg-septeo-blue { background-color: var(--septeo-blue); }
+.bg-septeo-orange { background-color: var(--septeo-orange); }
+.bg-white { background-color: #ffffff; }
+
+.text-septeo-gray-800 { color: var(--septeo-gray-800); }
+.text-septeo-orange { color: var(--septeo-orange); }
+.text-white { color: #ffffff; }
+.text-gray-600 { color: #4b5563; }
+
+.hover\:text-septeo-orange:hover { color: var(--septeo-orange); }
+.hover\:bg-septeo-orange\/90:hover { background-color: rgba(255, 97, 54, 0.9); }
+
+/* Layout */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (min-width: 640px) { .container { max-width: 640px; } }
+@media (min-width: 768px) { .container { max-width: 768px; } }
+@media (min-width: 1024px) { .container { max-width: 1024px; } }
+@media (min-width: 1280px) { .container { max-width: 1280px; } }
+
+/* Flexbox */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-grow { flex-grow: 1; }
+.space-x-4 > * + * { margin-left: 1rem; }
+
+/* Spacing */
+.p-4 { padding: 1rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.ml-2 { margin-left: 0.5rem; }
+.ml-3 { margin-left: 0.75rem; }
+.mr-1 { margin-right: 0.25rem; }
+.mr-2 { margin-right: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+
+/* Typography */
+.font-sans { font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
+.text-center { text-align: center; }
+
+/* Forms */
+.w-full { width: 100%; }
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-md { border-radius: 0.375rem; }
+.shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+.border { border-width: 1px; }
+.border-gray-300 { border-color: #d1d5db; }
+
+/* Buttons */
+button {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background-color: transparent;
+  background-image: none;
+  cursor: pointer;
+}
+
+/* Utilities */
+.h-10 { height: 2.5rem; }
+.w-10 { width: 2.5rem; }
+.max-w-md { max-width: 28rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+
+/* Input styles */
+input[type="url"] {
+  appearance: none;
+  background-color: #fff;
+  border-color: #d1d5db;
+  border-width: 1px;
+  border-radius: 0.375rem;
+  padding-top: 0.5rem;
+  padding-right: 0.75rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+input[type="url"]:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  ring-offset-width: 0;
+  border-color: var(--septeo-blue);
+  box-shadow: 0 0 0 1px var(--septeo-blue);
+}
+
+/* Progress bar animation */
+@keyframes progress {
+  from { width: 0%; }
+  to { width: var(--progress, 0%); }
+}
+
+.progress-bar {
+  animation: progress 1s ease-out forwards;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Visibility */
+.hidden { display: none; }
+.block { display: block; }

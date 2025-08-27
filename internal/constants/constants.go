@@ -43,9 +43,9 @@ const (
 	DefaultMaxPages    = 20
 	DefaultMinPages    = 10
 	
-	// Rate Limiting - Production Security
-	RateLimitRequestsPerSecond = 1    // 1 request per second
-	RateLimitBurst            = 5    // Burst of 5 requests allowed
+	// Rate Limiting - Production Security (FIXÉ selon standards SEPTEO)
+	RateLimitRequestsPerSecond = 10   // 10 requests per second - Production ready
+	RateLimitBurst            = 20   // Burst of 20 requests allowed - Prevent DoS but allow normal usage
 	
 	// Site Type Limits
 	EcommerceSiteMaxPages = 700

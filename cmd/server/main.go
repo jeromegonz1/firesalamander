@@ -316,6 +316,9 @@ func setupServer() http.Handler {
 	mux.HandleFunc(constants.APIEndpointStatus + "/", api.StatusHandler) 
 	mux.HandleFunc(constants.APIEndpointResults + "/", api.ResultsHandler)
 	
+	// 🔥🦎 STATIC FILES: CSS/JS selon standards NO HARDCODING  
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+
 	// 🔥🦎 MONITORING V2.0: Endpoints de surveillance anti-boucle infinie
 	mux.HandleFunc("/debug/metrics", monitoring.MetricsHandler)
 	mux.HandleFunc("/health", monitoring.HealthHandler)
