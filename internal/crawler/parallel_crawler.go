@@ -18,6 +18,48 @@ import (
 	"firesalamander/internal/constants"
 )
 
+// CrawlResult minimal pour compatibilité
+type CrawlResult struct {
+	URL             string
+	StatusCode      int
+	ContentType     string
+	Title           string
+	Description     string
+	MetaDescription string
+	Headers         map[string]string
+	Body            string
+	Links           []Link
+	Images          []Image
+	Error           error
+	ResponseTime    time.Duration
+	CrawledAt       time.Time
+	Depth           int
+}
+
+// Link represents a hyperlink
+type Link struct {
+	URL    string
+	Text   string
+	Rel    string
+}
+
+// Image represents an image resource
+type Image struct {
+	URL    string
+	Alt    string
+}
+
+// CrawlReport overall crawl results
+type CrawlReport struct {
+	StartURL   string
+	StartTime  time.Time
+	EndTime    time.Time
+	TotalPages int
+	Pages      []*CrawlResult
+	Errors     []string
+	Stats      map[string]interface{}
+}
+
 // ========================================
 // TDD PHASE 2: IMPLÉMENTATION MINIMALE (GREEN)
 // Uniquement le code nécessaire pour faire passer les tests
@@ -190,7 +232,7 @@ func NewParallelCrawler(cfg *config.CrawlerConfig) *ParallelCrawler {
 }
 
 // CrawlWithContext crawls a website starting from the given URL with context
-func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string) (*ParallelCrawlResult, error) {
+func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string) (*CrawlReport, error) {
 	// Apply timeout from config (NO HARDCODING)
 	crawlCtx, cancel := context.WithTimeout(ctx, time.Duration(pc.config.TimeoutSeconds)*time.Second)
 	defer cancel()
@@ -209,7 +251,7 @@ func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string
 	// Parse start URL
 	parsedURL, err := url.Parse(startURL)
 	if err != nil {
-		return result, fmt.Errorf("invalid start URL: %w", err)
+		return pc.convertToCrawlReport(result), fmt.Errorf("invalid start URL: %w", err)
 	}
 	
 	// Check robots.txt if configured
@@ -278,7 +320,7 @@ func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string
 		stdlog.Printf("🔍 DEBUG CRAWLER: Initial URL added successfully")
 	case <-crawlCtx.Done():
 		pc.cancel()
-		return result, crawlCtx.Err()
+		return pc.convertToCrawlReport(result), crawlCtx.Err()
 	}
 	
 	// Collect results
@@ -329,7 +371,7 @@ func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string
 			if pc.cancel != nil {
 				pc.cancel()
 			}
-			return result, nil
+			return pc.convertToCrawlReport(result), nil
 			
 		case <-crawlCtx.Done():
 			stdlog.Printf("⚠️ Context timeout - %d pages found", len(result.Pages))
@@ -337,7 +379,7 @@ func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string
 			if result.Error == nil {
 				result.Error = crawlCtx.Err()
 			}
-			return result, nil
+			return pc.convertToCrawlReport(result), nil
 		}
 		
 		// Exit conditions (backup)
@@ -352,7 +394,54 @@ func (pc *ParallelCrawler) CrawlWithContext(ctx context.Context, startURL string
 		}
 	}
 	
-	return result, result.Error
+	return pc.convertToCrawlReport(result), result.Error
+}
+
+// convertToCrawlReport converts ParallelCrawlResult to CrawlReport for orchestrator
+func (pc *ParallelCrawler) convertToCrawlReport(result *ParallelCrawlResult) *CrawlReport {
+	report := &CrawlReport{
+		StartURL:   result.StartURL,
+		StartTime:  time.Now().Add(-result.Duration),
+		EndTime:    time.Now(),
+		TotalPages: len(result.Pages),
+		Pages:      make([]*CrawlResult, 0, len(result.Pages)),
+		Errors:     []string{},
+	}
+	
+	// Convert PageResults to CrawlResults
+	for _, page := range result.Pages {
+		crawlResult := &CrawlResult{
+			URL:         page.URL,
+			StatusCode:  page.StatusCode,
+			ContentType: page.ContentType,
+			Title:       page.Title,
+			Body:        page.Body,
+			Headers:     page.Headers,
+			Links:       make([]Link, 0, len(page.Links)),
+			Images:      make([]Image, 0), // No images yet
+			CrawledAt:   page.CrawledAt,
+		}
+		
+		// Convert links
+		for _, link := range page.Links {
+			crawlResult.Links = append(crawlResult.Links, Link{
+				URL:  link.URL,
+				Text: link.Text,
+				Rel:  "", // Rel not in ParallelLink yet
+			})
+		}
+		
+		// Images not implemented in PageResult yet - skip for now
+		
+		if page.Error != nil {
+			crawlResult.Error = page.Error
+			report.Errors = append(report.Errors, page.Error.Error())
+		}
+		
+		report.Pages = append(report.Pages, crawlResult)
+	}
+	
+	return report
 }
 
 // 🔥 FIRE SALAMANDER - WORKER AVEC COMPTEUR DE JOBS
@@ -896,6 +985,7 @@ func (pc *ParallelCrawler) parseRobotsTxt(content string) *ParallelRobotsTxt {
 	
 	return robots
 }
+
 
 // isAllowedByRobots checks if a URL is allowed by robots.txt
 func (pc *ParallelCrawler) isAllowedByRobots(targetURL, domain string) bool {

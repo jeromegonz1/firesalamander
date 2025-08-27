@@ -27,7 +27,7 @@ type Orchestrator struct {
 	config *OrchestratorConfig
 	
 	// Composants intégrés
-	parallelCrawler *crawler.IntelligentAdapter
+	parallelCrawler *crawler.ParallelCrawler
 	seoAnalyzer     *seo.RealSEOAnalyzer
 	
 	// 🔥🦎 SPRINT 6: MCP Storage pour persistance
@@ -167,17 +167,16 @@ func NewOrchestrator() *Orchestrator {
 	}
 
 	// Créer le crawler parallel avec la config
-	crawlerConfig := &config.CrawlerConfig{
-		MaxPages:         realConfig.MaxPages,
-		InitialWorkers:   realConfig.InitialWorkers,
-		MinWorkers:       1,
-		MaxDepth:         constants.DefaultMaxDepth, // Add MaxDepth configuration
-		TimeoutSeconds:   constants.DefaultTimeoutSeconds, // Use the default timeout from constants
-		UserAgent:        realConfig.UserAgent,
+	// DIRECT INSTANTIATION - No more layers!
+	parallelCrawler := crawler.NewParallelCrawler(&config.CrawlerConfig{
+		MaxPages:         50,  // Reasonable default
+		MaxDepth:         3,   // Don't go too deep
+		InitialWorkers:   5,   // 5 parallel workers
+		MinWorkers:       1,   // Minimum 1 worker
+		TimeoutSeconds:   30,  // 30 seconds timeout
+		UserAgent:        "FireSalamander/1.0 (SEPTEO) SEO Analyzer",
 		RespectRobotsTxt: true,
-	}
-
-	intelligentAdapter := crawler.NewIntelligentAdapter(crawlerConfig)
+	})
 	seoAnalyzer := seo.NewRealSEOAnalyzer()
 
 	// 🔥🦎 SPRINT 6: Initialiser MCP Storage pour persistance
@@ -188,7 +187,7 @@ func NewOrchestrator() *Orchestrator {
 	
 	orchestrator := &Orchestrator{
 		config:          realConfig,
-		parallelCrawler: intelligentAdapter,
+		parallelCrawler: parallelCrawler,
 		seoAnalyzer:     seoAnalyzer,
 		storage:         mcpStorage,
 		safeCrawler:     safeCrawler,
@@ -335,30 +334,42 @@ func (ro *Orchestrator) performCrawling(analysisID, targetURL string) ([]*crawle
 	}
 
 	ro.sendUpdate(analysisID, "Crawler returned, checking results...", constants.OrchestratorStatusCrawling)
-	log.Printf("🔍 DEBUG: Crawl result: pages=%d, error=%v", len(crawlResult.Pages), crawlResult.Error)
-	if crawlResult.Error != nil {
-		ro.sendUpdate(analysisID, fmt.Sprintf("Crawl result error: %v", crawlResult.Error), constants.OrchestratorStatusError)
-		return nil, fmt.Errorf("crawling failed: %w", crawlResult.Error)
+	log.Printf("🔍 DEBUG: Crawl result: pages=%d, errors=%d", len(crawlResult.Pages), len(crawlResult.Errors))
+	if len(crawlResult.Errors) > 0 {
+		ro.sendUpdate(analysisID, fmt.Sprintf("Crawl had %d errors", len(crawlResult.Errors)), constants.OrchestratorStatusError)
+		return nil, fmt.Errorf("crawling failed with %d errors", len(crawlResult.Errors))
 	}
 
 	ro.sendUpdate(analysisID, fmt.Sprintf("Crawl result contains %d pages", len(crawlResult.Pages)), constants.OrchestratorStatusCrawling)
 
-	// Convertir la map en slice
+	// Convertir CrawlResults en PageResults
 	var results []*crawler.PageResult
-	for _, pageResult := range crawlResult.Pages {
-		if pageResult.Error == nil { // Ignorer les pages avec erreurs
+	for _, crawlPage := range crawlResult.Pages {
+		if crawlPage.Error == nil { // Ignorer les pages avec erreurs
+			pageResult := &crawler.PageResult{
+				URL:         crawlPage.URL,
+				StatusCode:  crawlPage.StatusCode,
+				ContentType: crawlPage.ContentType,
+				Title:       crawlPage.Title,
+				Body:        crawlPage.Body,
+				Headers:     crawlPage.Headers,
+				Links:       convertLinksToParallel(crawlPage.Links),
+				CrawledAt:   crawlPage.CrawledAt,
+				Error:       crawlPage.Error,
+			}
 			results = append(results, pageResult)
 		}
 	}
 	
-	// Mise à jour finale des métriques
+	// Mise à jour finale des métriques  
 	state := ro.getState(analysisID)
 	if state != nil {
 		state.PagesFound = len(results)
-		state.CrawlerMetrics = crawlResult.Metrics
-		if crawlResult.Metrics != nil {
-			state.CurrentWorkers = crawlResult.Metrics.CurrentWorkers
-			state.PagesPerSecond = crawlResult.Metrics.PagesPerSecond
+		state.PagesAnalyzed = len(results)
+		// Basic metrics from crawl duration
+		duration := crawlResult.EndTime.Sub(crawlResult.StartTime)
+		if duration > 0 {
+			state.PagesPerSecond = float64(len(results)) / duration.Seconds()
 		}
 	}
 
@@ -691,7 +702,7 @@ func (ro *Orchestrator) convertFromStorage(storageAnalysis *storage.AnalysisStat
 }
 
 // TestCrawl teste directement le crawling (pour debug des tests)
-func (ro *Orchestrator) TestCrawl(ctx context.Context, url string) (*crawler.ParallelCrawlResult, error) {
+func (ro *Orchestrator) TestCrawl(ctx context.Context, url string) (*crawler.CrawlReport, error) {
 	return ro.parallelCrawler.CrawlWithContext(ctx, url)
 }
 
@@ -786,4 +797,16 @@ func (ro *Orchestrator) GetRecentAnalyses(limit int) []*AnalysisState {
 // GetAnalysisDetails retourne les détails complets d'une analyse
 func (ro *Orchestrator) GetAnalysisDetails(analysisID string) (*AnalysisState, error) {
 	return ro.GetStatus(analysisID)
+}
+
+// convertLinksToParallel converts crawler.Link to crawler.ParallelLink  
+func convertLinksToParallel(links []crawler.Link) []crawler.ParallelLink {
+	result := make([]crawler.ParallelLink, 0, len(links))
+	for _, link := range links {
+		result = append(result, crawler.ParallelLink{
+			URL:  link.URL,
+			Text: link.Text,
+		})
+	}
+	return result
 }
