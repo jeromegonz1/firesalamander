@@ -27,7 +27,7 @@ type Orchestrator struct {
 	config *OrchestratorConfig
 	
 	// Composants intégrés
-	parallelCrawler *crawler.ParallelCrawler
+	parallelCrawler *crawler.IntelligentAdapter
 	seoAnalyzer     *seo.RealSEOAnalyzer
 	
 	// 🔥🦎 SPRINT 6: MCP Storage pour persistance
@@ -171,12 +171,13 @@ func NewOrchestrator() *Orchestrator {
 		MaxPages:         realConfig.MaxPages,
 		InitialWorkers:   realConfig.InitialWorkers,
 		MinWorkers:       1,
+		MaxDepth:         constants.DefaultMaxDepth, // Add MaxDepth configuration
 		TimeoutSeconds:   constants.DefaultTimeoutSeconds, // Use the default timeout from constants
 		UserAgent:        realConfig.UserAgent,
 		RespectRobotsTxt: true,
 	}
 
-	parallelCrawler := crawler.NewParallelCrawler(crawlerConfig)
+	intelligentAdapter := crawler.NewIntelligentAdapter(crawlerConfig)
 	seoAnalyzer := seo.NewRealSEOAnalyzer()
 
 	// 🔥🦎 SPRINT 6: Initialiser MCP Storage pour persistance
@@ -187,7 +188,7 @@ func NewOrchestrator() *Orchestrator {
 	
 	orchestrator := &Orchestrator{
 		config:          realConfig,
-		parallelCrawler: parallelCrawler,
+		parallelCrawler: intelligentAdapter,
 		seoAnalyzer:     seoAnalyzer,
 		storage:         mcpStorage,
 		safeCrawler:     safeCrawler,

@@ -43,6 +43,10 @@ const (
 	DefaultMaxPages    = 20
 	DefaultMinPages    = 10
 	
+	// Rate Limiting - Production Security
+	RateLimitRequestsPerSecond = 1    // 1 request per second
+	RateLimitBurst            = 5    // Burst of 5 requests allowed
+	
 	// Site Type Limits
 	EcommerceSiteMaxPages = 700
 	EcommerceSiteMinPages = 100

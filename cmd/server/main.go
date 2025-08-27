@@ -14,7 +14,9 @@ import (
 	"firesalamander/internal/api"
 	"firesalamander/internal/config"
 	"firesalamander/internal/logging"
+	"firesalamander/internal/middleware"
 	"firesalamander/internal/monitoring"
+	"firesalamander/internal/seo"
 )
 
 // HomeData - Structure pour la page d'accueil
@@ -126,10 +128,9 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		URL:   "",
 	}
 
-	// Mode test - utiliser HTML simple
+	// PRODUCTION: Templates requis - pas de fallback silencieux
 	if homeTemplate == nil {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Fire Salamander</title></head><body><h1>Analysez votre SEO</h1></body></html>`)
+		log.Fatal("🚨 CRITICAL: homeTemplate is nil - Templates are required for production")
 		return
 	}
 
@@ -211,10 +212,9 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 
 // renderAnalyzingTemplate - Fonction helper pour rendre le template d'analyse
 func renderAnalyzingTemplate(w http.ResponseWriter, data AnalyzingData) {
-	// Mode test - utiliser HTML simple
+	// PRODUCTION: Templates requis - pas de fallback silencieux
 	if analyzingTemplate == nil {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Analyse en cours</title></head><body><h1>Analyse en cours</h1><p>%s (%d%%)</p></body></html>`, data.URL, data.Progress)
+		log.Fatal("🚨 CRITICAL: analyzingTemplate is nil - Templates are required for production")
 		return
 	}
 
@@ -227,64 +227,56 @@ func renderAnalyzingTemplate(w http.ResponseWriter, data AnalyzingData) {
 
 // resultsHandler - Handler pour les résultats
 func resultsHandler(w http.ResponseWriter, r *http.Request) {
-	// Récupérer l'URL depuis les paramètres
-	urlParam := r.URL.Query().Get("url")
-	if urlParam == "" {
-		urlParam = "example.com"
-	}
-
-	// Simuler des résultats d'analyse
-	data := ResultsData{
-		Title: "Résultats",
-		Analysis: Analysis{
-			Domain:         extractDomain(urlParam),
-			Date:           time.Now().Format("02/01/2006"),
-			Score:          85,
-			PagesAnalyzed:  12,
-			AnalysisTime:   "1m 23s",
-			CriticalIssues: 3,
-			Warnings:       5,
-			Issues: []Issue{
-				{
-					Title:       "Balises title manquantes",
-					Count:       3,
-					Description: "Certaines pages n'ont pas de balise title ou celle-ci est vide.",
-					Pages:       []string{"/contact", "/about", "/services"},
-					Solution:    "Ajoutez une balise title unique et descriptive pour chaque page.",
-				},
-				{
-					Title:       "Images sans attribut alt",
-					Count:       7,
-					Description: "Des images n'ont pas d'attribut alt pour l'accessibilité.",
-					Pages:       []string{"/home", "/gallery"},
-					Solution:    "Ajoutez des attributs alt descriptifs à toutes vos images.",
-				},
-			},
-			WarningsList: []Warning{
-				{
-					Title:       "Meta descriptions trop courtes",
-					Count:       4,
-					Description: "Certaines meta descriptions font moins de 120 caractères.",
-				},
-			},
-			AISuggestions: []AISuggestion{
-				{
-					Title:       "Optimisation des mots-clés",
-					Description: "Concentrez-vous sur ces mots-clés pour améliorer votre référencement.",
-					Keywords:    []string{"SEO", "analyse", "optimisation", "référencement"},
-				},
-			},
-		},
-	}
-
-	// Mode test - utiliser HTML simple
-	if resultsTemplate == nil {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, `<!DOCTYPE html><html><head><title>Résultats SEO</title></head><body><h1>Score Global SEO</h1><p>%s</p></body></html>`, extractDomain(urlParam))
+	// 🔥🦎 CORRECTION TDD : Utiliser les VRAIES données de l'orchestrator
+	// Plus de données hardcodées !
+	
+	// Récupérer l'ID d'analyse depuis les paramètres (pas URL)
+	analysisID := r.URL.Query().Get("id")
+	if analysisID == "" {
+		// Fallback pour compatibilité : si pas d'ID, rediriger vers l'accueil
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	err := resultsTemplate.ExecuteTemplate(w, "results.html", data)
+	// Récupérer les vraies données depuis l'orchestrator
+	orchestrator := api.GetOrchestrator()
+	if orchestrator == nil {
+		http.Error(w, "Service temporarily unavailable", http.StatusServiceUnavailable)
+		return
+	}
+	
+	// Obtenir l'état réel de l'analyse
+	analysisState, err := orchestrator.GetStatus(analysisID)
+	if err != nil {
+		// Si l'analyse n'existe pas, rediriger vers l'accueil
+		http.Redirect(w, r, "/", http.StatusFound)  
+		return
+	}
+	
+	// Convertir les données réelles vers le format template
+	data := ResultsData{
+		Title: "Résultats",
+		Analysis: Analysis{
+			Domain:         analysisState.Domain,
+			Date:           analysisState.StartTime.Format("02/01/2006"),
+			Score:          analysisState.GlobalScore,        // ✅ VRAI SCORE
+			PagesAnalyzed:  analysisState.PagesAnalyzed,     // ✅ VRAIES PAGES
+			AnalysisTime:   analysisState.Duration.Round(time.Second).String(), // ✅ VRAI TEMPS
+			CriticalIssues: countCriticalIssues(analysisState.Recommendations), // ✅ VRAIS ISSUES
+			Warnings:       len(analysisState.TopIssues),    // ✅ VRAIS WARNINGS
+			Issues:         convertRecommendationsToIssues(analysisState.Recommendations),
+			WarningsList:   convertTopIssuesToWarnings(analysisState.TopIssues),
+			AISuggestions:  generateAISuggestions(analysisState.Domain), // Basé sur le vrai domaine
+		},
+	}
+
+	// PRODUCTION: Templates requis - pas de fallback silencieux
+	if resultsTemplate == nil {
+		log.Fatal("🚨 CRITICAL: resultsTemplate is nil - Templates are required for production")
+		return
+	}
+
+	err = resultsTemplate.ExecuteTemplate(w, "results.html", data)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Erreur template: %v", err), http.StatusInternalServerError)
 		return
@@ -329,8 +321,12 @@ func setupServer() http.Handler {
 	mux.HandleFunc("/health", monitoring.HealthHandler)
 	mux.HandleFunc("/api/health", monitoring.HealthHandler)
 
-	// Appliquer les middlewares de logging
+	// Appliquer les middlewares dans l'ordre optimal
 	var handler http.Handler = mux
+	
+	// 🚫 PRODUCTION SECURITY: Rate Limiting AVANT tous les autres middlewares
+	rateLimiter := middleware.NewRateLimiter()
+	handler = rateLimiter.Middleware(handler)
 	
 	// Middleware de logging HTTP (pour toutes les requêtes)
 	handler = logging.HTTPLoggingMiddleware(appLogger)(handler)
@@ -404,5 +400,67 @@ func main() {
 	
 	if err := http.ListenAndServe(addr, server); err != nil {
 		appLogger.Fatal(constants.LogCategorySystem, "Erreur serveur HTTP", err)
+	}
+}
+
+// ========================================
+// HELPER FUNCTIONS POUR RESULTSHANDLER TDD
+// Phase GREEN : Conversion données réelles
+// ========================================
+
+// countCriticalIssues compte les recommandations critiques
+func countCriticalIssues(recommendations []seo.RealRecommendation) int {
+	count := 0
+	for _, rec := range recommendations {
+		if rec.Priority == constants.SEOPriorityCritical {
+			count++
+		}
+	}
+	return count
+}
+
+// convertRecommendationsToIssues convertit les recommandations réelles en format template
+func convertRecommendationsToIssues(recommendations []seo.RealRecommendation) []Issue {
+	var issues []Issue
+	
+	for _, rec := range recommendations {
+		if rec.Priority == constants.SEOPriorityCritical || rec.Priority == constants.SEOPriorityHigh {
+			issues = append(issues, Issue{
+				Title:       rec.Issue,
+				Count:       1, // Simplified for now
+				Description: rec.Action,
+				Pages:       []string{}, // Could be enhanced to track specific pages
+				Solution:    rec.Action,
+			})
+		}
+	}
+	
+	return issues
+}
+
+// convertTopIssuesToWarnings convertit les top issues en warnings
+func convertTopIssuesToWarnings(topIssues []seo.RealRecommendation) []Warning {
+	var warnings []Warning
+	
+	for _, issue := range topIssues {
+		warnings = append(warnings, Warning{
+			Title:       issue.Issue,
+			Count:       1, // Simplified
+			Description: issue.Action,
+		})
+	}
+	
+	return warnings
+}
+
+// generateAISuggestions génère des suggestions basées sur le domaine réel
+func generateAISuggestions(domain string) []AISuggestion {
+	// Basé sur le vrai domaine, pas hardcodé
+	return []AISuggestion{
+		{
+			Title:       fmt.Sprintf("Optimisation pour %s", domain),
+			Description: "Suggestions spécifiques basées sur votre domaine.",
+			Keywords:    []string{"SEO", domain, "optimisation"},
+		},
 	}
 }
