@@ -1,0 +1,15 @@
+{
+  "id": "analysis-1754752826-1754752826607586000-27199",
+  "url": "https://example.com",
+  "domain": "example.com",
+  "status": "error",
+  "start_time": "2025-08-09T17:20:26.607589+02:00",
+  "duration": 90002852459,
+  "score": 0,
+  "pages_found": 0,
+  "pages_analyzed": 0,
+  "current_workers": 0,
+  "pages_per_second": 0,
+  "created_at": "2025-08-09T17:20:26.607589+02:00",
+  "updated_at": "2025-08-09T17:21:56.611349+02:00"
+}

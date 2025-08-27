@@ -1,0 +1,15 @@
+{
+  "id": "analysis-1756216134-1756216134405540000-89451",
+  "url": "https://github.com",
+  "domain": "github.com",
+  "status": "error",
+  "start_time": "2025-08-26T15:48:54.405544+02:00",
+  "duration": 90004427750,
+  "score": 0,
+  "pages_found": 0,
+  "pages_analyzed": 0,
+  "current_workers": 0,
+  "pages_per_second": 0,
+  "created_at": "2025-08-26T15:48:54.405544+02:00",
+  "updated_at": "2025-08-26T15:50:24.409611+02:00"
+}

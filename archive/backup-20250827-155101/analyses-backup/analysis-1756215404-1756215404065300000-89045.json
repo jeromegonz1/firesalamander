@@ -1,0 +1,20 @@
+{
+  "id": "analysis-1756215404-1756215404065300000-89045",
+  "url": "https://example.com",
+  "domain": "example.com",
+  "status": "complete",
+  "start_time": "2025-08-26T15:36:44.065302+02:00",
+  "duration": 453677250,
+  "score": 68,
+  "pages_found": 1,
+  "pages_analyzed": 1,
+  "current_workers": 5,
+  "pages_per_second": 0.1780966605291803,
+  "recommendations": [
+    "Title length not optimal: Optimize title length (30-60 characters)",
+    "Meta description missing: Add meta description"
+  ],
+  "global_grade": "C",
+  "created_at": "2025-08-26T15:36:44.065302+02:00",
+  "updated_at": "2025-08-26T15:36:44.518992+02:00"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "analysis-1756281647-1756281647140271000-28502",
+  "url": "https://claude.ai/",
+  "domain": "claude.ai",
+  "status": "complete",
+  "start_time": "2025-08-27T10:00:47.140275+02:00",
+  "duration": 263948459,
+  "score": 55,
+  "pages_found": 1,
+  "pages_analyzed": 1,
+  "current_workers": 5,
+  "pages_per_second": 4.122153845995301,
+  "recommendations": [
+    "Title length not optimal: Optimize title length (30-60 characters)",
+    "Meta description missing: Add meta description",
+    "Missing H1 heading: Add H1 heading"
+  ],
+  "global_grade": "D",
+  "created_at": "2025-08-27T10:00:47.140275+02:00",
+  "updated_at": "2025-08-27T10:00:47.405157+02:00"
+}

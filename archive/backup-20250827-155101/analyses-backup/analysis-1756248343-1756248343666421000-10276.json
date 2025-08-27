@@ -1,0 +1,35 @@
+{
+  "id": "analysis-1756248343-1756248343666421000-10276",
+  "url": "https://www.campinglacivelle.fr",
+  "domain": "www.campinglacivelle.fr",
+  "status": "complete",
+  "start_time": "2025-08-27T00:45:43.666423+02:00",
+  "duration": 8621925625,
+  "score": 67,
+  "pages_found": 217,
+  "pages_analyzed": 217,
+  "current_workers": 5,
+  "pages_per_second": 27.01389326509983,
+  "top_issues": [
+    "Title tag missing",
+    "Title tag missing",
+    "Title tag missing",
+    "Title tag missing",
+    "Title tag missing"
+  ],
+  "recommendations": [
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag",
+    "Title tag missing: Add a descriptive title tag"
+  ],
+  "global_grade": "C",
+  "created_at": "2025-08-27T00:45:43.666423+02:00",
+  "updated_at": "2025-08-27T00:45:52.288386+02:00"
+}

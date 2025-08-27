@@ -1,0 +1,15 @@
+{
+  "id": "analysis-1756215947-1756215947177011000-89451",
+  "url": "https://septeo.com",
+  "domain": "septeo.com",
+  "status": "error",
+  "start_time": "2025-08-26T15:45:47.177014+02:00",
+  "duration": 90003125958,
+  "score": 0,
+  "pages_found": 0,
+  "pages_analyzed": 0,
+  "current_workers": 0,
+  "pages_per_second": 0,
+  "created_at": "2025-08-26T15:45:47.177014+02:00",
+  "updated_at": "2025-08-26T15:47:17.179783+02:00"
+}

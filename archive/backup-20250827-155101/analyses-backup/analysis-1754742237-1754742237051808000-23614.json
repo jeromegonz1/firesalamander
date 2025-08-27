@@ -1,0 +1,15 @@
+{
+  "id": "analysis-1754742237-1754742237051808000-23614",
+  "url": "https://resalys.com",
+  "domain": "resalys.com",
+  "status": "error",
+  "start_time": "2025-08-09T14:23:57.051809+02:00",
+  "duration": 120003957083,
+  "score": 0,
+  "pages_found": 0,
+  "pages_analyzed": 0,
+  "current_workers": 0,
+  "pages_per_second": 0,
+  "created_at": "2025-08-09T14:23:57.051809+02:00",
+  "updated_at": "2025-08-09T14:25:57.056762+02:00"
+}

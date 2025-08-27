@@ -1,0 +1,20 @@
+{
+  "id": "analysis-1756237959-1756237959770920000-97215",
+  "url": "https://www.septeo.com",
+  "domain": "www.septeo.com",
+  "status": "complete",
+  "start_time": "2025-08-26T21:52:39.770929+02:00",
+  "duration": 545944666,
+  "score": 70,
+  "pages_found": 1,
+  "pages_analyzed": 1,
+  "current_workers": 5,
+  "pages_per_second": 0.01219699815684089,
+  "recommendations": [
+    "Title length not optimal: Optimize title length (30-60 characters)",
+    "Some images missing alt text: Add alt text to images"
+  ],
+  "global_grade": "B",
+  "created_at": "2025-08-26T21:52:39.770929+02:00",
+  "updated_at": "2025-08-26T21:52:40.316873+02:00"
+}

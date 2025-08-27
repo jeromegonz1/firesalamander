@@ -1,0 +1,20 @@
+{
+  "id": "analysis-1756241803-1756241803206185000-1789",
+  "url": "https://www.campinglacivelle.fr/",
+  "domain": "www.campinglacivelle.fr",
+  "status": "complete",
+  "start_time": "2025-08-26T22:56:43.206187+02:00",
+  "duration": 411702500,
+  "score": 74,
+  "pages_found": 1,
+  "pages_analyzed": 1,
+  "current_workers": 5,
+  "pages_per_second": 2.4980697165493253,
+  "recommendations": [
+    "Meta description missing: Add meta description",
+    "Some images missing alt text: Add alt text to images"
+  ],
+  "global_grade": "B",
+  "created_at": "2025-08-26T22:56:43.206187+02:00",
+  "updated_at": "2025-08-26T22:56:43.617895+02:00"
+}

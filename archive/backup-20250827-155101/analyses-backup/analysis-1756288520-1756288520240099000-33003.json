@@ -1,0 +1,19 @@
+{
+  "id": "analysis-1756288520-1756288520240099000-33003",
+  "url": "https://resalys.com",
+  "domain": "resalys.com",
+  "status": "complete",
+  "start_time": "2025-08-27T11:55:20.240107+02:00",
+  "duration": 1713831042,
+  "score": 85,
+  "pages_found": 1,
+  "pages_analyzed": 1,
+  "current_workers": 5,
+  "pages_per_second": 0.5909513967703872,
+  "recommendations": [
+    "Some images missing alt text: Add alt text to images"
+  ],
+  "global_grade": "B+",
+  "created_at": "2025-08-27T11:55:20.240107+02:00",
+  "updated_at": "2025-08-27T11:55:21.953937+02:00"
+}

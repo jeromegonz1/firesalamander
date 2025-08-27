@@ -1,7 +1,0 @@
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   258  100   155  100   103  33219  22074 --:--:-- --:--:-- --:--:-- 86000
-HTTP_STATUS:200
-TIME_TOTAL:0.004666
-TIME_CONNECT:0.002033
-TIME_STARTTRANSFER:0.004081
