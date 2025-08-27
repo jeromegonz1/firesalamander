@@ -22,16 +22,64 @@ body {
   line-height: inherit;
 }
 
-/* Couleurs SEPTEO */
+/* Couleurs SEPTEO - Design System */
 :root {
   --septeo-orange: #ff6136;
-  --septeo-blue: #1e3a8a;
+  --septeo-blue: #103374;  /* Bleu plus foncé comme dans les maquettes */
   --septeo-gray-50: #f8fafc;
   --septeo-gray-100: #f1f5f9;
+  --septeo-gray-200: #e2e8f0;
+  --septeo-gray-600: #475569;
   --septeo-gray-800: #1e293b;
-  --septeo-red: #dc2626;
-  --septeo-green: #16a34a;
-  --septeo-yellow: #fbbf24;
+  --septeo-green: #10b981;
+  --septeo-red: #ef4444;
+}
+
+/* Améliorations Design - Inspirées des maquettes mais avec nos données */
+.container {
+  max-width: 1200px;
+}
+
+/* Header amélioré selon maquette */
+.header-logo {
+  background: linear-gradient(135deg, var(--septeo-blue), #1a4297);
+  box-shadow: 0 2px 8px rgba(16, 51, 116, 0.2);
+}
+
+/* Bouton principal style maquette */
+.btn-primary {
+  background: linear-gradient(135deg, var(--septeo-orange), #e5562e);
+  box-shadow: 0 4px 12px rgba(255, 97, 54, 0.3);
+  transform: translateY(0);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 97, 54, 0.4);
+}
+
+/* Score circle amélioré */
+.score-circle {
+  filter: drop-shadow(0 4px 12px rgba(255, 97, 54, 0.2));
+}
+
+/* Cards avec ombre subtile */
+.stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress bar style maquette */
+.progress-bar-modern {
+  background: linear-gradient(90deg, var(--septeo-orange), #ff8c42);
+  border-radius: 12px;
+  height: 8px;
+  box-shadow: 0 2px 6px rgba(255, 97, 54, 0.3);
 }
 
 /* Classes Tailwind essentielles */
