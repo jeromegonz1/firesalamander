@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "timestamp": "2025-08-27T08:27:07.396Z",
+    "testSuite": "Fire Salamander UX Tests",
+    "version": "1.0.0",
+    "environment": "test"
+  },
+  "summary": {
+    "totalTests": 0,
+    "passedTests": 0,
+    "failedTests": 0,
+    "warnings": 0,
+    "criticalIssues": 0
+  },
+  "compliance": {
+    "accessibility": 0,
+    "performance": 0,
+    "designSystem": 0,
+    "userExperience": 0
+  },
+  "recommendations": [],
+  "reports": {
+    "accessibility": [],
+    "visual": [],
+    "performance": [],
+    "userFlows": [],
+    "designSystem": []
+  }
+}
