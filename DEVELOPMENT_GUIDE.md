@@ -524,6 +524,67 @@ Si ces règles ne sont PAS suivies :
 
 ---
 
+## 🔄 WORKFLOW GIT OBLIGATOIRE
+
+### Fréquence des commits et push
+
+**Commits locaux :**
+- Toutes les 30-60 minutes de travail actif
+- Après chaque test qui passe (TDD)
+- Avant chaque pause/interruption
+- Message descriptif, pas juste "WIP"
+
+**Push vers GitHub :**
+- OBLIGATOIRE en fin de session
+- Après chaque feature complète
+- Maximum 2h de travail sans push
+- Règle : "Si le Mac crash, je perds quoi ?"
+
+### Configuration automatique
+
+```bash
+# Ajouter dans .git/hooks/post-commit
+#!/bin/bash
+UNPUSHED=$(git log origin/main..HEAD --oneline | wc -l)
+if [ $UNPUSHED -gt 5 ]; then
+    echo "⚠️ ATTENTION: $UNPUSHED commits non pushés!"
+    echo "Faire: git push origin main"
+fi
+```
+
+### Commandes workflow
+
+```bash
+# Commit avec contexte
+git add -A && git commit -m "feat(crawler): add sitemap support"
+
+# Push sécurisé
+git pull --rebase && git push
+
+# Sauver avant pause
+alias safepush='git add -A && git commit -m "checkpoint: $(date +%H:%M)" && git push'
+```
+
+### Format des messages de commit
+
+```
+type(scope): description
+```
+
+**Types:**
+- `feat`: nouvelle fonctionnalité
+- `fix`: correction de bug
+- `test`: ajout de tests
+- `docs`: documentation
+- `refactor`: restructuration code
+
+**Exemples:**
+- `feat(crawler): implement intelligent termination`
+- `fix(css): serve static files correctly`
+- `test(api): add validation for score display`
+
+---
+
 ## 📚 RÈGLES D'OR - À MÉMORISER
 
 1. **TESTER** d'abord, **CODER** ensuite
@@ -531,6 +592,7 @@ Si ces règles ne sont PAS suivies :
 3. **ZÉRO** hardcoding, **TOUT** en config
 4. **UTILISER** l'équipe, pas coder seul
 5. **DOCUMENTER** immédiatement
+6. **COMMIT** régulièrement, **PUSH** obligatoire
 
 ---
 
