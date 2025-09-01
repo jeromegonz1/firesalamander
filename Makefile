@@ -1,9 +1,10 @@
 # Fire Salamander Makefile
 
-.PHONY: help validate-schemas test init clean build run dev
+.PHONY: help validate-schemas test init clean build run dev context
 
 help:
 	@echo "Fire Salamander - Available commands:"
+	@echo "  make context           - Show project context after auto-compact"
 	@echo "  make init              - Initialize project structure"
 	@echo "  make validate-schemas  - Validate all JSON schemas"
 	@echo "  make test              - Run all tests"
@@ -11,6 +12,42 @@ help:
 	@echo "  make run               - Run the application"
 	@echo "  make dev               - Run in development mode"
 	@echo "  make clean             - Clean generated files"
+
+context:
+	@echo "🦎 Fire Salamander - Contexte Projet"
+	@echo "═══════════════════════════════════════"
+	@echo ""
+	@echo "📋 CONTEXTE CCMP ACTUEL:"
+	@echo "────────────────────────"
+	@cat .claude/context/current_state.md | head -40
+	@echo ""
+	@echo "📋 DÉCISIONS TECHNIQUES:"
+	@echo "─────────────────────────"
+	@cat .claude/context/decisions.md | head -15
+	@echo ""
+	@echo "📈 DERNIERS COMMITS:"
+	@echo "──────────────────────"
+	@git log --oneline -5 --color=always
+	@echo ""
+	@echo "📂 FICHIERS MODIFIÉS:"
+	@echo "───────────────────────"
+	@git status --porcelain || echo "Aucun fichier modifié"
+	@echo ""
+	@echo "🧪 ÉTAT DES TESTS:"
+	@echo "─────────────────"
+	@echo "Go tests:"
+	@go test ./internal/crawler ./internal/audit ./internal/orchestrator ./internal/semantic ./internal/report 2>/dev/null | grep -E "(PASS|FAIL|ok)" | tail -10 || echo "❌ Erreur tests Go"
+	@echo ""
+	@echo "Python tests (Agent Sémantique):"
+	@cd internal/semantic/python && source venv/bin/activate && python -m pytest --tb=no -q 2>/dev/null | tail -5 || echo "❌ Agent sémantique non testé"
+	@echo ""
+	@echo "📊 RÉSUMÉ:"
+	@echo "─────────"
+	@echo "Architecture: 5 agents implémentés avec TDD"
+	@echo "Repository: https://github.com/jeromegonz1/firesalamander"
+	@echo "CDC: CDC/v4.1-current.md"
+	@echo "Specs: SPECS/functional/full-specifications.md"
+	@echo ""
 
 validate-schemas:
 	@echo "🔍 Validating JSON schemas..."
