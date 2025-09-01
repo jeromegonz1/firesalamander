@@ -79,11 +79,15 @@ jobs:
     - name: Install Python dependencies
       run: |
         cd internal/semantic/python
-        if [ -f "requirements.txt" ]; then
-          pip install -r requirements.txt
-          python -m spacy download fr_core_news_sm || echo "spaCy model download skipped"
+        if [ -f "requirements-ci.txt" ]; then
+          pip install -r requirements-ci.txt
+          echo "Lightweight CI dependencies installed"
+        elif [ -f "requirements.txt" ]; then
+          # Install only core testing dependencies to avoid timeout
+          pip install pytest pytest-cov pytest-mock pyyaml jsonschema numpy scikit-learn flask flask-cors
+          echo "Core dependencies installed, heavy ML dependencies skipped in CI"
         else
-          echo "No requirements.txt found, skipping Python dependencies"
+          echo "No requirements files found, skipping Python dependencies"
         fi
         
     - name: Run Python tests
