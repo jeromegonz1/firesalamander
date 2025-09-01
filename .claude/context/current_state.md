@@ -1,10 +1,10 @@
 # État Actuel - Fire Salamander
 
-## Phase: 1 - Agents Core
+## Phase: 0 - FINALISÉE ✅
 Date début: 2025-09-01
-Semaine: 2/7
+Finalisée: 2025-09-01
 
-## Complété
+## Phase 0 - Préparation Complète
 - [x] CDC V4.1 documenté et structuré
 - [x] Spécifications fonctionnelles complètes
 - [x] Repository GitHub restructuré
@@ -19,6 +19,12 @@ Semaine: 2/7
 - [x] **Agent Orchestrateur (Go)** - TDD, tests passants
 - [x] **Agent Analyse Sémantique (Python)** - TDD, tests passants
 - [x] **Agent Report Engine (Go)** - TDD, tests passants
+- [x] **Dataset d'évaluation** - 6 sites français annotés
+- [x] **Fixtures de test** - 4 pages HTML + robots.txt + sitemap
+- [x] **Epics CCPM** - 5 epics détaillés par agent
+- [x] **Dépendances mises à jour** - Go + Python
+- [x] **Script de validation** - validate-prep.sh
+- [x] **GitHub Actions CI** - Pipeline complet
 
 ## Architecture Implémentée
 - ✅ Pipeline 5 agents fonctionnel
@@ -27,13 +33,12 @@ Semaine: 2/7
 - ✅ Validation des contrats JSON Schema
 - ✅ Tests unitaires complets (TDD)
 
-## En cours
-- [x] Tests d'intégration complets
-
-## Prochaines étapes
-1. Tests d'intégration end-to-end
-2. Intégration Lighthouse réelle
-3. Déploiement et validation MVP
+## Prochaine Phase: 1 - Agents Avancés
+1. **Crawler avancé**: Support sitemap XML, gestion redirections 3xx
+2. **Technical Lighthouse**: Intégration API Lighthouse réelle
+3. **Semantic ML**: CamemBERT/DistilCamemBERT, embedding vectors
+4. **Report interactif**: Charts.js, export PDF, comparaisons temporelles
+5. **Orchestrator monitoring**: Métriques Prometheus, retry logic, reprise
 
 ## Agents Implémentés
 

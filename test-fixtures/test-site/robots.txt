@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Disallow: /wp-admin/
+Disallow: /*.pdf$
+
+# Allow important pages
+Allow: /pages/
+Allow: /static/
+
+# Sitemap location
+Sitemap: https://test-site.example.com/sitemap.xml
+
+# Crawl delay for testing
+Crawl-delay: 1
