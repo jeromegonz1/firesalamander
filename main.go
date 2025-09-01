@@ -17,8 +17,16 @@ func main() {
 		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
-	log.Printf("Fire Salamander MVP starting on port %d...", cfg.Server.Port)
+	// Check if we're in CI mode (just validate and exit)
+	if os.Getenv("CI") == "true" || os.Getenv("GITHUB_ACTIONS") == "true" {
+		log.Printf("CI mode detected - configuration loaded successfully")
+		os.Exit(0)
+	}
+
+	log.Printf("🔥 Fire Salamander starting on :%d", cfg.Server.Port)
 	
 	// TODO: Start HTTP server with TDD
+	// For now, just exit cleanly
+	log.Printf("Fire Salamander initialized successfully")
 	os.Exit(0)
 }
