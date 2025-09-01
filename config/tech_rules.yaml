@@ -1,0 +1,60 @@
+tech_audit:
+  title:
+    min_length: 15
+    max_length: 60
+    missing_severity: "critical"
+    too_short_severity: "high"
+    too_long_severity: "medium"
+    
+  meta_description:
+    min_length: 120
+    max_length: 160
+    missing_severity: "high"
+    too_short_severity: "medium"
+    too_long_severity: "medium"
+    
+  headings:
+    h1:
+      required: true
+      multiple_severity: "medium"
+      missing_severity: "critical"
+    h2:
+      min_count: 1
+      missing_severity: "low"
+    h3:
+      recommended: true
+      
+  images:
+    alt_missing_severity: "high"
+    oversized_severity: "medium"
+    max_size_kb: 500
+    
+  links:
+    broken_severity: "critical"
+    weak_anchor_severity: "low"
+    weak_anchors:
+      - "cliquez ici"
+      - "ici"
+      - "plus"
+      - "voir"
+      - "lire"
+      
+  performance:
+    lighthouse_thresholds:
+      performance:
+        good: 0.9
+        needs_improvement: 0.5
+      accessibility:
+        good: 0.9
+        needs_improvement: 0.8
+      best_practices:
+        good: 0.9
+        needs_improvement: 0.8
+      seo:
+        good: 0.9
+        needs_improvement: 0.8
+        
+  mesh_analysis:
+    orphan_severity: "high"
+    max_depth_warning: 4
+    weak_anchor_threshold: 0.3

@@ -1,0 +1,36 @@
+crawler:
+  performance:
+    concurrent_requests: 5
+    request_timeout: 10s
+    retry_attempts: 2
+    cache_ttl: 3600s
+  respect:
+    robots_txt: true
+    crawl_delay: true
+    sitemap: true
+  limits:
+    max_urls: 300
+    max_depth: 3
+  sampling:
+    strategy: "smart"  # none, smart, aggressive
+    priority_pages:
+      - home
+      - categories
+      - top_products
+  user_agent: "Fire Salamander SEO Analyzer/1.0 (SEPTEO)"
+  
+# Exclusions par défaut
+exclusions:
+  extensions:
+    - .pdf
+    - .jpg
+    - .png
+    - .gif
+    - .css
+    - .js
+    - .ico
+  patterns:
+    - "/admin/"
+    - "/wp-admin/"
+    - "/login"
+    - "/logout"

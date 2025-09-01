@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://firesalamander.septeo.com/schemas/crawl_result.json",
+  "title": "Crawl Index Result",
+  "description": "Schema for crawler output",
+  "type": "object",
+  "properties": {
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "lang": {
+            "type": "string",
+            "pattern": "^[a-z]{2}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "h1": {
+            "type": "string"
+          },
+          "h2": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "h3": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "anchors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {"type": "string"},
+                "href": {"type": "string"}
+              },
+              "required": ["text", "href"]
+            }
+          },
+          "canonical": {
+            "type": "string",
+            "format": "uri"
+          },
+          "meta_index": {
+            "type": "boolean"
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "outgoing_links": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "incoming_links": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "content": {
+            "type": "string",
+            "description": "Main text content for semantic analysis"
+          }
+        },
+        "required": ["url", "lang", "title", "depth"],
+        "additionalProperties": false
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "total_pages": {"type": "integer"},
+        "max_depth_reached": {"type": "integer"},
+        "duration_ms": {"type": "integer"},
+        "robots_respected": {"type": "boolean"},
+        "sitemap_found": {"type": "boolean"}
+      },
+      "required": ["total_pages", "duration_ms"]
+    }
+  },
+  "required": ["pages", "metadata"],
+  "additionalProperties": false
+}

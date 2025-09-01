@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://firesalamander.septeo.com/schemas/audit_request.json",
+  "title": "Fire Salamander Audit Request",
+  "description": "Schema for initiating an SEO audit",
+  "type": "object",
+  "properties": {
+    "jsonrpc": {
+      "type": "string",
+      "enum": ["2.0"]
+    },
+    "method": {
+      "type": "string",
+      "enum": ["audit_start"]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^audit_[a-zA-Z0-9]{8,}$"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "seed_url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "crawler": {
+          "type": "object",
+          "properties": {
+            "max_urls": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 300
+            },
+            "max_depth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 3
+            },
+            "respect_robots": {
+              "type": "boolean",
+              "default": true
+            },
+            "respect_sitemap": {
+              "type": "boolean",
+              "default": true
+            },
+            "language_target": {
+              "type": "string",
+              "pattern": "^[a-z]{2}$",
+              "default": "fr"
+            }
+          },
+          "additionalProperties": false
+        },
+        "technical": {
+          "type": "object",
+          "properties": {
+            "device": {
+              "type": "string",
+              "enum": ["desktop", "mobile"],
+              "default": "desktop"
+            },
+            "max_concurrent_audits": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 4
+            }
+          },
+          "additionalProperties": false
+        },
+        "semantic": {
+          "type": "object",
+          "properties": {
+            "max_candidates": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 1000,
+              "default": 500
+            },
+            "top_n": {
+              "type": "integer",
+              "minimum": 5,
+              "maximum": 50,
+              "default": 20
+            },
+            "ai_enabled": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["seed_url"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["jsonrpc", "method", "id", "params"],
+  "additionalProperties": false
+}

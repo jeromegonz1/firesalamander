@@ -1,0 +1,56 @@
+semantic:
+  language:
+    target: "fr"
+    confidence_threshold: 0.8
+    
+  preprocessing:
+    min_ngram_length: 2
+    max_ngram_length: 5
+    min_word_count: 2
+    stopwords_file: "config/stopwords_fr.txt"
+    
+  ranker:
+    weights:
+      thematic_score: 0.3
+      intent_score: 0.25
+      mesh_evidence: 0.2
+      readability: 0.15
+      historical_feedback: 0.1
+    
+  clustering:
+    algorithm: "HDBSCAN"
+    min_cluster_size: 3
+    min_samples: 2
+    
+  models:
+    embeddings: "distilcambert-base"  # ou "flaubert-base-uncased"
+    intent_classifier: "logistic_regression"
+    
+  output:
+    max_candidates: 500
+    top_suggestions: 20
+    diversity_threshold: 0.8
+    
+  ai_enhancement:
+    enabled: false
+    model: "mistral-7b-local"  # ou "gpt-3.5-turbo"
+    cache_enabled: true
+    cache_ttl: 86400  # 24h
+    prompt_templates:
+      business_keywords: "config/prompts/business_keywords.txt"
+      longtail_generation: "config/prompts/longtail_generation.txt"
+      
+# Listes de filtrage
+filters:
+  banlist:
+    - "cliquez ici"
+    - "en savoir plus"
+    - "voir plus"
+    - "lire la suite"
+  brand_terms:
+    - "septeo"
+    - "fire salamander"
+  generic_terms:
+    - "accueil"
+    - "contact"
+    - "mentions légales"
