@@ -1,0 +1,3 @@
+[submodule ".claude-tools"]
+	path = .claude-tools
+	url = https://github.com/automazeio/ccpm

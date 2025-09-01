@@ -59,3 +59,21 @@ lint:
 deps:
 	@go mod tidy
 	@go mod download
+
+# CCPM Commands
+.PHONY: ccpm-init ccpm-update ccpm-context ccpm-session
+
+ccpm-init:
+	@bash scripts/ccpm-update.sh
+	@echo "CCPM initialized"
+
+ccpm-context:
+	@bash scripts/ccpm-context.sh
+
+ccpm-session:
+	@echo "Creating new session log..."
+	@bash scripts/ccpm-update.sh
+
+ccpm-update:
+	@echo "Updating current state..."
+	@${EDITOR:-nano} .claude/context/current_state.md

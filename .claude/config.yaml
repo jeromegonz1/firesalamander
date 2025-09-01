@@ -1,0 +1,55 @@
+project:
+  name: "Fire Salamander"
+  description: "Outil d'audit SEO automatisé pour SEPTEO"
+  version: "0.1.0"
+  repository: "https://github.com/jeromegonz1/firesalamander"
+
+context:
+  max_size: 4000
+  priority_files:
+    - "CDC/v4.1-current.md"
+    - ".claude/context/current_state.md"
+    - ".claude/context/project.md"
+    
+memory:
+  retention_days: 30
+  session_format: "session_YYYYMMDD_HHMM.md"
+  
+phases:
+  current: 0
+  total: 4
+  schedule:
+    - phase: 0
+      name: "Fondations"
+      duration: "1 semaine"
+      tasks:
+        - "Structure projet"
+        - "Contrats JSON"
+        - "Dataset évaluation"
+    - phase: 1
+      name: "Core technique"
+      duration: "2 semaines"
+      tasks:
+        - "Crawler Go"
+        - "Lighthouse integration"
+        - "PDF simple"
+    - phase: 2
+      name: "Sémantique baseline"
+      duration: "2 semaines"
+      tasks:
+        - "N-grammes + TF-IDF"
+        - "Intent classifier"
+        - "Feedback loop"
+    - phase: 3
+      name: "ML & IA"
+      duration: "2 semaines"
+      tasks:
+        - "Embeddings CamemBERT"
+        - "Ranker ML"
+        - "Mistral 7B integration"
+
+tracking:
+  metrics:
+    - "Pages crawlées/seconde"
+    - "Precision@10 suggestions"
+    - "Temps génération rapport"
