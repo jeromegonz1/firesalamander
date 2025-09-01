@@ -104,7 +104,7 @@ jobs:
         
     - name: Check build
       run: |
-        go build -o fire-salamander ./cmd/main.go
+        go build -o fire-salamander ./cmd/server/main.go
         ./fire-salamander --version || echo "Build successful"
 
   lint:
