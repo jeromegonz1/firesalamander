@@ -1,4 +1,0 @@
-PROBLÈME EN COURS : Front affiche 85 (hardcodé) au lieu du score réel (74)
-Sprint 6.5 : Crawler intelligent FONCTIONNEL
-Dernier test : campinglacivelle.fr = 74/100 (réel)
-À débugger : templates/results.html probablement hardcodé

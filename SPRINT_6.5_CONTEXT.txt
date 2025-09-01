@@ -1,5 +1,0 @@
-Sprint 6.5 - Intelligent Crawler
-État : En cours
-Problème : Caractères HTML invalides dans le JSON
-Solution : Implémenter cleanHTML() pour nettoyer
-Fichiers modifiés : internal/crawler/intelligent_crawler.go
