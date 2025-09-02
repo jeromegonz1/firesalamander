@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"firesalamander/internal/audit"
+	"firesalamander/internal/agents"
 	"firesalamander/internal/agents/crawler"
 	"firesalamander/internal/agents/semantic"
 	"github.com/stretchr/testify/assert"

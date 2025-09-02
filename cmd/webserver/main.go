@@ -127,7 +127,10 @@ func (ws *WebServer) handleStartAudit(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Nouvel audit démarré: %s pour %s", auditID, auditReq.SiteURL)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
 
 // handleListAudits liste les audits (pour le MVP, retourne des données simulées)
@@ -149,7 +152,10 @@ func (ws *WebServer) handleListAudits(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(audits)
+	if err := json.NewEncoder(w).Encode(audits); err != nil {
+		log.Printf("Failed to encode audits: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
 
 // handleAuditDetails gère les détails d'un audit spécifique
@@ -209,7 +215,10 @@ func (ws *WebServer) handleAuditDetails(w http.ResponseWriter, r *http.Request) 
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(auditDetails)
+	if err := json.NewEncoder(w).Encode(auditDetails); err != nil {
+		log.Printf("Failed to encode audit details: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
 
 // corsMiddleware ajoute les headers CORS pour le développement
@@ -263,5 +272,8 @@ func (ws *WebServer) handleHealthCheck(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Failed to encode response: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }

@@ -128,7 +128,7 @@ func (c *Crawler) crawlPage(ctx context.Context, task CrawlTask) error {
 	if err != nil {
 		return fmt.Errorf("failed to fetch %s: %w", task.URL, err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode >= 400 {
 		return fmt.Errorf("HTTP %d for %s", resp.StatusCode, task.URL)
@@ -203,7 +203,7 @@ func (c *Crawler) saveToFile(result *CrawlResult, outputDir string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	encoder := json.NewEncoder(file)
 	encoder.SetIndent("", "  ")
