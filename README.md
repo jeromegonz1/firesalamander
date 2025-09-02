@@ -12,10 +12,10 @@ Outil d'audit SEO automatisé développé par SEPTEO Digital Services.
 Fire Salamander utilise une architecture multi-agents :
 
 ```
-Crawler → Audit Technique → Analyse Sémantique → Reporting
+Orchestrator → Crawler → Technical Analyzer → Semantic Analyzer → Report Engine
 ```
 
-Consultez [SPECS/technical/architecture.md](SPECS/technical/architecture.md) pour les détails.
+Consultez [docs/architecture.md](docs/architecture.md) pour le schéma complet avec diagramme Mermaid.
 
 ## 🚀 Démarrage rapide
 
@@ -103,11 +103,18 @@ L'interface utilise :
 
 ## 🤖 Agents
 
-1. **Crawler** - Exploration intelligente des sites
-2. **Audit Technique** - Analyse SEO et performance (Lighthouse)
-3. **Analyse Sémantique** - Compréhension métier et suggestions
-4. **Reporting** - Génération de rapports PDF/web
-5. **Orchestrateur** - Coordination du pipeline
+1. **Orchestrateur** - Coordination du pipeline
+2. **Crawler** - Exploration intelligente des sites
+3. **Audit Technique** - Analyse SEO et performance (Lighthouse)
+4. **Analyse Sémantique** - Compréhension métier et suggestions
+5. **Reporting** - Génération de rapports PDF/web
+
+## 📚 Documentation
+
+- [Architecture du système](docs/architecture.md) - Vue d'ensemble avec schéma Mermaid
+- [Spécifications fonctionnelles](SPECS/functional/) - User stories et scénarios BDD
+- [Spécifications techniques](SPECS/technical/) - API contracts et intégration
+- [Guide de développement](CONTRIBUTING.md) - Standards et processus agile
 
 ## 📈 Roadmap
 
