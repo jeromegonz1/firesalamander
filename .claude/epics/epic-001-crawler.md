@@ -44,6 +44,22 @@ Crawler intelligent pour l'audit SEO avec respect des robots.txt et gestion des 
 - Cache intelligent des pages déjà visitées
 - Limitation mémoire avec streaming
 
+## 🧪 Critères BDD
+**Given** un site web avec robots.txt et sitemap.xml
+**When** le crawler analyse le site
+**Then** il respecte les règles robots.txt et explore selon sitemap
+
+## 📊 Estimation
+- **Story Points**: 21 pts (Sprint 1)
+- **Complexité**: Moyenne
+- **Risques**: Gestion timeouts réseau
+
+## 🎯 User Stories
+- **US-001**: Parser robots.txt complet (5 pts)
+- **US-002**: Support sitemap.xml (8 pts)  
+- **US-003**: Gestion redirections 3xx (5 pts)
+- **US-004**: Optimisation performance (3 pts)
+
 ## Issues Connues
 - ⚠️ Gestion des redirections 3xx à améliorer
 - ⚠️ Support des sitemaps XML partiel
