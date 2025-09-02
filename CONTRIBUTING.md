@@ -120,3 +120,24 @@ make session-start
 - Markdown standard
 - Français pour specs métier
 - Anglais pour technique OK
+
+## Ressources et bonnes pratiques
+
+### Standards d'architecture
+- [C4 Model](https://c4model.com) - Approche structurée de visualisation d'architecture (utilisé dans ce projet)
+- [arc42](https://arc42.org) - Template de documentation d'architecture complet
+- [ADR (Architecture Decision Records)](https://adr.github.io) - Documenter les décisions techniques
+
+### Qualité code et process
+- [Google Engineering Practices](https://google.github.io/eng-practices/) - Guide de révision de code et bonnes pratiques
+- [The Twelve-Factor App](https://12factor.net) - Méthodologie pour applications SaaS modernes
+- [Martin Fowler's Blog](https://martinfowler.com) - Référence en architecture logicielle
+
+### Standards par langage
+- **Go** : [Effective Go](https://go.dev/doc/effective_go) - Guide officiel des bonnes pratiques
+- **Python** : [PEP 8](https://pep8.org/) - Guide de style Python
+- **Testing** : [Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html) - Stratégie de tests
+
+### Documentation
+- [Write the Docs](https://www.writethedocs.org/guide/) - Guide complet pour documentation technique
+- [Divio Documentation System](https://documentation.divio.com/) - Structure de documentation en 4 types

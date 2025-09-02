@@ -29,3 +29,16 @@
 - Version actuelle : 0.1.0
 - [Changelog](../CHANGELOG.md)
 - [Roadmap](../roadmap.md)
+
+## Standards et méthodologies
+
+Fire Salamander suit les standards de l'industrie :
+
+- **Architecture** : C4 Model pour la visualisation
+- **Décisions** : ADR pour la traçabilité
+- **Code Go** : Effective Go guidelines
+- **Code Python** : PEP 8 compliance
+- **Tests** : Pyramide de tests (Unit > Integration > E2E)
+- **Documentation** : arc42 structure adaptée
+
+Voir [CONTRIBUTING.md](../CONTRIBUTING.md#ressources-et-bonnes-pratiques) pour les références complètes.

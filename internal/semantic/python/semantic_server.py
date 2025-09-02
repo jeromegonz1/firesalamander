@@ -61,23 +61,24 @@ def analyze_semantic():
         "crawl_data": {...}
     }
     """
+    # Check for JSON data first
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'No JSON data provided'}), 400
+    
+    audit_id = data.get('audit_id')
+    crawl_data = data.get('crawl_data')
+    
+    if not audit_id:
+        return jsonify({'error': 'audit_id is required'}), 400
+    
+    if not crawl_data:
+        return jsonify({'error': 'crawl_data is required'}), 400
+    
+    if not analyzer:
+        return jsonify({'error': 'Analyzer not initialized'}), 500
+    
     try:
-        if not analyzer:
-            return jsonify({'error': 'Analyzer not initialized'}), 500
-        
-        data = request.get_json()
-        if not data:
-            return jsonify({'error': 'No JSON data provided'}), 400
-        
-        audit_id = data.get('audit_id')
-        crawl_data = data.get('crawl_data')
-        
-        if not audit_id:
-            return jsonify({'error': 'audit_id is required'}), 400
-        
-        if not crawl_data:
-            return jsonify({'error': 'crawl_data is required'}), 400
-        
         # Perform analysis
         result = analyzer.analyze(audit_id, crawl_data)
         

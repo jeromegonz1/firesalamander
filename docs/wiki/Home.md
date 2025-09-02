@@ -3,11 +3,11 @@
 Bienvenue sur le wiki Fire Salamander !
 
 ## Navigation rapide
-- [Architecture](Architecture)
-- [Installation](Installation)
-- [Guide utilisateur](User-Guide)
-- [API Reference](API-Reference)
-- [Troubleshooting](Troubleshooting)
+- [Architecture](../architecture.md)
+- [Guide utilisateur](../user-guide/getting-started.md)
+- [Premier audit](../user-guide/first-audit.md)
+- [API Reference](../api/)
+- [FAQ](../troubleshooting/faq.md)
 
 ## Projet
 - **Objectif** : Remplacer Screaming Frog pour SEPTEO
