@@ -38,13 +38,14 @@ Finalisée: 2025-09-01
 - Agents de base implémentés
 - Tests unitaires passants
 
-### Sprint 1.5 🔄 En cours (NEW)
-- [ ] INT-001: Pipeline intégration
-- [ ] INT-002: Scénarios BDD
-- [ ] INT-003: Gestion erreurs
-- [ ] INT-004: Report specs
-- [ ] INT-005: Matrice dépendances
-- [ ] INT-006: Tests E2E
+### Sprint 1.5 ✅ TERMINÉ
+- [x] INT-001: Pipeline intégration (8 pts)
+- [x] INT-002: Scénarios BDD (3 pts)
+- [x] INT-003: Gestion erreurs (5 pts)
+- [x] INT-004: Report specs (5 pts)
+- [x] INT-005: Matrice dépendances (2 pts)
+- [x] INT-006: Tests E2E (8 pts)
+**Total: 31/31 points ✅**
 
 ### Specs créées ce sprint
 - integration_flow.md avec exemples JSON-RPC
