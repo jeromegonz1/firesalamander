@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Salamander - SEO Audit Platform</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">🦎 Fire Salamander</h1>
+                <p class="tagline">Plateforme d'audit SEO avec agents spécialisés</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Section de soumission d'audit -->
+            <section class="audit-form-section">
+                <div class="card">
+                    <h2>Démarrer un audit SEO</h2>
+                    <form id="audit-form" class="audit-form">
+                        <div class="form-group">
+                            <label for="site-url">URL du site à auditer *</label>
+                            <input 
+                                type="url" 
+                                id="site-url" 
+                                name="siteUrl" 
+                                placeholder="https://example.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="audit-type">Type d'audit</label>
+                            <select id="audit-type" name="auditType">
+                                <option value="complete">Audit complet (tous les agents)</option>
+                                <option value="keyword">Analyse des mots-clés uniquement</option>
+                                <option value="technical">Audit technique uniquement</option>
+                                <option value="links">Analyse des liens uniquement</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="max-pages">Nombre maximum de pages</label>
+                            <input 
+                                type="number" 
+                                id="max-pages" 
+                                name="maxPages" 
+                                value="10"
+                                min="1"
+                                max="100"
+                            >
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="start-audit-btn">
+                                <span class="btn-text">Démarrer l'audit</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <span class="spinner"></span>
+                                    Audit en cours...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Section de progression temps réel -->
+            <section class="progress-section" id="progress-section" style="display: none;">
+                <div class="card">
+                    <h2>Progression de l'audit</h2>
+                    
+                    <div class="audit-info">
+                        <div class="audit-meta">
+                            <span class="audit-id">ID: <span id="current-audit-id">-</span></span>
+                            <span class="audit-url">URL: <span id="current-audit-url">-</span></span>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="progress-percentage">0%</span>
+                            <span id="progress-step">Initialisation...</span>
+                        </div>
+                    </div>
+
+                    <!-- Statut des agents -->
+                    <div class="agents-status">
+                        <h3>Statut des agents</h3>
+                        <div class="agents-grid">
+                            <div class="agent-card" data-agent="crawler">
+                                <div class="agent-icon">🕷️</div>
+                                <div class="agent-info">
+                                    <h4>Crawler</h4>
+                                    <div class="agent-status" data-status="pending">En attente</div>
+                                </div>
+                            </div>
+
+                            <div class="agent-card" data-agent="keyword_extractor">
+                                <div class="agent-icon">🔍</div>
+                                <div class="agent-info">
+                                    <h4>Keyword Extractor</h4>
+                                    <div class="agent-status" data-status="pending">En attente</div>
+                                </div>
+                            </div>
+
+                            <div class="agent-card" data-agent="technical_auditor">
+                                <div class="agent-icon">⚙️</div>
+                                <div class="agent-info">
+                                    <h4>Technical Auditor</h4>
+                                    <div class="agent-status" data-status="pending">En attente</div>
+                                </div>
+                            </div>
+
+                            <div class="agent-card" data-agent="linking_mapper">
+                                <div class="agent-icon">🔗</div>
+                                <div class="agent-info">
+                                    <h4>Linking Mapper</h4>
+                                    <div class="agent-status" data-status="pending">En attente</div>
+                                </div>
+                            </div>
+
+                            <div class="agent-card" data-agent="broken_links_detector">
+                                <div class="agent-icon">🚫</div>
+                                <div class="agent-info">
+                                    <h4>Broken Links Detector</h4>
+                                    <div class="agent-status" data-status="pending">En attente</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section des résultats -->
+            <section class="results-section" id="results-section" style="display: none;">
+                <div class="card">
+                    <div class="results-header">
+                        <h2>Résultats de l'audit</h2>
+                        <div class="results-actions">
+                            <button id="export-json-btn" class="btn btn-secondary">
+                                📄 Exporter JSON
+                            </button>
+                            <button id="export-html-btn" class="btn btn-secondary">
+                                📋 Exporter HTML
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Résumé global -->
+                    <div class="results-summary">
+                        <div class="summary-grid">
+                            <div class="summary-card">
+                                <div class="summary-value" id="total-pages">-</div>
+                                <div class="summary-label">Pages analysées</div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-value" id="total-keywords">-</div>
+                                <div class="summary-label">Mots-clés trouvés</div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-value" id="broken-links">-</div>
+                                <div class="summary-label">Liens brisés</div>
+                            </div>
+                            <div class="summary-card">
+                                <div class="summary-value" id="seo-score">-</div>
+                                <div class="summary-label">Score SEO moyen</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglets des résultats détaillés -->
+                    <div class="tabs">
+                        <div class="tabs-nav">
+                            <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
+                            <button class="tab-btn" data-tab="keywords">Mots-clés</button>
+                            <button class="tab-btn" data-tab="technical">Technique</button>
+                            <button class="tab-btn" data-tab="links">Liens</button>
+                        </div>
+
+                        <div class="tabs-content">
+                            <div class="tab-pane active" id="overview-tab">
+                                <div id="overview-content">
+                                    <!-- Contenu généré dynamiquement -->
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="keywords-tab">
+                                <div id="keywords-content">
+                                    <!-- Contenu généré dynamiquement -->
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="technical-tab">
+                                <div id="technical-content">
+                                    <!-- Contenu généré dynamiquement -->
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="links-tab">
+                                <div id="links-content">
+                                    <!-- Contenu généré dynamiquement -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section d'historique -->
+            <section class="history-section">
+                <div class="card">
+                    <h2>Audits récents</h2>
+                    <div id="audit-history">
+                        <!-- Historique généré dynamiquement -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Fire Salamander - Plateforme d'audit SEO</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="static/js/app.js"></script>
+</body>
+</html>

@@ -31,11 +31,59 @@ const (
 	IntegrationAgentSemantic = "semantic"
 )
 
+// Agent names for Sprint 2
+const (
+	AgentNameKeyword    = "keyword_extractor"
+	AgentNameTechnical  = "technical_auditor"
+	AgentNameLinking    = "linking_mapper"
+	AgentNameBrokenLinks = "broken_links_detector"
+)
+
+// Keyword extraction constants
+const (
+	KeywordMinLength = 3
+	KeywordMaxCount  = 50
+)
+
 // Analysis statuses
 const (
 	AnalysisStatusSuccess = "success"
 	AnalysisStatusFailed  = "failed"
 	AnalysisStatusPending = "pending"
+)
+
+// General status constants
+const (
+	StatusCompleted = "completed"
+	StatusFailed    = "failed"
+	StatusPending   = "pending"
+	StatusRunning   = "running"
+)
+
+// Orchestrator V2 constants
+const (
+	OrchestratorV2Name         = "orchestrator_v2"
+	DefaultMaxConcurrentAudits = 5
+	DefaultStreamBufferSize    = 100
+	DefaultAuditTimeoutMinutes = 30
+)
+
+// Pipeline step constants  
+const (
+	PipelineStepInitializing = "initializing"
+	PipelineStepCrawling     = "crawling"
+	PipelineStepAnalyzing    = "analyzing"
+	PipelineStepReporting    = "reporting"
+	PipelineStepCompleted    = "completed"
+)
+
+// Progress threshold constants
+const (
+	ProgressInitialized       = 5.0
+	ProgressCrawlingComplete  = 30.0
+	ProgressAnalysisComplete  = 80.0
+	ProgressReportingComplete = 95.0
+	ProgressFullComplete      = 100.0
 )
 
 // Analysis types
