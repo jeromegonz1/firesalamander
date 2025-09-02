@@ -10,7 +10,7 @@ import (
 
 	"firesalamander/internal/agents"
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 )
 
 // LinkingMapper implémente l'agent de cartographie et analyse des liens

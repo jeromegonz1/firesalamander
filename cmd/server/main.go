@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -10,7 +11,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"firesalamander/internal/orchestrator"
+	v2 "firesalamander/internal/orchestrator"
 )
 
 type HomeData struct {
@@ -20,7 +21,7 @@ type HomeData struct {
 
 var (
 	homeTemplate *template.Template
-	orch         *orchestrator.Orchestrator
+	orch         v2.OrchestratorV2
 )
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,13 +60,15 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 	auditID := fmt.Sprintf("audit_%d", time.Now().Unix())
 
 	// Start audit
-	auditRequest := orchestrator.AuditRequest{
-		SeedURL: req.URL,
-		AuditID: auditID,
-		Options: make(map[string]interface{}),
+	auditRequest := v2.AuditRequest{
+		AuditID:   auditID,
+		SeedURL:   req.URL,
+		MaxPages:  10,
+		Options:   make(map[string]interface{}),
+		Timestamp: time.Now(),
 	}
 
-	if err := orch.StartAudit(auditRequest); err != nil {
+	if _, err := orch.StartAudit(context.Background(), &auditRequest); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -88,7 +91,7 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	status, err := orch.GetStatus(auditID)
+	status, err := orch.GetAuditStatus(auditID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return
@@ -124,11 +127,9 @@ func setupServer() *http.ServeMux {
 
 func main() {
 	// Initialize orchestrator
+	orch = v2.NewOrchestratorV2()
+	
 	var err error
-	orch, err = orchestrator.NewOrchestrator()
-	if err != nil {
-		log.Fatalf("Failed to create orchestrator: %v", err)
-	}
 
 	// Load templates
 	homeTemplate, err = template.ParseFiles(filepath.Join("templates", "home.html"))

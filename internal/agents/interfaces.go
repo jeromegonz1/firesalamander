@@ -2,7 +2,7 @@ package agents
 
 import (
 	"context"
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 )
 
 // Agent représente l'interface commune pour tous les agents spécialisés

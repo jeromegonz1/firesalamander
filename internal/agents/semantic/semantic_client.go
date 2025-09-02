@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 )
 
 // SemanticClient handles communication with Python semantic analysis agent

@@ -2,9 +2,9 @@ package interfaces
 
 import (
 	"context"
-	"firesalamander/internal/audit"
-	"firesalamander/internal/crawler"
-	"firesalamander/internal/semantic"
+	"firesalamander/internal/agents"
+	"firesalamander/internal/agents/crawler"
+	"firesalamander/internal/agents/semantic"
 )
 
 // PageCrawler defines the interface for crawling web pages
@@ -14,7 +14,7 @@ type PageCrawler interface {
 
 // TechnicalAnalyzer defines the interface for technical analysis
 type TechnicalAnalyzer interface {
-	Analyze(crawlResult *crawler.CrawlResult, auditID string) (*audit.TechResult, error)
+	Analyze(crawlResult *crawler.CrawlResult, auditID string) (*agents.AgentResult, error)
 }
 
 // SemanticAnalyzer defines the interface for semantic analysis  
@@ -30,7 +30,7 @@ type ReportGenerator interface {
 // AuditResults represents the combined results of all analyses
 type AuditResults struct {
 	CrawlData       *crawler.CrawlResult
-	TechResults     *audit.TechResult  
+	TechResults     *agents.AgentResult  
 	SemanticResults *semantic.SemanticResult
 }
 

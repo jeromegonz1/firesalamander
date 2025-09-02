@@ -7,20 +7,21 @@ import (
 	"sync"
 	"time"
 
-	"firesalamander/internal/audit"
+	"firesalamander/internal/agents"
+	"firesalamander/internal/agents/technical"
 	"firesalamander/internal/config"
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
-	"firesalamander/internal/orchestrator"
+	"firesalamander/internal/agents/crawler"
+	v2 "firesalamander/internal/orchestrator"
 	"firesalamander/internal/report"
-	"firesalamander/internal/semantic"
+	"firesalamander/internal/agents/semantic"
 )
 
 // Pipeline manages the complete audit workflow
 type Pipeline struct {
 	config     *config.Config
 	crawler    *crawler.Crawler
-	technical  *audit.TechnicalAnalyzer
+	technical  *technical.TechnicalAuditor
 	semantic   *semantic.SemanticClient
 	report     *report.ReportEngine
 	mu         sync.RWMutex
@@ -78,17 +79,8 @@ func NewPipeline(cfg *config.Config) (*Pipeline, error) {
 	// Create agents with existing constructors
 	crawlerAgent := crawler.NewCrawler(*crawlerCfg)
 	
-	// Load tech rules for technical analyzer
-	techRules := audit.TechRules{
-		Title: audit.TitleRules{
-			MinLength:        10,
-			MaxLength:        60,
-			MissingSeverity:  "high",
-			TooShortSeverity: "medium",
-			TooLongSeverity:  "medium",
-		},
-	}
-	techAnalyzer := audit.NewTechnicalAnalyzer(techRules)
+	// Use the new unified technical auditor
+	techAnalyzer := technical.NewTechnicalAuditor()
 	
 	semanticClient := semantic.NewSemanticClient(constants.DefaultSemanticServiceURL)
 	reportEngine := report.NewReportEngine()
@@ -104,7 +96,7 @@ func NewPipeline(cfg *config.Config) (*Pipeline, error) {
 }
 
 // StartAudit begins a complete audit pipeline
-func (p *Pipeline) StartAudit(ctx context.Context, request orchestrator.AuditRequest) error {
+func (p *Pipeline) StartAudit(ctx context.Context, request v2.AuditRequest) error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
@@ -138,7 +130,7 @@ func (p *Pipeline) GetAuditStatus(auditID string) *AuditExecution {
 }
 
 // runPipeline executes the complete audit workflow
-func (p *Pipeline) runPipeline(ctx context.Context, request orchestrator.AuditRequest, execution *AuditExecution) {
+func (p *Pipeline) runPipeline(ctx context.Context, request v2.AuditRequest, execution *AuditExecution) {
 	defer func() {
 		if r := recover(); r != nil {
 			p.updateStatus(execution, "failed", "panic", fmt.Sprintf("Pipeline panic: %v", r))
@@ -186,7 +178,7 @@ func (p *Pipeline) runPipeline(ctx context.Context, request orchestrator.AuditRe
 	p.updateStatus(execution, "completed", "finished", "")
 }
 
-func (p *Pipeline) runCrawlStep(ctx context.Context, request orchestrator.AuditRequest, execution *AuditExecution) error {
+func (p *Pipeline) runCrawlStep(ctx context.Context, request v2.AuditRequest, execution *AuditExecution) error {
 	p.updateStatus(execution, "crawling", "crawling", "")
 
 	// Execute crawl using existing crawler
@@ -204,7 +196,7 @@ func (p *Pipeline) runCrawlStep(ctx context.Context, request orchestrator.AuditR
 	return nil
 }
 
-func (p *Pipeline) runTechnicalStep(ctx context.Context, request orchestrator.AuditRequest, execution *AuditExecution) error {
+func (p *Pipeline) runTechnicalStep(ctx context.Context, request v2.AuditRequest, execution *AuditExecution) error {
 	p.updateStatus(execution, "analyzing_tech", "technical analysis", "")
 
 	crawlData, ok := execution.Results["crawl"].(*crawler.CrawlResult)
@@ -212,19 +204,25 @@ func (p *Pipeline) runTechnicalStep(ctx context.Context, request orchestrator.Au
 		return fmt.Errorf("invalid crawl data")
 	}
 
-	// Analyze pages using existing technical analyzer
-	var allFindings []audit.Finding
+	// Use new technical auditor interface
+	var technicalResults []*agents.AgentResult
 	for _, page := range crawlData.Pages {
-		titleFindings := p.technical.ValidateTitle(page.Title, page.URL)
-		allFindings = append(allFindings, titleFindings...)
+		// Convert crawler.PageData to agents.PageData
+		agentPageData := &agents.PageData{
+			URL:     page.URL,
+			HTML:    page.Content, // Use HTML field
+			Headers: make(map[string]string),
+		}
 		
-		headingFindings := p.technical.ValidateHeadings(1, 2, page.URL)
-		allFindings = append(allFindings, headingFindings...)
+		result, err := p.technical.Process(context.Background(), agentPageData)
+		if err == nil && result != nil {
+			technicalResults = append(technicalResults, result)
+		}
 	}
 
 	execution.Results["technical"] = map[string]interface{}{
 		"audit_id": request.AuditID,
-		"findings": allFindings,
+		"results": technicalResults,
 		"status":   "completed",
 	}
 	p.updateProgress(execution, 60.0)
@@ -232,7 +230,7 @@ func (p *Pipeline) runTechnicalStep(ctx context.Context, request orchestrator.Au
 	return nil
 }
 
-func (p *Pipeline) runSemanticStep(ctx context.Context, request orchestrator.AuditRequest, execution *AuditExecution) error {
+func (p *Pipeline) runSemanticStep(ctx context.Context, request v2.AuditRequest, execution *AuditExecution) error {
 	p.updateStatus(execution, "analyzing_sem", "semantic analysis", "")
 
 	crawlData, ok := execution.Results["crawl"].(*crawler.CrawlResult)
@@ -252,7 +250,7 @@ func (p *Pipeline) runSemanticStep(ctx context.Context, request orchestrator.Aud
 	return nil
 }
 
-func (p *Pipeline) runReportStep(ctx context.Context, request orchestrator.AuditRequest, execution *AuditExecution) error {
+func (p *Pipeline) runReportStep(ctx context.Context, request v2.AuditRequest, execution *AuditExecution) error {
 	p.updateStatus(execution, "reporting", "generating reports", "")
 
 	// Combine results using existing report engine structure
@@ -267,7 +265,7 @@ func (p *Pipeline) runReportStep(ctx context.Context, request orchestrator.Audit
 		Duration:        time.Since(execution.StartTime).String(),
 		TotalPages:      len(crawlData.Pages),
 		CrawlData:       *crawlData,
-		TechResults:     audit.TechResult{Findings: techResults["findings"].([]audit.Finding)},
+		TechResults:     techResults["results"],
 		SemanticResults: *semanticResults,
 	}
 

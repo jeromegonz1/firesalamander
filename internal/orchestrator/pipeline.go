@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 )
 
 // pipelineExecutor implémente l'interface PipelineExecutor

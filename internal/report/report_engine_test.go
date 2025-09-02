@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"firesalamander/internal/audit"
-	"firesalamander/internal/crawler"
-	"firesalamander/internal/semantic"
+	"firesalamander/internal/agents/crawler"
+	"firesalamander/internal/agents/semantic"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

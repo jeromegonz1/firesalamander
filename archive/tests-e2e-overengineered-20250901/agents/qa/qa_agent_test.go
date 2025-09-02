@@ -76,8 +76,8 @@ func TestParseCoverageResults(t *testing.T) {
 	agent := NewQAAgent(DefaultQAConfig())
 	agent.stats = &QAStats{Coverage: CoverageStats{}}
 
-	mockOutput := `firesalamander/internal/crawler/crawler.go	func New	100.0%
-firesalamander/internal/crawler/fetcher.go	func Fetch	85.5%
+	mockOutput := `firesalamander/internal/agents/crawler/crawler.go	func New	100.0%
+firesalamander/internal/agents/crawler/fetcher.go	func Fetch	85.5%
 total:							(statements)		90.2%`
 
 	agent.parseCoverageResults(mockOutput)

@@ -11,7 +11,7 @@ import (
 
 	"firesalamander/internal/config"
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 	"firesalamander/internal/patterns"
 	"firesalamander/internal/seo"
 	"firesalamander/internal/storage"

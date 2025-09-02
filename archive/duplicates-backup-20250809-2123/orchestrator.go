@@ -10,8 +10,8 @@ import (
 
 	"firesalamander/internal/config"
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
-	"firesalamander/internal/semantic"
+	"firesalamander/internal/agents/crawler"
+	"firesalamander/internal/agents/semantic"
 	"firesalamander/internal/seo"
 )
 

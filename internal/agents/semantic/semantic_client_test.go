@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

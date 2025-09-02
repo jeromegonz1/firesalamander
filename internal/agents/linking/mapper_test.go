@@ -6,7 +6,7 @@ import (
 
 	"firesalamander/internal/agents"
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 )
 
 func TestLinkingMapper_Name(t *testing.T) {

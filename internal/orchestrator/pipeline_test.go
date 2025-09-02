@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"firesalamander/internal/constants"
-	"firesalamander/internal/crawler"
+	"firesalamander/internal/agents/crawler"
 )
 
 // MockCrawlResult pour simuler les résultats de crawling

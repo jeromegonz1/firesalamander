@@ -3,6 +3,7 @@ package technical
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
 	"time"
@@ -12,14 +13,22 @@ import (
 )
 
 // TechnicalAuditor implémente l'agent d'audit technique HTML/CSS/Performance
+// FUSION des meilleures fonctionnalités de internal/seo + internal/audit + agents/technical
 type TechnicalAuditor struct {
-	name string
+	name                string
+	client              *http.Client
+	mobileFriendlyRegex *regexp.Regexp
+	validHTMLRegex      *regexp.Regexp
 }
 
 // NewTechnicalAuditor crée une nouvelle instance de TechnicalAuditor
+// FUSION: Intègre les capacités avancées de la version SEO
 func NewTechnicalAuditor() *TechnicalAuditor {
 	return &TechnicalAuditor{
-		name: constants.AgentNameTechnical,
+		name:   constants.AgentNameTechnical,
+		client: &http.Client{Timeout: 30 * time.Second},
+		mobileFriendlyRegex: regexp.MustCompile(`viewport.*width=device-width`),
+		validHTMLRegex:      regexp.MustCompile(`<!DOCTYPE\s+html>`),
 	}
 }
 
