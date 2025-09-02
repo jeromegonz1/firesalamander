@@ -114,3 +114,25 @@ ccpm-session:
 ccpm-update:
 	@echo "Updating current state..."
 	@${EDITOR:-nano} .claude/context/current_state.md
+
+# Session management
+.PHONY: session-start session-end metrics
+
+session-start:
+	@echo "🚀 Starting Fire Salamander session"
+	@date >> .claude/memory/session_log.txt
+	@make context
+	@echo "📋 Checklist: .claude/templates/session-checklist.md"
+
+session-end:
+	@echo "🏁 Ending session - updating state..."
+	@echo "Session ended at $(date)" >> .claude/memory/session_log.txt
+	@git status --short
+	@echo "Remember to update .claude/context/current_state.md"
+
+metrics:
+	@echo "📊 Fire Salamander Metrics"
+	@cat .claude/context/metrics.md
+	@echo ""
+	@echo "Coverage Go: $(go test ./... -cover 2>/dev/null | grep coverage | tail -1)"
+	@echo "Tests Python: $(cd internal/semantic/python && python -m pytest --co -q 2>/dev/null | tail -1 || echo 'Python tests not configured')"

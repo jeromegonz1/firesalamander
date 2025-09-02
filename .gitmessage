@@ -1,0 +1,9 @@
+# Format: type(scope): description
+# Types: feat, fix, docs, test, refactor, chore
+# Scope: crawler, technical, semantic, report, orchestrator
+# 
+# Exemple: feat(crawler): implement robots.txt parser
+#
+# Description détaillée (optionnel) :
+
+# Issue/Epic référence :
