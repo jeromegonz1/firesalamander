@@ -553,18 +553,20 @@ func (r *RealSEOAnalyzer) CalculateTotalScore(analysis *RealPageAnalysis) int {
 // DetermineGrade determines the grade based on score
 func (r *RealSEOAnalyzer) DetermineGrade(score int) string {
 	switch {
-	case score >= constants.GradeAThreshold:
+	case score >= 95:
 		return constants.SEOGradeAPlus
-	case score >= constants.GradeBThreshold:
+	case score >= constants.GradeAThreshold:
 		return constants.SEOGradeA
-	case score >= constants.GradeBPlusThreshold:
+	case score >= constants.GradeBThreshold:
 		return constants.SEOGradeBPlus
-	case score >= constants.GradeCThreshold:
+	case score >= constants.GradeBPlusThreshold:
 		return constants.SEOGradeB
-	case score >= constants.GradeCPlusThreshold:
+	case score >= constants.GradeCThreshold:
 		return constants.SEOGradeC
-	case score >= constants.GradeDThreshold:
+	case score >= constants.GradeCPlusThreshold:
 		return constants.SEOGradeD
+	case score >= constants.GradeDThreshold:
+		return constants.SEOGradeF
 	default:
 		return constants.SEOGradeF
 	}

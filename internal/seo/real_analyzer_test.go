@@ -268,7 +268,7 @@ func TestRealSEOAnalyzer_ImageAltText(t *testing.T) {
 				ImagesWithAlt:    3,
 				MissingAlt:       0,
 				AltTextCoverage:  1.0,
-				Score:           constants.MaxImageScore, // 10 points
+				Score:           constants.MaxImageScore, // 100 points
 				Issues:          []string{},
 				Severity:        constants.RealSEOStatusInfo,
 			},
@@ -285,7 +285,7 @@ func TestRealSEOAnalyzer_ImageAltText(t *testing.T) {
 				ImagesWithAlt:   1,
 				MissingAlt:      2,
 				AltTextCoverage: 0.33,
-				Score:           3, // 1/3 coverage = 33% = 3.3/10 points
+				Score:           33, // 1/3 coverage = 33% = 33/100 points
 				Issues:          []string{constants.WarningMissingAltText},
 				Severity:        constants.RealSEOStatusWarning,
 			},
@@ -337,7 +337,7 @@ func TestRealSEOAnalyzer_PerformanceMetrics(t *testing.T) {
 				HasCaching:       true,
 				OptimizedImages:  true,
 			},
-			expected: constants.MaxPerformanceScore, // 10 points
+			expected: 9, // 3+3+3 points
 		},
 		{
 			name: "poor_performance",
@@ -349,7 +349,7 @@ func TestRealSEOAnalyzer_PerformanceMetrics(t *testing.T) {
 				HasCaching:      false,
 				OptimizedImages: false,
 			},
-			expected: 1, // Very low score
+			expected: 2, // 1+1+0 points
 		},
 		{
 			name: "moderate_performance",
@@ -361,7 +361,7 @@ func TestRealSEOAnalyzer_PerformanceMetrics(t *testing.T) {
 				HasCaching:      false,
 				OptimizedImages: true,
 			},
-			expected: 7, // Moderate score (actually good!)
+			expected: 8, // 3+3+2 points
 		},
 	}
 
