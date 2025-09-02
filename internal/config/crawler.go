@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"firesalamander/internal/constants"
 	"gopkg.in/yaml.v3"
 )
 
@@ -62,7 +63,7 @@ func LoadCrawlerConfig(path string) (*CrawlerConfig, error) {
 		wrapper.Crawler.Performance.RequestTimeout = 10 * time.Second
 	}
 	if wrapper.Crawler.Limits.MaxURLs == 0 {
-		wrapper.Crawler.Limits.MaxURLs = 300
+		wrapper.Crawler.Limits.MaxURLs = constants.DefaultMaxURLs
 	}
 	if wrapper.Crawler.Limits.MaxDepth == 0 {
 		wrapper.Crawler.Limits.MaxDepth = 3
@@ -85,7 +86,7 @@ func Load() (*Config, error) {
 	// Return default config for CI/testing
 	return &Config{
 		Server: ServerConfig{
-			Port: 8080,
+			Port: constants.DefaultServerPort,
 		},
 	}, nil
 }

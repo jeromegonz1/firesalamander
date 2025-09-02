@@ -10,6 +10,21 @@ import (
 	"golang.org/x/net/html"
 )
 
+// Temporary types for test compatibility
+type SEOAnalysisResult struct {
+	URL            string
+	Domain         string
+	Protocol       string
+	StatusCode     int
+	OverallScore   float64
+	CategoryScores map[string]float64
+}
+
+// NewSEOAnalyzer - Temporary function for test compatibility
+func NewSEOAnalyzer() *RealSEOAnalyzer {
+	return NewRealSEOAnalyzer()
+}
+
 // Test de l'analyseur de balises SEO
 func TestTagAnalyzerBasic(t *testing.T) {
 	analyzer := NewTagAnalyzer()

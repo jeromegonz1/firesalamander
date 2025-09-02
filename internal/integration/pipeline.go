@@ -9,6 +9,7 @@ import (
 
 	"firesalamander/internal/audit"
 	"firesalamander/internal/config"
+	"firesalamander/internal/constants"
 	"firesalamander/internal/crawler"
 	"firesalamander/internal/orchestrator"
 	"firesalamander/internal/report"
@@ -89,7 +90,7 @@ func NewPipeline(cfg *config.Config) (*Pipeline, error) {
 	}
 	techAnalyzer := audit.NewTechnicalAnalyzer(techRules)
 	
-	semanticClient := semantic.NewSemanticClient("http://localhost:5000")
+	semanticClient := semantic.NewSemanticClient(constants.DefaultSemanticServiceURL)
 	reportEngine := report.NewReportEngine()
 
 	return &Pipeline{

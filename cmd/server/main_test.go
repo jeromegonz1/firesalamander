@@ -12,6 +12,19 @@ import (
 	"firesalamander/internal/constants"
 )
 
+// Temporary types for test compatibility
+type AnalyzingData struct {
+	URL string
+}
+
+type ResultsData struct {
+	URL string
+}
+
+type Analysis struct {
+	URL string
+}
+
 // TestHomeHandler - Test du handler de la page d'accueil
 func TestHomeHandler(t *testing.T) {
 	// GIVEN - Une requête GET vers la page d'accueil

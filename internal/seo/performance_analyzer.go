@@ -2,6 +2,7 @@ package seo
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -323,7 +324,8 @@ func (pa *PerformanceAnalyzer) estimateCoreWebVitals(result *PerformanceMetricsR
 	result.CoreWebVitals.FID = EstimatedMetric{
 		Value:     fidValue,
 		Score:     pa.scoreFID(fidValue),
-		Threshold: "FID ≤ 100ms (good), ≤ 300ms (needs improvement), > 300ms (poor)",
+		Threshold: fmt.Sprintf("FID ≤ %dms (good), ≤ %dms (needs improvement), > %dms (poor)", 
+			constants.FIDGoodThreshold, constants.FIDNeedsImprovementThreshold, constants.FIDNeedsImprovementThreshold),
 	}
 
 	// CLS (Cumulative Layout Shift) - estimation basée sur les ressources
@@ -370,9 +372,9 @@ func (pa *PerformanceAnalyzer) scoreLCP(value float64) string {
 }
 
 func (pa *PerformanceAnalyzer) scoreFID(value float64) string {
-	if value <= 100 {
+	if value <= constants.FIDGoodThreshold {
 		return "good"
-	} else if value <= 300 {
+	} else if value <= constants.FIDNeedsImprovementThreshold {
 		return "needs-improvement"
 	}
 	return "poor"
