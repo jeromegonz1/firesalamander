@@ -83,4 +83,4 @@ Finalisée: 2025-09-01
 - `config/crawler.yaml` - Paramètres exploration
 - `config/semantic.yaml` - Configuration ML français  
 - `config/tech_rules.yaml` - Règles audit technique
-- `config/stopwords_fr.txt` - Mots vides français
+- `config/stopwords_fr.txt` - Mots vides françaisSprint 1.5 à démarrer - specs intégration

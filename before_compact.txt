@@ -1,0 +1,99 @@
+🦎 Fire Salamander - Contexte Projet
+═══════════════════════════════════════
+
+📋 CONTEXTE CCMP ACTUEL:
+────────────────────────
+# État Actuel - Fire Salamander
+
+## Phase: 0 - FINALISÉE ✅
+Date début: 2025-09-01
+Finalisée: 2025-09-01
+
+## Phase 0 - Préparation Complète
+- [x] CDC V4.1 documenté et structuré
+- [x] Spécifications fonctionnelles complètes
+- [x] Repository GitHub restructuré
+- [x] Templates HTML/CSS existants préservés
+- [x] Contrats JSON Schema créés
+- [x] Fichiers configuration YAML
+- [x] ADR pour décisions techniques
+- [x] README et Makefile complets
+- [x] Intégration CCPM
+- [x] **Agent Crawler (Go)** - TDD, tests passants
+- [x] **Agent Audit Technique (Go)** - TDD, tests passants
+- [x] **Agent Orchestrateur (Go)** - TDD, tests passants
+- [x] **Agent Analyse Sémantique (Python)** - TDD, tests passants
+- [x] **Agent Report Engine (Go)** - TDD, tests passants
+- [x] **Dataset d'évaluation** - 6 sites français annotés
+- [x] **Fixtures de test** - 4 pages HTML + robots.txt + sitemap
+- [x] **Epics CCPM** - 5 epics détaillés par agent
+- [x] **Dépendances mises à jour** - Go + Python
+- [x] **Script de validation** - validate-prep.sh
+- [x] **GitHub Actions CI** - Pipeline complet
+
+## Architecture Implémentée
+- ✅ Pipeline 5 agents fonctionnel
+- ✅ Communication JSON-RPC entre agents
+- ✅ Configuration centralisée (*.yaml)
+- ✅ Validation des contrats JSON Schema
+- ✅ Tests unitaires complets (TDD)
+
+## Prochaine Phase: 1 - Agents Avancés
+1. **Crawler avancé**: Support sitemap XML, gestion redirections 3xx
+2. **Technical Lighthouse**: Intégration API Lighthouse réelle
+3. **Semantic ML**: CamemBERT/DistilCamemBERT, embedding vectors
+4. **Report interactif**: Charts.js, export PDF, comparaisons temporelles
+
+📋 DÉCISIONS TECHNIQUES:
+─────────────────────────
+# Décisions Techniques - Fire Salamander
+
+## Backend: Go
+- Raison: Performance pour crawler concurrent
+- Alternative écartée: Rust (courbe apprentissage)
+
+## ML: CamemBERT/DistilCamemBERT  
+- Raison: Optimisé pour le français
+- Mode fast: DistilCamemBERT
+- Mode deep: CamemBERT complet
+
+## LLM: Mistral 7B local
+- Raison: Coût maîtrisé vs API
+- Quantization 4bit pour RAM
+- Cache suggestions 3 jours
+
+📈 DERNIERS COMMITS:
+──────────────────────
+[33m6d2f89ec[m docs: add virtual team roles and responsibilities
+[33mdcf8b14d[m feat: setup agile environment and context standards
+[33m626ccddf[m chore: add session guards and quality checks
+[33mc7f7da44[m fix: resolve CI timeout and linting errors
+[33m632b69fa[m fix: prevent CI timeout by not executing Fire Salamander binary
+
+📂 FICHIERS MODIFIÉS:
+───────────────────────
+ M .claude/context/current_state.md
+?? before_compact.txt
+
+🧪 ÉTAT DES TESTS:
+─────────────────
+Go tests:
+ok  	firesalamander/internal/crawler	(cached)
+ok  	firesalamander/internal/audit	(cached)
+ok  	firesalamander/internal/orchestrator	(cached)
+ok  	firesalamander/internal/semantic	(cached)
+ok  	firesalamander/internal/report	(cached)
+
+Python tests (Agent Sémantique):
+.................F.                                                      [100%]
+=========================== short test summary info ============================
+FAILED test_semantic_server.py::TestSemanticServer::test_analyze_missing_data
+1 failed, 18 passed in 1.08s
+
+📊 RÉSUMÉ:
+─────────
+Architecture: 5 agents implémentés avec TDD
+Repository: https://github.com/jeromegonz1/firesalamander
+CDC: CDC/v4.1-current.md
+Specs: SPECS/functional/full-specifications.md
+
