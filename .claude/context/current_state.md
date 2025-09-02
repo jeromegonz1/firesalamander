@@ -33,6 +33,24 @@ Finalisée: 2025-09-01
 - ✅ Validation des contrats JSON Schema
 - ✅ Tests unitaires complets (TDD)
 
+## Phase 1 - État actuel
+### Sprint 1 ✅ Complété
+- Agents de base implémentés
+- Tests unitaires passants
+
+### Sprint 1.5 🔄 En cours (NEW)
+- [ ] INT-001: Pipeline intégration
+- [ ] INT-002: Scénarios BDD
+- [ ] INT-003: Gestion erreurs
+- [ ] INT-004: Report specs
+- [ ] INT-005: Matrice dépendances
+- [ ] INT-006: Tests E2E
+
+### Specs créées ce sprint
+- integration_flow.md avec exemples JSON-RPC
+- user_scenarios.md avec audit IDs
+- Matrice de dépendances claire
+
 ## Prochaine Phase: 1 - Agents Avancés
 1. **Crawler avancé**: Support sitemap XML, gestion redirections 3xx
 2. **Technical Lighthouse**: Intégration API Lighthouse réelle
