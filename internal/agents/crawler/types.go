@@ -69,3 +69,9 @@ type Metadata struct {
 	RobotsRespected bool `json:"robots_respected"`
 	SitemapFound    bool `json:"sitemap_found"`
 }
+
+// CrawlRequest represents the input data for the Crawler agent
+type CrawlRequest struct {
+	SeedURL   string `json:"seed_url"`
+	OutputDir string `json:"output_dir,omitempty"`
+}

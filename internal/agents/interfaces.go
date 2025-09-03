@@ -2,7 +2,6 @@ package agents
 
 import (
 	"context"
-	"firesalamander/internal/agents/crawler"
 )
 
 // Agent représente l'interface commune pour tous les agents spécialisés
@@ -119,7 +118,7 @@ type StructureError struct {
 // LinkingAgent - Interface pour la cartographie des liens
 type LinkingAgent interface {
 	Agent
-	MapLinks(crawlResult *crawler.CrawlResult) (*LinkMap, error)
+	MapLinks(crawlData *CrawlData) (*LinkMap, error)
 	AnalyzeLinkStructure(links []Link) (*LinkAnalysis, error)
 }
 

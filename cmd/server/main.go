@@ -8,10 +8,19 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"path/filepath"
 	"time"
 
 	v2 "firesalamander/internal/orchestrator"
+	"firesalamander/internal/agents"
+	"firesalamander/internal/agents/broken"
+	"firesalamander/internal/agents/keyword"
+	"firesalamander/internal/agents/linking" 
+	"firesalamander/internal/agents/technical"
+	"firesalamander/internal/agents/page_profiler"
+	"firesalamander/internal/agents/semantic/topic"
+	"firesalamander/internal/agents/semantic/recommender"
 )
 
 type HomeData struct {
@@ -68,10 +77,25 @@ func analyzeHandler(w http.ResponseWriter, r *http.Request) {
 		Timestamp: time.Now(),
 	}
 
-	if _, err := orch.StartAudit(context.Background(), &auditRequest); err != nil {
+	log.Printf("Starting audit %s for URL: %s", auditID, req.URL)
+	progressChan, err := orch.StartAudit(context.Background(), &auditRequest)
+	if err != nil {
+		log.Printf("Failed to start audit %s: %v", auditID, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	
+	// Monitor progress in background
+	go func() {
+		for update := range progressChan {
+			if update.Error != "" {
+				log.Printf("Audit %s error: %s", auditID, update.Error)
+			} else {
+				log.Printf("Audit %s progress: %.1f%% - %s", auditID, update.Progress, update.Step)
+			}
+		}
+		log.Printf("Audit %s completed", auditID)
+	}()
 
 	// Return audit ID
 	response := map[string]interface{}{
@@ -125,9 +149,47 @@ func setupServer() *http.ServeMux {
 	return mux
 }
 
+// registerAgents registers all available agents with the orchestrator
+func registerAgents() {
+	log.Println("Registering agents...")
+	
+	
+	// Create agent instances - Sprint 3 complet avec agents sémantiques
+	agentList := []struct {
+		name  string
+		agent agents.Agent
+	}{
+		{"technical", technical.NewTechnicalAuditor()},
+		{"keyword", keyword.NewKeywordExtractor()},
+		{"linking", linking.NewLinkingMapper()},
+		{"broken_links", broken.NewBrokenLinksDetector()},
+		{"page_profiler", page_profiler.NewPageProfiler()},
+		{"topic_clusterer", topic.NewTopicClusterer()},
+		{"semantic_recommender", recommender.NewSemanticRecommender()},
+	}
+	
+	// TODO: Add crawler when it implements agents.Agent interface
+	
+	// Register agents with orchestrator
+	registered := 0
+	for _, a := range agentList {
+		if err := orch.RegisterAgent(a.name, a.agent); err != nil {
+			log.Printf("Warning: Failed to register agent %s: %v", a.name, err)
+		} else {
+			log.Printf("✅ Registered agent: %s", a.name)
+			registered++
+		}
+	}
+	
+	log.Printf("Successfully registered %d agents", registered)
+}
+
 func main() {
 	// Initialize orchestrator
 	orch = v2.NewOrchestratorV2()
+	
+	// Register all agents
+	registerAgents()
 	
 	var err error
 
@@ -137,12 +199,18 @@ func main() {
 		log.Fatalf("Failed to load templates: %v", err)
 	}
 
+	// Get port from environment or default to 8080
+	port := "8080"
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		port = envPort
+	}
+
 	// Setup routes
 	http.HandleFunc("/", homeHandler)
 	http.HandleFunc("/api/analyze", analyzeHandler)
 	http.HandleFunc("/api/status", statusHandler)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
-	log.Println("🔥 Fire Salamander starting on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Printf("🔥 Fire Salamander starting on :%s", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

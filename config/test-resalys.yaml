@@ -1,0 +1,26 @@
+crawler:
+  max_urls: 50  # Limiter pour ce premier test
+  max_depth: 3
+  timeout: 10s
+  user_agent: "FireSalamander/1.0 (Test SEO)"
+  respect_robots: true
+  concurrent_requests: 3
+  
+technical:
+  enable_lighthouse: true
+  performance_budget:
+    page_load_time: 3000
+    content_size: 2000000
+  
+semantic:
+  language: "fr"
+  min_content_length: 100
+  max_keywords: 50
+  
+report:
+  formats: ["pdf", "html", "json"]
+  include_screenshots: false
+  
+logging:
+  level: "info"
+  file: "logs/fire-salamander.log"
